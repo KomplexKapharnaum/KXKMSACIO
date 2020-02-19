@@ -1,4 +1,4 @@
-#include "K32.h" //https://github.com/KomplexKapharnaum/K32-lib
+#include <Arduino.h>
 
 #define LULU_VER  43
 
@@ -80,6 +80,8 @@ unsigned long lastRefresh_bat = 0;
 #define REFRESH_BAT 100
 
 String nodeName;
+
+#include "K32.h"            // https://github.com/KomplexKapharnaum/K32-lib
 K32* k32;
 
 ///////////////////////////////Lib esp32_digital_led_lib//////////////////////////////
@@ -195,6 +197,8 @@ bool sendFrame = 1;
 int previousDataLength = 0;
 
 ///////////////////////////////////////////////// include ////////////////////////////////////////
+
+#include <HTTPClient.h>     // ESP32 standard
 
 #include "k32_settings.h"
 #include "bat_custom.h"
