@@ -240,9 +240,10 @@ void setup()
   });                        // OSC
 
   // remote
-  // k32->init_remote(NUMBER_OF_MEM);
-
+  k32->init_remote(NUMBER_OF_MEM);
+ 
   bat_custom_on(); // bat_de_sac
+
 #ifdef DEBUG
   Serial.print("Starting ");
   Serial.println(nodeName);
@@ -309,14 +310,30 @@ void loop()
   if (k32->system->stm32->clicked())
   {
     manu_frame(++manu_counter);
-    LOG("clicked");
+    LOG("stm_clicked");
   }
 
   // // Click on Remote
   // if (k32->remote->getState() == REMOTE_AUTO)
   // {
   //   manu_frame(++manu_counter);
-  //   LOG("clicked");
+  //   LOG("remote_clicked");
   // }
+
+    // Remote Active
+  if (k32->remote->getActiveMacro())
+  {
+    int gpm = k32->remote->getActiveMacro();
+    active_frame(gpm);
+    LOG("remote_Active");
+  }
+
+    // Remote Preview
+  if (k32->remote->getPreviewMacro())
+  {
+    int gpm = k32->remote->getPreviewMacro();
+    preview_frame(gpm);
+    LOG("remote_Preview");
+  }
 
 } //loop
