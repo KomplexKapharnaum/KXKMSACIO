@@ -63,8 +63,6 @@ void active_frame(int mem) {
 
 void preview_frame(int mem) {
 
-   mem = mem % NUMBER_OF_MEM;
-   
     int p=0;
   for (int i = NUM_LEDS_PER_STRIP_max + 8 ; i < NUM_LEDS_PER_STRIP_max + 14 ; i++) {
         strands[1]->pixels[i] = pixelFromRGBW((MEM_PREV[mem][p]*COEF_PREV),(MEM_PREV[mem][p+1]*COEF_PREV),(MEM_PREV[mem][p+2]*COEF_PREV),(MEM_PREV[mem][p+3]*COEF_PREV));
