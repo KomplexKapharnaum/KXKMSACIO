@@ -83,7 +83,7 @@ void gpioSetup(int gpioNum, int gpioMode, int gpioVal) {
 void leds_init() {
   for (int k = 0; k < NUM_STRIPS; k++) {
     STRANDS[k] = {  .rmtChannel = k, .gpioNum = PINS[k], .ledType = RUBAN_type, .brightLimit = 32,
-                    .numPixels = NUM_LEDS_PER_STRIP + 6, .pixels = nullptr, ._stateVars = nullptr
+                    .numPixels = NUM_LEDS_PER_STRIP + 16, .pixels = nullptr, ._stateVars = nullptr
                  };
     gpioSetup(PINS[k], OUTPUT, LOW);
   }
