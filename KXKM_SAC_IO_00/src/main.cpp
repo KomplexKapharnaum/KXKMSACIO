@@ -241,8 +241,9 @@ void setup()
 
   // remote
   k32->init_remote(NUMBER_OF_MEM);
- 
-  bat_custom_on(); // bat_de_sac
+
+  // bat_de_sac
+  bat_custom_on();
 
 #ifdef DEBUG
   Serial.print("Starting ");
@@ -317,10 +318,10 @@ void loop()
   // if (k32->remote->getState() == REMOTE_AUTO)
   // {
   //   manu_frame(++manu_counter);
-  //   LOG("remote_clicked");
+  //   LOG("remote_AUTO");
   // }
 
-    // Remote Active
+  // Remote Active
   if (k32->remote->getActiveMacro())
   {
     int gpm = k32->remote->getActiveMacro();
@@ -328,7 +329,7 @@ void loop()
     LOG("remote_Active");
   }
 
-    // Remote Preview
+  // Remote Preview
   if (k32->remote->getPreviewMacro())
   {
     int gpm = k32->remote->getPreviewMacro();
