@@ -177,10 +177,6 @@ int percentage;
 int led_niv = 25;
 int etat_r = 0;
 
-///////////////////////////////////// botton variable /////////////////////////////////////
-
-bool lock = false;
-
 ///////////////////////////////////// Wifi variable /////////////////////////////////////
 
 bool lostConnection = true;
@@ -273,9 +269,10 @@ void setup()
 ///////////////////////////////////////// LOOP /////////////////////////////////////////////////
 void loop()
 {
+
   if (k32->wifi->isConnected())
   {
-    if (!lock)
+    if (k32->remote->getState() != REMOTE_MANULOCK)
       artnet.read();
     lostConnection = false;
   } // if wifi
@@ -284,7 +281,7 @@ void loop()
   {
     if (!k32->wifi->isConnected() && !lostConnection)
     {
-      if (!lock)
+      if (k32->remote->getState() != REMOTE_MANULOCK)
         ledBlack(); //passe led noir
       lostConnection = true;
     }
@@ -304,7 +301,6 @@ void loop()
   if (millis() < lastRefresh_bat)
     lastRefresh_bat = millis();
 
-  //  check_button();// 4 buttons
   eff_modulo();
 
   // Click on ESP
@@ -314,27 +310,38 @@ void loop()
     LOG("stm_clicked");
   }
 
-  // // Click on Remote
-  // if (k32->remote->getState() == REMOTE_AUTO)
-  // {
-  //   manu_frame(++manu_counter);
-  //   LOG("remote_AUTO");
-  // }
-
-  // Remote Active
-  if (k32->remote->getActiveMacro())
+  if (k32->remote->getState() != REMOTE_AUTO)
   {
-    int gpm = k32->remote->getActiveMacro();
-    active_frame(gpm);
-    LOG("remote_Active");
-  }
+    if (k32->remote->getState() == REMOTE_MANU)
+    {
+      remote_on();
+    }
+    else if (k32->remote->getState() == REMOTE_MANULOCK)
+    {
+      remote_lock();
+    }
+    // Remote Active
+    if (k32->remote->getActiveMacro())
+    {
+      int gpm = k32->remote->getActiveMacro();
+      active_frame(gpm);
+      LOG("remote_Active");
+    }
 
-  // Remote Preview
-  if (k32->remote->getPreviewMacro())
+    // Remote Preview
+    if (k32->remote->getPreviewMacro())
+    {
+      int gpm = k32->remote->getPreviewMacro();
+      preview_frame(gpm);
+      LOG("remote_Preview");
+    }
+  } // REMOTE_AUTO
+
+  if (k32->remote->getState() == REMOTE_AUTO)
   {
-    int gpm = k32->remote->getPreviewMacro();
-    preview_frame(gpm);
-    LOG("remote_Preview");
+    remote_off();
+    active_frame(0);
+    preview_frame(0);
   }
 
 } //loop
