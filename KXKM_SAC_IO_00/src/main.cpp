@@ -1,15 +1,15 @@
-#include "K32.h" //https://github.com/KomplexKapharnaum/K32-lib
+#include <Arduino.h>
 
-#define LULU_VER  43
+#define LULU_VER 44
 
 /////////////////////////////////////////ID/////////////////////////////////////////
-#define K32_SET_NODEID        92 // board unique id    (necessary first time only)
-#define K32_SET_HWREVISION    2  // board HW revision  (necessary first time only)
+#define K32_SET_NODEID 81    // board unique id    (necessary first time only)
+#define K32_SET_HWREVISION 2 // board HW revision  (necessary first time only)
 
-#define RUBAN_TYPE LED_SK6812W_V1  // LED_WS2812_V1  LED_WS2812B_V1  LED_WS2812B_V2  LED_WS2812B_V3  LED_WS2813_V1  LED_WS2813_V2   LED_WS2813_V3  LED_WS2813_V4  LED_SK6812_V1  LED_SK6812W_V1,
-#define LULU_ID   20                // permet de calculer l'adresse DMX
-#define LULU_TYPE 5                // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone"
-#define LULU_UNI  0                // Univers DM
+#define RUBAN_TYPE LED_SK6812W_V1 // LED_WS2812_V1  LED_WS2812B_V1  LED_WS2812B_V2  LED_WS2812B_V3  LED_WS2813_V1  LED_WS2813_V2   LED_WS2813_V3  LED_WS2813_V4  LED_SK6812_V1  LED_SK6812W_V1,
+#define LULU_ID 20                // permet de calculer l'adresse DMX
+#define LULU_TYPE 1               // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone"
+#define LULU_UNI 0                // Univers DM
 
 /////////////////////////////////////////Debug///////////////////////////////////////
 #define DEBUG 1
@@ -55,7 +55,7 @@
 #endif
 #endif
 
-#define LULU_PATCHSIZE 19          // Taille du patch DMX pour cet Fixture
+#define LULU_PATCHSIZE 19 // Taille du patch DMX pour cet Fixture
 #define LEDS_ABSOLUTE_MAX 300
 
 /////////////////////////////////////////Adresse/////////////////////////////////////
@@ -73,23 +73,25 @@ int NUM_LEDS_PER_STRIP;
 int N_L_P_S;
 
 /////////////////////////////////////////lib/////////////////////////////////////////
-#include <ArtnetWifi.h>           //https://github.com/rstephan/ArtnetWifi
+#include <ArtnetWifi.h> //https://github.com/rstephan/ArtnetWifi
 unsigned long lastRefresh = 0;
 #define REFRESH 10
 unsigned long lastRefresh_bat = 0;
 #define REFRESH_BAT 100
 
 String nodeName;
-K32* k32;
+
+#include "K32.h" // https://github.com/KomplexKapharnaum/K32-lib
+K32 *k32;
 
 ///////////////////////////////Lib esp32_digital_led_lib//////////////////////////////
 
-#define min(m,n) ((m)<(n)?(m):(n))
+#define min(m, n) ((m) < (n) ? (m) : (n))
 #define NUM_STRIPS 2
 int PINS[NUM_STRIPS];
 int numberOfChannels;
 strand_t STRANDS[NUM_STRIPS];
-strand_t * strands [] = { &STRANDS[0], &STRANDS[1]};
+strand_t *strands[] = {&STRANDS[0], &STRANDS[1]};
 
 //// Setup PWM State(s)
 int ledChannelOne = 0;
@@ -175,10 +177,6 @@ int percentage;
 int led_niv = 25;
 int etat_r = 0;
 
-///////////////////////////////////// botton variable /////////////////////////////////////
-
-bool lock = false;
-
 ///////////////////////////////////// Wifi variable /////////////////////////////////////
 
 bool lostConnection = true;
@@ -196,6 +194,8 @@ int previousDataLength = 0;
 
 ///////////////////////////////////////////////// include ////////////////////////////////////////
 
+#include <HTTPClient.h> // ESP32 standard
+
 #include "k32_settings.h"
 #include "bat_custom.h"
 #include "Black.h"
@@ -207,12 +207,11 @@ int previousDataLength = 0;
 #include "effet_modulo.h"
 #include "Get_percentage.h"
 #include "X_task.h"
-#include "button.h"
 #include "PWM.h"
 
-
 ///////////////////////////////////////////////// SETUP ////////////////////////////////////////
-void setup() {
+void setup()
+{
 
   Serial.begin(115200);
 
@@ -224,19 +223,24 @@ void setup() {
   k32_settings();
 
   // WIFI
-  k32->init_wifi( nodeName );
+  k32->init_wifi(nodeName);
   k32->wifi->staticIP("2.0.0." + String(k32->system->id() + 100), "2.0.0.1", "255.0.0.0");
-  k32->wifi->connect("kxkm24lulu", NULL);
+  k32->wifi->connect("kxkm24", NULL);
 
   // Start OSC
   k32->init_osc({
-    .port_in  = 1818,             // osc port input (0 = disable)  // 1818
-    .port_out = 1819,             // osc port output (0 = disable) // 1819
-    .beatInterval     = 0,        // heartbeat interval milliseconds (0 = disable)
-    .beaconInterval   = 3000      // full beacon interval milliseconds (0 = disable)
-  });// OSC
+      .port_in = 1818,       // osc port input (0 = disable)  // 1818
+      .port_out = 1819,      // osc port output (0 = disable) // 1819
+      .beatInterval = 0,     // heartbeat interval milliseconds (0 = disable)
+      .beaconInterval = 3000 // full beacon interval milliseconds (0 = disable)
+  });                        // OSC
 
-  bat_custom_on();// bat_de_sac
+  // remote
+  k32->init_remote(NUMBER_OF_MEM);
+
+  // bat_de_sac
+  bat_custom_on();
+
 #ifdef DEBUG
   Serial.print("Starting ");
   Serial.println(nodeName);
@@ -245,7 +249,6 @@ void setup() {
   ///////////////////////////////////////////////// LEDS //////////////////////////////////////
   leds_init();
   ledSetup();
-
 
   /////////////////////////////////////////////// ARTNET //////////////////////////////////////
   artnet.begin();
@@ -256,45 +259,89 @@ void setup() {
 
   ///////////////////////////////////////////////// CORE //////////////////////////////////////
   //  create a task that will be executed in the Map1code() function, with priority 1 and executed on core 0
-  xTaskCreatePinnedToCore(Map1code, "Map1code", 4096, NULL, 1, NULL, 1);   // core 1 = loop
-  xTaskCreatePinnedToCore(effTask, "effTask", 4096, NULL, 1, NULL, 0);    // core 0 = wifi
+  xTaskCreatePinnedToCore(Map1code, "Map1code", 4096, NULL, 1, NULL, 1); // core 1 = loop
+  xTaskCreatePinnedToCore(effTask, "effTask", 4096, NULL, 1, NULL, 0);   // core 0 = wifi
 
   ///////////////////////////////////////////////// osc //////////////////////////////////////
 
-}//setup
+} //setup
 
 ///////////////////////////////////////// LOOP /////////////////////////////////////////////////
-void loop() {
-  if (k32->wifi->isConnected()) {
-    if (!lock) artnet.read();
-    lostConnection = false;
-  }// if wifi
+void loop()
+{
 
-  if ((millis() - lastRefresh) > REFRESH) {
-    if (!k32->wifi->isConnected() && !lostConnection) {
-      if (!lock) ledBlack();//passe led noir
+  if (k32->wifi->isConnected())
+  {
+    if (k32->remote->getState() != REMOTE_MANULOCK)
+      artnet.read();
+    lostConnection = false;
+  } // if wifi
+
+  if ((millis() - lastRefresh) > REFRESH)
+  {
+    if (!k32->wifi->isConnected() && !lostConnection)
+    {
+      if (k32->remote->getState() != REMOTE_MANULOCK)
+        ledBlack(); //passe led noir
       lostConnection = true;
     }
     lastRefresh = millis();
-  }
+  } // if millis
 
   // BATTERIE
-  if ((millis() - lastRefresh_bat) > REFRESH_BAT) {
+  if ((millis() - lastRefresh_bat) > REFRESH_BAT)
+  {
     get_percentage();
     lastRefresh_bat = millis();
   }
 
   // MILLIS overflow protection
-  if (millis() < lastRefresh) lastRefresh = millis();
-  if (millis() < lastRefresh_bat) lastRefresh_bat = millis();
+  if (millis() < lastRefresh)
+    lastRefresh = millis();
+  if (millis() < lastRefresh_bat)
+    lastRefresh_bat = millis();
 
-  //  check_button();// 4 buttons
   eff_modulo();
 
   // Click on ESP
-  if (k32->system->stm32->clicked()) {
+  if (k32->system->stm32->clicked())
+  {
     manu_frame(++manu_counter);
-    LOG("clicked");
+    LOG("stm_clicked");
   }
 
-}//loop
+  if (k32->remote->getState() != REMOTE_AUTO)
+  {
+    if (k32->remote->getState() == REMOTE_MANU)
+    {
+      remote_on();
+    }
+    else if (k32->remote->getState() == REMOTE_MANULOCK)
+    {
+      remote_lock();
+    }
+    // Remote Active
+    if (k32->remote->getActiveMacro())
+    {
+      int gpm = k32->remote->getActiveMacro();
+      active_frame(gpm);
+      LOG("remote_Active");
+    }
+
+    // Remote Preview
+    if (k32->remote->getPreviewMacro())
+    {
+      int gpm = k32->remote->getPreviewMacro();
+      preview_frame(gpm);
+      LOG("remote_Preview");
+    }
+  } // REMOTE_AUTO
+
+  if (k32->remote->getState() == REMOTE_AUTO)
+  {
+    remote_off();
+    active_frame(0);
+    preview_frame(0);
+  }
+
+} //loop
