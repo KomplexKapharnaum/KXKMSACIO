@@ -14,7 +14,7 @@ unsigned char MEM[NUMBER_OF_MEM][LULU_PATCHSIZE] = {
 };
 //{master , r  , g  , b  , w  ,pix mod , pix long , pix_pos , str_mod , str_speed , r_fond , g_fond , b_fond , w_fond , color_mod , mirror_mod , zoom , pw1 , pw2 }
 
-#define COEF_PREV 30
+#define COEF_PREV 60
 bool MEM_PREV[NUMBER_OF_MEM][24] = {
     { 0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0},    // BLACK
     { 0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0},    // external
@@ -77,22 +77,10 @@ void preview_frame(int mem)
 
 } // preview_frame
 
-void remote_on()
-{
-  strands[NUM_LEDS_PER_STRIP_max + 16]->pixels[NUM_LEDS_PER_STRIP_max + 16] = pixelFromRGBW(0, 127, 0, 0);// vert
+
+void remote_status(remoteState state) {
+  if (state == REMOTE_AUTO) strands[NUM_LEDS_PER_STRIP_max + 16]->pixels[NUM_LEDS_PER_STRIP_max + 16] = pixelFromRGBW(0, 0, 0, 0);// noir
+  else if (state == REMOTE_MANU) strands[NUM_LEDS_PER_STRIP_max + 16]->pixels[NUM_LEDS_PER_STRIP_max + 16] = pixelFromRGBW(0, 127, 0, 0);// vert
+  else if (state == REMOTE_MANULOCK) strands[NUM_LEDS_PER_STRIP_max + 16]->pixels[NUM_LEDS_PER_STRIP_max + 16] = pixelFromRGBW(127, 0, 0, 0);// rouge
 }
 
-void remote_off()
-{
-  strands[NUM_LEDS_PER_STRIP_max + 16]->pixels[NUM_LEDS_PER_STRIP_max + 16] = pixelFromRGBW(0, 0, 0, 0);// noir
-}
-
-void remote_lock()
-{
-  strands[NUM_LEDS_PER_STRIP_max + 16]->pixels[NUM_LEDS_PER_STRIP_max + 16] = pixelFromRGBW(127, 0, 0, 0);// rouge
-}
-
-void remote_manu()
-{
-  strands[NUM_LEDS_PER_STRIP_max + 16]->pixels[NUM_LEDS_PER_STRIP_max + 16] = pixelFromRGBW(127, 127, 0, 0);// orange
-}

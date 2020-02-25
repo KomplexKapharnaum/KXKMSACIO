@@ -47,7 +47,7 @@ void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t* d
     if (color_mode >= 11 && color_mode <= 20) {
       pix_start = -1 ;
     } else {
-      if (pix_mod >= 0 && pix_mod <= 20 || pix_mod >= 31 && pix_mod <= 255) {
+      if ((pix_mod >= 0 && pix_mod <= 20) || (pix_mod >= 31 && pix_mod <= 255)) {
         pix_start = ((data[adr + 5]  * N_L_P_S) / 255) - 1 ;
       }
       else if (pix_mod >= 21 && pix_mod <= 30) {

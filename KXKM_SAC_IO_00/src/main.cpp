@@ -1,13 +1,13 @@
 #include <Arduino.h>
 
-#define LULU_VER 44
+#define LULU_VER 45
 
 /////////////////////////////////////////ID/////////////////////////////////////////
-#define K32_SET_NODEID 81    // board unique id    (necessary first time only)
+#define K32_SET_NODEID 113    // board unique id    (necessary first time only)
 #define K32_SET_HWREVISION 2 // board HW revision  (necessary first time only)
 
 #define RUBAN_TYPE LED_SK6812W_V1 // LED_WS2812_V1  LED_WS2812B_V1  LED_WS2812B_V2  LED_WS2812B_V3  LED_WS2813_V1  LED_WS2813_V2   LED_WS2813_V3  LED_WS2813_V4  LED_SK6812_V1  LED_SK6812W_V1,
-#define LULU_ID 20                // permet de calculer l'adresse DMX
+#define LULU_ID 1                // permet de calculer l'adresse DMX
 #define LULU_TYPE 1               // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone"
 #define LULU_UNI 0                // Univers DM
 
@@ -310,38 +310,17 @@ void loop()
     LOG("stm_clicked");
   }
 
-  if (k32->remote->getState() != REMOTE_AUTO)
+  remote_status( k32->remote->getState() ); 
+
+  int gpm = k32->remote->getPreviewMacro();
+  preview_frame(gpm);
+
+  if (k32->remote->getState() != REMOTE_AUTO) 
   {
-    if (k32->remote->getState() == REMOTE_MANU)
-    {
-      remote_on();
-    }
-    else if (k32->remote->getState() == REMOTE_MANULOCK)
-    {
-      remote_lock();
-    }
     // Remote Active
-    if (k32->remote->getActiveMacro())
-    {
-      int gpm = k32->remote->getActiveMacro();
-      active_frame(gpm);
-      LOG("remote_Active");
-    }
+    gpm = k32->remote->getActiveMacro();
+    active_frame(gpm);
 
-    // Remote Preview
-    if (k32->remote->getPreviewMacro())
-    {
-      int gpm = k32->remote->getPreviewMacro();
-      preview_frame(gpm);
-      LOG("remote_Preview");
-    }
-  } // REMOTE_AUTO
-
-  if (k32->remote->getState() == REMOTE_AUTO)
-  {
-    remote_off();
-    active_frame(0);
-    preview_frame(0);
-  }
+  } // ! REMOTE_AUTO
 
 } //loop
