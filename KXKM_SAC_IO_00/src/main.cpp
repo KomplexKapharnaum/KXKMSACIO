@@ -97,9 +97,6 @@ strand_t *strands[] = {&STRANDS[0], &STRANDS[1]};
 int ledChannelOne = 0;
 int ledChannelTwo = 0;
 
-//// for remote
-int LAMPA = 0;
-
 ///////////////////////////////////dmx variables////////////////////////////////////
 
 float zo_pi_n_1_r[LEDS_ABSOLUTE_MAX];
@@ -324,18 +321,6 @@ void loop()
     gpm = k32->remote->getActiveMacro();
     active_frame(gpm);
 
-    if (k32->remote->getLamp() == 1)
-    {
-      LAMPA = 255;
-      ledcWrite(1, 255);
-      ledcWrite(2, 255);
-    }
-    if (k32->remote->getLamp() == 0)
-    {
-      LAMPA = 0;
-      ledcWrite(1, 0);
-      ledcWrite(2, 0);
-    }
 
   } // ! REMOTE_AUTO
 
