@@ -194,8 +194,6 @@ int previousDataLength = 0;
 
 ///////////////////////////////////////////////// include ////////////////////////////////////////
 
-#include <HTTPClient.h> // ESP32 standard
-
 #include "k32_settings.h"
 #include "bat_custom.h"
 #include "Black.h"
