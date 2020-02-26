@@ -1,18 +1,18 @@
 #define NUMBER_OF_MEM 11
 unsigned char MEM[NUMBER_OF_MEM][LULU_PATCHSIZE] = {
-    {    0,   0,   0,   0,   0,       0,         0,        0,        0,          0,       0,       0,       0,       0,          0,           0,    0,     0,    0},                      // BLACK
-    {    0,   0,   0,   0,   0,       0,         0,        0,        0,          0,       0,       0,       0,       0,          0,           0,    0,     0,    0},                      // external
-    {  255,   0,   0,   0, 255,       0,         0,        0,        0,          0,      90,      90,      90,      90,          0,           0,  255,     0,    0},            // white
-    {  255, 255,   0,   0,   0,       0,         0,        0,        0,          0,      90,       0,       0,       0,          0,           0,  255,     0,    0},               // Red
-    {  255,   0, 255,   0,   0,       0,         0,        0,        0,          0,       0,      90,       0,       0,          0,           0,  255,     0,    0},               // Green
-    {  255,   0,   0, 255,   0,       0,         0,        0,        0,          0,       0,       0,      90,       0,          0,           0,  255,     0,    0},               // Blue
-    {  255, 255, 255,   0,   0,       0,         0,        0,        0,          0,     100,     100,       0,       0,          0,           0,  255,     0,    0},          // Yellow
-    {  255,   0, 255, 255,   0,       0,         0,        0,        0,          0,       0,     100,     100,       0,          0,           0,  255,     0,    0},          // Cyan
-    {  255, 255,   0, 255,   0,       0,         0,        0,        0,          0,     110,       0,     110,       0,          0,           0,  255,     0,    0},          // Magenta
-    {  255, 255, 255, 255,   0,       0,       255,      127,        0,          0,       0,     255,       0,       0,         15,           0,  255,     0,    0},     // arc
-    {  255, 255, 255, 255, 255,       0,         0,        0,       11,         80,     110,     110,     110,     110,          0,           0,  255,     0,    0} // str white
+    {    0,   0,   0,   0,   0,       0,         0,        0,        0,          0,       0,       0,       0,       0,          0,           0,    0,     LAMPA,    LAMPA}, // BLACK
+    {    0,   0,   0,   0,   0,       0,         0,        0,        0,          0,       0,       0,       0,       0,          0,           0,    0,     LAMPA,    LAMPA}, // external
+    {  255,   0,   0,   0, 255,       0,         0,        0,        0,          0,      90,      90,      90,      90,          0,           0,  255,     LAMPA,    LAMPA}, // white
+    {  255, 255,   0,   0,   0,       0,         0,        0,        0,          0,      90,       0,       0,       0,          0,           0,  255,     LAMPA,    LAMPA}, // Red
+    {  255,   0, 255,   0,   0,       0,         0,        0,        0,          0,       0,      90,       0,       0,          0,           0,  255,     LAMPA,    LAMPA}, // Green
+    {  255,   0,   0, 255,   0,       0,         0,        0,        0,          0,       0,       0,      90,       0,          0,           0,  255,     LAMPA,    LAMPA}, // Blue
+    {  255, 255, 255,   0,   0,       0,         0,        0,        0,          0,     100,     100,       0,       0,          0,           0,  255,     LAMPA,    LAMPA}, // Yellow
+    {  255,   0, 255, 255,   0,       0,         0,        0,        0,          0,       0,     100,     100,       0,          0,           0,  255,     LAMPA,    LAMPA}, // Cyan
+    {  255, 255,   0, 255,   0,       0,         0,        0,        0,          0,     110,       0,     110,       0,          0,           0,  255,     LAMPA,    LAMPA}, // Magenta
+    {  255, 255, 255, 255,   0,       0,       255,      127,        0,          0,       0,     255,       0,       0,         15,           0,  255,     LAMPA,    LAMPA}, // arc
+    {  255, 255, 255, 255, 255,       0,         0,        0,       11,         80,     110,     110,     110,     110,          0,           0,  255,     LAMPA,    LAMPA}  // str white
 };
-//{master , r  , g  , b  , w  ,pix mod , pix long , pix_pos , str_mod , str_speed , r_fond , g_fond , b_fond , w_fond , color_mod , mirror_mod , zoom , pw1 , pw2 }
+//{master , r  , g  , b  , w  ,pix mod , pix long , pix_pos , str_mod , str_speed , r_fond , g_fond , b_fond , w_fond , color_mod , mirror_mod , zoom ,     pw1 ,     pw2 }
 
 #define COEF_PREV 60
 bool MEM_PREV[NUMBER_OF_MEM][24] = {
@@ -79,8 +79,8 @@ void preview_frame(int mem)
 
 
 void remote_status(remoteState state) {
-  if (state == REMOTE_AUTO) strands[NUM_LEDS_PER_STRIP_max + 16]->pixels[NUM_LEDS_PER_STRIP_max + 16] = pixelFromRGBW(0, 0, 0, 0);// noir
-  else if (state == REMOTE_MANU) strands[NUM_LEDS_PER_STRIP_max + 16]->pixels[NUM_LEDS_PER_STRIP_max + 16] = pixelFromRGBW(0, 127, 0, 0);// vert
-  else if (state == REMOTE_MANULOCK) strands[NUM_LEDS_PER_STRIP_max + 16]->pixels[NUM_LEDS_PER_STRIP_max + 16] = pixelFromRGBW(127, 0, 0, 0);// rouge
+  if (state == REMOTE_AUTO) strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 14] = pixelFromRGBW(0, 0, 0, 0);// noir
+  else if (state == REMOTE_MANU) strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 14] = pixelFromRGBW(0, 127, 0, 0);// vert
+  else if (state == REMOTE_MANULOCK) strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 14] = pixelFromRGBW(127, 0, 0, 0);// rouge
 }
 
