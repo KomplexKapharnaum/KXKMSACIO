@@ -7,7 +7,7 @@ void ledSetup()
   ledcSetup(1, freq, resol);
   ledcSetup(2, freq, resol);
 #ifdef K32_SET_HWREVISION
-#if K32_SET_HWREVISION == 2
+#if K32_SET_HWREVISION <= 2
   ledcAttachPin(17, 1);
   ledcAttachPin(16, 2);
 #else if K32_SET_HWREVISION == 3
