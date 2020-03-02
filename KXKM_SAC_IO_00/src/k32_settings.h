@@ -1,5 +1,6 @@
 
-void k32_settings() {
+void k32_settings()
+{
 
 #ifdef K32_SET_NODEID
   k32->system->id(K32_SET_NODEID);
@@ -8,7 +9,7 @@ void k32_settings() {
   k32->system->hw(K32_SET_HWREVISION);
 #endif
 
-  // Save to EEPROM if DEFINE
+// Save to EEPROM if DEFINE
 #ifdef LULU_ID
   k32->system->preferences.putUInt("LULU_id", LULU_ID);
   LULU_id = LULU_ID;
@@ -58,7 +59,6 @@ void k32_settings() {
   NUM_LEDS_PER_STRIP_max = k32->system->preferences.getUInt("NUM_leds", 186);
 #endif
 
-
   // Calculate adr // channels
   adr = (1 + (LULU_id - 1) * (LULU_PATCHSIZE));
   numberOfChannels = NUM_STRIPS * NUM_LEDS_PER_STRIP_max * 4;
@@ -74,4 +74,4 @@ void k32_settings() {
   PINS[0] = k32->system->ledpin(0);
   PINS[1] = k32->system->ledpin(1);
 
-}//k32_settings()
+} //k32_settings()

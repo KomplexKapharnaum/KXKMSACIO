@@ -196,27 +196,27 @@ void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t *d
   } //sendFrame
 
 #ifdef DEBUG_dmx
-  LOG("data [1] = " + data[1] );
-  LOG("data [2] = " + data[2] );
-  LOG("master = " + master );
-  LOG("r = " + rr );
-  LOG("g = " + gg );
-  LOG("b = " + bb );
-  LOG("w = " + ww );
-  LOG("pix_mod = " + pix_mod );
-  LOG("pix_start = " + pix_start );
-  LOG("pix_center = " + pix_center );
-  LOG("pix_end = " + pix_end );
-  LOG("pix_pos = " + pix_pos );
-  LOG("modulo = " + modulo );
-  LOG("str_ws = " + str_ws );
-  LOG(" srr = " + srr );
-  LOG(" sgg = " + sgg );
-  LOG(" sbb = " + sbb );
-  LOG(" sww = " + sww );
-  LOG(" color_mode = " + color_mode );
-  LOG(" mirror = " + mirror );
-  LOG(" ledChannelOne = " + ledChannelOne );
-  LOG(" ledChannelTwo = " + ledChannelTwo );
+  LOG("data [1] = " + data[1]);
+  LOG("data [2] = " + data[2]);
+  LOG("master = " + master);
+  LOG("r = " + rr);
+  LOG("g = " + gg);
+  LOG("b = " + bb);
+  LOG("w = " + ww);
+  LOG("pix_mod = " + pix_mod);
+  LOG("pix_start = " + pix_start);
+  LOG("pix_center = " + pix_center);
+  LOG("pix_end = " + pix_end);
+  LOG("pix_pos = " + pix_pos);
+  LOG("modulo = " + modulo);
+  LOG("str_ws = " + str_ws);
+  LOG(" srr = " + srr);
+  LOG(" sgg = " + sgg);
+  LOG(" sbb = " + sbb);
+  LOG(" sww = " + sww);
+  LOG(" color_mode = " + color_mode);
+  LOG(" mirror = " + mirror);
+  LOG(" ledChannelOne = " + ledChannelOne);
+  LOG(" ledChannelTwo = " + ledChannelTwo);
 #endif
 } //onframedmx
