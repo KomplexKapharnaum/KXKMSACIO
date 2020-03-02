@@ -242,8 +242,7 @@ void setup()
   bat_custom_on();
 
 #ifdef DEBUG
-  Serial.print("Starting ");
-  Serial.println(nodeName);
+  LOG("Starting " + nodeName );
 #endif
 
   ///////////////////////////////////////////////// LEDS //////////////////////////////////////

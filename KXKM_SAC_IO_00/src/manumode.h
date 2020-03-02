@@ -34,8 +34,6 @@ void manu_frame(int mem)
 {
 
   mem = mem % NUMBER_OF_MEM;
-  // Serial.print("Mem ");
-  // Serial.println(mem);
 
   const int frameSize = adr + LULU_PATCHSIZE;
   uint8_t fakeframe[frameSize];

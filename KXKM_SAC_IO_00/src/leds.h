@@ -10,14 +10,14 @@ void leds_show() {
 
 void ledBlack() {
 #ifdef DEBUG
-  Serial.println("ledBlack()");
+  LOG("ledBlack()");
 #endif
   manu_frame(0);
 }//ledBlack
 
 void initTest() {
 #ifdef DEBUG
-  Serial.println("initTest()");
+  LOG("initTest()");
 #endif
   Black();
   ledChannelOne = 0;
@@ -90,7 +90,7 @@ void leds_init() {
   int STRANDCNT = sizeof(STRANDS) / sizeof(STRANDS[0]);
   if (digitalLeds_initStrands(STRANDS, STRANDCNT)) {
 #ifdef DEBUG
-    Serial.println("Init FAILURE: halting");
+    LOG("Init FAILURE: halting");
     delay(1000);
 #endif
     ESP.restart();
@@ -99,6 +99,6 @@ void leds_init() {
     strand_t * pStrand = &STRANDS[i];
   }
 #ifdef DEBUG
-  Serial.println("Init complete");
+  LOG("Init complete");
 #endif
 }//leds_init

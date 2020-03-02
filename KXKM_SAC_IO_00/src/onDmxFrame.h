@@ -10,13 +10,13 @@ void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t *d
   {
 
 #ifdef DEBUG_dmxframe
-    Serial.print("dmx frame: ");
+    LOGINL("dmx frame: ");
     for (int i = 0; i < length; i++)
     {
-      Serial.print(data[i]);
-      Serial.print(" ");
+      LOGINL(data[i]);
+      LOGINL(" ");
     }
-    Serial.println("");
+    LOG("");
 #endif
 
     master = data[adr - 1];
@@ -196,49 +196,27 @@ void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t *d
   } //sendFrame
 
 #ifdef DEBUG_dmx
-  Serial.print("data [1] = ");
-  Serial.println(data[1]);
-  Serial.print("data [2] = ");
-  Serial.println(data[2]);
-  Serial.print("master = ");
-  Serial.println(master);
-  Serial.print("r = ");
-  Serial.println(rr);
-  Serial.print("g = ");
-  Serial.println(gg);
-  Serial.print("b = ");
-  Serial.println(bb);
-  Serial.print("w = ");
-  Serial.println(ww);
-  Serial.print("pix_mod = ");
-  Serial.println(pix_mod);
-  Serial.print("pix_start = ");
-  Serial.println(pix_start);
-  Serial.print("pix_center = ");
-  Serial.println(pix_center);
-  Serial.print("pix_end = ");
-  Serial.println(pix_end);
-  Serial.print("pix_pos = ");
-  Serial.println(pix_pos);
-  Serial.print("modulo = ");
-  Serial.println(modulo);
-  Serial.print("str_ws = ");
-  Serial.println(str_ws);
-  Serial.print(" srr = ");
-  Serial.println(srr);
-  Serial.print(" sgg = ");
-  Serial.println(sgg);
-  Serial.print(" sbb = ");
-  Serial.println(sbb);
-  Serial.print(" sww = ");
-  Serial.println(sww);
-  Serial.print(" color_mode = ");
-  Serial.println(color_mode);
-  Serial.print(" mirror = ");
-  Serial.println(mirror);
-  Serial.print(" ledChannelOne = ");
-  Serial.println(ledChannelOne);
-  Serial.print(" ledChannelTwo = ");
-  Serial.println(ledChannelTwo);
+  LOG("data [1] = " + data[1] );
+  LOG("data [2] = " + data[2] );
+  LOG("master = " + master );
+  LOG("r = " + rr );
+  LOG("g = " + gg );
+  LOG("b = " + bb );
+  LOG("w = " + ww );
+  LOG("pix_mod = " + pix_mod );
+  LOG("pix_start = " + pix_start );
+  LOG("pix_center = " + pix_center );
+  LOG("pix_end = " + pix_end );
+  LOG("pix_pos = " + pix_pos );
+  LOG("modulo = " + modulo );
+  LOG("str_ws = " + str_ws );
+  LOG(" srr = " + srr );
+  LOG(" sgg = " + sgg );
+  LOG(" sbb = " + sbb );
+  LOG(" sww = " + sww );
+  LOG(" color_mode = " + color_mode );
+  LOG(" mirror = " + mirror );
+  LOG(" ledChannelOne = " + ledChannelOne );
+  LOG(" ledChannelTwo = " + ledChannelTwo );
 #endif
 } //onframedmx
