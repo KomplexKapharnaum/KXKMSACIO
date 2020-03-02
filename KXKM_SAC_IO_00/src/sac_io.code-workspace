@@ -5,5 +5,11 @@
 			"path": "F:\\Documents\\GitHub\\KXKMSACIO\\KXKM_SAC_IO_00"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"files.associations": {
+			"*.ino": "cpp",
+			"array": "cpp",
+			"string": "cpp"
+		}
+	}
 }
