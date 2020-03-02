@@ -4,7 +4,7 @@
 
 /////////////////////////////////////////ID/////////////////////////////////////////
 #define K32_SET_NODEID 113   // board unique id    (necessary first time only)
-#define K32_SET_HWREVISION 2 // board HW revision  (necessary first time only)
+#define K32_SET_HWREVISION 3 // board HW revision  (necessary first time only) 3 = ATOM
 
 #define RUBAN_TYPE LED_SK6812W_V1 // LED_WS2812_V1  LED_WS2812B_V1  LED_WS2812B_V2  LED_WS2812B_V3  LED_WS2813_V1  LED_WS2813_V2   LED_WS2813_V3  LED_WS2813_V4  LED_SK6812_V1  LED_SK6812W_V1,
 #define LULU_ID 1                 // permet de calculer l'adresse DMX
@@ -171,6 +171,8 @@ int a;
 float str_blind_ws = 1;
 int manu_counter = 0;
 
+int state_btn_atom = 0;
+
 ///////////////////////////////////// batterie variable /////////////////////////////////////
 
 int percentage;
@@ -260,13 +262,22 @@ void setup()
   xTaskCreatePinnedToCore(Map1code, "Map1code", 4096, NULL, 1, NULL, 1); // core 1 = loop
   xTaskCreatePinnedToCore(effTask, "effTask", 4096, NULL, 1, NULL, 0);   // core 0 = wifi
 
-  ///////////////////////////////////////////////// osc //////////////////////////////////////
+///////////////////////////////////////////////// osc //////////////////////////////////////
+
+
+///////////////////////////////////////////////// ATOM  //////////////////////////////////////
+#ifdef K32_SET_HWREVISION
+#if K32_SET_HWREVISION == 3
+  pinMode(39, INPUT_PULLUP);
+#endif
+#endif
 
 } //setup
 
 ///////////////////////////////////////// LOOP /////////////////////////////////////////////////
 void loop()
 {
+  eff_modulo();
 
   if (k32->wifi->isConnected())
   {
@@ -299,8 +310,6 @@ void loop()
   if (millis() < lastRefresh_bat)
     lastRefresh_bat = millis();
 
-  eff_modulo();
-
   // Click on ESP
   if (k32->system->stm32->clicked())
   {
@@ -308,6 +317,24 @@ void loop()
     LOG("stm_clicked");
   }
 
+// Click on Atom
+#ifdef K32_SET_HWREVISION
+#if K32_SET_HWREVISION == 3
+  if ((digitalRead(39) >= 1) && (state_btn_atom != 0))
+  {
+    state_btn_atom = 0;
+  }
+
+  if ((digitalRead(39) <= 0) && (state_btn_atom != 1))
+  {
+    state_btn_atom = 1;
+    manu_frame(++manu_counter);
+    LOG("atom_clicked");
+  }
+#endif
+#endif
+
+  // REMOTE CONTROL
   remote_status(k32->remote->getState());
 
   int gpm = k32->remote->getPreviewMacro();
@@ -318,7 +345,6 @@ void loop()
     // Remote Active
     gpm = k32->remote->getActiveMacro();
     active_frame(gpm);
-
 
   } // ! REMOTE_AUTO
 
