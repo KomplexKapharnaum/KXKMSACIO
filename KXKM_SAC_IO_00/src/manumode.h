@@ -48,6 +48,11 @@ void manu_frame(int mem)
      fakeframe[adr + 18 - 1] = k32->remote->getLamp();
     }
 
+    if (mem==11)
+    {
+      fakeframe[adr + 16 -1 ] = modulator1->getValue();
+    }
+
    onDmxFrame(LULU_uni, adr + LULU_PATCHSIZE, 0, fakeframe);
 
   int p = 0;

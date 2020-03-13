@@ -84,6 +84,9 @@ String nodeName;
 #include "K32.h" // https://github.com/KomplexKapharnaum/K32-lib
 K32 *k32;
 
+#include "K32_modulo.h"
+K32_modulo_sinus *modulator1;
+
 ///////////////////////////////Lib esp32_digital_led_lib//////////////////////////////
 
 #define min(m, n) ((m) < (n) ? (m) : (n))
@@ -252,7 +255,8 @@ void setup()
 
   /////////////////////////////////////////////// ARTNET //////////////////////////////////////
   artnet.begin();
-  artnet.setArtDmxCallback(onDmxFrame);
+  // artnet.setArtDmxCallback(onDmxFrame);
+  artnet.setArtDmxCallback(onArtNetFrame);
 
   ///////////////////////////////////////////////// INIT //////////////////////////////////////
   initTest();
@@ -271,13 +275,15 @@ void setup()
 #endif
 #endif
 
+modulator1 = new K32_modulo_sinus(1000, 0, 255);
+modulator1->play();
+
 } //setup
 
 ///////////////////////////////////////// LOOP /////////////////////////////////////////////////
 void loop()
 {
   eff_modulo();
-
 
 /////////////////////    if wifi     ///////////////////////
   if (k32->wifi->isConnected())
@@ -348,7 +354,10 @@ void loop()
     // Remote Active
     gpm = k32->remote->getActiveMacro();
     active_frame(gpm);
+    manu_frame(gpm);
+    LOG("auto  *******");
 
   } // ! REMOTE_AUTO
 
+manu_frame(manu_counter);
 } //loop

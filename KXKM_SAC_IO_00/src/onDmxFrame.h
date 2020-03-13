@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////// onDmxFrame //////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t *data)
+void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t* data)
 {
   sendFrame = 1;
 
@@ -220,3 +220,11 @@ void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t *d
   LOG(" ledChannelTwo = " + ledChannelTwo);
 #endif
 } //onframedmx
+
+
+void onArtNetFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t* data)
+{
+  if (k32->remote->getState() == REMOTE_MANU) k32->remote->setAuto();
+  if (k32->remote->getState() == REMOTE_AUTO)
+  onDmxFrame(universe, length, sequence, data);
+}
