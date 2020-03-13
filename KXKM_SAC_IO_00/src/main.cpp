@@ -1,14 +1,14 @@
 #include <Arduino.h>
 
-#define LULU_VER 45
+#define LULU_VER 46
 
 /////////////////////////////////////////ID/////////////////////////////////////////
-#define K32_SET_NODEID 113   // board unique id    (necessary first time only)
+#define K32_SET_NODEID 81   // board unique id    (necessary first time only)
 #define K32_SET_HWREVISION 2 // board HW revision  (necessary first time only) 3 = ATOM
 
 #define RUBAN_TYPE LED_SK6812W_V1 // LED_WS2812_V1  LED_WS2812B_V1  LED_WS2812B_V2  LED_WS2812B_V3  LED_WS2813_V1  LED_WS2813_V2   LED_WS2813_V3  LED_WS2813_V4  LED_SK6812_V1  LED_SK6812W_V1,
 #define LULU_ID 1                 // permet de calculer l'adresse DMX
-#define LULU_TYPE 1               // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone"
+#define LULU_TYPE 3               // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone"
 #define LULU_UNI 0                // Univers DM
 
 /////////////////////////////////////////Debug///////////////////////////////////////
@@ -208,6 +208,7 @@ int previousDataLength = 0;
 #include "Get_percentage.h"
 #include "X_task.h"
 #include "PWM.h"
+#include "sinus.h"
 
 ///////////////////////////////////////////////// SETUP ////////////////////////////////////////
 void setup()
@@ -277,6 +278,8 @@ void loop()
 {
   eff_modulo();
 
+
+/////////////////////    if wifi     ///////////////////////
   if (k32->wifi->isConnected())
   {
     if (k32->remote->getState() != REMOTE_MANULOCK)
@@ -284,6 +287,7 @@ void loop()
     lostConnection = false;
   } // if wifi
 
+/////////////////////   if millis    ///////////////////////
   if ((millis() - lastRefresh) > REFRESH)
   {
     if (!k32->wifi->isConnected() && !lostConnection)
@@ -295,27 +299,27 @@ void loop()
     lastRefresh = millis();
   } // if millis
 
-  // BATTERIE
+  /////////////////////  batterie   ///////////////////////
   if ((millis() - lastRefresh_bat) > REFRESH_BAT)
   {
     get_percentage();
     lastRefresh_bat = millis();
-  }
+  }// batterie
 
-  // MILLIS overflow protection
+  //////////////// MILLIS overflow protection //////////////
   if (millis() < lastRefresh)
     lastRefresh = millis();
   if (millis() < lastRefresh_bat)
     lastRefresh_bat = millis();
 
-  // Click on ESP
+  //////////////////     Click on ESP   ////////////////////
   if (k32->system->stm32->clicked())
   {
     manu_frame(++manu_counter);
     LOG("stm_clicked");
-  }
+  }// Click on ESP
 
-// Click on Atom
+//////////////////    Click on Atom    ////////////////////
 #ifdef K32_SET_HWREVISION
 #if K32_SET_HWREVISION == 3
   if ((digitalRead(39) >= 1) && (state_btn_atom != 0))
@@ -332,7 +336,8 @@ void loop()
 #endif
 #endif
 
-  // REMOTE CONTROL
+  //////////////////////  REMOTE CONTROL   ///////////////////////////
+
   remote_status(k32->remote->getState());
 
   int gpm = k32->remote->getPreviewMacro();
