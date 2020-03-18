@@ -50,7 +50,7 @@ void manu_frame(int mem)
 
     if (mem==11)
     {
-      fakeframe[adr + 16 -1 ] = modulator1->getValue();
+      // fakeframe[adr + 16 -1 ] = modulator1->getValue();
     }
 
    onDmxFrame(LULU_uni, adr + LULU_PATCHSIZE, 0, fakeframe);

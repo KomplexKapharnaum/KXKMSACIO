@@ -84,9 +84,6 @@ String nodeName;
 #include "K32.h" // https://github.com/KomplexKapharnaum/K32-lib
 K32 *k32;
 
-#include "K32_modulo.h"
-K32_modulo_sinus *modulator1;
-
 ///////////////////////////////Lib esp32_digital_led_lib//////////////////////////////
 
 #define min(m, n) ((m) < (n) ? (m) : (n))
@@ -275,8 +272,15 @@ void setup()
 #endif
 #endif
 
-modulator1 = new K32_modulo_sinus(1000, 0, 255);
-modulator1->play();
+///////////////////////////////////////////////// MODULO  //////////////////////////////////////
+
+k32->init_modulo();
+k32->modulo_phase->setParam(0,1000);
+k32->modulo_phase->setParam(1,100);
+k32->modulo_phase->setParam(2,200);
+k32->modulo_phase->play();
+
+
 
 } //setup
 
@@ -284,6 +288,14 @@ modulator1->play();
 void loop()
 {
   eff_modulo();
+
+LOG("modulator = ");
+LOGINL(" p1 = ");
+LOGINL(k32->modulo_phase->getValue_1());
+LOGINL(" p2 = ");
+LOGINL(k32->modulo_phase->getValue_2());
+LOGINL(" p3 = ");
+LOG(k32->modulo_phase->getValue_3());
 
 /////////////////////    if wifi     ///////////////////////
   if (k32->wifi->isConnected())
