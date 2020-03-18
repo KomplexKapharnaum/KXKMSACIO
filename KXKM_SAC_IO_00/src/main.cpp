@@ -173,6 +173,8 @@ int manu_counter = 0;
 
 int state_btn_atom = 0;
 
+int mem_call = -1;
+
 ///////////////////////////////////// batterie variable /////////////////////////////////////
 
 int percentage;
@@ -275,12 +277,6 @@ void setup()
 ///////////////////////////////////////////////// MODULO  //////////////////////////////////////
 
 k32->init_modulo();
-k32->modulo_phase->setParam(0,1000);
-k32->modulo_phase->setParam(1,100);
-k32->modulo_phase->setParam(2,200);
-k32->modulo_phase->play();
-
-
 
 } //setup
 
@@ -288,14 +284,6 @@ k32->modulo_phase->play();
 void loop()
 {
   eff_modulo();
-
-LOG("modulator = ");
-LOGINL(" p1 = ");
-LOGINL(k32->modulo_phase->getValue_1());
-LOGINL(" p2 = ");
-LOGINL(k32->modulo_phase->getValue_2());
-LOGINL(" p3 = ");
-LOG(k32->modulo_phase->getValue_3());
 
 /////////////////////    if wifi     ///////////////////////
   if (k32->wifi->isConnected())
@@ -356,7 +344,7 @@ LOG(k32->modulo_phase->getValue_3());
 
   //////////////////////  REMOTE CONTROL   ///////////////////////////
 
-  remote_status(k32->remote->getState());
+  remote_status(k32->remote->getState()); // 
 
   int gpm = k32->remote->getPreviewMacro();
   preview_frame(gpm);
@@ -371,5 +359,7 @@ LOG(k32->modulo_phase->getValue_3());
 
   } // ! REMOTE_AUTO
 
-manu_frame(manu_counter);
+manu_frame(manu_counter); // rustine pour rafrechire les modulos ??
+
+
 } //loop
