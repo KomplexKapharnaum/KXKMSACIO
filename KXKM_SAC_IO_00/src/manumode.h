@@ -1,4 +1,4 @@
-#define NUMBER_OF_MEM 12
+#define NUMBER_OF_MEM 13
 unsigned char MEM[NUMBER_OF_MEM][LULU_PATCHSIZE] = {
     {    0,   0,   0,   0,   0,       0,         0,        0,        0,          0,       0,       0,       0,       0,          0,           0,    0,     0,    0}, // BLACK
     {    0,   0,   0,   0,   0,       0,         0,        0,        0,          0,       0,       0,       0,       0,          0,           0,    0,     0,    0}, // external
@@ -12,8 +12,10 @@ unsigned char MEM[NUMBER_OF_MEM][LULU_PATCHSIZE] = {
     {  255, 255, 255, 255,   0,       0,       255,      127,        0,          0,       0,     255,       0,       0,         15,           0,  255,   240,   60}, // arc
     {  255, 255, 255, 255, 255,       0,         0,        0,       11,         80,     110,     110,     110,     110,          0,           0,  255,   255,   30}, // str white
     {  255, 255, 255, 255,   0,       0,       255,      127,        0,          0,     127,     255,       0,       0,         15,           0,  255,   240,   60}, // arc mouv
+    {  255, 100, 100, 100,   0,       0,         0,        0,        0,          0,      90,      90,      90,      90,          0,           0,  255,    30,  255}, // modulo rvb
 };
 //{master , r  , g  , b  , w  ,pix mod , pix long , pix_pos , str_mod , str_speed , r_fond , g_fond , b_fond , w_fond , color_mod , mirror_mod , zoom , pw1 , pw2 }
+//{0      , 1  , 2  , 3  , 4  ,5       , 6        , 7       , 8       , 9         , 10     , 11     , 12     , 13     , 14        , 15         , 16   , 17  , 18  } adr + -1
 
 #define COEF_PREV 60
 bool MEM_PREV[NUMBER_OF_MEM][24] = {
@@ -28,14 +30,29 @@ bool MEM_PREV[NUMBER_OF_MEM][24] = {
     {01, 0,01, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0},    // Magenta
     {01, 0, 0, 0, 01,01, 0, 0,  0,01, 0, 0,  0,01,01, 0,  0, 0,01, 0, 01, 0,01, 0},    // Arc
     { 0, 0, 0,01,  0, 0, 0, 0,  0, 0, 0,01,  0, 0, 0, 0,  0, 0, 0,01,  0, 0, 0, 0},    // str white
-    {01, 0, 0, 0, 01,01, 0, 0,  0,01, 0, 0,  0,01,01, 0,  0, 0,01, 0, 01, 0,01, 0}     // Arc mouv
+    {01, 0, 0, 0, 01,01, 0, 0,  0,01, 0, 0,  0,01,01, 0,  0, 0,01, 0, 01, 0,01, 0},    // Arc mouv
+    { 0,01,01,01,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0},    // modulo rvb
 };
 //  {r1,g1,b1,w1, r2,g2,b2,w2, r3,g3,w3,w3, r4,g4,b4,w4, r5,g5,b5,w5, r6,g6,b6,w6}                      ,
 
 void manu_frame(int mem)
 {
   mem = mem % NUMBER_OF_MEM;
-  
+
+  if (mem_call != mem ) {
+    mem_call = mem ;
+    if (mem == 11) {
+      k32->modulo_sinus->setParam(0,1000);// periode
+      k32->modulo_sinus->setParam(1,0);   // value min
+      k32->modulo_sinus->setParam(2,255); // value max
+      k32->modulo_sinus->play();
+    }else if (mem == 12) {
+      k32->modulo_phase->setParam(0,5000);// periode
+      k32->modulo_phase->setParam(1,0);   // value min
+      k32->modulo_phase->setParam(2,255); // value max
+      k32->modulo_phase->play();
+    }
+  }
   const int frameSize = adr + LULU_PATCHSIZE;
   uint8_t fakeframe[frameSize];
 
@@ -48,9 +65,12 @@ void manu_frame(int mem)
      fakeframe[adr + 18 - 1] = k32->remote->getLamp();
     }
 
-    if (mem==11)
-    {
-      // fakeframe[adr + 16 -1 ] = modulator1->getValue();
+    if (mem==11)    {
+     fakeframe[adr + 16 -1 ] = k32->modulo_sinus->getValue();
+    }else if (mem == 12){
+     fakeframe[adr + 1 -1 ] = k32->modulo_phase->getValue_1();
+     fakeframe[adr + 2 -1 ] = k32->modulo_phase->getValue_2();
+     fakeframe[adr + 3 -1 ] = k32->modulo_phase->getValue_3();
     }
 
    onDmxFrame(LULU_uni, adr + LULU_PATCHSIZE, 0, fakeframe);
