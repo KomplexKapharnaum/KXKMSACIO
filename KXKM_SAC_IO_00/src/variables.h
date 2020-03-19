@@ -73,7 +73,7 @@ float str_blind_ws = 1;
 
 ////////////////////////////////// btn variables////////////////////////////////////
 
-int manu_counter = 0;
+int manu_counter = -1;
 int state_btn_atom = 0;
 bool state_btn_stm = false;
 int mem_call = -1;
