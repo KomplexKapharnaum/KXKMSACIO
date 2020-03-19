@@ -116,6 +116,7 @@ int previousDataLength = 0;
 #include "bat_custom.h"
 #include "Black.h"
 #include "onDmxFrame.h"
+#include "mem.h"
 #include "manumode.h"
 #include "leds.h"
 #include "do_effet_0.h"
@@ -277,7 +278,7 @@ void loop()
     LOG("auto  *******");
 
   } // ! REMOTE_AUTO
-  
+
 if (state_btn_stm == true || k32->remote->getState() != REMOTE_AUTO){
 manu_frame(manu_counter);
 }// rafrechire les modulos si manu btn
