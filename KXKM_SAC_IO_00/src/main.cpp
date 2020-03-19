@@ -277,8 +277,9 @@ void loop()
     LOG("auto  *******");
 
   } // ! REMOTE_AUTO
-if (state_btn_stm == true){
-manu_frame(manu_counter); // rustine pour rafrechire les modulos ??
-}
+  
+if (state_btn_stm == true || k32->remote->getState() != REMOTE_AUTO){
+manu_frame(manu_counter);
+}// rafrechire les modulos si manu btn
 
 } //loop
