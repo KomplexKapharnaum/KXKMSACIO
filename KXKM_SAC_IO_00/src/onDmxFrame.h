@@ -5,7 +5,7 @@ void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t* d
 {
   sendFrame = 1;
 
-  boolean tail = false;
+  // boolean tail = false;
   if (universe == LULU_uni)
   {
 
