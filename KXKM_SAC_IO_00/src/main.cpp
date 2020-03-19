@@ -97,23 +97,7 @@ strand_t *strands[] = {&STRANDS[0], &STRANDS[1]};
 int ledChannelOne = 0;
 int ledChannelTwo = 0;
 
-#include "dmx variables.h"
-
-////////////////////////////////// btn variables////////////////////////////////////
-
-int manu_counter = 0;
-int state_btn_atom = 0;
-int mem_call = -1;
-
-///////////////////////////////////// batterie variable /////////////////////////////////////
-
-int percentage;
-int led_niv = 25;
-int etat_r = 0;
-
-///////////////////////////////////// Wifi variable /////////////////////////////////////
-
-bool lostConnection = true;
+#include "variables.h"
 
 ///////////////////////////////////// Artnet settings /////////////////////////////////////
 ArtnetWifi artnet;
@@ -218,7 +202,7 @@ void loop()
 /////////////////////    if wifi     ///////////////////////
   if (k32->wifi->isConnected())
   {
-    if (k32->remote->getState() != REMOTE_MANULOCK)
+    if (k32->remote->getState() != REMOTE_MANULOCK || state_btn_stm == false)
       artnet.read();
     lostConnection = false;
   } // if wifi
@@ -251,8 +235,13 @@ void loop()
   //////////////////     Click on ESP   ////////////////////
   if (k32->system->stm32->clicked())
   {
+    LOG(" stm_clicked ");
+    if (state_btn_stm == false) 
+    {
+      state_btn_stm = true;
+      LOG(" state_btn_stm TRUE ");
+    }
     manu_frame(++manu_counter);
-    LOG("stm_clicked");
   }// Click on ESP
 
 //////////////////    Click on Atom    ////////////////////
@@ -288,8 +277,8 @@ void loop()
     LOG("auto  *******");
 
   } // ! REMOTE_AUTO
-
+if (state_btn_stm == true){
 manu_frame(manu_counter); // rustine pour rafrechire les modulos ??
-
+}
 
 } //loop

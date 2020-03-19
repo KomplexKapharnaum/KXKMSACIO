@@ -1,7 +1,6 @@
-#define NUMBER_OF_MEM 13
+#define NUMBER_OF_MEM 13 // stm leave in last mem
 unsigned char MEM[NUMBER_OF_MEM][LULU_PATCHSIZE] = {
-    {    0,   0,   0,   0,   0,       0,         0,        0,        0,          0,       0,       0,       0,       0,          0,           0,    0,     0,    0}, // BLACK
-    {    0,   0,   0,   0,   0,       0,         0,        0,        0,          0,       0,       0,       0,       0,          0,           0,    0,     0,    0}, // external
+    {   60, 255, 255, 255, 255,       0,         0,        0,        0,          0,       0,       0,       0,       0,          0,           0,  255,     0,    0}, // first
     {  255,   0,   0,   0, 255,       0,         0,        0,        0,          0,      90,      90,      90,      90,          0,           0,  255,    30,  255}, // white
     {  255, 255,   0,   0,   0,       0,         0,        0,        0,          0,      90,       0,       0,       0,          0,           0,  255,    60,  240}, // Red
     {  255,   0, 255,   0,   0,       0,         0,        0,        0,          0,       0,      90,       0,       0,          0,           0,  255,    90,  210}, // Green
@@ -13,14 +12,14 @@ unsigned char MEM[NUMBER_OF_MEM][LULU_PATCHSIZE] = {
     {  255, 255, 255, 255, 255,       0,         0,        0,       11,         80,     110,     110,     110,     110,          0,           0,  255,   255,   30}, // str white
     {  255, 255, 255, 255,   0,       0,       255,      127,        0,          0,     127,     255,       0,       0,         15,           0,  255,   240,   60}, // arc mouv
     {  255, 100, 100, 100,   0,       0,         0,        0,        0,          0,      90,      90,      90,      90,          0,           0,  255,    30,  255}, // modulo rvb
+    {    0,   0,   0,   0,   0,       0,         0,        0,        0,          0,       0,       0,       0,       0,          0,           0,    0,     0,    0}, // BLACK stm leave lst mem
 };
 //{master , r  , g  , b  , w  ,pix mod , pix long , pix_pos , str_mod , str_speed , r_fond , g_fond , b_fond , w_fond , color_mod , mirror_mod , zoom , pw1 , pw2 }
 //{0      , 1  , 2  , 3  , 4  ,5       , 6        , 7       , 8       , 9         , 10     , 11     , 12     , 13     , 14        , 15         , 16   , 17  , 18  } adr + -1
 
 #define COEF_PREV 60
 bool MEM_PREV[NUMBER_OF_MEM][24] = {
-    { 0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0},    // BLACK
-    { 0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0},    // external
+    {10,10,10,10,  0,10,10,10,  0, 0,10,10,  0, 0, 0,10, 10, 0, 0, 0,  0,10, 0, 0},    // first
     { 0, 0, 0,01,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0},    // white
     {01, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0},    // Red
     { 0,01, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0},    // Green
@@ -32,6 +31,7 @@ bool MEM_PREV[NUMBER_OF_MEM][24] = {
     { 0, 0, 0,01,  0, 0, 0, 0,  0, 0, 0,01,  0, 0, 0, 0,  0, 0, 0,01,  0, 0, 0, 0},    // str white
     {01, 0, 0, 0, 01,01, 0, 0,  0,01, 0, 0,  0,01,01, 0,  0, 0,01, 0, 01, 0,01, 0},    // Arc mouv
     { 0,01,01,01,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0},    // modulo rvb
+    { 0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0},    // BLACK stm leave last mem
 };
 //  {r1,g1,b1,w1, r2,g2,b2,w2, r3,g3,w3,w3, r4,g4,b4,w4, r5,g5,b5,w5, r6,g6,b6,w6}                      ,
 
@@ -39,14 +39,19 @@ void manu_frame(int mem)
 {
   mem = mem % NUMBER_OF_MEM;
 
+  if (mem == NUMBER_OF_MEM-1) {
+    state_btn_stm = false;
+    LOG(" state_btn_stm FALSE ");
+  }
+
   if (mem_call != mem ) {
     mem_call = mem ;
-    if (mem == 11) {
+    if (mem == 10) {
       k32->modulo_sinus->setParam(0,1000);// periode
       k32->modulo_sinus->setParam(1,0);   // value min
       k32->modulo_sinus->setParam(2,255); // value max
       k32->modulo_sinus->play();
-    }else if (mem == 12) {
+    }else if (mem == 11) {
       k32->modulo_phase->setParam(0,5000);// periode
       k32->modulo_phase->setParam(1,0);   // value min
       k32->modulo_phase->setParam(2,255); // value max
@@ -65,9 +70,9 @@ void manu_frame(int mem)
      fakeframe[adr + 18 - 1] = k32->remote->getLamp();
     }
 
-    if (mem==11)    {
+    if (mem==10)    {
      fakeframe[adr + 16 -1 ] = k32->modulo_sinus->getValue();
-    }else if (mem == 12){
+    }else if (mem == 11){
      fakeframe[adr + 1 -1 ] = k32->modulo_phase->getValue_1();
      fakeframe[adr + 2 -1 ] = k32->modulo_phase->getValue_2();
      fakeframe[adr + 3 -1 ] = k32->modulo_phase->getValue_3();

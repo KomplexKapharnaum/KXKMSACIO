@@ -75,6 +75,7 @@ float str_blind_ws = 1;
 
 int manu_counter = 0;
 int state_btn_atom = 0;
+bool state_btn_stm = false;
 int mem_call = -1;
 
 ///////////////////////////////////// batterie variable /////////////////////////////////////
