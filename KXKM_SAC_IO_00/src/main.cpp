@@ -1,6 +1,6 @@
 #include <Arduino.h>
 
-#define LULU_VER 46
+#define LULU_VER 47
 
 /////////////////////////////////////////ID/////////////////////////////////////////
 #define K32_SET_NODEID 81   // board unique id    (necessary first time only)
