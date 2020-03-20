@@ -5,8 +5,7 @@ void manu_frame(int mem)
 
   if (mem == NUMBER_OF_MEM - 1)
   {
-    state_btn_stm = false;
-    LOG(" state_btn_stm FALSE ");
+    state_btn = false;
   }
 
   if (mem_call != mem)
@@ -15,7 +14,7 @@ void manu_frame(int mem)
     if (mem == 8)
     {
       k32->modulo_fadein->setParam(0, 3000); // fade time
-      k32->modulo_fadein->setParam(1, 100);    // start value
+      k32->modulo_fadein->setParam(1, 100);  // start value
       k32->modulo_fadein->setParam(2, 255);  // end value
       k32->modulo_fadein->play();
     }
@@ -101,7 +100,7 @@ void remote_status(remoteState state)
   if (state == REMOTE_AUTO)
     strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 14] = pixelFromRGBW(0, 0, 0, 0); // noir
   else if (state == REMOTE_MANU)
-    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 14] = pixelFromRGBW(0, 127, 0, 0); // vert
+    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 14] = pixelFromRGBW(0, COEF_PREV, 0, 0); // vert
   else if (state == REMOTE_MANULOCK)
-    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 14] = pixelFromRGBW(127, 0, 0, 0); // rouge
+    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 14] = pixelFromRGBW(COEF_PREV, 0, 0, 0); // rouge
 }

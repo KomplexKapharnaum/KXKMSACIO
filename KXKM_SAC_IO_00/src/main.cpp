@@ -203,7 +203,7 @@ void loop()
 /////////////////////    if wifi     ///////////////////////
   if (k32->wifi->isConnected())
   {
-    if (k32->remote->getState() != REMOTE_MANULOCK || state_btn_stm == false)
+    if (k32->remote->getState() != REMOTE_MANULOCK || state_btn == false)
       artnet.read();
     lostConnection = false;
   } // if wifi
@@ -236,11 +236,9 @@ void loop()
   //////////////////     Click on ESP   ////////////////////
   if (k32->system->stm32->clicked())
   {
-    LOG(" stm_clicked ");
-    if (state_btn_stm == false) 
+    if (state_btn == false) 
     {
-      state_btn_stm = true;
-      LOG(" state_btn_stm TRUE ");
+      state_btn = true;
     }
     manu_frame(++manu_counter);
   }// Click on ESP
@@ -248,16 +246,14 @@ void loop()
 //////////////////    Click on Atom    ////////////////////
 #ifdef K32_SET_HWREVISION
 #if K32_SET_HWREVISION == 3
-  if ((digitalRead(39) >= 1) && (state_btn_atom != 0))
+  if ((digitalRead(39) >= 1) && (state_btn != false))
   {
-    state_btn_atom = 0;
+    state_btn = false;
   }
-
-  if ((digitalRead(39) <= 0) && (state_btn_atom != 1))
+  if ((digitalRead(39) <= 0) && (state_btn != true))
   {
-    state_btn_atom = 1;
+    state_btn = true;
     manu_frame(++manu_counter);
-    LOG("atom_clicked");
   }
 #endif
 #endif
@@ -275,11 +271,9 @@ void loop()
     gpm = k32->remote->getActiveMacro();
     active_frame(gpm);
     manu_frame(gpm);
-    LOG("auto  *******");
-
   } // ! REMOTE_AUTO
 
-if (state_btn_stm == true || k32->remote->getState() != REMOTE_AUTO){
+if (state_btn == true){
 manu_frame(manu_counter);
 }// rafrechire les modulos si manu btn
 

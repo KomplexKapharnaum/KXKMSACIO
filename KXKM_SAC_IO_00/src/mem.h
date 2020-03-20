@@ -17,7 +17,7 @@ unsigned char MEM[NUMBER_OF_MEM][LULU_PATCHSIZE] = {
 //{master , r  , g  , b  , w  ,pix mod , pix long , pix_pos , str_mod , str_speed , r_fond , g_fond , b_fond , w_fond , color_mod , mirror_mod , zoom , pw1 , pw2 }
 //{0      , 1  , 2  , 3  , 4  ,5       , 6        , 7       , 8       , 9         , 10     , 11     , 12     , 13     , 14        , 15         , 16   , 17  , 18  } adr + -1
 
-#define COEF_PREV 60
+#define COEF_PREV 25
 bool MEM_PREV[NUMBER_OF_MEM][24] = {
     {10,10,10,10,  0,10,10,10,  0, 0,10,10,  0, 0, 0,10, 10, 0, 0, 0,  0,10, 0, 0},    // first
     { 0, 0, 0,01,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0},    // white

@@ -7,7 +7,7 @@ void get_percentage()
     //3ledverte
     for (int i = NUM_LEDS_PER_STRIP_max + 2; i < NUM_LEDS_PER_STRIP_max + 6; i++)
     {
-      strands[1]->pixels[i] = pixelFromRGB(0, led_niv, 0);
+      strands[1]->pixels[i] = pixelFromRGB(0, COEF_PREV, 0);
     } //for i
   }
   else if (percentage > 33)
@@ -15,7 +15,7 @@ void get_percentage()
     //3ledorange
     for (int i = NUM_LEDS_PER_STRIP_max + 2; i < NUM_LEDS_PER_STRIP_max + 6; i++)
     {
-      strands[1]->pixels[i] = pixelFromRGB(led_niv, (led_niv / 3), 0);
+      strands[1]->pixels[i] = pixelFromRGB(COEF_PREV, (COEF_PREV / 3), 0);
     } //for i
   }
   else if (percentage > 16)
