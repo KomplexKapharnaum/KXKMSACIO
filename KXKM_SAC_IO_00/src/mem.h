@@ -11,7 +11,7 @@ unsigned char MEM[NUMBER_OF_MEM][LULU_PATCHSIZE] = {
     {  255, 255, 255, 255,   0,       0,       255,      127,        0,          0,       0,     255,       0,       0,         15,           0,  255,   240,   60}, // arc
     {  255, 255, 255, 255, 255,       0,         0,        0,       11,         80,     110,     110,     110,     110,          0,           0,  255,   255,   30}, // str white
     {  255, 255, 255, 255,   0,       0,       255,      127,        0,          0,     127,     255,       0,       0,         15,           0,  255,   240,   60}, // arc mouv
-    {  255, 100, 100, 100,   0,       0,         0,        0,        0,          0,      90,      90,      90,      90,          0,           0,  255,    30,  255}, // modulo rvb
+    {  255, 100, 100, 100,   0,       0,         0,        0,        0,          0,      90,      90,      90,      90,          0,           0,  255,     0,    0}, // modulo rvb
     {    0,   0,   0,   0,   0,       0,         0,        0,        0,          0,       0,       0,       0,       0,          0,           0,    0,     0,    0}, // BLACK stm leave lst mem
 };
 //{master , r  , g  , b  , w  ,pix mod , pix long , pix_pos , str_mod , str_speed , r_fond , g_fond , b_fond , w_fond , color_mod , mirror_mod , zoom , pw1 , pw2 }
