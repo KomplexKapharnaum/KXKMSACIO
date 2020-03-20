@@ -13,12 +13,12 @@ void manu_frame(int mem)
     mem_call = mem;
     if (mem == 8)
     {
-      k32->modulo_fadein->setParam(0, 3000); // fade time
-      k32->modulo_fadein->setParam(1, 100);  // start value
-      k32->modulo_fadein->setParam(2, 255);  // end value
+      k32->modulo_fadein->setParam(0, 5000); // fade time
+      k32->modulo_fadein->setParam(1, 255);  // start value
+      k32->modulo_fadein->setParam(2, 0);  // end value
       k32->modulo_fadein->play();
     }
-    if (mem == 10)
+    else if (mem == 10)
     {
       k32->modulo_sinus->setParam(0, 1000); // periode
       k32->modulo_sinus->setParam(1, 0);    // value min
@@ -32,7 +32,8 @@ void manu_frame(int mem)
       k32->modulo_phase->setParam(2, 255);  // value max
       k32->modulo_phase->play();
     }
-  }
+  }// (mem_call != mem)
+
   const int frameSize = adr + LULU_PATCHSIZE;
   uint8_t fakeframe[frameSize];
 
