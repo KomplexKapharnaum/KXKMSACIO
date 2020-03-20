@@ -15,9 +15,9 @@ void manu_frame(int mem)
     if (mem == 8)
     {
       k32->modulo_fadein->setParam(0, 3000); // fade time
-      k32->modulo_fadein->setParam(1, 0);    // start value
+      k32->modulo_fadein->setParam(1, 100);    // start value
       k32->modulo_fadein->setParam(2, 255);  // end value
-      k32->modulo_fadein->play;
+      k32->modulo_fadein->play();
     }
     if (mem == 10)
     {
