@@ -239,7 +239,7 @@ void loop()
   }
 
   //////////////////    Click on Atom    ////////////////////
-  if (k32->system->hw() == 3) {
+  else if (k32->system->hw() == 3) {
     if ((digitalRead(39) >= 1) && (state_btn != false))
     {
       state_btn = false;
