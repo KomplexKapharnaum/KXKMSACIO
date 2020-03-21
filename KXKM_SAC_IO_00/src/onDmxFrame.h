@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////// onDmxFrame //////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t* data)
+void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t *data)
 {
   sendFrame = 1;
 
@@ -60,13 +60,21 @@ void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t* d
     }
     else
     {
-      if ((pix_mod >= 0 && pix_mod <= 20) || (pix_mod >= 31 && pix_mod <= 255))
+      if ((pix_mod >= 0 && pix_mod <= 20) || (pix_mod >= 31 && pix_mod <= 230))
       {
         pix_start = ((data[adr + 5] * N_L_P_S) / 255) - 1;
       }
       else if (pix_mod >= 21 && pix_mod <= 30)
       {
         pix_start = data[adr + 5] - 1;
+      }
+      else if (pix_mod >= 231 && pix_mod <= 250)
+      {
+        pix_start = ((data[adr + 5] * N_L_P_S) / 255) - 1;
+        color_rgbw(0, data[adr]);
+        color_rgbw(1, data[adr + 1]);
+        color_rgbw(2, data[adr + 2]);
+        color_rgbw(3, data[adr + 3]);
       }
     }
 
@@ -220,7 +228,7 @@ void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t* d
 } //onframedmx
 
 
-void onArtNetFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t* data)
+void onArtNetFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t *data)
 {
   if (k32->remote->getState() == REMOTE_MANU) k32->remote->setAuto();
   if (k32->remote->getState() == REMOTE_AUTO) onDmxFrame(universe, length, sequence, data);

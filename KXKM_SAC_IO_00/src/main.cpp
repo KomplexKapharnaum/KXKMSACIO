@@ -77,6 +77,7 @@ int previousDataLength = 0;
 #include "k32_settings.h"
 #include "bat_custom.h"
 #include "Black.h"
+#include "color_rgbw.h"
 #include "onDmxFrame.h"
 #include "mem.h"
 #include "manumode.h"

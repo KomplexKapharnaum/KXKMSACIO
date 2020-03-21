@@ -13,7 +13,7 @@ void do_effet_0()
     } //for i
   }   //pix_mod 0
 
-  if (pix_mod >= 11 && pix_mod <= 20)
+  else if (pix_mod >= 11 && pix_mod <= 20)
   {
     for (int i = 0; i < NUM_LEDS_PER_STRIP; i++)
     {
@@ -34,7 +34,7 @@ void do_effet_0()
     } //for i
   }   //pix_mod 10
 
-  if (pix_mod >= 21 && pix_mod <= 30)
+  else if (pix_mod >= 21 && pix_mod <= 30)
   {
     for (int i = 0; i < NUM_LEDS_PER_STRIP; i++)
     {
@@ -55,7 +55,7 @@ void do_effet_0()
     } //for i
   }   //pix_mod 20
 
-  if (pix_mod >= 31 && pix_mod <= 40)
+  else if (pix_mod >= 31 && pix_mod <= 40)
   {
     for (int i = 0; i < NUM_LEDS_PER_STRIP; i++)
     {
@@ -88,7 +88,7 @@ void do_effet_0()
     } //for i
   }   //pix_mod 30
 
-  if (pix_mod >= 41 && pix_mod <= 50)
+  else if (pix_mod >= 41 && pix_mod <= 50)
   {
     ref_pix_pos = (pix_start + pix_pos);
     for (int i = 0; i < NUM_LEDS_PER_STRIP; i++)
@@ -123,7 +123,7 @@ void do_effet_0()
     } //for i
   }   //pix_mod 40
 
-  if (pix_mod >= 51 && pix_mod <= 60)
+  else if (pix_mod >= 51 && pix_mod <= 60)
   {
     ref_pix_pos = (pix_start + pix_pos);
     for (int i = 0; i < NUM_LEDS_PER_STRIP; i++)
@@ -168,7 +168,7 @@ void do_effet_0()
     } //for i
   }   //pix_mod 50
 
-  if (pix_mod >= 91 && pix_mod <= 100)
+  else if (pix_mod >= 91 && pix_mod <= 100)
   {
     for (int i = 0; i < NUM_LEDS_PER_STRIP; i++)
     {
@@ -203,7 +203,7 @@ void do_effet_0()
     } //for i
   }   //pix_mod 90
 
-  if (pix_mod >= 101 && pix_mod <= 110)
+  else if (pix_mod >= 101 && pix_mod <= 110)
   {
     ref_pix_pos = (pix_start + pix_pos);
     for (int i = 0; i < NUM_LEDS_PER_STRIP; i++)
@@ -240,7 +240,7 @@ void do_effet_0()
     } //for i
   }   //pix_mod 100
 
-  if (pix_mod >= 111 && pix_mod <= 120)
+  else if (pix_mod >= 111 && pix_mod <= 120)
   {
     ref_pix_pos = (pix_start + pix_pos);
     for (int i = 0; i < NUM_LEDS_PER_STRIP; i++)
@@ -287,5 +287,79 @@ void do_effet_0()
       }
     } //for i
   }   //pix_mod 110
+
+  else if (pix_mod >= 231 && pix_mod <= 240)
+  {
+
+    for (int i = 0; i < NUM_LEDS_PER_STRIP; i++)
+    {
+      if (i >= pix_pos && i < (NUM_LEDS_PER_STRIP / 3) + pix_pos)
+      {
+        pi_n_1_r[i] = tri1r;
+        pi_n_1_g[i] = tri1g;
+        pi_n_1_b[i] = tri1b;
+        pi_n_1_w[i] = tri1w;
+      }
+      else if (i >= (NUM_LEDS_PER_STRIP / 3) + pix_pos && i < ((NUM_LEDS_PER_STRIP / 3) * 2) + pix_pos)
+      {
+        pi_n_1_r[i] = tri2r;
+        pi_n_1_g[i] = tri2g;
+        pi_n_1_b[i] = tri2b;
+        pi_n_1_w[i] = tri2w;
+      }
+      else if (i >= ((NUM_LEDS_PER_STRIP / 3) * 2) + pix_pos && i < (NUM_LEDS_PER_STRIP + pix_pos))
+      {
+        pi_n_1_r[i] = tri3r;
+        pi_n_1_g[i] = tri3g;
+        pi_n_1_b[i] = tri3b;
+        pi_n_1_w[i] = tri3w;
+      }
+      else
+      {
+        pi_n_1_r[i] = 0;
+        pi_n_1_g[i] = 0;
+        pi_n_1_b[i] = 0;
+        pi_n_1_w[i] = 0; 
+      }
+    }
+
+  } //pix_mod 231
+
+  else if (pix_mod >= 241 && pix_mod <= 250)
+  {
+
+    for (int i = 0; i < NUM_LEDS_PER_STRIP; i++)
+    {
+      if (i < NUM_LEDS_PER_STRIP / 4)
+      {
+        pi_n_1_r[i] = tri1r;
+        pi_n_1_g[i] = tri1g;
+        pi_n_1_b[i] = tri1b;
+        pi_n_1_w[i] = tri1w;
+      }
+      else if (i >= NUM_LEDS_PER_STRIP / 4 && i < (NUM_LEDS_PER_STRIP / 4) * 2)
+      {
+        pi_n_1_r[i] = tri2r;
+        pi_n_1_g[i] = tri2g;
+        pi_n_1_b[i] = tri2b;
+        pi_n_1_w[i] = tri2w;
+      }
+      else if (i >= (NUM_LEDS_PER_STRIP / 4) * 2 && i < (NUM_LEDS_PER_STRIP / 4) * 3)
+      {
+        pi_n_1_r[i] = tri3r;
+        pi_n_1_g[i] = tri3g;
+        pi_n_1_b[i] = tri3b;
+        pi_n_1_w[i] = tri3w;
+      }
+      else
+      {
+        pi_n_1_r[i] = tri4r;
+        pi_n_1_g[i] = tri4g;
+        pi_n_1_b[i] = tri4b;
+        pi_n_1_w[i] = tri4w;
+      }
+    }
+
+  } //pix_mod 241
 
 } // do_effet_0

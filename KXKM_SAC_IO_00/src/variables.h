@@ -40,22 +40,10 @@ int pix_start;
 int pix_center;
 int pix_end;
 int master;
-float rrr;
-float ggg;
-float bbb;
-float www;
-float rr;
-float gg;
-float bb;
-float ww;
-float r;
-float g;
-float b;
-float w;
-float srr;
-float sgg;
-float sbb;
-float sww;
+float rrr , ggg , bbb , www;
+float rr , gg , bb , ww;
+float r , g , b , w;
+float srr , sgg , sbb , sww;
 int mod;
 int pix_mod;
 unsigned long str_ws_last = 0;
@@ -85,3 +73,10 @@ int etat_r = 0;
 ///////////////////////////////////// Wifi variable /////////////////////////////////////
 
 bool lostConnection = true;
+
+///////////////////////////////////// tri & quadri color  variable /////////////////////////////////////
+
+    int tri1r , tri1g , tri1b , tri1w ;
+    int tri2r , tri2g , tri2b , tri2w ;
+    int tri3r , tri3g , tri3b , tri3w ;
+    int tri4r , tri4g , tri4b , tri4w ;
