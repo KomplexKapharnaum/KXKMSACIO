@@ -11,7 +11,15 @@ void manu_frame(int mem)
   if (mem_call != mem)
   {
     mem_call = mem;
-    if (mem == 8)
+
+    if (mem == 0)
+    {
+      k32->modulo_sinus->setParam(0, 10000); // periode
+      k32->modulo_sinus->setParam(1, 0);    // value min
+      k32->modulo_sinus->setParam(2, 255);  // value max
+      k32->modulo_sinus->play();
+    }
+    else if (mem == 8)
     {
       k32->modulo_fade->setParam(0, 5000); // fade time
       k32->modulo_fade->setParam(1, 255);  // start value
@@ -46,7 +54,11 @@ void manu_frame(int mem)
     fakeframe[adr + 18 - 1] = k32->remote->getLamp();
   }
 
-  if (mem == 8)
+  if (mem == 0)
+  {
+    fakeframe[adr + 6 - 1] = k32->modulo_sinus->getValue();
+  }
+  else if (mem == 8)
   {
     fakeframe[adr - 1] = k32->modulo_fade->getValue();
   }
