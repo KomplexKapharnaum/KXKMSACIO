@@ -119,6 +119,7 @@ int previousDataLength = 0;
 #include "k32_settings.h"
 #include "bat_custom.h"
 #include "Black.h"
+#include "color_rgbw.h"
 #include "onDmxFrame.h"
 #include "mem.h"
 #include "manumode.h"
@@ -129,7 +130,6 @@ int previousDataLength = 0;
 #include "Get_percentage.h"
 #include "X_task.h"
 #include "PWM.h"
-#include "sinus.h"
 
 ///////////////////////////////////////////////// SETUP ////////////////////////////////////////
 void setup()
