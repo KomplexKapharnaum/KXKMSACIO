@@ -1,61 +1,28 @@
 #include <Arduino.h>
 
-#define LULU_VER 47
+#define LULU_VER 48
 
 /////////////////////////////////////////ID/////////////////////////////////////////
-#define K32_SET_NODEID 81     // board unique id    (necessary first time only)
 
-#define RUBAN_TYPE LED_SK6812W_V1 // LED_WS2812_V1  LED_WS2812B_V1  LED_WS2812B_V2  LED_WS2812B_V3  LED_WS2813_V1  LED_WS2813_V2   LED_WS2813_V3  LED_WS2813_V4  LED_SK6812_V1  LED_SK6812W_V1,
-#define LULU_ID 1                 // permet de calculer l'adresse DMX
-#define LULU_TYPE 3               // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone"
-#define LULU_UNI 0                // Univers DM
+// #define K32_SET_NODEID 1337       // board unique id    
+
+// #define RUBAN_TYPE LED_WS2812_V1  // LED_WS2812_V1  LED_WS2812B_V1  LED_WS2812B_V2  LED_WS2812B_V3  LED_WS2813_V1  LED_WS2813_V2   LED_WS2813_V3  LED_WS2813_V4  LED_SK6812_V1  LED_SK6812W_V1,
+// #define LULU_ID 1                 // permet de calculer l'adresse DMX
+// #define LULU_TYPE 8               // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom"
+// #define LULU_UNI 0                // Univers DM
 
 /////////////////////////////////////////Debug///////////////////////////////////////
 #define DEBUG 1
-//#define DEBUG_dmx 1
-//#define DEBUG_dmxframe 1
-//#define DEBUG_STR 1
-//#define DEBUG_calibre_btn 1
-//#define DEBUG_btn 1
-
-/////////////////////////////////////////def RUBAN_TYPE & LULU_TYPE /////////////////////////////////////////
-#ifdef RUBAN_TYPE
-#if RUBAN_TYPE == LED_SK6812_V1
-#define R_TYPE "_SK"
-#elif RUBAN_TYPE == LED_SK6812W_V1
-#define R_TYPE "_SK"
-#else
-#define R_TYPE "_WS"
-#endif
-#endif
-
-#ifdef LULU_TYPE
-#if LULU_TYPE == 1
-#define NUM_LEDS_PER_STRIP_MAX 120
-#define L_TYPE "Sac"
-#elif LULU_TYPE == 2
-#define NUM_LEDS_PER_STRIP_MAX 120
-#define L_TYPE "Barre"
-#elif LULU_TYPE == 3
-#define NUM_LEDS_PER_STRIP_MAX 17
-#define L_TYPE "Pince"
-#elif LULU_TYPE == 4
-#define NUM_LEDS_PER_STRIP_MAX 73
-#define L_TYPE "Fluo"
-#elif LULU_TYPE == 5
-#define NUM_LEDS_PER_STRIP_MAX 186
-#define L_TYPE "Flex"
-#elif LULU_TYPE == 6
-#define NUM_LEDS_PER_STRIP_MAX 60
-#define L_TYPE "HideSee"
-#elif LULU_TYPE == 7
-#define NUM_LEDS_PER_STRIP_MAX 35
-#define L_TYPE "Phone"
-#endif
-#endif
+// #define DEBUG_dmx 1
+// #define DEBUG_dmxframe 1
+// #define DEBUG_STR 1
+// #define DEBUG_calibre_btn 1
+// #define DEBUG_btn 1
 
 #define LULU_PATCHSIZE 19 // Taille du patch DMX pour cet Fixture
 #define LEDS_ABSOLUTE_MAX 300
+
+
 
 /////////////////////////////////////////Adresse/////////////////////////////////////
 int LULU_id;
@@ -63,8 +30,8 @@ int LULU_type;
 int LULU_uni;
 int adr;
 
+String nodeName;
 int RUBAN_type;
-String R_type;
 String L_type;
 
 int NUM_LEDS_PER_STRIP_max;
@@ -78,13 +45,9 @@ unsigned long lastRefresh = 0;
 unsigned long lastRefresh_bat = 0;
 #define REFRESH_BAT 100
 
-String nodeName;
+/////////////////////////////////////////K32/////////////////////////////////////////
 
-#if __has_include ("../lib/K32-lib/src/K32.h")
-  #include "../lib/K32-lib/src/K32.h"  // https://github.com/KomplexKapharnaum/K32-lib
-#else
-  #include <K32.h>  // https://github.com/KomplexKapharnaum/K32-lib
-#endif
+#include <K32.h>  // remote https://github.com/KomplexKapharnaum/K32-lib
 
 K32 *k32;
 
@@ -92,14 +55,9 @@ K32 *k32;
 
 #define min(m, n) ((m) < (n) ? (m) : (n))
 #define NUM_STRIPS 2
-int PINS[NUM_STRIPS];
 int numberOfChannels;
 strand_t STRANDS[NUM_STRIPS];
 strand_t *strands[] = {&STRANDS[0], &STRANDS[1]};
-
-//// Setup PWM State(s)
-int ledChannelOne = 0;
-int ledChannelTwo = 0;
 
 #include "variables.h"
 
@@ -128,8 +86,6 @@ int previousDataLength = 0;
 #include "effet_modulo.h"
 #include "Get_percentage.h"
 #include "X_task.h"
-#include "PWM.h"
-#include "sinus.h"
 
 ///////////////////////////////////////////////// SETUP ////////////////////////////////////////
 void setup()
@@ -140,6 +96,12 @@ void setup()
   //////////////////////////////////////// K32 modules ////////////////////////////////////
   k32->init_stm32();
   k32_settings();
+
+  // LEDS
+  // k32->init_light( RUBAN_type, NUM_LEDS_PER_STRIP_max );
+
+  // PWM
+  k32->init_pwm();
 
   // WIFI
   k32->init_wifi(nodeName);
@@ -164,7 +126,8 @@ void setup()
 
   ///////////////////////////////////////////////// LEDS //////////////////////////////////////
   leds_init();
-  ledSetup();
+  
+  initTest();
 
   /////////////////////////////////////////////// ARTNET //////////////////////////////////////
   artnet.begin();
@@ -172,7 +135,7 @@ void setup()
   artnet.setArtDmxCallback(onArtNetFrame);
 
   ///////////////////////////////////////////////// INIT //////////////////////////////////////
-  initTest();
+  
 
   ///////////////////////////////////////////////// CORE //////////////////////////////////////
   //  create a task that will be executed in the Map1code() function, with priority 1 and executed on core 0

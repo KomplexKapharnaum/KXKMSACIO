@@ -3,10 +3,7 @@ void manu_frame(int mem)
 {
   mem = mem % NUMBER_OF_MEM;
 
-  if (mem == NUMBER_OF_MEM - 1)
-  {
-    state_btn = false;
-  }
+  if (mem == NUMBER_OF_MEM - 1) state_btn = false;
 
   if (mem_call != mem)
   {

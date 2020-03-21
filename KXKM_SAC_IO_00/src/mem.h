@@ -1,5 +1,5 @@
 #define NUMBER_OF_MEM 13 // stm leave in last mem
-unsigned char MEM[NUMBER_OF_MEM][LULU_PATCHSIZE] = {
+byte MEM[NUMBER_OF_MEM][LULU_PATCHSIZE] = {
     {  127, 255, 255,   0,   0,      15,        50,      127,        0,          0,       0,       0,     255,       0,          0,           0,  255,     0,    0}, // first
     {  255,   0,   0,   0, 255,       0,         0,        0,        0,          0,      90,      90,      90,      90,          0,           0,  255,    30,  255}, // white
     {  255, 255,   0,   0,   0,       0,         0,        0,        0,          0,      90,       0,       0,       0,          0,           0,  255,    60,  240}, // Red
@@ -18,7 +18,7 @@ unsigned char MEM[NUMBER_OF_MEM][LULU_PATCHSIZE] = {
 //{0      , 1  , 2  , 3  , 4  ,5       , 6        , 7       , 8       , 9         , 10     , 11     , 12     , 13     , 14        , 15         , 16   , 17  , 18  } adr + -1
 
 #define COEF_PREV 25
-bool MEM_PREV[NUMBER_OF_MEM][24] = {
+byte MEM_PREV[NUMBER_OF_MEM][24] = {
     {10,10,10,10,  0,10,10,10,  0, 0,10,10,  0, 0, 0,10, 10, 0, 0, 0,  0,10, 0, 0},    // first
     { 0, 0, 0,01,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0},    // white
     {01, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0},    // Red

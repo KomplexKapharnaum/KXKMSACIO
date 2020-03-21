@@ -5,8 +5,6 @@ void leds_show()
 {
   digitalLeds_updatePixels(strands[0]);
   digitalLeds_updatePixels(strands[1]);
-  ledcWrite(1, ledChannelOne);
-  ledcWrite(2, ledChannelTwo);
 } //leds_show
 
 void ledBlack()
@@ -23,8 +21,7 @@ void initTest()
   LOG("initTest()");
 #endif
   Black();
-  ledChannelOne = 0;
-  ledChannelTwo = 0;
+  k32->pwm->setAll(0);
   leds_show();
   delay(500);
   for (int i = 0; i < NUM_LEDS_PER_STRIP + 4; i++)
@@ -32,8 +29,8 @@ void initTest()
     strands[0]->pixels[i] = pixelFromRGBW(test_led_niv, 0, 0, 0);
     strands[1]->pixels[i] = pixelFromRGBW(test_led_niv, 0, 0, 0);
   } //for i
-  ledChannelOne = test_led_niv;
-  ledChannelTwo = 0;
+  k32->pwm->set(0, test_led_niv);
+  k32->pwm->set(1, 0);
   leds_show();
   delay(500);
   for (int i = 0; i < NUM_LEDS_PER_STRIP + 4; i++)
@@ -41,8 +38,8 @@ void initTest()
     strands[0]->pixels[i] = pixelFromRGBW(0, test_led_niv, 0, 0);
     strands[1]->pixels[i] = pixelFromRGBW(0, test_led_niv, 0, 0);
   } //for i
-  ledChannelOne = 0;
-  ledChannelTwo = test_led_niv;
+  k32->pwm->set(0, 0);
+  k32->pwm->set(1, test_led_niv);
   leds_show();
   delay(500);
   for (int i = 0; i < NUM_LEDS_PER_STRIP + 4; i++)
@@ -50,8 +47,7 @@ void initTest()
     strands[0]->pixels[i] = pixelFromRGBW(0, 0, test_led_niv, 0);
     strands[1]->pixels[i] = pixelFromRGBW(0, 0, test_led_niv, 0);
   } //for i
-  ledChannelOne = 0;
-  ledChannelTwo = 0;
+  k32->pwm->setAll(0);
   leds_show();
   delay(500);
   for (int i = 0; i < NUM_LEDS_PER_STRIP + 4; i++)
@@ -59,8 +55,7 @@ void initTest()
     strands[0]->pixels[i] = pixelFromRGBW(0, 0, 0, test_led_niv);
     strands[1]->pixels[i] = pixelFromRGBW(0, 0, 0, test_led_niv);
   } //for i
-  ledChannelOne = test_led_niv;
-  ledChannelTwo = test_led_niv;
+  k32->pwm->setAll(test_led_niv);
   leds_show();
   delay(500);
   for (int i = 0; i < NUM_LEDS_PER_STRIP + 4; i++)
@@ -68,8 +63,7 @@ void initTest()
     strands[0]->pixels[i] = pixelFromRGBW(0, 0, 0, 0);
     strands[1]->pixels[i] = pixelFromRGBW(0, 0, 0, 0);
   } //for i
-  ledChannelOne = 0;
-  ledChannelTwo = 0;
+  k32->pwm->setAll(0);
   Black();
   leds_show();
 } //initest
@@ -90,10 +84,11 @@ void gpioSetup(int gpioNum, int gpioMode, int gpioVal)
 
 void leds_init()
 {
+  int Ltype = k32->system->preferences.getUInt("LULU_ruban", LED_SK6812W_V1);
   for (int k = 0; k < NUM_STRIPS; k++)
   {
-    STRANDS[k] = {.rmtChannel = k, .gpioNum = PINS[k], .ledType = RUBAN_type, .brightLimit = 32, .numPixels = NUM_LEDS_PER_STRIP + 16, .pixels = nullptr, ._stateVars = nullptr};
-    gpioSetup(PINS[k], OUTPUT, LOW);
+    STRANDS[k] = {.rmtChannel = k, .gpioNum = k32->system->ledpin(k), .ledType = Ltype, .brightLimit = 32, .numPixels = NUM_LEDS_PER_STRIP + 16, .pixels = nullptr, ._stateVars = nullptr};
+    gpioSetup(k32->system->ledpin(k), OUTPUT, LOW);
   }
   int STRANDCNT = sizeof(STRANDS) / sizeof(STRANDS[0]);
   if (digitalLeds_initStrands(STRANDS, STRANDCNT))
@@ -103,10 +98,6 @@ void leds_init()
     delay(1000);
 #endif
     ESP.restart();
-  }
-  for (int i = 0; i < STRANDCNT; i++)
-  {
-    strand_t *pStrand = &STRANDS[i];
   }
 #ifdef DEBUG
   LOG("Init complete");

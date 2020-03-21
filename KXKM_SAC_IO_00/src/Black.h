@@ -8,6 +8,5 @@ void Black()
     zo_pi_n_1_b[i] = 0;
     zo_pi_n_1_w[i] = 0;
   } //for i
-  ledcWrite(1, 0);
-  ledcWrite(2, 0);
+  k32->pwm->blackout();
 }

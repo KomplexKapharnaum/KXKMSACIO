@@ -1,13 +1,38 @@
 
+/////////////////////////////////////////def RUBAN_TYPE & LULU_TYPE /////////////////////////////////////////
+
+
+#ifdef LULU_TYPE
+  #if LULU_TYPE == 1
+    #define NUM_LEDS_PER_STRIP_MAX 120
+    #define L_TYPE "Sac"
+  #elif LULU_TYPE == 2
+    #define NUM_LEDS_PER_STRIP_MAX 120
+    #define L_TYPE "Barre"
+  #elif LULU_TYPE == 3
+    #define NUM_LEDS_PER_STRIP_MAX 17
+    #define L_TYPE "Pince"
+  #elif LULU_TYPE == 4
+    #define NUM_LEDS_PER_STRIP_MAX 73
+    #define L_TYPE "Fluo"
+  #elif LULU_TYPE == 5
+    #define NUM_LEDS_PER_STRIP_MAX 186
+    #define L_TYPE "Flex"
+  #elif LULU_TYPE == 6
+    #define NUM_LEDS_PER_STRIP_MAX 60
+    #define L_TYPE "HideSee"
+  #elif LULU_TYPE == 7
+    #define NUM_LEDS_PER_STRIP_MAX 35
+    #define L_TYPE "Phone"
+  #elif LULU_TYPE == 8
+    #define NUM_LEDS_PER_STRIP_MAX 25
+    #define L_TYPE "Atom"
+  #endif
+#endif
+
+
 void k32_settings()
 {
-
-#ifdef K32_SET_NODEID
-  k32->system->id(K32_SET_NODEID);
-#endif
-#ifdef K32_SET_HWREVISION
-  k32->system->hw(K32_SET_HWREVISION);
-#endif
 
 // Save to EEPROM if DEFINE
 #ifdef LULU_ID
@@ -32,17 +57,10 @@ void k32_settings()
 #endif
 
 #ifdef RUBAN_TYPE
-  k32->system->preferences.putUInt("RUBAN_type", RUBAN_TYPE);
+  k32->system->preferences.putUInt("LULU_ruban", RUBAN_TYPE);
   RUBAN_type = RUBAN_TYPE;
 #else
-  RUBAN_type = k32->system->preferences.getUInt("RUBAN_type", LED_SK6812W_V1);
-#endif
-
-#ifdef R_TYPE
-  k32->system->preferences.putString("R_type", R_TYPE);
-  R_type = R_TYPE;
-#else
-  R_type = k32->system->preferences.getString("R_type", "_SK");
+  RUBAN_type = k32->system->preferences.getUInt("LULU_ruban", LED_SK6812W_V1);
 #endif
 
 #ifdef L_TYPE
@@ -56,8 +74,9 @@ void k32_settings()
   k32->system->preferences.putUInt("NUM_leds", NUM_LEDS_PER_STRIP_MAX);
   NUM_LEDS_PER_STRIP_max = NUM_LEDS_PER_STRIP_MAX;
 #else
-  NUM_LEDS_PER_STRIP_max = k32->system->preferences.getUInt("NUM_leds", 186);
+  NUM_LEDS_PER_STRIP_max = k32->system->preferences.getUInt("NUM_leds", LEDS_ABSOLUTE_MAX);
 #endif
+ 
 
   // Calculate adr // channels
   adr = (1 + (LULU_id - 1) * (LULU_PATCHSIZE));
@@ -69,9 +88,11 @@ void k32_settings()
   NUM_LEDS_PER_STRIP = NUM_LEDS_PER_STRIP_max;
   N_L_P_S = NUM_LEDS_PER_STRIP_max;
 
-  // Make name and PINS
-  nodeName += L_type + R_type + "-" + String(LULU_id) + "-v" + String(LULU_VER);
-  PINS[0] = k32->system->ledpin(0);
-  PINS[1] = k32->system->ledpin(1);
+  // NAME
+  nodeName = L_type;
+  if (RUBAN_type == LED_SK6812_V1) nodeName += "_SK";
+  else if (RUBAN_type == LED_SK6812W_V1) nodeName += "_SKW";
+  else nodeName += "_WS";
+  nodeName += "-"+String(LULU_id)+ "-v" + String(LULU_VER);
 
 } //k32_settings()

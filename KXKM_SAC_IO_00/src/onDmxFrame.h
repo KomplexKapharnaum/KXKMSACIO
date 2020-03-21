@@ -46,13 +46,12 @@ void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t* d
 
     if (k32->remote->getLamp() == -1)
     {
-      ledChannelOne = (data[adr + 16] * data[adr + 16]) / 255;
-      ledChannelTwo = (data[adr + 17] * data[adr + 17]) / 255;
+      k32->pwm->set(0, (data[adr + 16] * data[adr + 16]) / 255);
+      k32->pwm->set(1, (data[adr + 17] * data[adr + 17]) / 255);
     }
     else if (k32->remote->getLamp() >= 0)
     {
-      ledChannelOne = k32->remote->getLamp();
-      ledChannelTwo = k32->remote->getLamp();
+      k32->pwm->setAll( k32->remote->getLamp() );
     }
 
     if (color_mode >= 11 && color_mode <= 20)
@@ -215,8 +214,8 @@ void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t* d
   LOG(" sww = " + sww);
   LOG(" color_mode = " + color_mode);
   LOG(" mirror = " + mirror);
-  LOG(" ledChannelOne = " + ledChannelOne);
-  LOG(" ledChannelTwo = " + ledChannelTwo);
+  LOG(" pwm0 = " + k32->pwm->get(0));
+  LOG(" pwm1 = " + k32->pwm->get(1));
 #endif
 } //onframedmx
 
@@ -224,6 +223,5 @@ void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t* d
 void onArtNetFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t* data)
 {
   if (k32->remote->getState() == REMOTE_MANU) k32->remote->setAuto();
-  if (k32->remote->getState() == REMOTE_AUTO)
-  onDmxFrame(universe, length, sequence, data);
+  if (k32->remote->getState() == REMOTE_AUTO) onDmxFrame(universe, length, sequence, data);
 }
