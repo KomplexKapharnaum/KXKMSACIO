@@ -43,18 +43,10 @@ void Map1code(void *pvParameters)
 
       for (int i = 0; i < NUM_LEDS_PER_STRIP; i++)
       {
-        if (P_S < P_E)
-        {
-          P_S_E = P_E - P_S;
-        }
-        else if (P_S > P_E)
-        {
-          P_S_E = P_S - P_E;
-        }
-        else if (P_S == P_E)
-        {
-          P_S_E = P_S;
-        }
+        if (P_S < P_E) P_S_E = P_E - P_S;
+        else if (P_S > P_E) P_S_E = P_S - P_E;
+        else P_S_E = P_S;
+        
         P_S_N = P_S + ((P_S_E / NUM_LEDS_PER_STRIP) * i);
 
         if (P_S_N >= 0 && P_S_N < 42.5)

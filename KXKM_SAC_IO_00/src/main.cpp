@@ -80,7 +80,12 @@ unsigned long lastRefresh_bat = 0;
 
 String nodeName;
 
-#include "K32.h" // https://github.com/KomplexKapharnaum/K32-lib
+#if __has_include ("../lib/K32-lib/src/K32.h")
+  #include "../lib/K32-lib/src/K32.h"  // https://github.com/KomplexKapharnaum/K32-lib
+#else
+  #include <K32.h>  // https://github.com/KomplexKapharnaum/K32-lib
+#endif
+
 K32 *k32;
 
 ///////////////////////////////Lib esp32_digital_led_lib//////////////////////////////
