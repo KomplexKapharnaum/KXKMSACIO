@@ -3,8 +3,7 @@
 #define LULU_VER 47
 
 /////////////////////////////////////////ID/////////////////////////////////////////
-#define K32_SET_NODEID 81   // board unique id    (necessary first time only)
-#define K32_SET_HWREVISION 2 // board HW revision  (necessary first time only) 3 = ATOM
+#define K32_SET_NODEID 81     // board unique id    (necessary first time only)
 
 #define RUBAN_TYPE LED_SK6812W_V1 // LED_WS2812_V1  LED_WS2812B_V1  LED_WS2812B_V2  LED_WS2812B_V3  LED_WS2813_V1  LED_WS2813_V2   LED_WS2813_V3  LED_WS2813_V4  LED_SK6812_V1  LED_SK6812W_V1,
 #define LULU_ID 1                 // permet de calculer l'adresse DMX
@@ -130,9 +129,6 @@ int previousDataLength = 0;
 ///////////////////////////////////////////////// SETUP ////////////////////////////////////////
 void setup()
 {
-
-  Serial.begin(115200);
-
   //////////////////////////////////////// K32_lib ////////////////////////////////////
   k32 = new K32();
 
@@ -159,9 +155,7 @@ void setup()
   // bat_de_sac
   bat_custom_on();
 
-#ifdef DEBUG
   LOG("Starting " + nodeName);
-#endif
 
   ///////////////////////////////////////////////// LEDS //////////////////////////////////////
   leds_init();
@@ -179,19 +173,13 @@ void setup()
   //  create a task that will be executed in the Map1code() function, with priority 1 and executed on core 0
   xTaskCreatePinnedToCore(Map1code, "Map1code", 4096, NULL, 1, NULL, 1); // core 1 = loop
   xTaskCreatePinnedToCore(effTask, "effTask", 4096, NULL, 1, NULL, 0);   // core 0 = wifi
+  ///////////////////////////////////////////////// osc //////////////////////////////////////
 
-///////////////////////////////////////////////// osc //////////////////////////////////////
+  ///////////////////////////////////////////////// ATOM  //////////////////////////////////////
+  if (k32->system->hw() == 3) pinMode(39, INPUT_PULLUP);
+  ///////////////////////////////////////////////// MODULO  //////////////////////////////////////
 
-///////////////////////////////////////////////// ATOM  //////////////////////////////////////
-#ifdef K32_SET_HWREVISION
-#if K32_SET_HWREVISION == 3
-  pinMode(39, INPUT_PULLUP);
-#endif
-#endif
-
-///////////////////////////////////////////////// MODULO  //////////////////////////////////////
-
-k32->init_modulo();
+  k32->init_modulo();
 
 } //setup
 
@@ -200,7 +188,7 @@ void loop()
 {
   eff_modulo();
 
-/////////////////////    if wifi     ///////////////////////
+  /////////////////////    if wifi     ///////////////////////
   if (k32->wifi->isConnected())
   {
     if (k32->remote->getState() != REMOTE_MANULOCK || state_btn == false)
@@ -208,7 +196,7 @@ void loop()
     lostConnection = false;
   } // if wifi
 
-/////////////////////   if millis    ///////////////////////
+  /////////////////////   if millis    ///////////////////////
   if ((millis() - lastRefresh) > REFRESH)
   {
     if (!k32->wifi->isConnected() && !lostConnection)
@@ -234,29 +222,29 @@ void loop()
     lastRefresh_bat = millis();
 
   //////////////////     Click on ESP   ////////////////////
-  if (k32->system->stm32->clicked())
-  {
-    if (state_btn == false) 
+  if (k32->system->hw() <= 2) {
+    if (k32->system->stm32->clicked())
+    {
+      if (state_btn == false) 
+      {
+        state_btn = true;
+      }
+      manu_frame(++manu_counter);
+    }// Click on ESP
+  }
+
+  //////////////////    Click on Atom    ////////////////////
+  if (k32->system->hw() == 3) {
+    if ((digitalRead(39) >= 1) && (state_btn != false))
+    {
+      state_btn = false;
+    }
+    if ((digitalRead(39) <= 0) && (state_btn != true))
     {
       state_btn = true;
+      manu_frame(++manu_counter);
     }
-    manu_frame(++manu_counter);
-  }// Click on ESP
-
-//////////////////    Click on Atom    ////////////////////
-#ifdef K32_SET_HWREVISION
-#if K32_SET_HWREVISION == 3
-  if ((digitalRead(39) >= 1) && (state_btn != false))
-  {
-    state_btn = false;
   }
-  if ((digitalRead(39) <= 0) && (state_btn != true))
-  {
-    state_btn = true;
-    manu_frame(++manu_counter);
-  }
-#endif
-#endif
 
   //////////////////////  REMOTE CONTROL   ///////////////////////////
 
