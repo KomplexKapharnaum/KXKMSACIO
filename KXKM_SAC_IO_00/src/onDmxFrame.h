@@ -71,6 +71,7 @@ void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t *d
       }
       else if (pix_mod >= 231 && pix_mod <= 250)
       {
+        pix_start = ((data[adr + 5] * N_L_P_S) / 255) - 1;
         color_rgbw(0, data[adr]);
         color_rgbw(1, data[adr + 1]);
         color_rgbw(2, data[adr + 2]);
