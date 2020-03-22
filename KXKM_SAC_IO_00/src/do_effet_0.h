@@ -319,7 +319,7 @@ void do_effet_0()
         pi_n_1_r[i] = 0;
         pi_n_1_g[i] = 0;
         pi_n_1_b[i] = 0;
-        pi_n_1_w[i] = 0; 
+        pi_n_1_w[i] = 0;
       }
     }
 
@@ -330,33 +330,40 @@ void do_effet_0()
 
     for (int i = 0; i < NUM_LEDS_PER_STRIP; i++)
     {
-      if (i >= pix_pos && i < (NUM_LEDS_PER_STRIP / 4) + pix_pos)
+      if (i >= pix_pos && i < (rap_tri / 4) + pix_pos)
       {
         pi_n_1_r[i] = tri1r;
         pi_n_1_g[i] = tri1g;
         pi_n_1_b[i] = tri1b;
         pi_n_1_w[i] = tri1w;
       }
-      else if (i >= (NUM_LEDS_PER_STRIP / 4) + pix_pos && i < ((NUM_LEDS_PER_STRIP / 4) * 2) + pix_pos)
+      else if (i >= (rap_tri / 4) + pix_pos && i < ((rap_tri / 4) * 2) + pix_pos)
       {
         pi_n_1_r[i] = tri2r;
         pi_n_1_g[i] = tri2g;
         pi_n_1_b[i] = tri2b;
         pi_n_1_w[i] = tri2w;
       }
-      else if (i >= ((NUM_LEDS_PER_STRIP / 4) * 2) + pix_pos && i < ((NUM_LEDS_PER_STRIP / 4) * 3) + pix_pos)
+      else if (i >= ((rap_tri / 4) * 2) + pix_pos && i < ((rap_tri / 4) * 3) + pix_pos)
       {
         pi_n_1_r[i] = tri3r;
         pi_n_1_g[i] = tri3g;
         pi_n_1_b[i] = tri3b;
         pi_n_1_w[i] = tri3w;
       }
-      else
+      else if (i >= ((rap_tri / 4) * 3) + pix_pos && i < (rap_tri + pix_pos))
       {
         pi_n_1_r[i] = tri4r;
         pi_n_1_g[i] = tri4g;
         pi_n_1_b[i] = tri4b;
         pi_n_1_w[i] = tri4w;
+      }
+      else
+      {
+        pi_n_1_r[i] = 0;
+        pi_n_1_g[i] = 0;
+        pi_n_1_b[i] = 0;
+        pi_n_1_w[i] = 0; 
       }
     }
 
