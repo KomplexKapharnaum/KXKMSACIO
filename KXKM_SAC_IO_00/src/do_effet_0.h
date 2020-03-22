@@ -330,21 +330,21 @@ void do_effet_0()
 
     for (int i = 0; i < NUM_LEDS_PER_STRIP; i++)
     {
-      if (i < NUM_LEDS_PER_STRIP / 4)
+      if (i >= pix_pos && i < (NUM_LEDS_PER_STRIP / 4) + pix_pos)
       {
         pi_n_1_r[i] = tri1r;
         pi_n_1_g[i] = tri1g;
         pi_n_1_b[i] = tri1b;
         pi_n_1_w[i] = tri1w;
       }
-      else if (i >= NUM_LEDS_PER_STRIP / 4 && i < (NUM_LEDS_PER_STRIP / 4) * 2)
+      else if (i >= (NUM_LEDS_PER_STRIP / 4) + pix_pos && i < ((NUM_LEDS_PER_STRIP / 4) * 2) + pix_pos)
       {
         pi_n_1_r[i] = tri2r;
         pi_n_1_g[i] = tri2g;
         pi_n_1_b[i] = tri2b;
         pi_n_1_w[i] = tri2w;
       }
-      else if (i >= (NUM_LEDS_PER_STRIP / 4) * 2 && i < (NUM_LEDS_PER_STRIP / 4) * 3)
+      else if (i >= ((NUM_LEDS_PER_STRIP / 4) * 2) + pix_pos && i < ((NUM_LEDS_PER_STRIP / 4) * 3) + pix_pos)
       {
         pi_n_1_r[i] = tri3r;
         pi_n_1_g[i] = tri3g;
