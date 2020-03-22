@@ -24,7 +24,7 @@ void initTest()
   k32->pwm->setAll(0);
   leds_show();
   delay(500);
-  for (int i = 0; i < NUM_LEDS_PER_STRIP + 4; i++)
+  for (int i = 0; i < NUM_LEDS_PER_STRIP + 14; i++)
   {
     strands[0]->pixels[i] = pixelFromRGBW(test_led_niv, 0, 0, 0);
     strands[1]->pixels[i] = pixelFromRGBW(test_led_niv, 0, 0, 0);
@@ -33,7 +33,7 @@ void initTest()
   k32->pwm->set(1, 0);
   leds_show();
   delay(500);
-  for (int i = 0; i < NUM_LEDS_PER_STRIP + 4; i++)
+  for (int i = 0; i < NUM_LEDS_PER_STRIP + 14; i++)
   {
     strands[0]->pixels[i] = pixelFromRGBW(0, test_led_niv, 0, 0);
     strands[1]->pixels[i] = pixelFromRGBW(0, test_led_niv, 0, 0);
@@ -42,7 +42,7 @@ void initTest()
   k32->pwm->set(1, test_led_niv);
   leds_show();
   delay(500);
-  for (int i = 0; i < NUM_LEDS_PER_STRIP + 4; i++)
+  for (int i = 0; i < NUM_LEDS_PER_STRIP + 14; i++)
   {
     strands[0]->pixels[i] = pixelFromRGBW(0, 0, test_led_niv, 0);
     strands[1]->pixels[i] = pixelFromRGBW(0, 0, test_led_niv, 0);
@@ -50,7 +50,7 @@ void initTest()
   k32->pwm->setAll(0);
   leds_show();
   delay(500);
-  for (int i = 0; i < NUM_LEDS_PER_STRIP + 4; i++)
+  for (int i = 0; i < NUM_LEDS_PER_STRIP + 14; i++)
   {
     strands[0]->pixels[i] = pixelFromRGBW(0, 0, 0, test_led_niv);
     strands[1]->pixels[i] = pixelFromRGBW(0, 0, 0, test_led_niv);
@@ -58,7 +58,7 @@ void initTest()
   k32->pwm->setAll(test_led_niv);
   leds_show();
   delay(500);
-  for (int i = 0; i < NUM_LEDS_PER_STRIP + 4; i++)
+  for (int i = 0; i < NUM_LEDS_PER_STRIP + 14; i++)
   {
     strands[0]->pixels[i] = pixelFromRGBW(0, 0, 0, 0);
     strands[1]->pixels[i] = pixelFromRGBW(0, 0, 0, 0);
