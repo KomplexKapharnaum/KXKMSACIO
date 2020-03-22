@@ -12,8 +12,8 @@ void manu_frame(int mem)
     if (mem == 0)
     {
       k32->modulo_sinus->setParam(0, 10000); // periode
-      k32->modulo_sinus->setParam(1, 0);    // value min
-      k32->modulo_sinus->setParam(2, 255);  // value max
+      k32->modulo_sinus->setParam(1, 1);    // value min
+      k32->modulo_sinus->setParam(2, 254);  // value max
       k32->modulo_sinus->play();
     }
     else if (mem == 8)
@@ -53,7 +53,7 @@ void manu_frame(int mem)
 
   if (mem == 0)
   {
-    fakeframe[adr + 6 - 1] = k32->modulo_sinus->getValue();
+    fakeframe[adr + 7 - 1] = k32->modulo_sinus->getValue();
   }
   else if (mem == 8)
   {
