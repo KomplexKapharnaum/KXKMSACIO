@@ -64,6 +64,7 @@ float str_blind_ws = 1;
 int manu_counter = -1;
 bool state_btn = false;
 int mem_call = -1;
+int last_gpm = -1;
 
 ///////////////////////////////////// batterie variable /////////////////////////////////////
 
