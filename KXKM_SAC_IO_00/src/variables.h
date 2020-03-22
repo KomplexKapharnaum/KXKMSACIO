@@ -66,18 +66,13 @@ bool state_btn = false;
 int mem_call = -1;
 int last_gpm = -1;
 
-///////////////////////////////////// batterie variable /////////////////////////////////////
-
-int percentage;
-int etat_r = 0;
-
 ///////////////////////////////////// Wifi variable /////////////////////////////////////
 
 bool lostConnection = true;
 
 ///////////////////////////////////// tri & quadri color  variable /////////////////////////////////////
 
-    int tri1r , tri1g , tri1b , tri1w ;
-    int tri2r , tri2g , tri2b , tri2w ;
-    int tri3r , tri3g , tri3b , tri3w ;
-    int tri4r , tri4g , tri4b , tri4w ;
+int tri1r , tri1g , tri1b , tri1w ;
+int tri2r , tri2g , tri2b , tri2w ;
+int tri3r , tri3g , tri3b , tri3w ;
+int tri4r , tri4g , tri4b , tri4w ;

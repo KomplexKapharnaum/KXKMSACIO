@@ -1,4 +1,6 @@
 
+bool etat_r = false;
+
 void get_percentage()
 {
   percentage = k32->system->stm32->battery();
