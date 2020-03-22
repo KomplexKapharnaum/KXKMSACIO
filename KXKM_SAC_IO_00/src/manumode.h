@@ -12,8 +12,8 @@ void manu_frame(int mem)
     if (mem == 0)
     {
       k32->modulo_sinus->setParam(0, 10000); // periode
-      k32->modulo_sinus->setParam(1, 1);    // value min
-      k32->modulo_sinus->setParam(2, 254);  // value max
+      k32->modulo_sinus->setParam(1, 127);    // value min
+      k32->modulo_sinus->setParam(2, 127);  // value max
       k32->modulo_sinus->play();
     }
     else if (mem == 8)

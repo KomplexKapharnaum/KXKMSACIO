@@ -76,3 +76,4 @@ int tri1r , tri1g , tri1b , tri1w ;
 int tri2r , tri2g , tri2b , tri2w ;
 int tri3r , tri3g , tri3b , tri3w ;
 int tri4r , tri4g , tri4b , tri4w ;
+int rap_tri;

@@ -76,7 +76,9 @@ void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t *d
       {
         pix_start = ((data[adr + 5] * N_L_P_S) / 255) - 1;
         pix_end = pix_start + pix_start;
-        pix_pos = map(pix_pos_v, 0, 255, -NUM_LEDS_PER_STRIP + 1, NUM_LEDS_PER_STRIP + 1);
+        rap_tri = map(data[adr + 5], 0, 255, 0, NUM_LEDS_PER_STRIP * 2);
+        pix_pos =  (NUM_LEDS_PER_STRIP / 2 - rap_tri / 2) + map(pix_pos_v, 0, 255, -NUM_LEDS_PER_STRIP+ 1, NUM_LEDS_PER_STRIP+ 1);
+        // pix_pos = map(pix_pos_v, 0, 255, -NUM_LEDS_PER_STRIP + 1, NUM_LEDS_PER_STRIP + 1);
         color_rgbw(0, data[adr]);
         color_rgbw(1, data[adr + 1]);
         color_rgbw(2, data[adr + 2]);
@@ -84,8 +86,6 @@ void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t *d
       }
     }
 
-    
-    
     pix_center = ((pix_start) / 2) + pix_pos;
 
     //&& mirror
