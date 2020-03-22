@@ -40,6 +40,34 @@ void color_rgbw(int rgbw_id,int rgbw_value)
         color_b = 0;
         color_w = 255;
     }// white
+    else if (rgbw_value < 61)
+    {
+        color_r = 255;
+        color_g = 255;
+        color_b = 0;
+        color_w = 0;
+    }// yelow
+    else if (rgbw_value < 71)
+    {
+        color_r = 255;
+        color_g = 0;
+        color_b = 255;
+        color_w = 0;
+    }// magenta
+    else if (rgbw_value < 81)
+    {
+        color_r = 0;
+        color_g = 255;
+        color_b = 255;
+        color_w = 0;
+    }// cyan
+    else if (rgbw_value < 91)
+    {
+        color_r = 255;
+        color_g = 100;
+        color_b = 0;
+        color_w = 0;
+    }// orange
 
     ///////////////////////////////////// ID ///////////////////////////////////
 
