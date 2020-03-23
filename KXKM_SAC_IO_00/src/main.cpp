@@ -99,24 +99,25 @@ void setup()
   k32_settings();
 
   // LEDS
-  // k32->init_light( RUBAN_type, NUM_LEDS_PER_STRIP_max );
+  k32->init_light( RUBAN_type, NUM_LEDS_PER_STRIP_max );
 
   // PWM
   k32->init_pwm();
 
   // WIFI
   k32->init_wifi(nodeName);
-  // k32->wifi->staticIP("2.0.0." + String(k32->system->id() + 100), "2.0.0.1", "255.0.0.0");
+  k32->wifi->staticIP("2.0.0." + String(k32->system->id() + 100), "2.0.0.1", "255.0.0.0");
   // k32->wifi->connect("interweb", "superspeed37");
   k32->wifi->connect("riri_new", "B2az41opbn6397");///
+  // k32->wifi->connect("P30", NULL);
 
   // Start OSC
-  k32->init_osc({
-      .port_in = 1818,       // osc port input (0 = disable)  // 1818
-      .port_out = 1819,      // osc port output (0 = disable) // 1819
-      .beatInterval = 0,     // heartbeat interval milliseconds (0 = disable)
-      .beaconInterval = 3000 // full beacon interval milliseconds (0 = disable)
-  });                        // OSC
+  // k32->init_osc({
+  //     .port_in = 1818,       // osc port input (0 = disable)  // 1818
+  //     .port_out = 1819,      // osc port output (0 = disable) // 1819
+  //     .beatInterval = 0,     // heartbeat interval milliseconds (0 = disable)
+  //     .beaconInterval = 3000 // full beacon interval milliseconds (0 = disable)
+  // });                        // OSC
 
   // remote
   k32->init_remote(NUMBER_OF_MEM);
