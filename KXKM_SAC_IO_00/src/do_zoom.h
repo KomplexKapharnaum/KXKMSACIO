@@ -2,7 +2,7 @@ void do_zoom()
 {
   for (int i = 0; i < NUM_LEDS_PER_STRIP_max; i++)
   {
-    if (i >= offset && i <= offset + zoom)
+    if (i >= offset && i <= (offset + zoom) - 1 )
     {
 
       strands[1]->pixels[i] = pixelFromRGBW(
