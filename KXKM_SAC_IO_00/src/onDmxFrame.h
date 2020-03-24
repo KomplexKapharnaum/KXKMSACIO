@@ -38,11 +38,11 @@ void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t *d
     color_mode = data[adr + 13];
     mirror = data[adr + 14];
 
-    zoom = (NUM_LEDS_PER_STRIP_max * data[adr + 15]) / 255;
+    zoom = ((NUM_LEDS_PER_STRIP_max * data[adr + 15]) / 255) * 1.0;
     if (zoom <= 0)
       zoom = 1;
-    NUM_LEDS_PER_STRIP = zoom;
-    offset = (NUM_LEDS_PER_STRIP_max - zoom) / 2;
+    NUM_LEDS_PER_STRIP = nearbyint(zoom);
+    offset = ((NUM_LEDS_PER_STRIP_max - zoom) / 2) * 1.0;
 
     if (k32->remote->getLamp() == -1)
     {
@@ -62,22 +62,22 @@ void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t *d
     {
       if ((pix_mod >= 0 && pix_mod <= 20) || (pix_mod >= 31 && pix_mod <= 230))
       {
-        pix_start = ((data[adr + 5] * N_L_P_S) / 255) - 1;
+        pix_start = (((data[adr + 5] * N_L_P_S) / 255) - 1);
         pix_end = pix_start + pix_start;
-        pix_pos = (((pix_start + N_L_P_S + pix_end) * pix_pos_v) / 255) - (pix_end + 1);
+        pix_pos = ((((pix_start + N_L_P_S + pix_end) * pix_pos_v) / 255) - (pix_end + 1));
       }
       else if (pix_mod >= 21 && pix_mod <= 30)
       {
         pix_start = data[adr + 5] - 1;
         pix_end = pix_start + pix_start;
-        pix_pos = (((pix_start + N_L_P_S + pix_end) * pix_pos_v) / 255) - (pix_end + 1);
+        pix_pos = ((((pix_start + N_L_P_S + pix_end) * pix_pos_v) / 255) - (pix_end + 1));
       }
       else if (pix_mod >= 231 && pix_mod <= 250)
       {
-        pix_start = ((data[adr + 5] * N_L_P_S) / 255) - 1;
+        pix_start = (((data[adr + 5] * N_L_P_S) / 255) - 1);
         pix_end = pix_start + pix_start;
         rap_tri = map(data[adr + 5], 0, 255, 0, NUM_LEDS_PER_STRIP * 2);
-        pix_pos =  (NUM_LEDS_PER_STRIP / 2 - rap_tri / 2) + map(pix_pos_v, 0, 255, -NUM_LEDS_PER_STRIP+ 1, NUM_LEDS_PER_STRIP+ 1);
+        pix_pos = ((NUM_LEDS_PER_STRIP / 2 - rap_tri / 2) + map(pix_pos_v, 0, 255, -NUM_LEDS_PER_STRIP + 1, NUM_LEDS_PER_STRIP + 1));
         // pix_pos = map(pix_pos_v, 0, 255, -NUM_LEDS_PER_STRIP + 1, NUM_LEDS_PER_STRIP + 1);
         color_rgbw(0, data[adr]);
         color_rgbw(1, data[adr + 1]);
@@ -228,6 +228,7 @@ void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t *d
   LOG(" sww = " + sww);
   LOG(" color_mode = " + color_mode);
   LOG(" mirror = " + mirror);
+  LOG(" zoom = " + zoom);
   LOG(" pwm0 = " + k32->pwm->get(0));
   LOG(" pwm1 = " + k32->pwm->get(1));
 #endif
