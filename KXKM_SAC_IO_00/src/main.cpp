@@ -109,8 +109,7 @@ void setup()
   k32->wifi->staticIP("2.0.0." + String(k32->system->id() + 100), "2.0.0.1", "255.0.0.0");
   k32->wifi->connect("kxkm24", NULL);//KXKM
   // k32->wifi->connect("interweb", "superspeed37");
-  // k32->wifi->connect("riri_new", "B2az41opbn6397");///
-  // k32->wifi->connect("P30", NULL);
+  k32->wifi->connect("riri_new", "B2az41opbn6397");
 
   // Start OSC
   // k32->init_osc({
