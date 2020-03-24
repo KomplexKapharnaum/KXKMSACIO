@@ -98,66 +98,65 @@ void setup()
   k32->init_stm32();
   k32_settings();
 
-  // LEDS
-  // k32->init_light( RUBAN_type, NUM_LEDS_PER_STRIP_max );
-
   // PWM
   k32->init_pwm();
 
+  // LEDS
+  k32->init_light( RUBAN_type, NUM_LEDS_PER_STRIP_max );
+
+
   // WIFI
-  k32->init_wifi(nodeName);
+  //k32->init_wifi(nodeName);
   // k32->wifi->staticIP("2.0.0." + String(k32->system->id() + 100), "2.0.0.1", "255.0.0.0");
-  // k32->wifi->connect("interweb", "superspeed37");
-  k32->wifi->connect("riri_new", "B2az41opbn6397");///
+  //k32->wifi->connect("interweb", "superspeed37");
 
   // Start OSC
-  k32->init_osc({
-      .port_in = 1818,       // osc port input (0 = disable)  // 1818
-      .port_out = 1819,      // osc port output (0 = disable) // 1819
-      .beatInterval = 0,     // heartbeat interval milliseconds (0 = disable)
-      .beaconInterval = 3000 // full beacon interval milliseconds (0 = disable)
-  });                        // OSC
+  // k32->init_osc({
+  //     .port_in = 1818,       // osc port input (0 = disable)  // 1818
+  //     .port_out = 1819,      // osc port output (0 = disable) // 1819
+  //     .beatInterval = 0,     // heartbeat interval milliseconds (0 = disable)
+  //     .beaconInterval = 3000 // full beacon interval milliseconds (0 = disable)
+  // });                        // OSC
 
   // remote
-  k32->init_remote(NUMBER_OF_MEM);
+  //k32->init_remote(NUMBER_OF_MEM);
 
   // bat_de_sac
-  bat_custom_on();
+  //bat_custom_on();
 
   LOG("Starting " + nodeName);
 
   ///////////////////////////////////////////////// LEDS //////////////////////////////////////
-  leds_init();
-  
-  initTest();
+  // leds_init();
+  // initTest();
 
   /////////////////////////////////////////////// ARTNET //////////////////////////////////////
-  artnet.begin();
-  // artnet.setArtDmxCallback(onDmxFrame);
-  artnet.setArtDmxCallback(onArtNetFrame);
+  //artnet.begin();
+  //artnet.setArtDmxCallback(onArtNetFrame);
 
   ///////////////////////////////////////////////// INIT //////////////////////////////////////
   
 
   ///////////////////////////////////////////////// CORE //////////////////////////////////////
   //  create a task that will be executed in the Map1code() function, with priority 1 and executed on core 0
-  xTaskCreatePinnedToCore(Map1code, "Map1code", 4096, NULL, 1, NULL, 1); // core 1 = loop
-  xTaskCreatePinnedToCore(effTask, "effTask", 4096, NULL, 1, NULL, 0);   // core 0 = wifi
+  // xTaskCreatePinnedToCore(Map1code, "Map1code", 4096, NULL, 1, NULL, 1); // core 1 = loop
+  // xTaskCreatePinnedToCore(effTask, "effTask", 4096, NULL, 1, NULL, 0);   // core 0 = wifi
   ///////////////////////////////////////////////// osc //////////////////////////////////////
 
   ///////////////////////////////////////////////// ATOM  //////////////////////////////////////
-  if (k32->system->hw() == 3) pinMode(39, INPUT_PULLUP);
+  //if (k32->system->hw() == 3) pinMode(39, INPUT_PULLUP);
+  
   ///////////////////////////////////////////////// MODULO  //////////////////////////////////////
-
-  k32->init_modulo();
+  // k32->init_modulo();
 
 } //setup
 
 ///////////////////////////////////////// LOOP /////////////////////////////////////////////////
 void loop()
 {
-  eff_modulo();
+  // eff_modulo();
 
+  /*
   /////////////////////    if wifi     ///////////////////////
   if (k32->wifi->isConnected())
   {
@@ -235,8 +234,10 @@ void loop()
     manu_frame(gpm);
   } // ! REMOTE_AUTO
 
-if (state_btn == true){
-manu_frame(manu_counter);
-}// rafrechire les modulos si manu btn
+  if (state_btn == true){
+    manu_frame(manu_counter);
+  }// rafrechire les modulos si manu btn
+
+  */
 
 } //loop

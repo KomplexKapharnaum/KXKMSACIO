@@ -85,20 +85,14 @@ void gpioSetup(int gpioNum, int gpioMode, int gpioVal)
 void leds_init()
 {
   int Ltype = k32->system->preferences.getUInt("LULU_ruban", LED_SK6812W_V1);
+  digitalLeds_init();
   for (int k = 0; k < NUM_STRIPS; k++)
   {
     STRANDS[k] = {.rmtChannel = k, .gpioNum = k32->system->ledpin(k), .ledType = Ltype, .brightLimit = 32, .numPixels = NUM_LEDS_PER_STRIP + 16, .pixels = nullptr, ._stateVars = nullptr};
     gpioSetup(k32->system->ledpin(k), OUTPUT, LOW);
+    digitalLeds_addStrand(STRANDS[k]);
   }
-  int STRANDCNT = sizeof(STRANDS) / sizeof(STRANDS[0]);
-  if (digitalLeds_initStrands(STRANDS, STRANDCNT))
-  {
-#ifdef DEBUG
-    LOG("Init FAILURE: halting");
-    delay(1000);
-#endif
-    ESP.restart();
-  }
+
 #ifdef DEBUG
   LOG("Init complete");
 #endif
