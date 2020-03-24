@@ -22,8 +22,8 @@ float pi_1_sw[LEDS_ABSOLUTE_MAX];
 
 int color_mode;
 int mirror;
-int zoom;
-int offset;
+float zoom;
+float offset;
 int di;
 
 unsigned long now;

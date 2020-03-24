@@ -38,11 +38,11 @@ void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t *d
     color_mode = data[adr + 13];
     mirror = data[adr + 14];
 
-    zoom = ((NUM_LEDS_PER_STRIP_max * data[adr + 15]) / 255);
+    zoom = ((NUM_LEDS_PER_STRIP_max * data[adr + 15]) / 255) * 1.0;
     if (zoom <= 0)
       zoom = 1;
-    NUM_LEDS_PER_STRIP = zoom;
-    offset = ((NUM_LEDS_PER_STRIP_max - zoom) / 2);
+    NUM_LEDS_PER_STRIP = nearbyint(zoom);
+    offset = ((NUM_LEDS_PER_STRIP_max - zoom) / 2) * 1.0;
 
     if (k32->remote->getLamp() == -1)
     {
