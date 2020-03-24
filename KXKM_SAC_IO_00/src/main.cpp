@@ -8,7 +8,7 @@
 
 // #define RUBAN_TYPE LED_WS2812_V1  // LED_WS2812_V1  LED_WS2812B_V1  LED_WS2812B_V2  LED_WS2812B_V3  LED_WS2813_V1  LED_WS2813_V2   LED_WS2813_V3  LED_WS2813_V4  LED_SK6812_V1  LED_SK6812W_V1,
 // #define LULU_ID 1                 // permet de calculer l'adresse DMX
-#define LULU_TYPE 1               // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom"
+// #define LULU_TYPE 8               // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom"
 // #define LULU_UNI 0                // Univers DM
 
 /////////////////////////////////////////Debug///////////////////////////////////////
@@ -57,7 +57,7 @@ K32 *k32;
 #define NUM_STRIPS 2
 int numberOfChannels;
 strand_t STRANDS[NUM_STRIPS];
-strand_t *strands[] = {&STRANDS[0], &STRANDS[1]};
+strand_t *strands[NUM_STRIPS];
 
 #include "variables.h"
 
@@ -104,9 +104,9 @@ void setup()
   // LEDS
   k32->init_light( RUBAN_type, NUM_LEDS_PER_STRIP_max );
 
-
+  /*
   // WIFI
-  // k32->init_wifi(nodeName);
+  k32->init_wifi(nodeName);
   // k32->wifi->staticIP("2.0.0." + String(k32->system->id() + 100), "2.0.0.1", "255.0.0.0");
   // k32->wifi->connect("kxkm24", NULL);//KXKM
   // k32->wifi->connect("interweb", "superspeed37");
@@ -121,16 +121,16 @@ void setup()
   // });                        // OSC
 
   // remote
-  // k32->init_remote(NUMBER_OF_MEM);
+  k32->init_remote(NUMBER_OF_MEM);
 
   // bat_de_sac
-  // bat_custom_on();
+  bat_custom_on();
 
   LOG("Starting " + nodeName);
 
   ///////////////////////////////////////////////// LEDS //////////////////////////////////////
-  // leds_init();
-  // initTest();
+  leds_init();
+  initTest();
 
   /////////////////////////////////////////////// ARTNET //////////////////////////////////////
   // artnet.begin();
@@ -141,24 +141,25 @@ void setup()
 
   ///////////////////////////////////////////////// CORE //////////////////////////////////////
   //  create a task that will be executed in the Map1code() function, with priority 1 and executed on core 0
-  // xTaskCreatePinnedToCore(Map1code, "Map1code", 4096, NULL, 1, NULL, 1); // core 1 = loop
-  // xTaskCreatePinnedToCore(effTask, "effTask", 4096, NULL, 1, NULL, 0);   // core 0 = wifi
+  xTaskCreatePinnedToCore(Map1code, "Map1code", 4096, NULL, 1, NULL, 1); // core 1 = loop
+  xTaskCreatePinnedToCore(effTask, "effTask", 4096, NULL, 1, NULL, 0);   // core 0 = wifi
   ///////////////////////////////////////////////// osc //////////////////////////////////////
 
   ///////////////////////////////////////////////// ATOM  //////////////////////////////////////
-  //if (k32->system->hw() == 3) pinMode(39, INPUT_PULLUP);
+  if (k32->system->hw() == 3) pinMode(39, INPUT_PULLUP);
   
   ///////////////////////////////////////////////// MODULO  //////////////////////////////////////
-  // k32->init_modulo();
+  k32->init_modulo();
+
+  */
 
 } //setup
 
 ///////////////////////////////////////// LOOP /////////////////////////////////////////////////
 void loop()
 {
-  // eff_modulo();
+  /*eff_modulo();
 
-  /*
   /////////////////////    if wifi     ///////////////////////
   if (k32->wifi->isConnected())
   {
@@ -241,5 +242,4 @@ void loop()
   }// rafrechire les modulos si manu btn
 
   */
-
 } //loop
