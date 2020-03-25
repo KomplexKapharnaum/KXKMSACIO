@@ -102,15 +102,14 @@ void setup()
   k32->init_pwm();
 
   // LEDS
-  k32->init_light( RUBAN_type, NUM_LEDS_PER_STRIP_max );
+  // k32->init_light( RUBAN_type, NUM_LEDS_PER_STRIP_max );
 
-  /*
   // WIFI
   k32->init_wifi(nodeName);
-  // k32->wifi->staticIP("2.0.0." + String(k32->system->id() + 100), "2.0.0.1", "255.0.0.0");
+  k32->wifi->staticIP("2.0.0." + String(k32->system->id() + 100), "2.0.0.1", "255.0.0.0");
   // k32->wifi->connect("kxkm24", NULL);//KXKM
   // k32->wifi->connect("interweb", "superspeed37");
-  // k32->wifi->connect("riri_new", "B2az41opbn6397");
+  k32->wifi->connect("riri_new", "B2az41opbn6397");
 
   // Start OSC
   // k32->init_osc({
@@ -133,8 +132,8 @@ void setup()
   initTest();
 
   /////////////////////////////////////////////// ARTNET //////////////////////////////////////
-  // artnet.begin();
-  // artnet.setArtDmxCallback(onArtNetFrame);
+  artnet.begin();
+  artnet.setArtDmxCallback(onArtNetFrame);
 
   ///////////////////////////////////////////////// INIT //////////////////////////////////////
   
@@ -151,14 +150,13 @@ void setup()
   ///////////////////////////////////////////////// MODULO  //////////////////////////////////////
   k32->init_modulo();
 
-  */
 
 } //setup
 
 ///////////////////////////////////////// LOOP /////////////////////////////////////////////////
 void loop()
 {
-  /*eff_modulo();
+  eff_modulo();
 
   /////////////////////    if wifi     ///////////////////////
   if (k32->wifi->isConnected())
@@ -241,5 +239,5 @@ void loop()
     manu_frame(manu_counter);
   }// rafrechire les modulos si manu btn
 
-  */
+
 } //loop
