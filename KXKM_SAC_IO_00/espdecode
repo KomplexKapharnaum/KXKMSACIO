@@ -323,9 +323,7 @@ if __name__ == "__main__":
         if args.elf == "#last":
             builDirs = glob(".pio/build/*/")
             builDirs.sort(key=os.path.getmtime, reverse=True)
-            print(builDirs)
-            print( glob("./*/") )
-            args.elf = builDirs[0].split('.pio/build/')[1]
+            args.elf = builDirs[0].replace('\\', '/').split('.pio/build/')[1]
         
         elf_file = os.path.abspath(os.path.expanduser(args.elf))
         if not os.path.exists(elf_file):
