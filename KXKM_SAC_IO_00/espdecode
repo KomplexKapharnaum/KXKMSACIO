@@ -297,7 +297,6 @@ if __name__ == "__main__":
             print("Paste your Backtrace: ")
             backtrace = sys.stdin.readline().strip()
             
-
             f = tempfile.TemporaryFile(mode = 'w+')
             f.write(backtrace)
             f.seek(0)
@@ -324,6 +323,8 @@ if __name__ == "__main__":
         if args.elf == "#last":
             builDirs = glob(".pio/build/*/")
             builDirs.sort(key=os.path.getmtime, reverse=True)
+            print(builDirs)
+            print( glob("./*/") )
             args.elf = builDirs[0].split('.pio/build/')[1]
         
         elf_file = os.path.abspath(os.path.expanduser(args.elf))
