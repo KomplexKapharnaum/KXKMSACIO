@@ -69,6 +69,8 @@ void manu_frame(int mem)
     fakeframe[adr + 1 - 1] = k32->modulo_phase->getValue_1();
     fakeframe[adr + 2 - 1] = k32->modulo_phase->getValue_2();
     fakeframe[adr + 3 - 1] = k32->modulo_phase->getValue_3();
+    fakeframe[adr + 17 - 1] = k32->modulo_phase->getValue_1();
+    fakeframe[adr + 18 - 1] = k32->modulo_phase->getValue_1();
   }
 
   onDmxFrame(LULU_uni, adr + LULU_PATCHSIZE, 0, fakeframe);
@@ -117,7 +119,21 @@ void remote_status(remoteState state)
   else if (state == REMOTE_MANU_STM)
     strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 14] = pixelFromRGBW(0, 0, COEF_PREV, 0); // blue
   else if (state == REMOTE_MANU_LAMP)
-    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 14] = pixelFromRGBW(0, COEF_PREV / 2, 0, 0, COEF_PREV); // white green
+    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 14] = pixelFromRGBW(0, COEF_PREV / 2, 0, COEF_PREV); // white green
   else if (state == REMOTE_MANULOCK_LAMP)
     strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 14] = pixelFromRGBW(COEF_PREV / 2, 0, 0, COEF_PREV); // white red
 } // remote_status
+
+void wifi_status(int Wifi_Status)
+{
+  if (Wifi_Status > -55)
+    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 16] = pixelFromRGBW(0, COEF_PREV * 2, 0, 0);
+  else if (Wifi_Status > -70)
+    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 16] = pixelFromRGBW(0, COEF_PREV, 0, 0);
+  else if (Wifi_Status > -80)
+    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 16] = pixelFromRGBW(COEF_PREV, COEF_PREV / 2, 0, 0);
+  else if (Wifi_Status > -90)
+    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 16] = pixelFromRGBW(COEF_PREV, 0, 0, 0);
+  else if (Wifi_Status == 100)
+    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 16] = pixelFromRGBW(0, 0, COEF_PREV, 0);
+}

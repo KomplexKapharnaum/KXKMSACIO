@@ -160,6 +160,7 @@ void loop()
 
   /////////////////////    if wifi     ///////////////////////
   if (k32->wifi->isConnected())
+  wifi_status(k32->wifi->getRSSI());
   {
     if (k32->remote->getState() != REMOTE_MANULOCK || state_btn == false)
       artnet.read();
@@ -171,7 +172,8 @@ void loop()
   {
     if (!k32->wifi->isConnected() && !lostConnection)
     {
-      if (k32->remote->getState() != REMOTE_MANULOCK)
+      wifi_status(100);
+      if (k32->remote->getState() != REMOTE_MANULOCK )
         ledBlack(); //passe led noir
       lostConnection = true;
     }
@@ -195,6 +197,8 @@ void loop()
   if (k32->system->hw() <= 2) {
     if (k32->system->stm32->clicked())
     {
+      // k32->remote->setManu_Stm();
+
       if (state_btn == false) 
       {
         state_btn = true;
