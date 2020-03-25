@@ -36,17 +36,20 @@ void Map1code(void *pvParameters)
       {
         pix_pos = (((pix_start + N_L_P_S + pix_end) * pix_pos_v) / 255) - (pix_end + 1);
       }
-      float P_S = srr;
-      float P_E = sgg;
+      float P_S = start_color;
+      float P_E = end_color;
       float P_S_E;
       float P_S_N;
 
       for (int i = 0; i < NUM_LEDS_PER_STRIP; i++)
       {
-        if (P_S < P_E) P_S_E = P_E - P_S;
-        else if (P_S > P_E) P_S_E = P_S - P_E;
-        else P_S_E = P_S;
-        
+        if (P_S < P_E)
+          P_S_E = P_E - P_S;
+        else if (P_S > P_E)
+          P_S_E = P_S - P_E;
+        else
+          P_S_E = P_S;
+
         P_S_N = P_S + ((P_S_E / NUM_LEDS_PER_STRIP) * i);
 
         if (P_S_N >= 0 && P_S_N < 42.5)

@@ -30,6 +30,8 @@ void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t *d
     modulo = data[adr + 7];
     str_ws = (data[adr + 8] * data[adr + 8]) / 33;
 
+    start_color = data[adr + 9];
+    end_color = data[adr + 10];
     srr = (data[adr + 9] * data[adr + 9]) / 255;
     sgg = (data[adr + 10] * data[adr + 10]) / 255;
     sbb = (data[adr + 11] * data[adr + 11]) / 255;
@@ -208,29 +210,29 @@ void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t *d
   } //sendFrame
 
 #ifdef DEBUG_dmx
-  LOGF("data [1] = %d\n" , data[1]);
-  LOGF("data [2] = %d\n" , data[2]);
-  LOGF("master = %d\n" , master);
-  LOGF("r = %d\n" , rr);
-  LOGF("g = %d\n" , gg);
-  LOGF("b = %d\n" , bb);
-  LOGF("w = %d\n" , ww);
-  LOGF("pix_mod = %d\n" , pix_mod);
-  LOGF("pix_start = %d\n" , pix_start);
-  LOGF("pix_center = %d\n" , pix_center);
-  LOGF("pix_end = %d\n" , pix_end);
-  LOGF("pix_pos = %d\n" , pix_pos);
-  LOGF("modulo = %d\n" , modulo);
-  LOGF("str_ws = %d\n" , str_ws);
-  LOGF(" srr = %d\n" , srr);
-  LOGF(" sgg = %d\n" , sgg);
-  LOGF(" sbb = %d\n" , sbb);
-  LOGF(" sww = %d\n" , sww);
-  LOGF(" color_mode = %d\n" , color_mode);
-  LOGF(" mirror = %d\n" , mirror);
-  LOGF(" zoom = %d\n" , zoom);
-  LOGF(" pwm0 = %d\n" , k32->pwm->get(0));
-  LOGF(" pwm1 = %d\n" , k32->pwm->get(1));
+  LOGF("data [1] = %d\n", data[1]);
+  LOGF("data [2] = %d\n", data[2]);
+  LOGF("master = %d\n", master);
+  LOGF("r = %d\n", rr);
+  LOGF("g = %d\n", gg);
+  LOGF("b = %d\n", bb);
+  LOGF("w = %d\n", ww);
+  LOGF("pix_mod = %d\n", pix_mod);
+  LOGF("pix_start = %d\n", pix_start);
+  LOGF("pix_center = %d\n", pix_center);
+  LOGF("pix_end = %d\n", pix_end);
+  LOGF("pix_pos = %d\n", pix_pos);
+  LOGF("modulo = %d\n", modulo);
+  LOGF("str_ws = %d\n", str_ws);
+  LOGF(" srr = %d\n", srr);
+  LOGF(" sgg = %d\n", sgg);
+  LOGF(" sbb = %d\n", sbb);
+  LOGF(" sww = %d\n", sww);
+  LOGF(" color_mode = %d\n", color_mode);
+  LOGF(" mirror = %d\n", mirror);
+  LOGF(" zoom = %d\n", zoom);
+  LOGF(" pwm0 = %d\n", k32->pwm->get(0));
+  LOGF(" pwm1 = %d\n", k32->pwm->get(1));
 #endif
 } //onframedmx
 

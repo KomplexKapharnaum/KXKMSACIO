@@ -44,6 +44,7 @@ float rrr , ggg , bbb , www;
 float rr , gg , bb , ww;
 float r , g , b , w;
 float srr , sgg , sbb , sww;
+int start_color, end_color;
 int mod;
 int pix_mod;
 unsigned long str_ws_last = 0;
