@@ -10,6 +10,7 @@ import argparse
 import re
 import subprocess
 from collections import namedtuple
+from glob import glob
 
 import sys
 
@@ -275,57 +276,62 @@ def print_result(parser, resolver, platform, full=True, stack_only=False):
 def parse_args():
     parser = argparse.ArgumentParser(description="decode ESP Stacktraces.")
 
-    parser.add_argument("-p", "--platform", help="The platform to decode from", choices=PLATFORMS.keys(),
-                        default="ESP32")
-    parser.add_argument("-t", "--tool", help="Path to the xtensa toolchain",
-                        default="~/.platformio/packages/toolchain-xtensa32/")
-    parser.add_argument("-e", "--elf", help="path to elf file", required=True)
+    parser.add_argument("-p", "--platform", help="The platform to decode from", choices=PLATFORMS.keys(), default="ESP32")
+    parser.add_argument("-t", "--tool", help="Path to the xtensa toolchain", default="~/.platformio/packages/toolchain-xtensa32/")
+    parser.add_argument("-e", "--elf", help="path to elf file", default="#last")
     parser.add_argument("-f", "--full", help="Print full stack dump", action="store_true")
     parser.add_argument("-s", "--stack_only", help="Decode only a stractrace", action="store_true")
-    parser.add_argument("file", help="The file to read the exception data from ('-' for STDIN)", default="-")
+    parser.add_argument("-F", "--file", help="The file to read the exception data from (omit for STDIN)", default="-")
 
     return parser.parse_args()
 
 
 if __name__ == "__main__":
-    args = parse_args()
 
-    if args.file == "-":
-        # file = sys.stdin
-        backtrace = sys.stdin.readline().strip()
-        
-        #backtrace = backtrace.split('Backtrace: ')
-        #if len(backtrace) > 1:
-        #	backtrace = backtrace[1]
-        #backtrace = '\n'.join(backtrace.split(' '))	
-        
-        file = open("/tmp/espstack", "w")
-        file.write(backtrace)
-        file.close()
-        file = open("/tmp/espstack", "r")
-    else:
+    while(True):
+
+        args = parse_args()
+
+        if args.file == "-":
+            print("Paste your Backtrace: ")
+            backtrace = sys.stdin.readline().strip()
+            
+            args.file = "/tmp/espstack"
+            with open(args.file, "w") as f:
+                f.write(backtrace)
+
+            file = open("/tmp/espstack", "r")
+
         if not os.path.exists(args.file):
             print("ERROR: file " + args.file + " not found")
             sys.exit(1)
+
         file = open(args.file, "r")
 
-    addr2line = os.path.join(os.path.abspath(os.path.expanduser(args.tool)),
-                             "bin/xtensa-" + PLATFORMS[args.platform] + "-elf-addr2line")
-    if os.name == 'nt':
-        addr2line += '.exe'
-    if not os.path.exists(addr2line):
-        print("ERROR: addr2line not found (" + addr2line + ")")
+        addr2line = os.path.join(os.path.abspath(os.path.expanduser(args.tool)),
+                                "bin/xtensa-" + PLATFORMS[args.platform] + "-elf-addr2line")
+        if os.name == 'nt':
+            addr2line += '.exe'
+        if not os.path.exists(addr2line):
+            print("ERROR: addr2line not found (" + addr2line + ")")
 
-    elf_file = os.path.abspath(os.path.expanduser(args.elf))
-    if not os.path.exists(elf_file):
-        elf_file = os.path.join('.pio/build', args.elf, 'firmware.elf')
-    if not os.path.exists(elf_file):
-        print("ERROR: elf file not found (" + elf_file + ")")
+        if args.elf == "#last":
+            builDirs = glob(".pio/build/*/")
+            builDirs.sort(key=os.path.getmtime, reverse=True)
+            args.elf = builDirs[0].split('.pio/build/')[1]
+        
+        elf_file = os.path.abspath(os.path.expanduser(args.elf))
+        if not os.path.exists(elf_file):
+            elf_file = os.path.join('.pio/build', args.elf, 'firmware.elf')
+        if not os.path.exists(elf_file):
+            print("ERROR: elf file not found (" + elf_file + ")")
 
-    parser = ExceptionDataParser()
-    resolver = AddressResolver(addr2line, elf_file)
+        parser = ExceptionDataParser()
+        resolver = AddressResolver(addr2line, elf_file)
 
-    parser.parse_file(file, args.platform, args.stack_only)
-    resolver.fill(parser)
+        parser.parse_file(file, args.platform, args.stack_only)
+        resolver.fill(parser)
 
-    print_result(parser, resolver, args.platform, args.full, args.stack_only)
+        print("")
+        print_result(parser, resolver, args.platform, args.full, args.stack_only)
+        print("\n===================================================")

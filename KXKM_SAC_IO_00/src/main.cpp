@@ -8,7 +8,7 @@
 
 // #define RUBAN_TYPE LED_WS2812_V1  // LED_WS2812_V1  LED_WS2812B_V1  LED_WS2812B_V2  LED_WS2812B_V3  LED_WS2813_V1  LED_WS2813_V2   LED_WS2813_V3  LED_WS2813_V4  LED_SK6812_V1  LED_SK6812W_V1,
 // #define LULU_ID 1                 // permet de calculer l'adresse DMX
-#define LULU_TYPE 1               // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom"
+// #define LULU_TYPE 8               // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom"
 // #define LULU_UNI 0                // Univers DM
 
 /////////////////////////////////////////Debug///////////////////////////////////////
@@ -57,7 +57,7 @@ K32 *k32;
 #define NUM_STRIPS 2
 int numberOfChannels;
 strand_t STRANDS[NUM_STRIPS];
-strand_t *strands[] = {&STRANDS[0], &STRANDS[1]};
+strand_t *strands[NUM_STRIPS];
 
 #include "variables.h"
 
@@ -98,16 +98,16 @@ void setup()
   k32->init_stm32();
   k32_settings();
 
-  // LEDS
-  k32->init_light( RUBAN_type, NUM_LEDS_PER_STRIP_max );
-
   // PWM
   k32->init_pwm();
+
+  // LEDS
+  // k32->init_light( RUBAN_type, NUM_LEDS_PER_STRIP_max );
 
   // WIFI
   k32->init_wifi(nodeName);
   k32->wifi->staticIP("2.0.0." + String(k32->system->id() + 100), "2.0.0.1", "255.0.0.0");
-  k32->wifi->connect("kxkm24", NULL);//KXKM
+  // k32->wifi->connect("kxkm24", NULL);//KXKM
   // k32->wifi->connect("interweb", "superspeed37");
   k32->wifi->connect("riri_new", "B2az41opbn6397");
 
@@ -129,12 +129,10 @@ void setup()
 
   ///////////////////////////////////////////////// LEDS //////////////////////////////////////
   leds_init();
-  
   initTest();
 
   /////////////////////////////////////////////// ARTNET //////////////////////////////////////
   artnet.begin();
-  // artnet.setArtDmxCallback(onDmxFrame);
   artnet.setArtDmxCallback(onArtNetFrame);
 
   ///////////////////////////////////////////////// INIT //////////////////////////////////////
@@ -148,9 +146,10 @@ void setup()
 
   ///////////////////////////////////////////////// ATOM  //////////////////////////////////////
   if (k32->system->hw() == 3) pinMode(39, INPUT_PULLUP);
+  
   ///////////////////////////////////////////////// MODULO  //////////////////////////////////////
-
   k32->init_modulo();
+
 
 } //setup
 
@@ -236,8 +235,9 @@ void loop()
     manu_frame(gpm);
   } // ! REMOTE_AUTO
 
-if (state_btn == true){
-manu_frame(manu_counter);
-}// rafrechire les modulos si manu btn
+  if (state_btn == true){
+    manu_frame(manu_counter);
+  }// rafrechire les modulos si manu btn
+
 
 } //loop

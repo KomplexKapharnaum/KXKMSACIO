@@ -68,37 +68,17 @@ void initTest()
   leds_show();
 } //initest
 
-void gpioSetup(int gpioNum, int gpioMode, int gpioVal)
-{
-#if defined(ARDUINO) && ARDUINO >= 100
-  pinMode(gpioNum, gpioMode);
-  digitalWrite(gpioNum, gpioVal);
-#elif defined(ESP_PLATFORM)
-  gpio_num_t gpioNumNative = static_cast<gpio_num_t>(gpioNum);
-  gpio_mode_t gpioModeNative = static_cast<gpio_mode_t>(gpioMode);
-  gpio_pad_select_gpio(gpioNumNative);
-  gpio_set_direction(gpioNumNative, gpioModeNative);
-  gpio_set_level(gpioNumNative, gpioVal);
-#endif
-} // gpioSetup
 
 void leds_init()
 {
   int Ltype = k32->system->preferences.getUInt("LULU_ruban", LED_SK6812W_V1);
+  digitalLeds_init();
   for (int k = 0; k < NUM_STRIPS; k++)
   {
     STRANDS[k] = {.rmtChannel = k, .gpioNum = k32->system->ledpin(k), .ledType = Ltype, .brightLimit = 32, .numPixels = NUM_LEDS_PER_STRIP + 16, .pixels = nullptr, ._stateVars = nullptr};
-    gpioSetup(k32->system->ledpin(k), OUTPUT, LOW);
+    strands[k] = digitalLeds_addStrand(STRANDS[k]);
   }
-  int STRANDCNT = sizeof(STRANDS) / sizeof(STRANDS[0]);
-  if (digitalLeds_initStrands(STRANDS, STRANDCNT))
-  {
-#ifdef DEBUG
-    LOG("Init FAILURE: halting");
-    delay(1000);
-#endif
-    ESP.restart();
-  }
+
 #ifdef DEBUG
   LOG("Init complete");
 #endif
