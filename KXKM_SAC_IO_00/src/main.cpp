@@ -4,7 +4,7 @@
 
 /////////////////////////////////////////ID/////////////////////////////////////////
 
-// #define K32_SET_NODEID 81       // board unique id    
+// #define K32_SET_NODEID 81       // board unique id
 
 // #define RUBAN_TYPE LED_WS2812_V1  // LED_WS2812_V1  LED_WS2812B_V1  LED_WS2812B_V2  LED_WS2812B_V3  LED_WS2813_V1  LED_WS2813_V2   LED_WS2813_V3  LED_WS2813_V4  LED_SK6812_V1  LED_SK6812W_V1,
 // #define LULU_ID 1                 // permet de calculer l'adresse DMX
@@ -21,8 +21,6 @@
 
 #define LULU_PATCHSIZE 19 // Taille du patch DMX pour cet Fixture
 #define LEDS_ABSOLUTE_MAX 300
-
-
 
 /////////////////////////////////////////Adresse/////////////////////////////////////
 int LULU_id;
@@ -47,7 +45,7 @@ unsigned long lastRefresh_bat = 0;
 
 /////////////////////////////////////////K32/////////////////////////////////////////
 
-#include <K32.h>  // remote https://github.com/KomplexKapharnaum/K32-lib
+#include <K32.h> // remote https://github.com/KomplexKapharnaum/K32-lib
 
 K32 *k32;
 
@@ -136,7 +134,6 @@ void setup()
   artnet.setArtDmxCallback(onArtNetFrame);
 
   ///////////////////////////////////////////////// INIT //////////////////////////////////////
-  
 
   ///////////////////////////////////////////////// CORE //////////////////////////////////////
   //  create a task that will be executed in the Map1code() function, with priority 1 and executed on core 0
@@ -145,11 +142,11 @@ void setup()
   ///////////////////////////////////////////////// osc //////////////////////////////////////
 
   ///////////////////////////////////////////////// ATOM  //////////////////////////////////////
-  if (k32->system->hw() == 3) pinMode(39, INPUT_PULLUP);
-  
+  if (k32->system->hw() == 3)
+    pinMode(39, INPUT_PULLUP);
+
   ///////////////////////////////////////////////// MODULO  //////////////////////////////////////
   k32->init_modulo();
-
 
 } //setup
 
@@ -160,7 +157,7 @@ void loop()
 
   /////////////////////    if wifi     ///////////////////////
   if (k32->wifi->isConnected())
-  wifi_status(k32->wifi->getRSSI());
+    wifi_status(k32->wifi->getRSSI());
   {
     if (k32->remote->getState() != REMOTE_MANULOCK || state_btn == false)
       artnet.read();
@@ -173,7 +170,7 @@ void loop()
     if (!k32->wifi->isConnected() && !lostConnection)
     {
       wifi_status(100);
-      if (k32->remote->getState() != REMOTE_MANULOCK )
+      if (k32->remote->getState() != REMOTE_MANULOCK)
         ledBlack(); //passe led noir
       lostConnection = true;
     }
@@ -185,7 +182,7 @@ void loop()
   {
     get_percentage();
     lastRefresh_bat = millis();
-  }// batterie
+  } // batterie
 
   //////////////// MILLIS overflow protection //////////////
   if (millis() < lastRefresh)
@@ -194,21 +191,24 @@ void loop()
     lastRefresh_bat = millis();
 
   //////////////////     Click on ESP   ////////////////////
-  if (k32->system->hw() <= 2) {
+  if (k32->system->hw() <= 2)
+  {
     if (k32->system->stm32->clicked())
     {
       // k32->remote->setManu_Stm();
 
-      if (state_btn == false) 
+      if (state_btn == false)
       {
         state_btn = true;
       }
-      manu_frame(++manu_counter);
-    }// Click on ESP
+      active_frame(++manu_counter);
+      preview_frame(manu_counter);
+    } // Click on ESP
   }
 
   //////////////////    Click on Atom    ////////////////////
-  else if (k32->system->hw() == 3) {
+  else if (k32->system->hw() == 3)
+  {
     if ((digitalRead(39) >= 1) && (state_btn != false))
     {
       state_btn = false;
@@ -216,32 +216,32 @@ void loop()
     if ((digitalRead(39) <= 0) && (state_btn != true))
     {
       state_btn = true;
-      manu_frame(++manu_counter);
+      active_frame(++manu_counter);
+      preview_frame(manu_counter);
     }
   }
 
   //////////////////////  REMOTE CONTROL   ///////////////////////////
 
-  remote_status(k32->remote->getState()); // 
+  remote_status(k32->remote->getState()); //
 
   int gpm = k32->remote->getPreviewMacro();
   if (last_gpm != gpm)
   {
-    last_gpm =gpm;
-  preview_frame(gpm);
-  }// getPreviewMacro()
-  
+    last_gpm = gpm;
+    preview_frame(gpm);
+  } // getPreviewMacro()
+
   if (k32->remote->getState() != REMOTE_AUTO)
   {
     // Remote Active
     gpm = k32->remote->getActiveMacro();
     active_frame(gpm);
-    manu_frame(gpm);
   } // ! REMOTE_AUTO
 
-  if (state_btn == true){
-    manu_frame(manu_counter);
-  }// rafrechire les modulos si manu btn
-
+  if (state_btn == true)
+  {
+    active_frame(manu_counter);
+  } // rafrechire les modulos si manu btn
 
 } //loop

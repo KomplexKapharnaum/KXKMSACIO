@@ -12,7 +12,7 @@ void ledBlack()
 #ifdef DEBUG
   LOG("ledBlack()");
 #endif
-  manu_frame(0);
+  active_frame(0);
 } //ledBlack
 
 void initTest()

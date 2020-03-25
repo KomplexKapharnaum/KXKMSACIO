@@ -1,7 +1,7 @@
 
-void manu_frame(int mem)
+void active_frame(int mem)
 {
-  mem = mem % NUMBER_OF_MEM;
+    mem = mem % NUMBER_OF_MEM;
 
   if (mem == NUMBER_OF_MEM - 1)
     state_btn = false;
@@ -43,7 +43,7 @@ void manu_frame(int mem)
   const int frameSize = adr + LULU_PATCHSIZE;
   uint8_t fakeframe[frameSize];
 
-  for (int i = 0; i < LULU_PATCHSIZE; i++)
+    for (int i = 0; i < LULU_PATCHSIZE; i++)
     fakeframe[adr + i - 1] = MEM[mem][i];
 
   if (k32->remote->getLamp() >= 0)
@@ -73,25 +73,6 @@ void manu_frame(int mem)
     fakeframe[adr + 18 - 1] = k32->modulo_phase->getValue_1();
   }
 
-  onDmxFrame(LULU_uni, adr + LULU_PATCHSIZE, 0, fakeframe);
-
-  int p = 0;
-  for (int i = NUM_LEDS_PER_STRIP_max + 8; i < NUM_LEDS_PER_STRIP_max + 14; i++)
-  {
-    strands[1]->pixels[i] = pixelFromRGBW((MEM_PREV[mem][p] * COEF_PREV), (MEM_PREV[mem][p + 1] * COEF_PREV), (MEM_PREV[mem][p + 2] * COEF_PREV), (MEM_PREV[mem][p + 3] * COEF_PREV));
-    p = p + 4;
-  }
-
-} // manu_frame
-
-void active_frame(int mem)
-{
-
-  const int frameSize = adr + LULU_PATCHSIZE;
-  uint8_t fakeframe[frameSize];
-
-  for (int i = 0; i < LULU_PATCHSIZE; i++)
-    fakeframe[adr + i - 1] = MEM[mem][i];
   onDmxFrame(LULU_uni, adr + LULU_PATCHSIZE, 0, fakeframe);
 
 } // active_frame
