@@ -3,7 +3,8 @@ void manu_frame(int mem)
 {
   mem = mem % NUMBER_OF_MEM;
 
-  if (mem == NUMBER_OF_MEM - 1) state_btn = false;
+  if (mem == NUMBER_OF_MEM - 1)
+    state_btn = false;
 
   if (mem_call != mem)
   {
@@ -12,15 +13,15 @@ void manu_frame(int mem)
     if (mem == 0)
     {
       k32->modulo_sinus->setParam(0, 10000); // periode
-      k32->modulo_sinus->setParam(1, 127);    // value min
-      k32->modulo_sinus->setParam(2, 127);  // value max
+      k32->modulo_sinus->setParam(1, 127);   // value min
+      k32->modulo_sinus->setParam(2, 127);   // value max
       k32->modulo_sinus->play();
     }
     else if (mem == 8)
     {
       k32->modulo_fade->setParam(0, 5000); // fade time
       k32->modulo_fade->setParam(1, 255);  // start value
-      k32->modulo_fade->setParam(2, 0);  // end value
+      k32->modulo_fade->setParam(2, 0);    // end value
       k32->modulo_fade->play();
     }
     else if (mem == 10)
@@ -37,7 +38,7 @@ void manu_frame(int mem)
       k32->modulo_phase->setParam(2, 255);  // value max
       k32->modulo_phase->play();
     }
-  }// (mem_call != mem)
+  } // (mem_call != mem)
 
   const int frameSize = adr + LULU_PATCHSIZE;
   uint8_t fakeframe[frameSize];
@@ -108,9 +109,15 @@ void preview_frame(int mem)
 void remote_status(remoteState state)
 {
   if (state == REMOTE_AUTO)
-    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 14] = pixelFromRGBW(0, 0, 0, 0); // noir
+    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 14] = pixelFromRGBW(0, 0, 0, 0); // black
   else if (state == REMOTE_MANU)
-    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 14] = pixelFromRGBW(0, COEF_PREV, 0, 0); // vert
+    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 14] = pixelFromRGBW(0, COEF_PREV, 0, 0); // green
   else if (state == REMOTE_MANULOCK)
-    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 14] = pixelFromRGBW(COEF_PREV, 0, 0, 0); // rouge
-}
+    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 14] = pixelFromRGBW(COEF_PREV, 0, 0, 0); // red
+  else if (state == REMOTE_MANU_STM)
+    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 14] = pixelFromRGBW(0, 0, COEF_PREV, 0); // blue
+  else if (state == REMOTE_MANU_LAMP)
+    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 14] = pixelFromRGBW(0, COEF_PREV / 2, 0, 0, COEF_PREV); // white green
+  else if (state == REMOTE_MANULOCK_LAMP)
+    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 14] = pixelFromRGBW(COEF_PREV / 2, 0, 0, COEF_PREV); // white red
+} // remote_status
