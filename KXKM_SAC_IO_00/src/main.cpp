@@ -104,7 +104,7 @@ void setup()
   // k32->light->play("test");
 
   // WIFI
-  k32->init_wifi(nodeName);
+  /*k32->init_wifi(nodeName);
   k32->wifi->staticIP("2.0.0." + String(k32->system->id() + 100), "2.0.0.1", "255.0.0.0");
   // k32->wifi->connect("kxkm24", NULL);//KXKM
   // k32->wifi->connect("interweb", "superspeed37");
@@ -148,12 +148,13 @@ void setup()
 
   ///////////////////////////////////////////////// MODULO  //////////////////////////////////////
   k32->init_modulo();
-
+  */
 } //setup
 
 ///////////////////////////////////////// LOOP /////////////////////////////////////////////////
 void loop()
 {
+  /*
   eff_modulo();
 
   /////////////////////    if wifi     ///////////////////////
@@ -244,5 +245,5 @@ void loop()
   {
     active_frame(manu_counter);
   } // rafrechire les modulos si manu btn
-
+  */
 } //loop
