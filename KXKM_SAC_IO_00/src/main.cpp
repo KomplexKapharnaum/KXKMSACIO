@@ -101,6 +101,7 @@ void setup()
 
   // LEDS
   // k32->init_light( RUBAN_type, NUM_LEDS_PER_STRIP_max );
+  // k32->play("test");
 
   // WIFI
   k32->init_wifi(nodeName);
