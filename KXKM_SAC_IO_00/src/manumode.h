@@ -1,11 +1,14 @@
 
 void active_frame(int mem)
 {
-    mem = mem % NUMBER_OF_MEM;
+  mem = mem % NUMBER_OF_MEM;
 
-  if (mem == NUMBER_OF_MEM - 1)
+  if (mem == NUMBER_OF_MEM - 1 && k32->remote->getState() == REMOTE_MANU_STM)
+  {
     state_btn = false;
-
+    manu_counter = NUMBER_OF_MEM - 1;
+    k32->remote->setAuto();
+  }
   if (mem_call != mem)
   {
     mem_call = mem;
@@ -43,7 +46,7 @@ void active_frame(int mem)
   const int frameSize = adr + LULU_PATCHSIZE;
   uint8_t fakeframe[frameSize];
 
-    for (int i = 0; i < LULU_PATCHSIZE; i++)
+  for (int i = 0; i < LULU_PATCHSIZE; i++)
     fakeframe[adr + i - 1] = MEM[mem][i];
 
   if (k32->remote->getLamp() >= 0)
@@ -79,7 +82,9 @@ void active_frame(int mem)
 
 void preview_frame(int mem)
 {
-
+  mem = mem % NUMBER_OF_MEM;
+  
+  LOGF(" preview_frame = %d\n", mem);
   int p = 0;
   for (int i = NUM_LEDS_PER_STRIP_max + 8; i < NUM_LEDS_PER_STRIP_max + 14; i++)
   {

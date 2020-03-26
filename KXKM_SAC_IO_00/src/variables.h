@@ -66,6 +66,9 @@ int manu_counter = -1;
 bool state_btn = false;
 int mem_call = -1;
 int last_gpm = -1;
+int gam = 0;
+int log_get = -1;
+int old_log_get = 0;
 
 ///////////////////////////////////// Wifi variable /////////////////////////////////////
 

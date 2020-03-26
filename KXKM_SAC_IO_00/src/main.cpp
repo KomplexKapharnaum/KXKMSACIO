@@ -159,7 +159,7 @@ void loop()
   if (k32->wifi->isConnected())
     wifi_status(k32->wifi->getRSSI());
   {
-    if (k32->remote->getState() != REMOTE_MANULOCK || state_btn == false)
+    if (k32->remote->getState() == REMOTE_AUTO)
       artnet.read();
     lostConnection = false;
   } // if wifi
@@ -170,7 +170,7 @@ void loop()
     if (!k32->wifi->isConnected() && !lostConnection)
     {
       wifi_status(100);
-      if (k32->remote->getState() != REMOTE_MANULOCK)
+      if (k32->remote->getState() == REMOTE_AUTO)
         ledBlack(); //passe led noir
       lostConnection = true;
     }
@@ -200,9 +200,11 @@ void loop()
       if (state_btn == false)
       {
         state_btn = true;
+        k32->remote->setManu_Stm();
       }
       active_frame(++manu_counter);
       preview_frame(manu_counter);
+      gam = manu_counter;
     } // Click on ESP
   }
 
@@ -216,8 +218,10 @@ void loop()
     if ((digitalRead(39) <= 0) && (state_btn != true))
     {
       state_btn = true;
+      k32->remote->setManu_Stm();
       active_frame(++manu_counter);
       preview_frame(manu_counter);
+      gam = manu_counter;
     }
   }
 
@@ -225,23 +229,29 @@ void loop()
 
   remote_status(k32->remote->getState()); //
 
-  int gpm = k32->remote->getPreviewMacro();
-  if (last_gpm != gpm)
+  if (k32->remote->getState() != REMOTE_AUTO && k32->remote->getState() != REMOTE_MANU_STM)
   {
-    last_gpm = gpm;
-    preview_frame(gpm);
-  } // getPreviewMacro()
+    gpm = k32->remote->getPreviewMacro();
+    if (last_gpm != gpm)
+    {
+      last_gpm = gpm;
+      preview_frame(gpm);
+    } // getPreviewMacro()
 
-  if (k32->remote->getState() != REMOTE_AUTO)
-  {
     // Remote Active
-    gpm = k32->remote->getActiveMacro();
-    active_frame(gpm);
-  } // ! REMOTE_AUTO
+    gam = k32->remote->getActiveMacro();
+    active_frame(gam);
+  } // ! REMOTE_AUTO || REMOTE_MANU_STM
 
-  if (state_btn == true)
+  if (k32->remote->getState() == REMOTE_MANU_STM)
   {
-    active_frame(manu_counter);
+    active_frame(gam);
   } // rafrechire les modulos si manu btn
 
+  log_get = k32->remote->getState();
+  if (log_get != old_log_get)
+  {
+    old_log_get = log_get;
+    LOGF(" STATE = %d\n", log_get);
+  }
 } //loop
