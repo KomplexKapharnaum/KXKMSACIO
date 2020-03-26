@@ -1,10 +1,10 @@
 
 bool etat_r = false;
+int lrc = 0;
 
 void get_percentage()
 {
   int percentage = k32->system->stm32->battery();
-
 
   /////////////////////  GREEN   ///////////////////////
 
@@ -31,7 +31,7 @@ void get_percentage()
       }
     } //for i
   }
-    else if (percentage > 62)
+  else if (percentage > 62)
   {
     //2ledverte
     for (int i = NUM_LEDS_PER_STRIP_max + 2; i < NUM_LEDS_PER_STRIP_max + 6; i++)
@@ -46,7 +46,7 @@ void get_percentage()
       }
     } //for i
   }
-      else if (percentage > 50)
+  else if (percentage > 50)
   {
     //1ledverte
     for (int i = NUM_LEDS_PER_STRIP_max + 2; i < NUM_LEDS_PER_STRIP_max + 6; i++)
@@ -72,7 +72,7 @@ void get_percentage()
       strands[1]->pixels[i] = pixelFromRGB(COEF_PREV, COEF_PREV / 1.5, 0);
     } //for i
   }
-    else if (percentage > 42)
+  else if (percentage > 42)
   {
     //3ledorange
     for (int i = NUM_LEDS_PER_STRIP_max + 2; i < NUM_LEDS_PER_STRIP_max + 6; i++)
@@ -87,7 +87,7 @@ void get_percentage()
       }
     } //for i
   }
-    else if (percentage > 38)
+  else if (percentage > 38)
   {
     //2ledorange
     for (int i = NUM_LEDS_PER_STRIP_max + 2; i < NUM_LEDS_PER_STRIP_max + 6; i++)
@@ -102,7 +102,7 @@ void get_percentage()
       }
     } //for i
   }
-   else if (percentage > 33)
+  else if (percentage > 33)
   {
     //1ledorange
     for (int i = NUM_LEDS_PER_STRIP_max + 2; i < NUM_LEDS_PER_STRIP_max + 6; i++)
@@ -128,7 +128,7 @@ void get_percentage()
       strands[1]->pixels[i] = pixelFromRGB(127, 0, 0);
     } //for i
   }
-   else if (percentage > 25)
+  else if (percentage > 25)
   {
     //3ledrouge
     for (int i = NUM_LEDS_PER_STRIP_max + 2; i < NUM_LEDS_PER_STRIP_max + 6; i++)
@@ -143,7 +143,7 @@ void get_percentage()
       }
     } //for i
   }
-    else if (percentage > 20)
+  else if (percentage > 20)
   {
     //2ledrouge
     for (int i = NUM_LEDS_PER_STRIP_max + 2; i < NUM_LEDS_PER_STRIP_max + 6; i++)
@@ -158,7 +158,7 @@ void get_percentage()
       }
     } //for i
   }
-    else if (percentage > 16)
+  else if (percentage > 16)
   {
     //1ledrouge
     for (int i = NUM_LEDS_PER_STRIP_max + 2; i < NUM_LEDS_PER_STRIP_max + 6; i++)
@@ -174,15 +174,98 @@ void get_percentage()
     } //for i
   }
 
-
   /////////////////////  BLINK   ///////////////////////
 
-  else if (percentage >= 1)
+  else if (percentage > 14)
   {
     //4ledrouge clignote
     if (etat_r != 1)
     {
       for (int i = NUM_LEDS_PER_STRIP_max + 2; i < NUM_LEDS_PER_STRIP_max + 6; i++)
+      {
+        strands[1]->pixels[i] = pixelFromRGB(255, 0, 0);
+      }
+      etat_r = 1;
+    }
+    else if (etat_r != 0)
+    {
+      for (int i = NUM_LEDS_PER_STRIP_max + 2; i < NUM_LEDS_PER_STRIP_max + 6; i++)
+      {
+        strands[1]->pixels[i] = pixelFromRGB(0, 0, 0);
+      }
+      etat_r = 0;
+    }
+  }
+  else if (percentage > 13)
+  {
+    //3ledrouge clignote
+    if (etat_r != 1)
+    {
+      for (int i = NUM_LEDS_PER_STRIP_max + 2; i < NUM_LEDS_PER_STRIP_max + 5; i++)
+      {
+        strands[1]->pixels[i] = pixelFromRGB(255, 0, 0);
+      }
+      etat_r = 1;
+    }
+    else if (etat_r != 0)
+    {
+      for (int i = NUM_LEDS_PER_STRIP_max + 2; i < NUM_LEDS_PER_STRIP_max + 6; i++)
+      {
+        strands[1]->pixels[i] = pixelFromRGB(0, 0, 0);
+      }
+      etat_r = 0;
+    }
+  }
+  else if (percentage > 12)
+  {
+    //2ledrouge clignote
+    if (etat_r != 1)
+    {
+      for (int i = NUM_LEDS_PER_STRIP_max + 2; i < NUM_LEDS_PER_STRIP_max + 4; i++)
+      {
+        strands[1]->pixels[i] = pixelFromRGB(255, 0, 0);
+      }
+      etat_r = 1;
+    }
+    else if (etat_r != 0)
+    {
+      for (int i = NUM_LEDS_PER_STRIP_max + 2; i < NUM_LEDS_PER_STRIP_max + 6; i++)
+      {
+        strands[1]->pixels[i] = pixelFromRGB(0, 0, 0);
+      }
+      etat_r = 0;
+    }
+  }
+  else if (percentage > 11)
+  {
+    //1ledrouge clignote
+    if (etat_r != 1)
+    {
+      for (int i = NUM_LEDS_PER_STRIP_max + 2; i < NUM_LEDS_PER_STRIP_max + 3; i++)
+      {
+        strands[1]->pixels[i] = pixelFromRGB(255, 0, 0);
+      }
+      etat_r = 1;
+    }
+    else if (etat_r != 0)
+    {
+      for (int i = NUM_LEDS_PER_STRIP_max + 2; i < NUM_LEDS_PER_STRIP_max + 6; i++)
+      {
+        strands[1]->pixels[i] = pixelFromRGB(0, 0, 0);
+      }
+      etat_r = 0;
+    }
+  }
+  else if (percentage >= 1)
+  {
+    //---> ledrouge clignote
+    if (etat_r != 1)
+    {
+      lrc++;
+      if (lrc > 3)
+        lrc = 0;
+
+      for (int i = NUM_LEDS_PER_STRIP_max + 2 + lrc; i < NUM_LEDS_PER_STRIP_max + 3 + lrc; i++)
       {
         strands[1]->pixels[i] = pixelFromRGB(255, 0, 0);
       }
