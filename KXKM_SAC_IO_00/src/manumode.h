@@ -107,13 +107,13 @@ void remote_status(remoteState state)
 
 void wifi_status(int Wifi_Status)
 {
-  if (Wifi_Status > -55)
+  if (Wifi_Status > -45)
     strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 16] = pixelFromRGBW(0, COEF_PREV * 2, 0, 0);
-  else if (Wifi_Status > -70)
+  else if (Wifi_Status > -58)
     strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 16] = pixelFromRGBW(0, COEF_PREV, 0, 0);
-  else if (Wifi_Status > -80)
+  else if (Wifi_Status > -71)
     strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 16] = pixelFromRGBW(COEF_PREV, COEF_PREV / 2, 0, 0);
-  else if (Wifi_Status > -90)
+  else if (Wifi_Status > -80)
     strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 16] = pixelFromRGBW(COEF_PREV, 0, 0, 0);
   else if (Wifi_Status == 100)
     strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 16] = pixelFromRGBW(0, 0, COEF_PREV, 0);
