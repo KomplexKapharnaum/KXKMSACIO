@@ -83,7 +83,7 @@ void active_frame(int mem)
 void preview_frame(int mem)
 {
   mem = mem % NUMBER_OF_MEM;
-  
+
   LOGF(" preview_frame = %d\n", mem);
   int p = 0;
   for (int i = NUM_LEDS_PER_STRIP_max + 8; i < NUM_LEDS_PER_STRIP_max + 14; i++)
@@ -122,4 +122,4 @@ void wifi_status(int Wifi_Status)
     strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 16] = pixelFromRGBW(COEF_PREV, 0, 0, 0);
   else if (Wifi_Status == 100)
     strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 16] = pixelFromRGBW(0, 0, COEF_PREV, 0);
-}
+}//wifi_status

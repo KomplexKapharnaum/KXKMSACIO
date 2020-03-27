@@ -198,9 +198,10 @@ void loop()
     {
       // k32->remote->setManu_Stm();
 
-      if (state_btn == false)
+      if (state_btn == false || k32->remote->getState() != REMOTE_AUTO)
       {
         state_btn = true;
+        LOG(" **************** ");
         k32->remote->setManu_Stm();
       }
       active_frame(++manu_counter);
@@ -232,6 +233,8 @@ void loop()
 
   if (k32->remote->getState() != REMOTE_AUTO && k32->remote->getState() != REMOTE_MANU_STM)
   {
+
+    // getPreviewMacro()
     gpm = k32->remote->getPreviewMacro();
     if (last_gpm != gpm)
     {
@@ -239,10 +242,25 @@ void loop()
       preview_frame(gpm);
     } // getPreviewMacro()
 
-    // Remote Active
+    //  Active FRAME
     gam = k32->remote->getActiveMacro();
-    active_frame(gam);
+    if (k32->remote->getSendMacro() == true || last_gam == gam)
+    {
+      last_gam = gam;
+      active_frame(gam);
+      k32->remote->setSendMacro();
+    } // Active FRAME
+
   } // ! REMOTE_AUTO || REMOTE_MANU_STM
+  else if (k32->remote->getState() == REMOTE_AUTO)
+  {
+    gpm = NUMBER_OF_MEM - 1;
+    if (last_gpm != gpm)
+    {
+      last_gpm = gpm;
+      preview_frame(gpm);
+    }
+  }
 
   if (k32->remote->getState() == REMOTE_MANU_STM)
   {
@@ -252,7 +270,37 @@ void loop()
   log_get = k32->remote->getState();
   if (log_get != old_log_get)
   {
+    LOGF(" *   old_STATE = %d\n", old_log_get);
+    if (old_log_get == 0)
+    {
+
+    }
+    if (log_get == 0) // REMOTE_AUTO
+    {
+      k32->remote->setSendMacro();
+    }
+    else if (log_get == 1) // REMOTE_MANU
+    {
+    }
+    else if (log_get == 2) // REMOTE_MANU_STM
+    {
+      k32->remote->setSendMacro();
+    }
+    else if (log_get == 3) // REMOTE_MANULOCK
+    {
+    }
+    else if (log_get == 4) // REMOTE_MANU_LAMP
+    {
+    }
+    else if (log_get == 5) // REMOTE_MANULOCK_LAMP
+    {
+    }
+    else if (log_get == 6) // REMOTE_LOCK
+    {
+    }
+
     old_log_get = log_get;
-    LOGF(" STATE = %d\n", log_get);
+
+    LOGF(" * NEW STATE = %d\n", log_get);
   }
 } //loop
