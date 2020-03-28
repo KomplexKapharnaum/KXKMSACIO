@@ -198,7 +198,7 @@ void loop()
     {
       // k32->remote->setManu_Stm();
 
-      if (state_btn == false || k32->remote->getState() != REMOTE_AUTO)
+      if (state_btn == false || k32->remote->getState() > 1)
       {
         state_btn = true;
         LOG(" **************** ");
@@ -231,7 +231,7 @@ void loop()
 
   remote_status(k32->remote->getState()); //
 
-  if (k32->remote->getState() != REMOTE_AUTO && k32->remote->getState() != REMOTE_MANU_STM)
+  if ((k32->remote->getState() != REMOTE_AUTO || k32->remote->getState() != REMOTE_AUTO_LOCK) && (k32->remote->getState() != REMOTE_MANU_STM || k32->remote->getState() != REMOTE_MANU_STM_LOCK))
   {
 
     // getPreviewMacro()
@@ -252,7 +252,7 @@ void loop()
     } // Active FRAME
 
   } // ! REMOTE_AUTO || REMOTE_MANU_STM
-  else if (k32->remote->getState() == REMOTE_AUTO)
+  else if (k32->remote->getState() == REMOTE_AUTO || k32->remote->getState() != REMOTE_AUTO_LOCK)
   {
     gpm = NUMBER_OF_MEM - 1;
     if (last_gpm != gpm)
@@ -262,7 +262,7 @@ void loop()
     }
   }
 
-  if (k32->remote->getState() == REMOTE_MANU_STM)
+  if (k32->remote->getState() == REMOTE_MANU_STM || k32->remote->getState() == REMOTE_MANU_STM_LOCK)
   {
     active_frame(gam);
   } // rafrechire les modulos si manu btn
@@ -279,23 +279,23 @@ void loop()
     {
       k32->remote->setSendMacro();
     }
-    else if (log_get == 1) // REMOTE_MANU
+    else if (log_get == 1) // REMOTE_AUTO_LOCK
     {
     }
     else if (log_get == 2) // REMOTE_MANU_STM
     {
       k32->remote->setSendMacro();
     }
-    else if (log_get == 3) // REMOTE_MANULOCK
+    else if (log_get == 3) // REMOTE_MANU_STM_LOCK
     {
     }
-    else if (log_get == 4) // REMOTE_MANU_LAMP
+    else if (log_get == 4) // REMOTE_MANU_LOCK,
     {
     }
-    else if (log_get == 5) // REMOTE_MANULOCK_LAMP
+    else if (log_get == 5) // REMOTE_MANU
     {
     }
-    else if (log_get == 6) // REMOTE_LOCK
+    else if (log_get == 6) // REMOTE_MANU_LAMP
     {
     }
 

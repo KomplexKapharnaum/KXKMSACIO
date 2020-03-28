@@ -97,17 +97,40 @@ void preview_frame(int mem)
 void remote_status(remoteState state)
 {
   if (state == REMOTE_AUTO)
-    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 14] = pixelFromRGBW(0, 0, 0, 0); // black
+  {
+    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 6] = pixelFromRGBW(0, 0, 0, 0);  // black
+    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 15] = pixelFromRGBW(0, 0, 0, 0); // black
+  }
+  else if (state == REMOTE_AUTO_LOCK)
+  {
+    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 6] = pixelFromRGBW(COEF_PREV, 0, 0, 0); // red
+    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 15] = pixelFromRGBW(0, 0, 0, 0);        // black
+  }
   else if (state == REMOTE_MANU)
-    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 14] = pixelFromRGBW(0, COEF_PREV, 0, 0); // green
-  else if (state == REMOTE_MANULOCK)
-    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 14] = pixelFromRGBW(COEF_PREV, 0, 0, 0); // red
+  {
+    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 6] = pixelFromRGBW(0, COEF_PREV, 0, 0);  // green
+    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 15] = pixelFromRGBW(0, COEF_PREV, 0, 0); // green
+  }
+  else if (state == REMOTE_MANU_LOCK)
+  {
+    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 6] = pixelFromRGBW(COEF_PREV, 0, 0, 0); // red
+    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 15] = pixelFromRGBW(0, COEF_PREV, 0, 0); // green
+  }
   else if (state == REMOTE_MANU_STM)
-    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 14] = pixelFromRGBW(0, 0, COEF_PREV, 0); // blue
+  {
+    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 6] = pixelFromRGBW(0, 0, COEF_PREV, 0); // blue
+    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 15] = pixelFromRGBW(0, 0, COEF_PREV, 0); // blue
+  }
+  else if (state == REMOTE_MANU_STM_LOCK)
+  {
+    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 6] = pixelFromRGBW(COEF_PREV, 0, 0, 0); // red
+    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 15] = pixelFromRGBW(0, 0, COEF_PREV, 0); // blue
+  }
   else if (state == REMOTE_MANU_LAMP)
-    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 14] = pixelFromRGBW(0, COEF_PREV / 2, 0, COEF_PREV); // white green
-  else if (state == REMOTE_MANULOCK_LAMP)
-    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 14] = pixelFromRGBW(COEF_PREV / 2, 0, 0, COEF_PREV); // white red
+  {
+    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 6] = pixelFromRGBW(0, COEF_PREV, 0, 0);  // green
+    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 15] = pixelFromRGBW(0, COEF_PREV / 2, 0, COEF_PREV); // white green
+  }
 } // remote_status
 
 void wifi_status(int Wifi_Status)
@@ -122,4 +145,4 @@ void wifi_status(int Wifi_Status)
     strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 16] = pixelFromRGBW(COEF_PREV, 0, 0, 0);
   else if (Wifi_Status == 100)
     strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 16] = pixelFromRGBW(0, 0, COEF_PREV, 0);
-}//wifi_status
+} //wifi_status
