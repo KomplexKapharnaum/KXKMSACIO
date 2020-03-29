@@ -1,10 +1,10 @@
 void do_zoom()
 {
-  int Zoom = nearbyint(zoom) ;
+  int Zoom = nearbyint(zoom);
   int Offset = nearbyint(offset);
   for (int i = 0; i < NUM_LEDS_PER_STRIP_max; i++)
   {
-    if (i >= Offset && i <= (Offset + Zoom) - 1 )
+    if (i >= Offset && i <= (Offset + Zoom) - 1)
     {
 
       strands[1]->pixels[i] = pixelFromRGBW(
