@@ -85,7 +85,7 @@ void boutons()
     log_get = k32->remote->getState();
     if (log_get != old_log_get)
     {
-        LOGF(" old_STATE = %d\n", old_log_get);
+        LOGF(" *  old_STATE = %d\n", old_log_get);
         if (old_log_get == 0)
         {
             last_gam = -127;

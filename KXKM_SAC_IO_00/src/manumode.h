@@ -1,6 +1,8 @@
 
 #define Start_Preview 8
 
+/////////////////////////////////////////active_frame/////////////////////////////////////
+
 void active_frame(int mem)
 {
 
@@ -83,6 +85,8 @@ void active_frame(int mem)
 
 } // active_frame
 
+/////////////////////////////////////////preview_frame/////////////////////////////////////
+
 void preview_frame(int mem)
 {
   mem = mem % NUMBER_OF_MEM;
@@ -96,6 +100,8 @@ void preview_frame(int mem)
   }
 
 } // preview_frame
+
+/////////////////////////////////////////remote & wifi status/////////////////////////////////////
 
 void remote_status(remoteState state)
 {
@@ -111,27 +117,27 @@ void remote_status(remoteState state)
   }
   else if (state == REMOTE_MANU)
   {
-    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + Start_Preview - 2] = pixelFromRGBW(0, COEF_PREV, 0, 0);  // green
+    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + Start_Preview - 2] = pixelFromRGBW(0, COEF_PREV, 0, 0); // green
     strands[1]->pixels[NUM_LEDS_PER_STRIP_max + Start_Preview + 7] = pixelFromRGBW(0, COEF_PREV, 0, 0); // green
   }
   else if (state == REMOTE_MANU_LOCK)
   {
-    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + Start_Preview - 2] = pixelFromRGBW(COEF_PREV, 0, 0, 0);  // red
-    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + Start_Preview + 7] = pixelFromRGBW(0, COEF_PREV, 0, 0);   // green
+    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + Start_Preview - 2] = pixelFromRGBW(COEF_PREV, 0, 0, 0); // red
+    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + Start_Preview + 7] = pixelFromRGBW(0, COEF_PREV, 0, 0); // green
   }
   else if (state == REMOTE_MANU_STM)
   {
-    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + Start_Preview - 2] = pixelFromRGBW(0, 0, COEF_PREV, 0);  // blue
-    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + Start_Preview + 7] = pixelFromRGBW(0, 0, COEF_PREV, 0);  // blue
+    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + Start_Preview - 2] = pixelFromRGBW(0, 0, COEF_PREV, 0); // blue
+    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + Start_Preview + 7] = pixelFromRGBW(0, 0, COEF_PREV, 0); // blue
   }
   else if (state == REMOTE_MANU_STM_LOCK)
   {
-    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + Start_Preview - 2] = pixelFromRGBW(COEF_PREV, 0, 0, 0);  // red
-    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + Start_Preview + 7] = pixelFromRGBW(0, 0, COEF_PREV, 0);  // blue
+    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + Start_Preview - 2] = pixelFromRGBW(COEF_PREV, 0, 0, 0); // red
+    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + Start_Preview + 7] = pixelFromRGBW(0, 0, COEF_PREV, 0); // blue
   }
   else if (state == REMOTE_MANU_LAMP)
   {
-    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + Start_Preview - 2] = pixelFromRGBW(0, COEF_PREV, 0, 0);              // green
+    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + Start_Preview - 2] = pixelFromRGBW(0, COEF_PREV, 0, 0);             // green
     strands[1]->pixels[NUM_LEDS_PER_STRIP_max + Start_Preview + 7] = pixelFromRGBW(0, COEF_PREV / 2, 0, COEF_PREV); // white green
   }
 } // remote_status

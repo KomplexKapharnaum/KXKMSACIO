@@ -56,6 +56,11 @@ void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t *d
       k32->pwm->setAll(k32->remote->getLamp());
     }
 
+    if (k32->remote->getState() == REMOTE_MANU_LAMP)
+    {
+      k32->pwm->setAll(k32->remote->getLampGrad());
+    }
+
     if (color_mode >= 11 && color_mode <= 20)
     {
       pix_start = -1;
@@ -238,6 +243,5 @@ void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t *d
 
 void onArtNetFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t *data)
 {
-  if (k32->remote->getState() < 2)
-    onDmxFrame(universe, length, sequence, data);
+    onDmxFrame(universe, length, sequence, data); 
 }
