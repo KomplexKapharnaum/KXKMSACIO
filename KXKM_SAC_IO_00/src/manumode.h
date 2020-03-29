@@ -1,4 +1,6 @@
 
+#define Start_Preview 8
+
 void active_frame(int mem)
 {
 
@@ -83,13 +85,11 @@ void active_frame(int mem)
 
 void preview_frame(int mem)
 {
-  LOGF(" preview_frame = %d\n", mem);
   mem = mem % NUMBER_OF_MEM;
-
-  LOGF("%%%%%% preview_frame = %d\n", mem);
+  LOGF(" preview_frame = %d\n", mem);
 
   int p = 0;
-  for (int i = NUM_LEDS_PER_STRIP_max + 8; i < NUM_LEDS_PER_STRIP_max + 14; i++)
+  for (int i = NUM_LEDS_PER_STRIP_max + Start_Preview; i < NUM_LEDS_PER_STRIP_max + Start_Preview + 6; i++)
   {
     strands[1]->pixels[i] = pixelFromRGBW((MEM_PREV[mem][p] * COEF_PREV), (MEM_PREV[mem][p + 1] * COEF_PREV), (MEM_PREV[mem][p + 2] * COEF_PREV), (MEM_PREV[mem][p + 3] * COEF_PREV));
     p = p + 4;
@@ -101,51 +101,51 @@ void remote_status(remoteState state)
 {
   if (state == REMOTE_AUTO)
   {
-    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 6] = pixelFromRGBW(0, COEF_PREV, 0, 0); // green
-    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 15] = pixelFromRGBW(0, 0, 0, 0);        // black
+    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + Start_Preview - 2] = pixelFromRGBW(0, COEF_PREV, 0, 0); // green
+    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + Start_Preview + 7] = pixelFromRGBW(0, 0, 0, 0);         // black
   }
   else if (state == REMOTE_AUTO_LOCK)
   {
-    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 6] = pixelFromRGBW(COEF_PREV, 0, 0, 0); // red
-    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 15] = pixelFromRGBW(0, 0, 0, 0);        // black
+    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + Start_Preview - 2] = pixelFromRGBW(COEF_PREV, 0, 0, 0); // red
+    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + Start_Preview + 7] = pixelFromRGBW(0, 0, 0, 0);         // black
   }
   else if (state == REMOTE_MANU)
   {
-    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 6] = pixelFromRGBW(0, COEF_PREV, 0, 0);  // green
-    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 15] = pixelFromRGBW(0, COEF_PREV, 0, 0); // green
+    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + Start_Preview - 2] = pixelFromRGBW(0, COEF_PREV, 0, 0);  // green
+    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + Start_Preview + 7] = pixelFromRGBW(0, COEF_PREV, 0, 0); // green
   }
   else if (state == REMOTE_MANU_LOCK)
   {
-    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 6] = pixelFromRGBW(COEF_PREV, 0, 0, 0);  // red
-    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 15] = pixelFromRGBW(0, COEF_PREV, 0, 0); // green
+    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + Start_Preview - 2] = pixelFromRGBW(COEF_PREV, 0, 0, 0);  // red
+    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + Start_Preview + 7] = pixelFromRGBW(0, COEF_PREV, 0, 0);   // green
   }
   else if (state == REMOTE_MANU_STM)
   {
-    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 6] = pixelFromRGBW(0, 0, COEF_PREV, 0);  // blue
-    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 15] = pixelFromRGBW(0, 0, COEF_PREV, 0); // blue
+    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + Start_Preview - 2] = pixelFromRGBW(0, 0, COEF_PREV, 0);  // blue
+    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + Start_Preview + 7] = pixelFromRGBW(0, 0, COEF_PREV, 0);  // blue
   }
   else if (state == REMOTE_MANU_STM_LOCK)
   {
-    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 6] = pixelFromRGBW(COEF_PREV, 0, 0, 0);  // red
-    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 15] = pixelFromRGBW(0, 0, COEF_PREV, 0); // blue
+    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + Start_Preview - 2] = pixelFromRGBW(COEF_PREV, 0, 0, 0);  // red
+    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + Start_Preview + 7] = pixelFromRGBW(0, 0, COEF_PREV, 0);  // blue
   }
   else if (state == REMOTE_MANU_LAMP)
   {
-    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 6] = pixelFromRGBW(0, COEF_PREV, 0, 0);              // green
-    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 15] = pixelFromRGBW(0, COEF_PREV / 2, 0, COEF_PREV); // white green
+    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + Start_Preview - 2] = pixelFromRGBW(0, COEF_PREV, 0, 0);              // green
+    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + Start_Preview + 7] = pixelFromRGBW(0, COEF_PREV / 2, 0, COEF_PREV); // white green
   }
 } // remote_status
 
 void wifi_status(int Wifi_Status)
 {
   if (Wifi_Status > -45)
-    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 16] = pixelFromRGBW(0, COEF_PREV * 2, 0, 0);
+    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + Start_Preview + 9] = pixelFromRGBW(0, COEF_PREV * 2, 0, 0);
   else if (Wifi_Status > -58)
-    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 16] = pixelFromRGBW(0, COEF_PREV, 0, 0);
+    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + Start_Preview + 9] = pixelFromRGBW(0, COEF_PREV, 0, 0);
   else if (Wifi_Status > -71)
-    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 16] = pixelFromRGBW(COEF_PREV, COEF_PREV / 2, 0, 0);
+    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + Start_Preview + 9] = pixelFromRGBW(COEF_PREV, COEF_PREV / 2, 0, 0);
   else if (Wifi_Status > -80)
-    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 16] = pixelFromRGBW(COEF_PREV, 0, 0, 0);
+    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + Start_Preview + 9] = pixelFromRGBW(COEF_PREV, 0, 0, 0);
   else if (Wifi_Status == 100)
-    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 16] = pixelFromRGBW(0, 0, COEF_PREV, 0);
+    strands[1]->pixels[NUM_LEDS_PER_STRIP_max + Start_Preview + 9] = pixelFromRGBW(0, 0, COEF_PREV, 0);
 } //wifi_status
