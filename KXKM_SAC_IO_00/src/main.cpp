@@ -79,6 +79,7 @@ int previousDataLength = 0;
 #include "onDmxFrame.h"
 #include "mem.h"
 #include "manumode.h"
+#include "boutons.h"
 #include "leds.h"
 #include "do_effet_0.h"
 #include "do_zoom.h"
@@ -120,7 +121,8 @@ void setup()
 
   // remote
   k32->init_remote(NUMBER_OF_MEM);
-
+  last_gpm = NUMBER_OF_MEM - 1;
+  gpm = NUMBER_OF_MEM - 1;
   // bat_de_sac
   bat_custom_on();
 
@@ -160,7 +162,7 @@ void loop()
   if (k32->wifi->isConnected())
     wifi_status(k32->wifi->getRSSI());
   {
-    if (k32->remote->getState() == REMOTE_AUTO)
+    if (k32->remote->getState() < 2) // == REMOTE_AUTO || REMOTE_AUTO_LOCK
       artnet.read();
     lostConnection = false;
   } // if wifi
@@ -191,116 +193,7 @@ void loop()
   if (millis() < lastRefresh_bat)
     lastRefresh_bat = millis();
 
-  //////////////////     Click on ESP   ////////////////////
-  if (k32->system->hw() <= 2)
-  {
-    if (k32->system->stm32->clicked())
-    {
-      // k32->remote->setManu_Stm();
+  /////////////////////  boutons   ///////////////////////
+  boutons();
 
-      if (state_btn == false || k32->remote->getState() > 1)
-      {
-        state_btn = true;
-        LOG(" **************** ");
-        k32->remote->setManu_Stm();
-      }
-      active_frame(++manu_counter);
-      preview_frame(manu_counter);
-      gam = manu_counter;
-    } // Click on ESP
-  }
-
-  //////////////////    Click on Atom    ////////////////////
-  else if (k32->system->hw() == 3)
-  {
-    if ((digitalRead(39) >= 1) && (state_btn != false))
-    {
-      state_btn = false;
-    }
-    if ((digitalRead(39) <= 0) && (state_btn != true))
-    {
-      state_btn = true;
-      k32->remote->setManu_Stm();
-      active_frame(++manu_counter);
-      preview_frame(manu_counter);
-      gam = manu_counter;
-    }
-  }
-
-  //////////////////////  REMOTE CONTROL   ///////////////////////////
-
-  remote_status(k32->remote->getState()); //
-
-  if ((k32->remote->getState() != REMOTE_AUTO || k32->remote->getState() != REMOTE_AUTO_LOCK) && (k32->remote->getState() != REMOTE_MANU_STM || k32->remote->getState() != REMOTE_MANU_STM_LOCK))
-  {
-
-    // getPreviewMacro()
-    gpm = k32->remote->getPreviewMacro();
-    if (last_gpm != gpm)
-    {
-      last_gpm = gpm;
-      preview_frame(gpm);
-    } // getPreviewMacro()
-
-    //  Active FRAME
-    gam = k32->remote->getActiveMacro();
-    if (k32->remote->getSendMacro() == true || last_gam == gam)
-    {
-      last_gam = gam;
-      active_frame(gam);
-      k32->remote->setSendMacro();
-    } // Active FRAME
-
-  } // ! REMOTE_AUTO || REMOTE_MANU_STM
-  else if (k32->remote->getState() == REMOTE_AUTO || k32->remote->getState() != REMOTE_AUTO_LOCK)
-  {
-    gpm = NUMBER_OF_MEM - 1;
-    if (last_gpm != gpm)
-    {
-      last_gpm = gpm;
-      preview_frame(gpm);
-    }
-  }
-
-  if (k32->remote->getState() == REMOTE_MANU_STM || k32->remote->getState() == REMOTE_MANU_STM_LOCK)
-  {
-    active_frame(gam);
-  } // rafrechire les modulos si manu btn
-
-  log_get = k32->remote->getState();
-  if (log_get != old_log_get)
-  {
-    LOGF(" *   old_STATE = %d\n", old_log_get);
-    if (old_log_get == 0)
-    {
-
-    }
-    if (log_get == 0) // REMOTE_AUTO
-    {
-      k32->remote->setSendMacro();
-    }
-    else if (log_get == 1) // REMOTE_AUTO_LOCK
-    {
-    }
-    else if (log_get == 2) // REMOTE_MANU_STM
-    {
-      k32->remote->setSendMacro();
-    }
-    else if (log_get == 3) // REMOTE_MANU_STM_LOCK
-    {
-    }
-    else if (log_get == 4) // REMOTE_MANU_LOCK,
-    {
-    }
-    else if (log_get == 5) // REMOTE_MANU
-    {
-    }
-    else if (log_get == 6) // REMOTE_MANU_LAMP
-    {
-    }
-
-    old_log_get = log_get;
-
-    LOGF(" * NEW STATE = %d\n", log_get);
-  }
 } //loop
