@@ -363,7 +363,7 @@ void do_effet_0()
         pi_n_1_r[i] = 0;
         pi_n_1_g[i] = 0;
         pi_n_1_b[i] = 0;
-        pi_n_1_w[i] = 0; 
+        pi_n_1_w[i] = 0;
       }
     }
 
