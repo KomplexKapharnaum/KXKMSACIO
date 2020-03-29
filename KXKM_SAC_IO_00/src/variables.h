@@ -40,10 +40,10 @@ int pix_start;
 int pix_center;
 int pix_end;
 int master;
-float rrr , ggg , bbb , www;
-float rr , gg , bb , ww;
-float r , g , b , w;
-float srr , sgg , sbb , sww;
+float rrr, ggg, bbb, www;
+float rr, gg, bb, ww;
+float r, g, b, w;
+float srr, sgg, sbb, sww;
 int start_color, end_color;
 int mod;
 int pix_mod;
@@ -66,7 +66,7 @@ int manu_counter = -1;
 bool state_btn = false;
 int mem_call = -1;
 int gpm;
-int last_gpm ;
+int last_gpm;
 int last_gam = -10;
 int gam = 0;
 int log_get = -1;
@@ -78,8 +78,8 @@ bool lostConnection = true;
 
 ///////////////////////////////////// tri & quadri color  variable /////////////////////////////////////
 
-int tri1r , tri1g , tri1b , tri1w ;
-int tri2r , tri2g , tri2b , tri2w ;
-int tri3r , tri3g , tri3b , tri3w ;
-int tri4r , tri4g , tri4b , tri4w ;
+int tri1r, tri1g, tri1b, tri1w;
+int tri2r, tri2g, tri2b, tri2w;
+int tri3r, tri3g, tri3b, tri3w;
+int tri4r, tri4g, tri4b, tri4w;
 int rap_tri;
