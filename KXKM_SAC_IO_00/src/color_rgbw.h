@@ -1,7 +1,10 @@
 
-void color_rgbw(int rgbw_id,int rgbw_value)
+void color_rgbw(int rgbw_id, int rgbw_value)
 {
-    int color_r , color_g , color_b , color_w;
+    int color_r = 0;
+    int color_g = 0;
+    int color_b = 0;
+    int color_w = 0;
 
     //////////////////////////////////// COLOR //////////////////////////////////
 
@@ -11,63 +14,63 @@ void color_rgbw(int rgbw_id,int rgbw_value)
         color_g = 0;
         color_b = 0;
         color_w = 0;
-    }// black
+    } // black
     else if (rgbw_value < 21)
     {
         color_r = 255;
         color_g = 0;
         color_b = 0;
         color_w = 0;
-    }// red
+    } // red
     else if (rgbw_value < 31)
     {
         color_r = 0;
         color_g = 255;
         color_b = 0;
         color_w = 0;
-    }// green
+    } // green
     else if (rgbw_value < 41)
     {
         color_r = 0;
         color_g = 0;
         color_b = 255;
         color_w = 0;
-    }// blue
+    } // blue
     else if (rgbw_value < 51)
     {
         color_r = 0;
         color_g = 0;
         color_b = 0;
         color_w = 255;
-    }// white
+    } // white
     else if (rgbw_value < 61)
     {
         color_r = 255;
         color_g = 255;
         color_b = 0;
         color_w = 0;
-    }// yelow
+    } // yelow
     else if (rgbw_value < 71)
     {
         color_r = 255;
         color_g = 0;
         color_b = 255;
         color_w = 0;
-    }// magenta
+    } // magenta
     else if (rgbw_value < 81)
     {
         color_r = 0;
         color_g = 255;
         color_b = 255;
         color_w = 0;
-    }// cyan
+    } // cyan
     else if (rgbw_value < 91)
     {
         color_r = 255;
         color_g = 100;
         color_b = 0;
         color_w = 0;
-    }// orange
+    } // orange
 
     ///////////////////////////////////// ID ///////////////////////////////////
 
@@ -100,4 +103,4 @@ void color_rgbw(int rgbw_id,int rgbw_value)
         tri4w = color_w;
     }
 
-}// color_rgbw
+} // color_rgbw
