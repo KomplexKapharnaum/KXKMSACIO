@@ -1,35 +1,33 @@
 
 /////////////////////////////////////////def RUBAN_TYPE & LULU_TYPE /////////////////////////////////////////
 
-
 #ifdef LULU_TYPE
-  #if LULU_TYPE == 1
-    #define NUM_LEDS_PER_STRIP_MAX 120
-    #define L_TYPE "Sac"
-  #elif LULU_TYPE == 2
-    #define NUM_LEDS_PER_STRIP_MAX 120
-    #define L_TYPE "Barre"
-  #elif LULU_TYPE == 3
-    #define NUM_LEDS_PER_STRIP_MAX 17
-    #define L_TYPE "Pince"
-  #elif LULU_TYPE == 4
-    #define NUM_LEDS_PER_STRIP_MAX 73
-    #define L_TYPE "Fluo"
-  #elif LULU_TYPE == 5
-    #define NUM_LEDS_PER_STRIP_MAX 186
-    #define L_TYPE "Flex"
-  #elif LULU_TYPE == 6
-    #define NUM_LEDS_PER_STRIP_MAX 60
-    #define L_TYPE "HideSee"
-  #elif LULU_TYPE == 7
-    #define NUM_LEDS_PER_STRIP_MAX 35
-    #define L_TYPE "Phone"
-  #elif LULU_TYPE == 8
-    #define NUM_LEDS_PER_STRIP_MAX 25
-    #define L_TYPE "Atom"
-  #endif
+#if LULU_TYPE == 1
+#define NUM_LEDS_PER_STRIP_MAX 120
+#define L_TYPE "Sac"
+#elif LULU_TYPE == 2
+#define NUM_LEDS_PER_STRIP_MAX 120
+#define L_TYPE "Barre"
+#elif LULU_TYPE == 3
+#define NUM_LEDS_PER_STRIP_MAX 17
+#define L_TYPE "Pince"
+#elif LULU_TYPE == 4
+#define NUM_LEDS_PER_STRIP_MAX 73
+#define L_TYPE "Fluo"
+#elif LULU_TYPE == 5
+#define NUM_LEDS_PER_STRIP_MAX 186
+#define L_TYPE "Flex"
+#elif LULU_TYPE == 6
+#define NUM_LEDS_PER_STRIP_MAX 60
+#define L_TYPE "HideSee"
+#elif LULU_TYPE == 7
+#define NUM_LEDS_PER_STRIP_MAX 35
+#define L_TYPE "Phone"
+#elif LULU_TYPE == 8
+#define NUM_LEDS_PER_STRIP_MAX 25
+#define L_TYPE "Atom"
 #endif
-
+#endif
 
 void k32_settings()
 {
@@ -76,7 +74,6 @@ void k32_settings()
 #else
   NUM_LEDS_PER_STRIP_max = k32->system->preferences.getUInt("NUM_leds", LEDS_ABSOLUTE_MAX);
 #endif
- 
 
   // Calculate adr // channels
   adr = (1 + (LULU_id - 1) * (LULU_PATCHSIZE));
@@ -90,9 +87,12 @@ void k32_settings()
 
   // NAME
   nodeName = L_type;
-  if (RUBAN_type == LED_SK6812_V1) nodeName += "_SK";
-  else if (RUBAN_type == LED_SK6812W_V1) nodeName += "_SKW";
-  else nodeName += "_WS";
-  nodeName += "-"+String(LULU_id)+ "-v" + String(LULU_VER);
+  if (RUBAN_type == LED_SK6812_V1)
+    nodeName += "_SK";
+  else if (RUBAN_type == LED_SK6812W_V1)
+    nodeName += "_SKW";
+  else
+    nodeName += "_WS";
+  nodeName += "-" + String(LULU_id) + "-v" + String(LULU_VER);
 
 } //k32_settings()
