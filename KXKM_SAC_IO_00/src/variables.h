@@ -65,11 +65,12 @@ float str_blind_ws = 1;
 int manu_counter = -1;
 bool state_btn = false;
 int mem_call = -1;
-int last_gpm = -1;
+int gpm;
+int last_gpm ;
 int last_gam = -10;
 int gam = 0;
 int log_get = -1;
-int old_log_get = 0;
+int old_log_get = -129;
 
 ///////////////////////////////////// Wifi variable /////////////////////////////////////
 
