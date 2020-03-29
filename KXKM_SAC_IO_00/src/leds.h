@@ -12,11 +12,11 @@ void ledBlack()
 #ifdef DEBUG
   LOG("ledBlack()");
 #endif
-  active_frame(0);
+  active_frame(NUMBER_OF_MEM - 1);
 } //ledBlack
 
 void initTest()
-{
+{ 
 #ifdef DEBUG
   LOG("initTest()");
 #endif
