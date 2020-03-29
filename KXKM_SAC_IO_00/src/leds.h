@@ -17,7 +17,7 @@ void ledBlack()
 } //ledBlack
 
 void initTest()
-{ 
+{
 #ifdef DEBUG
   LOG("initTest()");
 #endif
