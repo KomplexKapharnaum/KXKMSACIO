@@ -35,4 +35,4 @@ byte MEM_PREV[NUMBER_OF_MEM][24] = {
 };
 //  {r1,g1,b1,w1, r2,g2,b2,w2, r3,g3,w3,w3, r4,g4,b4,w4, r5,g5,b5,w5, r6,g6,b6,w6},
 
-int gpm = NUMBER_OF_MEM - 1;
+// int gpm = NUMBER_OF_MEM - 1;
