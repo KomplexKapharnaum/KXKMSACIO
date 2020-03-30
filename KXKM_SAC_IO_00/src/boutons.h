@@ -85,7 +85,9 @@ void boutons()
     log_get = k32->remote->getState();
     if (log_get != old_log_get)
     {
+#ifdef DEBUG_btn
         LOGF(" *  old_STATE = %d\n", old_log_get);
+#endif
         if (old_log_get == 0)
         {
             last_gam = -127;
@@ -117,10 +119,10 @@ void boutons()
         }
 
         old_log_get = log_get;
-
+#ifdef DEBUG_btn
         LOGF(" * last_gpm = %d\n", last_gpm);
         LOGF(" * gpm = %d\n", gpm);
-
         LOGF(" * NEW STATE = %d\n", log_get);
+#endif
     } // if (log_get != old_log_get)
 } // void boutons();

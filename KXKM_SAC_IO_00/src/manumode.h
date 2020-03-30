@@ -90,7 +90,9 @@ void active_frame(int mem)
 void preview_frame(int mem)
 {
   mem = mem % NUMBER_OF_MEM;
+#ifdef DEBUG_btn
   LOGF(" preview_frame = %d\n", mem);
+#endif
 
   int p = 0;
   for (int i = NUM_LEDS_PER_STRIP_max + Start_Preview; i < NUM_LEDS_PER_STRIP_max + Start_Preview + 6; i++)
