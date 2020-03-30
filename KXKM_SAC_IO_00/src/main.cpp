@@ -12,7 +12,7 @@
 // #define LULU_UNI 0                // Univers DM
 
 /////////////////////////////////////////Debug///////////////////////////////////////
-#define DEBUG 1
+
 // #define DEBUG_dmx 1
 // #define DEBUG_dmxframe 1
 // #define DEBUG_STR 1
