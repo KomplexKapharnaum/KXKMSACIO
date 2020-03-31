@@ -3,6 +3,11 @@ void color_rgbw(int rgbw_id,int rgbw_value)
 {
     int color_r , color_g , color_b , color_w;
 
+    color_r = 0;
+    color_g = 0;
+    color_b = 0;
+    color_w = 0;
+
     //////////////////////////////////// COLOR //////////////////////////////////
 
     if (rgbw_value < 11)

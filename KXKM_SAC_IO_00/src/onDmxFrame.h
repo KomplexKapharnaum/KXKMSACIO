@@ -65,14 +65,16 @@ void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t *d
       if ((pix_mod >= 0 && pix_mod <= 20) || (pix_mod >= 31 && pix_mod <= 230))
       {
         pix_start = (((data[adr + 5] * N_L_P_S) / 255) - 1);
-        pix_end = pix_start + pix_start;
-        pix_pos = ((((pix_start + N_L_P_S + pix_end) * pix_pos_v) / 255) - (pix_end + 1));
+        // pix_end = pix_start + pix_start;
+        // pix_pos = ((((pix_start + N_L_P_S + pix_end) * pix_pos_v) / 255) - (pix_end + 1));
+        pix_pos = ((((3*pix_start + N_L_P_S) * pix_pos_v) / 255) - (2*pix_start + 1));
       }
       else if (pix_mod >= 21 && pix_mod <= 30)
       {
         pix_start = data[adr + 5] - 1;
-        pix_end = pix_start + pix_start;
-        pix_pos = ((((pix_start + N_L_P_S + pix_end) * pix_pos_v) / 255) - (pix_end + 1));
+        // pix_end = pix_start + pix_start;
+        // pix_pos = ((((pix_start + N_L_P_S + pix_end) * pix_pos_v) / 255) - (pix_end + 1));
+        pix_pos = ((((3*pix_start + N_L_P_S) * pix_pos_v) / 255) - (2*pix_start + 1));
       }
       else if (pix_mod >= 231 && pix_mod <= 250)
       {
