@@ -74,17 +74,8 @@ int previousDataLength = 0;
 
 #include "k32_settings.h"
 #include "bat_custom.h"
-#include "Black.h"
-#include "color_rgbw.h"
-#include "onDmxFrame.h"
 #include "mem.h"
-#include "manumode.h"
-#include "leds.h"
-#include "do_effet_0.h"
-#include "do_zoom.h"
-#include "effet_modulo.h"
 #include "Get_percentage.h"
-#include "X_task.h"
 
 ///////////////////////////////////////////////// SETUP ////////////////////////////////////////
 void setup()
@@ -101,16 +92,23 @@ void setup()
 
   // LEDS
   k32->init_light( RUBAN_type, NUM_LEDS_PER_STRIP_max );
-  // k32->light->play("test")->push(50);
-  // k32->light->wait();
 
-  k32->light->play("color")->push(50, 255, 200, 0, 0);
-  k32->light->wait(1000);
+  // CREATE GENERATORS
+  
 
-  k32->light->play("dmx")->push(MEM[8], LULU_PATCHSIZE)->push(50);
-  k32->light->wait(1000);
+  // INIT TEST
+  k32->light->load("test")->set(50)->loop(false);
+  k32->light->play()->wait();
 
-  k32->light->play("dmx")->push(MEM[2], LULU_PATCHSIZE)->push(50);
+  // k32->light->load("color")->set(50, 255, 200, 0, 0);
+  // k32->light->play(250)->wait();
+
+  // k32->light->load("dmx")->set(MEM[8], LULU_PATCHSIZE)->set(50);
+  // k32->light->play(1000)->wait();
+
+  // k32->light->load("color")->set(50, 0, 200, 0, 0);
+  // k32->light->play(1000);
+
 
   // WIFI
   // k32->init_wifi(nodeName);
@@ -135,25 +133,19 @@ void setup()
 
   LOG("Starting " + nodeName);
 
-  ///////////////////////////////////////////////// LEDS //////////////////////////////////////
-  // leds_init();
-  // initTest();
 
   /////////////////////////////////////////////// ARTNET //////////////////////////////////////
-  // artnet.begin();
-  // artnet.setArtDmxCallback(onArtNetFrame);
+  artnet.begin();
+  artnet.setArtDmxCallback( [&](uint16_t universe, uint16_t length, uint8_t sequence, uint8_t *data) {
 
-  ///////////////////////////////////////////////// INIT //////////////////////////////////////
+    if (universe == LULU_uni)
+      k32->light->anim("artnet")->set( &data[adr-1], 20 );
 
-  ///////////////////////////////////////////////// CORE //////////////////////////////////////
-  //  create a task that will be executed in the Map1code() function, with priority 1 and executed on core 0
-  // xTaskCreatePinnedToCore(Map1code, "Map1code", 4096, NULL, 1, NULL, 1); // core 1 = loop
-  // xTaskCreatePinnedToCore(effTask, "effTask", 4096, NULL, 1, NULL, 0);   // core 0 = wifi
-  ///////////////////////////////////////////////// osc //////////////////////////////////////
+  });
 
   ///////////////////////////////////////////////// ATOM  //////////////////////////////////////
-  // if (k32->system->hw() == 3)
-  //   pinMode(39, INPUT_PULLUP);
+  if (k32->system->hw() == 3)
+    pinMode(39, INPUT_PULLUP);
 
   ///////////////////////////////////////////////// MODULO  //////////////////////////////////////
   // k32->init_modulo();
@@ -164,7 +156,7 @@ void setup()
 void loop()
 {
   delay(100);
-  // eff_modulo();
+
 /*
   /////////////////////    if wifi     ///////////////////////
   if (k32->wifi->isConnected())
@@ -189,31 +181,20 @@ void loop()
   } // if millis
 
   /////////////////////  batterie   ///////////////////////
-  if ((millis() - lastRefresh_bat) > REFRESH_BAT)
+  if (abs(millis() - lastRefresh_bat) > REFRESH_BAT)
   {
     get_percentage();
     lastRefresh_bat = millis();
   } // batterie
-
-  //////////////// MILLIS overflow protection //////////////
-  if (millis() < lastRefresh)
-    lastRefresh = millis();
-  if (millis() < lastRefresh_bat)
-    lastRefresh_bat = millis();
+*/
 
   //////////////////     Click on ESP   ////////////////////
   if (k32->system->hw() <= 2)
   {
     if (k32->system->stm32->clicked())
     {
-      // k32->remote->setManu_Stm();
-
-      if (state_btn == false)
-      {
-        state_btn = true;
-      }
-      active_frame(++manu_counter);
-      preview_frame(manu_counter);
+      // active_frame(++manu_counter);
+      // preview_frame(manu_counter);
     } // Click on ESP
   }
 
@@ -227,13 +208,13 @@ void loop()
     if ((digitalRead(39) <= 0) && (state_btn != true))
     {
       state_btn = true;
-      active_frame(++manu_counter);
-      preview_frame(manu_counter);
+      // active_frame(++manu_counter);
+      // preview_frame(manu_counter);
     }
   }
 
   //////////////////////  REMOTE CONTROL   ///////////////////////////
-
+/*
   remote_status(k32->remote->getState()); //
 
   int gpm = k32->remote->getPreviewMacro();
@@ -250,9 +231,5 @@ void loop()
     active_frame(gpm);
   } // ! REMOTE_AUTO
 
-  if (state_btn == true)
-  {
-    active_frame(manu_counter);
-  } // rafrechire les modulos si manu btn
   */
 } //loop
