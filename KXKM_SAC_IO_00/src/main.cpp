@@ -85,7 +85,9 @@ void setup()
 
   //////////////////////////////////////// K32 modules ////////////////////////////////////
   k32->init_stm32();
+
   k32_settings();
+  LOG("LULU:   " + nodeName + "\n");
 
   // PWM
   k32->init_pwm();
@@ -93,8 +95,9 @@ void setup()
   // LEDS
   k32->init_light( RUBAN_type, NUM_LEDS_PER_STRIP_max );
 
-  // CREATE GENERATORS
-  
+  // ADD NEW ANIMS
+  k32->light->anim( "artnet",    new K32_anim_dmx() );
+  k32->light->anim( "manuframe", new K32_anim_dmx() );
 
   // INIT TEST
   k32->light->load("test")->set(50)->loop(false);
@@ -105,16 +108,17 @@ void setup()
 
   // k32->light->load("dmx")->set(MEM[8], LULU_PATCHSIZE)->set(50);
   // k32->light->play(1000)->wait();
+  // TODO: ERROR not going black at end
 
   // k32->light->load("color")->set(50, 0, 200, 0, 0);
   // k32->light->play(1000);
 
 
   // WIFI
-  // k32->init_wifi(nodeName);
+  k32->init_wifi(nodeName);
   // k32->wifi->staticIP("2.0.0." + String(k32->system->id() + 100), "2.0.0.1", "255.0.0.0");
-  // // k32->wifi->connect("kxkm24", NULL);//KXKM
-  // // k32->wifi->connect("interweb", "superspeed37");
+  // k32->wifi->connect("kxkm24", NULL);//KXKM
+  k32->wifi->connect("interweb", "superspeed37");
   // k32->wifi->connect("riri_new", "B2az41opbn6397");
 
   // Start OSC
@@ -131,15 +135,12 @@ void setup()
   // bat_de_sac
   // bat_custom_on();
 
-  LOG("Starting " + nodeName);
-
-
   /////////////////////////////////////////////// ARTNET //////////////////////////////////////
   artnet.begin();
   artnet.setArtDmxCallback( [&](uint16_t universe, uint16_t length, uint8_t sequence, uint8_t *data) {
 
     if (universe == LULU_uni)
-      k32->light->anim("artnet")->set( &data[adr-1], 20 );
+      k32->light->anim("artnet")->set( &data[adr-1], LULU_PATCHSIZE );
 
   });
 
@@ -155,13 +156,11 @@ void setup()
 ///////////////////////////////////////// LOOP /////////////////////////////////////////////////
 void loop()
 {
-  delay(100);
-
-/*
+  
   /////////////////////    if wifi     ///////////////////////
   if (k32->wifi->isConnected())
-    wifi_status(k32->wifi->getRSSI());
   {
+    // wifi_status(k32->wifi->getRSSI());
     if (k32->remote->getState() != REMOTE_MANULOCK || state_btn == false)
       artnet.read();
     lostConnection = false;
@@ -172,9 +171,8 @@ void loop()
   {
     if (!k32->wifi->isConnected() && !lostConnection)
     {
-      wifi_status(100);
-      if (k32->remote->getState() != REMOTE_MANULOCK)
-        ledBlack(); //passe led noir
+      // wifi_status(100);
+      if (k32->remote->getState() != REMOTE_MANULOCK) k32->light->blackout();  //passe led noir
       lostConnection = true;
     }
     lastRefresh = millis();
@@ -208,6 +206,11 @@ void loop()
     if ((digitalRead(39) <= 0) && (state_btn != true))
     {
       state_btn = true;
+      manu_counter = (manu_counter+1) % NUMBER_OF_MEM;
+
+      k32->light->load("manuframe")->set( MEM[manu_counter], LULU_PATCHSIZE );
+      k32->light->play();
+
       // active_frame(++manu_counter);
       // preview_frame(manu_counter);
     }
