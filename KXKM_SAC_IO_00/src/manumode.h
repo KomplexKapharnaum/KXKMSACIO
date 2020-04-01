@@ -114,6 +114,6 @@ void wifi_status(int Wifi_Status)
     strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 16] = pixelFromRGBW(COEF_PREV, COEF_PREV / 2, 0, 0);
   else if (Wifi_Status > -80)
     strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 16] = pixelFromRGBW(COEF_PREV, 0, 0, 0);
-  else if (Wifi_Status == 100)
+  else if (Wifi_Status == 0)
     strands[1]->pixels[NUM_LEDS_PER_STRIP_max + 16] = pixelFromRGBW(0, 0, COEF_PREV, 0);
 }

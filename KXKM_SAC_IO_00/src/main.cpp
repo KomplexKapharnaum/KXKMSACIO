@@ -20,7 +20,7 @@
 // #define DEBUG_btn 1
 
 #define LULU_PATCHSIZE 19 // Taille du patch DMX pour cet Fixture
-#define LEDS_ABSOLUTE_MAX 300
+#define LULU_PREVSIZE 25 // Taille du patch DMX pour cet Fixture
 
 /////////////////////////////////////////Adresse/////////////////////////////////////
 int LULU_id;
@@ -35,7 +35,7 @@ int RUBAN_size;
 
 /////////////////////////////////////////lib/////////////////////////////////////////
 unsigned long lastRefresh_bat = 0;
-#define REFRESH_BAT 100
+#define REFRESH_INFO 300
 
 /////////////////////////////////////////K32/////////////////////////////////////////
 
@@ -77,9 +77,14 @@ void setup()
   // LEDS
   k32->init_light( RUBAN_type, RUBAN_size );
 
-  // ADD NEW ANIMS
-  k32->light->anim( "artnet",    new K32_anim_dmx() );
-  k32->light->anim( "manuframe", new K32_anim_dmx() );
+  // ADD NEW ANIMS  ( anims in K32_anim_basics are already loaded )
+  k32->light->anim( "artnet",   new K32_anim_dmx() );
+  k32->light->anim( "manu",     new K32_anim_dmx() );
+  // k32->light->anim( "preview",  new K32_anim_preview() );
+  // k32->light->anim( "remote",   new K32_anim_remote() );
+  // k32->light->anim( "rssi",     new K32_anim_rssi() );
+  // k32->light->anim( "battery",      new K32_anim_bat() );
+
 
   // INIT TEST
   k32->light->load("test")->set(50)->loop(false);
@@ -95,8 +100,6 @@ void setup()
   // k32->light->load("color")->set(50, 0, 200, 0, 0);
   // k32->light->play(1000);
 
-
-  
 
   // Start OSC
   // k32->init_osc({
@@ -119,60 +122,51 @@ void setup()
       .framesize  = LULU_PATCHSIZE
   });
   
-  k32->artnet->onDmx( [](uint8_t* data, int length) {
+  // event: new artnet frame received
+  //
+  k32->artnet->onDmx( [](uint8_t* data, int length) 
+  {
       k32->light->anim("artnet")->set(data, length);
   });
 
-  k32->wifi->onDisconnect( [&](){ 
-    // wifi_status(100);                  
-    k32->light->anim("wifi")->setdata(1, 100);  // @rssi -100
+  // event: wifi lost
+  //
+  k32->wifi->onDisconnect( [&]()
+  { 
     k32->light->anim("artnet")->setdata(0, 0);  // @master 0
   });
 
 
   ///////////////////////////////////////////////// ATOM  //////////////////////////////////////
-  if (k32->system->hw() == 3)
-    pinMode(39, INPUT_PULLUP);
+  if (k32->system->hw() == 3) pinMode(39, INPUT_PULLUP);
 
 
-  ///////////////////////////////////////////////// MODULO  //////////////////////////////////////
-  // k32->init_modulo();
-  
+  ///////////////////////////////////////////////// INFO //////////////////////////////////////
+  //
+  k32->timer->every(REFRESH_INFO, [](){
+    // k32->light->anim("battery")->set( k32->system->stm32->battery() );
+    // k32->light->anim("rssi")->set( k32->wifi->getRSSI() );
+    LOG( k32->wifi->getRSSI() );
+  });
+
 } //setup
 
 ///////////////////////////////////////// LOOP /////////////////////////////////////////////////
 void loop()
 {
-  
-  /////////////////////    if wifi     ///////////////////////
-  if (k32->wifi->isConnected()) {
-    //wifi_status(k32->wifi->getRSSI());
-  }
-
-  /////////////////////  batterie   ///////////////////////
-  if (abs(millis() - lastRefresh_bat) > REFRESH_BAT)
-  {
-    //get_percentage();
-    lastRefresh_bat = millis();
-  }
 
   //////////////////     Click on ESP   ////////////////////
-  if (k32->system->hw() <= 2)
+  if (k32->system->stm32->clicked())
   {
-    if (k32->system->stm32->clicked())
-    {
-      manu_counter = (manu_counter+1) % NUMBER_OF_MEM;
+    manu_counter = (manu_counter+1) % NUMBER_OF_MEM;
 
-      k32->light->load("manuframe")->set( MEM[manu_counter], LULU_PATCHSIZE );
-      k32->light->play();
-
-      // active_frame(manu_counter);
-      // preview_frame(manu_counter);
-    }
+    k32->light->anim("manu")->set( MEM[manu_counter], LULU_PATCHSIZE );
+    // k32->light->anim("preview")->set( MEM_PREV[manu_counter], LULU_PREVSIZE );
   }
 
+
   //////////////////    Click on Atom    ////////////////////
-  else if (k32->system->hw() == 3)
+  if (k32->system->hw() == 3)
   {
     if ((digitalRead(39) >= 1) && (state_btn != false)) state_btn = false;
     else if ((digitalRead(39) <= 0) && (state_btn != true))
@@ -180,31 +174,30 @@ void loop()
       state_btn = true;
       manu_counter = (manu_counter+1) % NUMBER_OF_MEM;
 
-      k32->light->load("manuframe")->set( MEM[manu_counter], LULU_PATCHSIZE );
-      k32->light->play();
+      k32->light->anim("manu")->set( MEM[manu_counter], LULU_PATCHSIZE );
+      // k32->light->anim("preview")->set( MEM_PREV[manu_counter], LULU_PREVSIZE );
 
-      // active_frame(manu_counter);
-      // preview_frame(manu_counter);
     }
   }
 
   //////////////////////  REMOTE CONTROL   ///////////////////////////
-/*
-  remote_status(k32->remote->getState()); //
 
-  int gpm = k32->remote->getPreviewMacro();
-  if (last_gpm != gpm)
-  {
-    last_gpm = gpm;
-    preview_frame(gpm);
-  } // getPreviewMacro()
+  // k32->light->anim("remote")->set( k32->remote->getState() );
 
-  if (k32->remote->getState() != REMOTE_AUTO)
-  {
-    // Remote Active
-    gpm = k32->remote->getActiveMacro();
-    active_frame(gpm);
-  } // ! REMOTE_AUTO
+  // int gpm = k32->remote->getPreviewMacro();
+  // if (last_gpm != gpm)
+  // {
+  //   last_gpm = gpm;
+  //   // k32->light->anim("preview")->set( MEM_PREV[gpm], LULU_PREVSIZE );
+  // }
 
-  */
+  // if (k32->remote->getState() != REMOTE_AUTO)
+  // {
+  //   // Remote Active
+  //   gpm = k32->remote->getActiveMacro();
+  //   k32->light->anim("manu")->set( MEM[gpm], LULU_PATCHSIZE );
+    
+  // }
+
+
 } //loop

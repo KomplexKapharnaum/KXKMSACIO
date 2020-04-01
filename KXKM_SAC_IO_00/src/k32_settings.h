@@ -75,7 +75,7 @@ String L_type;
   k32->system->preferences.putUInt("RUBAN_size", RUBAN_SIZE);
   RUBAN_size = RUBAN_SIZE;
 #else
-  RUBAN_size = k32->system->preferences.getUInt("RUBAN_size", LEDS_ABSOLUTE_MAX);
+  RUBAN_size = k32->system->preferences.getUInt("RUBAN_size", 300);
 #endif
  
 

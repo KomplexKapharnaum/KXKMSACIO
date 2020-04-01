@@ -1,25 +1,5 @@
 ///////////////////////////////////dmx variables////////////////////////////////////
 
-float zo_pi_n_1_r[LEDS_ABSOLUTE_MAX];
-float zo_pi_n_1_g[LEDS_ABSOLUTE_MAX];
-float zo_pi_n_1_b[LEDS_ABSOLUTE_MAX];
-float zo_pi_n_1_w[LEDS_ABSOLUTE_MAX];
-
-float pi_n_1_r[LEDS_ABSOLUTE_MAX];
-float pi_n_1_g[LEDS_ABSOLUTE_MAX];
-float pi_n_1_b[LEDS_ABSOLUTE_MAX];
-float pi_n_1_w[LEDS_ABSOLUTE_MAX];
-
-float pi_1_r[LEDS_ABSOLUTE_MAX];
-float pi_1_g[LEDS_ABSOLUTE_MAX];
-float pi_1_b[LEDS_ABSOLUTE_MAX];
-float pi_1_w[LEDS_ABSOLUTE_MAX];
-
-float pi_1_sr[LEDS_ABSOLUTE_MAX];
-float pi_1_sg[LEDS_ABSOLUTE_MAX];
-float pi_1_sb[LEDS_ABSOLUTE_MAX];
-float pi_1_sw[LEDS_ABSOLUTE_MAX];
-
 int color_mode;
 int mirror;
 float zoom;
@@ -66,15 +46,3 @@ int manu_counter = -1;
 bool state_btn = false;
 int mem_call = -1;
 int last_gpm = -1;
-
-///////////////////////////////////// Wifi variable /////////////////////////////////////
-
-bool lostConnection = true;
-
-///////////////////////////////////// tri & quadri color  variable /////////////////////////////////////
-
-int tri1r , tri1g , tri1b , tri1w ;
-int tri2r , tri2g , tri2b , tri2w ;
-int tri3r , tri3g , tri3b , tri3w ;
-int tri4r , tri4g , tri4b , tri4w ;
-int rap_tri;
