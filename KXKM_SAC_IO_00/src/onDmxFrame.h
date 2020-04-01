@@ -46,20 +46,25 @@ void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t *d
     NUM_LEDS_PER_STRIP = nearbyint(zoom);
     offset = ((NUM_LEDS_PER_STRIP_max - zoom) / 2) * 1.0;
 
-    if (k32->remote->getLamp() == -1)
+    /////////////////////////////////////////LAMP/////////////////////////////////////////
+    if (k32->remote->getState() != REMOTE_MANU_LAMP)
     {
-      k32->pwm->set(0, (data[adr + 16] * data[adr + 16]) / 255);
-      k32->pwm->set(1, (data[adr + 17] * data[adr + 17]) / 255);
+      if (k32->remote->getLamp() == -1)
+      {
+        k32->pwm->set(0, (data[adr + 16] * data[adr + 16]) / 255);
+        k32->pwm->set(1, (data[adr + 17] * data[adr + 17]) / 255);
+      }
+      else if (k32->remote->getLamp() >= 0)
+      {
+        k32->pwm->setAll(k32->remote->getLamp());
+      }
     }
-    else if (k32->remote->getLamp() >= 0)
-    {
-      k32->pwm->setAll(k32->remote->getLamp());
-    }
-
-    if (k32->remote->getState() == REMOTE_MANU_LAMP)
+    else
     {
       k32->pwm->setAll(k32->remote->getLampGrad());
     }
+
+    /////////////////////////////////////////MODE/////////////////////////////////////////
 
     if (color_mode >= 11 && color_mode <= 20)
     {
@@ -240,6 +245,10 @@ void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t *d
   LOGF(" pwm1 = %d\n", k32->pwm->get(1));
 #endif
 } //onframedmx
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////// onArtNetFrame //////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void onArtNetFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t *data)
 {

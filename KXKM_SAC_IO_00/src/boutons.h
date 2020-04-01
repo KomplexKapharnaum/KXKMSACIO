@@ -81,6 +81,18 @@ void boutons()
     {
         active_frame(gam);
     } // == REMOTE_MANU_STM || REMOTE_MANU_STM_LOCK // rafrechire les modulos si manu btn
+    else if (k32->remote->getState() == 4 && k32->remote->getLamp() != old_getlamp)
+    {
+        old_getlamp = k32->remote->getLamp();
+        if (k32->remote->getLamp() >= 0)
+        {
+            k32->pwm->setAll(k32->remote->getLamp());
+        }
+        else
+        {
+            k32->pwm->setAll(0);
+        }
+    }
 
     log_get = k32->remote->getState();
     if (log_get != old_log_get)
@@ -91,6 +103,17 @@ void boutons()
         if (old_log_get == 0)
         {
             last_gam = -127;
+        }
+        else if (old_log_get == 6)
+        {
+            if (k32->remote->getLamp() >= 0)
+            {
+                k32->pwm->setAll(k32->remote->getLamp());
+            }
+            else
+            {
+                k32->pwm->setAll(0);
+            }
         }
         if (log_get == 0) // REMOTE_AUTO_LOCK
         {
