@@ -4,28 +4,28 @@
 
 #ifdef LULU_TYPE
   #if LULU_TYPE == 1
-    #define NUM_LEDS_PER_STRIP_MAX 120
+    #define RUBAN_SIZE 120
     #define L_TYPE "Sac"
   #elif LULU_TYPE == 2
-    #define NUM_LEDS_PER_STRIP_MAX 120
+    #define RUBAN_SIZE 120
     #define L_TYPE "Barre"
   #elif LULU_TYPE == 3
-    #define NUM_LEDS_PER_STRIP_MAX 17
+    #define RUBAN_SIZE 17
     #define L_TYPE "Pince"
   #elif LULU_TYPE == 4
-    #define NUM_LEDS_PER_STRIP_MAX 73
+    #define RUBAN_SIZE 73
     #define L_TYPE "Fluo"
   #elif LULU_TYPE == 5
-    #define NUM_LEDS_PER_STRIP_MAX 186
+    #define RUBAN_SIZE 186
     #define L_TYPE "Flex"
   #elif LULU_TYPE == 6
-    #define NUM_LEDS_PER_STRIP_MAX 60
+    #define RUBAN_SIZE 60
     #define L_TYPE "HideSee"
   #elif LULU_TYPE == 7
-    #define NUM_LEDS_PER_STRIP_MAX 35
+    #define RUBAN_SIZE 35
     #define L_TYPE "Phone"
   #elif LULU_TYPE == 8
-    #define NUM_LEDS_PER_STRIP_MAX 25
+    #define RUBAN_SIZE 25
     #define L_TYPE "Atom"
   #endif
 #endif
@@ -63,6 +63,7 @@ void k32_settings()
   RUBAN_type = k32->system->preferences.getUInt("LULU_ruban", LED_SK6812W_V1);
 #endif
 
+String L_type;
 #ifdef L_TYPE
   k32->system->preferences.putString("L_type", L_TYPE);
   L_type = L_TYPE;
@@ -70,23 +71,16 @@ void k32_settings()
   L_type = k32->system->preferences.getString("L_type", "Flex");
 #endif
 
-#ifdef NUM_LEDS_PER_STRIP_MAX
-  k32->system->preferences.putUInt("NUM_leds", NUM_LEDS_PER_STRIP_MAX);
-  NUM_LEDS_PER_STRIP_max = NUM_LEDS_PER_STRIP_MAX;
+#ifdef RUBAN_SIZE
+  k32->system->preferences.putUInt("RUBAN_size", RUBAN_SIZE);
+  RUBAN_size = RUBAN_SIZE;
 #else
-  NUM_LEDS_PER_STRIP_max = k32->system->preferences.getUInt("NUM_leds", LEDS_ABSOLUTE_MAX);
+  RUBAN_size = k32->system->preferences.getUInt("RUBAN_size", LEDS_ABSOLUTE_MAX);
 #endif
  
 
   // Calculate adr // channels
-  adr = (1 + (LULU_id - 1) * (LULU_PATCHSIZE));
-  numberOfChannels = NUM_STRIPS * NUM_LEDS_PER_STRIP_max * 4;
-  maxUniverses = numberOfChannels / 512 + ((numberOfChannels % 512) ? 1 : 0);
-  startUniverse = LULU_uni;
-
-  // Calculate NUM leds MAX & L/R TYPE
-  NUM_LEDS_PER_STRIP = NUM_LEDS_PER_STRIP_max;
-  N_L_P_S = NUM_LEDS_PER_STRIP_max;
+  LULU_adr = (1 + (LULU_id - 1) * (LULU_PATCHSIZE));
 
   // NAME
   nodeName = L_type;
