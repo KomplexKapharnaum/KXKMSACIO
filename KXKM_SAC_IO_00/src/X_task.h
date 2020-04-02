@@ -24,11 +24,11 @@ void Map1code(void *pvParameters)
     else if (color_mode >= 11 && color_mode <= 20)
     {
 
-      if ((pix_mod >= 11 && pix_mod <= 20) || (pix_mod >= 31 && pix_mod <= 60) || (pix_mod >= 91 && pix_mod <= 120))
+      if ((pix_mod >= 11 && pix_mod <= 20) || (pix_mod >= 31 && pix_mod <= 60))
       {
         pix_pos = (((pix_start + N_L_P_S + pix_end) * pix_pos_v) / 255) - (pix_end + 1);
       }
-      else if ((pix_mod >= 21 && pix_mod <= 30) || (pix_mod >= 61 && pix_mod <= 90) || (pix_mod >= 121 && pix_mod <= 150))
+      else if ((pix_mod >= 21 && pix_mod <= 30))
       {
         pix_pos = (((pix_start + NUM_LEDS_PER_STRIP + pix_end) * pix_pos_v) / 255) - (pix_end + 1);
       }
