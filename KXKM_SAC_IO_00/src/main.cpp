@@ -162,7 +162,6 @@ void loop()
   if (k32->wifi->isConnected())
     wifi_status(k32->wifi->getRSSI());
   {
-    if (k32->remote->getState() < 2 || k32->remote->getState() == REMOTE_MANU_LAMP) // == REMOTE_AUTO || REMOTE_AUTO_LOCK
       artnet.read();
     lostConnection = false;
   } // if wifi

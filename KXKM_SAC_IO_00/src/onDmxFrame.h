@@ -252,5 +252,12 @@ void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t *d
 
 void onArtNetFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t *data)
 {
-  onDmxFrame(universe, length, sequence, data);
+  if (data[adr + 14] >= 251)
+  {
+    k32->remote->setAuto_Lock();
+  }
+  if (k32->remote->getState() < 2 || k32->remote->getState() == REMOTE_MANU_LAMP) // == REMOTE_AUTO || REMOTE_AUTO_LOCK
+  {
+    onDmxFrame(universe, length, sequence, data);
+  }
 }
