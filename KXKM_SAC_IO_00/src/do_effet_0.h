@@ -1,7 +1,7 @@
 
 void do_effet_0()
 {
-  if (pix_mod >= 0 && pix_mod <= 10)
+  if ((pix_mod >= 0 && pix_mod <= 10) || (pix_mod >= 61 && pix_mod <= 70))
   {
     for (int i = 0; i < NUM_LEDS_PER_STRIP; i++)
     {
@@ -13,7 +13,7 @@ void do_effet_0()
     } //for i
   }   //pix_mod 0
 
-  else if (pix_mod >= 11 && pix_mod <= 20)
+  else if ((pix_mod >= 11 && pix_mod <= 20) || (pix_mod >= 71 && pix_mod <= 80))
   {
     for (int i = 0; i < NUM_LEDS_PER_STRIP; i++)
     {
@@ -34,7 +34,7 @@ void do_effet_0()
     } //for i
   }   //pix_mod 10
 
-  else if (pix_mod >= 21 && pix_mod <= 30)
+  else if ((pix_mod >= 21 && pix_mod <= 30) || (pix_mod >= 81 && pix_mod <= 90))
   {
     for (int i = 0; i < NUM_LEDS_PER_STRIP; i++)
     {
@@ -55,7 +55,7 @@ void do_effet_0()
     } //for i
   }   //pix_mod 20
 
-  else if (pix_mod >= 31 && pix_mod <= 40)
+  else if ((pix_mod >= 31 && pix_mod <= 40) || (pix_mod >= 91 && pix_mod <= 100))
   {
     for (int i = 0; i < NUM_LEDS_PER_STRIP; i++)
     {
@@ -90,7 +90,7 @@ void do_effet_0()
     } //for i
   }   //pix_mod 30
 
-  else if (pix_mod >= 41 && pix_mod <= 50)
+  else if ((pix_mod >= 41 && pix_mod <= 50) || (pix_mod >= 101 && pix_mod <= 110))
   {
     ref_pix_pos = (pix_start + pix_pos);
     for (int i = 0; i < NUM_LEDS_PER_STRIP; i++)
@@ -127,7 +127,7 @@ void do_effet_0()
     } //for i
   }   //pix_mod 40
 
-  else if (pix_mod >= 51 && pix_mod <= 60)
+  else if ((pix_mod >= 51 && pix_mod <= 60) || (pix_mod >= 111 && pix_mod <= 120))
   {
     ref_pix_pos = (pix_start + pix_pos);
     for (int i = 0; i < NUM_LEDS_PER_STRIP; i++)

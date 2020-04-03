@@ -37,10 +37,9 @@ void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t *d
     sbb = (data[adr + 11] * data[adr + 11]) / 255;
     sww = (data[adr + 12] * data[adr + 12]) / 255;
 
-    color_mode = data[adr + 13];
-    mirror = data[adr + 14];
+    mirror = data[adr + 13];
 
-    zoom = ((NUM_LEDS_PER_STRIP_max * data[adr + 15]) / 255) * 1.0;
+    zoom = ((NUM_LEDS_PER_STRIP_max * data[adr + 14]) / 255) * 1.0;
     if (zoom <= 0)
       zoom = 1;
     NUM_LEDS_PER_STRIP = nearbyint(zoom);
@@ -51,8 +50,8 @@ void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t *d
     {
       if (k32->remote->getLamp() == -1)
       {
-        k32->pwm->set(0, (data[adr + 16] * data[adr + 16]) / 255);
-        k32->pwm->set(1, (data[adr + 17] * data[adr + 17]) / 255);
+        k32->pwm->set(0, (data[adr + 15] * data[adr + 15]) / 255);
+        k32->pwm->set(1, (data[adr + 16] * data[adr + 16]) / 255);
       }
       else if (k32->remote->getLamp() >= 0)
       {
@@ -64,20 +63,29 @@ void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t *d
       k32->pwm->setAll(k32->remote->getLampGrad());
     }
 
-    /////////////////////////////////////////MODE/////////////////////////////////////////
+    //////////////////////////////////COLOR MODE/////////////////////////////////////////
+    if (pix_mod >= 0 && pix_mod <= 60)
+    {
+      color_mode = 5; // NORM
+    }
+    else if (pix_mod >= 61 && pix_mod <= 120)
+    {
+      color_mode = 15; // COLOR PICKER
+    }
 
-    if ((pix_mod >= 0 && pix_mod <= 20))
+    ////////////////////////////////////////PIX MODE/////////////////////////////////////////
+    if ((pix_mod >= 0 && pix_mod <= 20) || (pix_mod >= 61 && pix_mod <= 80))
     {
       pix_start = (((data[adr + 5] * N_L_P_S) / 255) - 1);
       pix_end = pix_start + pix_start;
       pix_pos = map(pix_pos_v, 0, 255, -N_L_P_S, N_L_P_S);
     }
-    else if (pix_mod >= 21 && pix_mod <= 30)
+    else if ((pix_mod >= 21 && pix_mod <= 30) || (pix_mod >= 81 && pix_mod <= 90))
     {
       pix_start = (((data[adr + 5] * N_L_P_S) / 255) - 1);
       pix_pos = map(pix_pos_v, 0, 255, 0, N_L_P_S);
     }
-    else if (pix_mod >= 31 && pix_mod <= 60)
+    else if ((pix_mod >= 31 && pix_mod <= 60) || (pix_mod >= 91 && pix_mod <= 120))
     {
       rap_tri = ((data[adr + 5] * N_L_P_S) / 255);
       pix_start = ((rap_tri - 1) * 2);
