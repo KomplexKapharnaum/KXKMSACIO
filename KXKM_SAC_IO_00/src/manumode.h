@@ -56,8 +56,8 @@ void active_frame(int mem)
 
   if (k32->remote->getLamp() >= 0)
   {
+    fakeframe[adr + 16 - 1] = k32->remote->getLamp();
     fakeframe[adr + 17 - 1] = k32->remote->getLamp();
-    fakeframe[adr + 18 - 1] = k32->remote->getLamp();
   }
 
   if (mem == 0)
@@ -67,18 +67,20 @@ void active_frame(int mem)
   else if (mem == 8)
   {
     fakeframe[adr - 1] = k32->modulo_fade->getValue();
+    fakeframe[adr + 16 - 1] = k32->modulo_fade->getValue();
+    fakeframe[adr + 17 - 1] = k32->modulo_fade->getValue();
   }
   else if (mem == 10)
   {
-    fakeframe[adr + 16 - 1] = k32->modulo_sinus->getValue();
+    fakeframe[adr + 15 - 1] = k32->modulo_sinus->getValue();
   }
   else if (mem == 11)
   {
     fakeframe[adr + 1 - 1] = k32->modulo_phase->getValue_1();
     fakeframe[adr + 2 - 1] = k32->modulo_phase->getValue_2();
     fakeframe[adr + 3 - 1] = k32->modulo_phase->getValue_3();
+    fakeframe[adr + 16 - 1] = k32->modulo_phase->getValue_1();
     fakeframe[adr + 17 - 1] = k32->modulo_phase->getValue_1();
-    fakeframe[adr + 18 - 1] = k32->modulo_phase->getValue_1();
   }
 
   onDmxFrame(LULU_uni, adr + LULU_PATCHSIZE, 0, fakeframe);

@@ -259,7 +259,7 @@ void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t *d
 
 void onArtNetFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t *data)
 {
-  if (data[adr + 14] >= 251)
+  if (data[adr + 13] >= 251)
   {
     k32->remote->setAuto_Lock();
   }

@@ -19,7 +19,7 @@
 // #define DEBUG_calibre_btn 1
 // #define DEBUG_btn 1
 
-#define LULU_PATCHSIZE 19 // Taille du patch DMX pour cet Fixture
+#define LULU_PATCHSIZE 18 // Taille du patch DMX pour cet Fixture
 #define LEDS_ABSOLUTE_MAX 300
 
 /////////////////////////////////////////Adresse/////////////////////////////////////
