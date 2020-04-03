@@ -72,6 +72,7 @@ int gam = 0;
 int log_get = -1;
 int old_log_get = -129;
 int old_getlamp = -129;
+int old_ci;
 
 ///////////////////////////////////// Wifi variable /////////////////////////////////////
 
