@@ -77,38 +77,40 @@ void setup()
   // LEDS
   k32->init_light( RUBAN_type, RUBAN_size );
 
-  // ADD NEW ANIMS  ( anims in K32_anim_basics are already loaded )
-  k32->light->anim( "test0",    new K32_anim_test,  0 );
-  k32->light->anim( "test1",    new K32_anim_test,  1 );
+  // ADD NEW ANIMS (name, anim, strip, size, offset)
+  k32->light->anim( "test0",   new K32_anim_test, 0 );
+  k32->light->anim( "test1",   new K32_anim_test, 1 );
 
-  k32->light->anim( "colorA",    new K32_anim_color,  0, 10, 5);
-  k32->light->anim( "colorB",    new K32_anim_color,  0, 1, 1);
-  
-  k32->light->anim( "artnet",   new K32_anim_dmx,   0, RUBAN_size );
-  k32->light->anim( "manu",     new K32_anim_dmx,   0, RUBAN_size );
-  // k32->light->anim( "preview",  new K32_anim_preview, 0,          6, RUBAN_size+1);
-  // k32->light->anim( "remote",   new K32_anim_remote() );
-  // k32->light->anim( "rssi",     new K32_anim_rssi() );
-  // k32->light->anim( "battery",      new K32_anim_bat() );
+  k32->light->anim( "artnet",  new K32_anim_dmx, 0, RUBAN_size);
+  k32->light->anim( "manu",    new K32_anim_dmx, 0, RUBAN_size);
+
+  // k32->light->anim( "preview", new K32_anim_preview, 0, 6, RUBAN_size+2);
+  // k32->light->anim( "remote",  new K32_anim_remote,  0, 6, RUBAN_size+2);
+  // k32->light->anim( "rssi",    new K32_anim_rssi,    0, 6, RUBAN_size+2);
+  // k32->light->anim( "battery", new K32_anim_battery, 0, 6, RUBAN_size+2);
 
 
   // INIT TEST
-  // k32->light->anim("test0")->set(50)->loop(false)->play()->wait();
-  // k32->light->anim("test1")->set(50)->loop(false)->play()->wait();
+  // k32->light->anim("test0")->push(50)->loop(false)->play()->wait();
+  // k32->light->anim("test1")->push(50)->loop(false)->play()->wait();
 
-  k32->light->anim("colorA")->set(50, 255, 200, 0, 0);
-  k32->light->anim("colorA")->play(1000);
+  // COLOR T0EST
+  k32->light->anim("colorA", new K32_anim_color, 0, 10, 5 );
+  k32->light->anim("colorB", new K32_anim_color, 0,  1, 1 );
 
-  k32->light->anim("colorB")->set(50, 255, 0, 0, 0);
-  k32->light->anim("colorB")->play(500);
+  k32->light->anim("colorA")->push(50, 255, 200, 0, 0)->play(1000);
 
-  // k32->light->anim("artnet")->set(MEM[8], LULU_PATCHSIZE);
+  k32->light->anim("colorB")->push(255, 255, 0, 0, 0)->play();
+  k32->light->anim("colorB")->modulate(1, "sin_red", new K32_mod_sinus(120, 0, 255));
+  k32->light->anim("colorB")->modulate(2, "sin_green", new K32_mod_sinus(1000, 0, 180));
+  delay(1000);
+  k32->light->anim("colorB")->modulate("sin_red")->pause();
+  delay(1000);
+  k32->light->anim("colorB")->modulate("sin_red")->set(3000)->play();
+
+
+  // k32->light->anim("artnet")->push(MEM[8], LULU_PATCHSIZE);
   // k32->light->anim("artnet")->play(1000)->wait();
-  // TODO: ERROR not going black at end
-
-  // k32->light->load("color")->set(50, 0, 200, 0, 0);
-  // k32->light->play(1000);
-
 
   // Start OSC
   // k32->init_osc({
@@ -135,14 +137,14 @@ void setup()
   //
   k32->artnet->onDmx( [](uint8_t* data, int length) 
   {
-      k32->light->anim("artnet")->set(data, length);
+      k32->light->anim("artnet")->push(data, length);
   });
 
   // event: wifi lost
   //
   k32->wifi->onDisconnect( [&]()
   { 
-    k32->light->anim("artnet")->setdata(0, 0);  // @master 0
+    k32->light->anim("artnet")->push(0);  // @master 0
   });
 
 
@@ -153,11 +155,11 @@ void setup()
   ///////////////////////////////////////////////// INFO //////////////////////////////////////
   //
   k32->timer->every(REFRESH_INFO, [](){
-    // k32->light->anim("battery")->set( k32->system->stm32->battery() );
-    // k32->light->anim("rssi")->set( k32->wifi->getRSSI() );
+    // k32->light->anim("battery")->push( k32->system->stm32->battery() );
+    // k32->light->anim("rssi")->push( k32->wifi->getRSSI() );
   });
 
-} //setup
+} //pushup
 
 ///////////////////////////////////////// LOOP /////////////////////////////////////////////////
 void loop()
@@ -168,8 +170,8 @@ void loop()
   {
     manu_counter = (manu_counter+1) % NUMBER_OF_MEM;
 
-    k32->light->anim("manu")->set( MEM[manu_counter], LULU_PATCHSIZE );
-    // k32->light->anim("preview")->set( MEM_PREV[manu_counter], LULU_PREVSIZE );
+    k32->light->anim("manu")->push( MEM[manu_counter], LULU_PATCHSIZE );
+    // k32->light->anim("preview")->push( MEM_PREV[manu_counter], LULU_PREVSIZE );
   }
 
 
@@ -182,28 +184,28 @@ void loop()
       state_btn = true;
       manu_counter = (manu_counter+1) % NUMBER_OF_MEM;
 
-      k32->light->anim("manu")->set( MEM[manu_counter], LULU_PATCHSIZE );
-      // k32->light->anim("preview")->set( MEM_PREV[manu_counter], LULU_PREVSIZE );
+      k32->light->anim("manu")->push( MEM[manu_counter], LULU_PATCHSIZE );
+      // k32->light->anim("preview")->push( MEM_PREV[manu_counter], LULU_PREVSIZE );
 
     }
   }
 
   //////////////////////  REMOTE CONTROL   ///////////////////////////
 
-  // k32->light->anim("remote")->set( k32->remote->getState() );
+  // k32->light->anim("remote")->push( k32->remote->getState() );
 
   // int gpm = k32->remote->getPreviewMacro();
   // if (last_gpm != gpm)
   // {
   //   last_gpm = gpm;
-  //   // k32->light->anim("preview")->set( MEM_PREV[gpm], LULU_PREVSIZE );
+  //   // k32->light->anim("preview")->push( MEM_PREV[gpm], LULU_PREVSIZE );
   // }
 
   // if (k32->remote->getState() != REMOTE_AUTO)
   // {
   //   // Remote Active
   //   gpm = k32->remote->getActiveMacro();
-  //   k32->light->anim("manu")->set( MEM[gpm], LULU_PATCHSIZE );
+  //   k32->light->anim("manu")->push( MEM[gpm], LULU_PATCHSIZE );
     
   // }
 
