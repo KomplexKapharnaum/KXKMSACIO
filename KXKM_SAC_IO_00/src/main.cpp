@@ -91,26 +91,28 @@ void setup()
 
 
   // INIT TEST
-  // k32->light->anim("test0")->push(50)->loop(false)->play()->wait();
-  // k32->light->anim("test1")->push(50)->loop(false)->play()->wait();
+    // k32->light->anim("test0")->push(50)->loop(false)->play()->wait();
+    // k32->light->anim("test1")->push(50)->loop(false)->play()->wait();
 
   // COLOR T0EST
-  k32->light->anim("colorA", new K32_anim_color, 0, 10, 5 );
-  k32->light->anim("colorB", new K32_anim_color, 0,  1, 1 );
+    // k32->light->anim("colorA", new K32_anim_color, 0, 10, 5 );
+    // k32->light->anim("colorB", new K32_anim_color, 0,  1, 1 );
 
-  k32->light->anim("colorA")->push(50, 255, 200, 0, 0)->play(1000);
+    // k32->light->anim("colorA")->push(50, 255, 200, 0, 0)->play(1000);
 
-  k32->light->anim("colorB")->push(255, 255, 0, 0, 0)->play();
-  k32->light->anim("colorB")->modulate(1, "sin_red", new K32_mod_sinus(120, 0, 255));
-  k32->light->anim("colorB")->modulate(2, "sin_green", new K32_mod_sinus(1000, 0, 180));
-  delay(1000);
-  k32->light->anim("colorB")->modulate("sin_red")->pause();
-  delay(1000);
-  k32->light->anim("colorB")->modulate("sin_red")->set(3000)->play();
+    // k32->light->anim("colorB")->push(255, 255, 0, 0, 0)->play();  
+    // k32->light->anim("colorB")->modulate(1, "sin_red",   new K32_mod_sinus(120, 0, 255)  );
+    // k32->light->anim("colorB")->modulate(2, "sin_green", new K32_mod_sinus(1000, 0, 180) );
+    // k32->light->anim("colorB")->modulate(3, "ran_blue",  new K32_mod_random(1000, 0, 255) );
+    // delay(1000);
+    // k32->light->anim("colorB")->modulate("sin_red")->pause();
+    // delay(1000);
+    // k32->light->anim("colorB")->modulate("sin_red")->param(0, 3000)->play();
 
+  K32_anim* artnet = k32->light->anim("artnet");
+  artnet->push(MEM[8], LULU_PATCHSIZE)->setdata(0,100)->play();
+  artnet->modulate(7, "sin_pos", new K32_mod_sinus(1000, 0, 255));
 
-  // k32->light->anim("artnet")->push(MEM[8], LULU_PATCHSIZE);
-  // k32->light->anim("artnet")->play(1000)->wait();
 
   // Start OSC
   // k32->init_osc({
