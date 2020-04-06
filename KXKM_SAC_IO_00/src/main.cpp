@@ -96,35 +96,14 @@ void setup()
 
   // COLOR T0EST
     // k32->light->anim("colorA", new K32_anim_color, 0, 10, 5 );
-    // k32->light->anim("colorB", new K32_anim_color, 0,  1, 1 );
-
     // k32->light->anim("colorA")->push(50, 255, 200, 0, 0)->play(1000);
 
-    // k32->light->anim("colorB")->push(255, 255, 0, 0, 0)->play();  
-    // k32->light->anim("colorB")->modulate(1, "sin_red",   new K32_mod_sinus(120, 0, 255)  );
-    // k32->light->anim("colorB")->modulate(2, "sin_green", new K32_mod_sinus(1000, 0, 180) );
-    // k32->light->anim("colorB")->modulate(3, "ran_blue",  new K32_mod_random(1000, 0, 255) );
-    // delay(1000);
-    // k32->light->anim("colorB")->modulate("sin_red")->pause();
-    // delay(1000);
-    // k32->light->anim("colorB")->modulate("sin_red")->param(0, 3000)->play();
+  // MOD TEST
+    K32_anim* artnet = k32->light->anim("artnet");
+    artnet->push(MEM[8], LULU_PATCHSIZE)->setdata(0,255)->play();
+    artnet->modulate(7, "sin_pos", new K32_mod_sinus)->period(1000)->play();
+    artnet->modulate(0, "fadeout", new K32_mod_fadeout)->period(1000)->mini(100)->play();
 
-  K32_anim* artnet = k32->light->anim("artnet");
-  artnet->push(MEM[8], LULU_PATCHSIZE)->setdata(0,100)->play();
-  artnet->modulate(7, "sin_pos", new K32_mod_sinus)->period(1000);
-
-  artnet->modulate(0, "fadeout", new K32_mod_fadeout)->period(1000)->mini(20);
-
-  delay(1000);
-
-  artnet->modulate(0, "fadein", new K32_mod_fadein)->period(1000)->maxi(255);
-
-  delay(1000);
-
-  artnet->modulate("fadeout")->mini(0)->maxi(255)->play();
-
-  delay(1000);
-  artnet->modulate("fadein")->mini(0)->maxi(100)->play();
 
   // Start OSC
   // k32->init_osc({
