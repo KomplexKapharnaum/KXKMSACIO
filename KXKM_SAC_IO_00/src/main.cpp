@@ -111,8 +111,20 @@ void setup()
 
   K32_anim* artnet = k32->light->anim("artnet");
   artnet->push(MEM[8], LULU_PATCHSIZE)->setdata(0,100)->play();
-  artnet->modulate(7, "sin_pos", new K32_mod_sinus(1000, 0, 255));
+  artnet->modulate(7, "sin_pos", new K32_mod_sinus)->period(1000);
 
+  artnet->modulate(0, "fadeout", new K32_mod_fadeout)->period(1000)->mini(20);
+
+  delay(1000);
+
+  artnet->modulate(0, "fadein", new K32_mod_fadein)->period(1000)->maxi(255);
+
+  delay(1000);
+
+  artnet->modulate("fadeout")->mini(0)->maxi(255)->play();
+
+  delay(1000);
+  artnet->modulate("fadein")->mini(0)->maxi(100)->play();
 
   // Start OSC
   // k32->init_osc({
