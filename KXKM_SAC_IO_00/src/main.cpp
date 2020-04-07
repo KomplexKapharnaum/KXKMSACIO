@@ -1,6 +1,6 @@
 #include <Arduino.h>
 
-#define LULU_VER 48
+#define LULU_VER 100
 
 /////////////////////////////////////////ID/////////////////////////////////////////
 
@@ -12,7 +12,7 @@
 // #define LULU_UNI 0                // Univers DM
 
 /////////////////////////////////////////Debug///////////////////////////////////////
-#define DEBUG 1
+
 // #define DEBUG_dmx 1
 // #define DEBUG_dmxframe 1
 // #define DEBUG_STR 1
@@ -114,7 +114,9 @@ void setup()
   // });                        // OSC
 
   // remote
-  // k32->init_remote(NUMBER_OF_MEM);
+  k32->init_remote(NUMBER_OF_MEM);
+  // last_gpm = NUMBER_OF_MEM - 1;
+  // gpm = NUMBER_OF_MEM - 1;
 
   // bat_de_sac
   // bat_custom_on();
@@ -157,7 +159,6 @@ void setup()
 ///////////////////////////////////////// LOOP /////////////////////////////////////////////////
 void loop()
 {
-
   //////////////////     Click on ESP   ////////////////////
   if (k32->system->stm32->clicked())
   {
@@ -203,4 +204,8 @@ void loop()
   // }
 
 
+
+  /////////////////////  boutons   ///////////////////////
+  // boutons();
+  
 } //loop

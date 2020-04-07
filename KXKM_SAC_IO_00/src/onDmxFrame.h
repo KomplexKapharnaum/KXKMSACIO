@@ -37,58 +37,73 @@ void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t *d
     sbb = (data[adr + 11] * data[adr + 11]) / 255;
     sww = (data[adr + 12] * data[adr + 12]) / 255;
 
-    color_mode = data[adr + 13];
-    mirror = data[adr + 14];
+    mirror = data[adr + 13];
 
-    zoom = ((NUM_LEDS_PER_STRIP_max * data[adr + 15]) / 255) * 1.0;
+    zoom = ((NUM_LEDS_PER_STRIP_max * data[adr + 14]) / 255) * 1.0;
     if (zoom <= 0)
       zoom = 1;
     NUM_LEDS_PER_STRIP = nearbyint(zoom);
     offset = ((NUM_LEDS_PER_STRIP_max - zoom) / 2) * 1.0;
 
-    if (k32->remote->getLamp() == -1)
+    /////////////////////////////////////////LAMP/////////////////////////////////////////
+    if (k32->remote->getState() != REMOTE_MANU_LAMP)
     {
-      k32->pwm->set(0, (data[adr + 16] * data[adr + 16]) / 255);
-      k32->pwm->set(1, (data[adr + 17] * data[adr + 17]) / 255);
-    }
-    else if (k32->remote->getLamp() >= 0)
-    {
-      k32->pwm->setAll(k32->remote->getLamp());
-    }
-
-    if (color_mode >= 11 && color_mode <= 20)
-    {
-      pix_start = -1;
+      if (k32->remote->getLamp() == -1)
+      {
+        k32->pwm->set(0, (data[adr + 15] * data[adr + 15]) / 255);
+        k32->pwm->set(1, (data[adr + 16] * data[adr + 16]) / 255);
+      }
+      else if (k32->remote->getLamp() >= 0)
+      {
+        k32->pwm->setAll(k32->remote->getLamp());
+      }
     }
     else
     {
-      if ((pix_mod >= 0 && pix_mod <= 20) || (pix_mod >= 31 && pix_mod <= 230))
-      {
-        pix_start = (((data[adr + 5] * N_L_P_S) / 255) - 1);
-        // pix_end = pix_start + pix_start;
-        // pix_pos = ((((pix_start + N_L_P_S + pix_end) * pix_pos_v) / 255) - (pix_end + 1));
-        pix_pos = ((((3*pix_start + N_L_P_S) * pix_pos_v) / 255) - (2*pix_start + 1));
-      }
-      else if (pix_mod >= 21 && pix_mod <= 30)
-      {
-        pix_start = data[adr + 5] - 1;
-        // pix_end = pix_start + pix_start;
-        // pix_pos = ((((pix_start + N_L_P_S + pix_end) * pix_pos_v) / 255) - (pix_end + 1));
-        pix_pos = ((((3*pix_start + N_L_P_S) * pix_pos_v) / 255) - (2*pix_start + 1));
-      }
-      else if (pix_mod >= 231 && pix_mod <= 250)
-      {
-        pix_start = (((data[adr + 5] * N_L_P_S) / 255) - 1);
-        pix_end = pix_start + pix_start;
-        rap_tri = map(data[adr + 5], 0, 255, 0, NUM_LEDS_PER_STRIP * 2);
-        pix_pos = ((NUM_LEDS_PER_STRIP / 2 - rap_tri / 2) + map(pix_pos_v, 0, 255, -NUM_LEDS_PER_STRIP + 1, NUM_LEDS_PER_STRIP + 1));
-        // pix_pos = map(pix_pos_v, 0, 255, -NUM_LEDS_PER_STRIP + 1, NUM_LEDS_PER_STRIP + 1);
-        color_rgbw(0, data[adr]);
-        color_rgbw(1, data[adr + 1]);
-        color_rgbw(2, data[adr + 2]);
-        color_rgbw(3, data[adr + 3]);
-      }
+      k32->pwm->setAll(k32->remote->getLampGrad());
     }
+
+    //////////////////////////////////COLOR MODE/////////////////////////////////////////
+    if (pix_mod >= 0 && pix_mod <= 60)
+    {
+      color_mode = 5; // NORM
+    }
+    else if (pix_mod >= 61 && pix_mod <= 120)
+    {
+      color_mode = 15; // COLOR PICKER
+    }
+
+    ////////////////////////////////////////PIX MODE/////////////////////////////////////////
+    if ((pix_mod >= 0 && pix_mod <= 20) || (pix_mod >= 61 && pix_mod <= 80))
+    {
+      pix_start = (((data[adr + 5] * N_L_P_S) / 255) - 1);
+      pix_end = pix_start + pix_start;
+      pix_pos = map(pix_pos_v, 0, 255, -N_L_P_S, N_L_P_S);
+    }
+    else if ((pix_mod >= 21 && pix_mod <= 30) || (pix_mod >= 81 && pix_mod <= 90))
+    {
+      pix_start = (((data[adr + 5] * N_L_P_S) / 255) - 1);
+      pix_pos = map(pix_pos_v, 0, 255, 0, N_L_P_S);
+    }
+    else if ((pix_mod >= 31 && pix_mod <= 60) || (pix_mod >= 91 && pix_mod <= 120))
+    {
+      rap_tri = ((data[adr + 5] * N_L_P_S) / 255);
+      pix_start = ((rap_tri - 1) * 2);
+      pix_end = pix_start + pix_start;
+      pix_pos = (N_L_P_S / 2) + map(pix_pos_v, 0, 255, -(N_L_P_S + pix_end + 1), pix_start + N_L_P_S + 1);
+    }
+    else if (pix_mod >= 231 && pix_mod <= 250)
+    {
+      pix_start = (((data[adr + 5] * N_L_P_S) / 255) - 1);
+      pix_end = pix_start + pix_start;
+      rap_tri = map(data[adr + 5], 0, 255, 0, NUM_LEDS_PER_STRIP * 2);
+      pix_pos = ((NUM_LEDS_PER_STRIP / 2 - rap_tri / 2) + map(pix_pos_v, 0, 255, -NUM_LEDS_PER_STRIP + 1, NUM_LEDS_PER_STRIP + 1));
+      color_rgbw(0, data[adr]);
+      color_rgbw(1, data[adr + 1]);
+      color_rgbw(2, data[adr + 2]);
+      color_rgbw(3, data[adr + 3]);
+    }
+    // }
 
     pix_center = ((pix_start) / 2) + pix_pos;
 
@@ -238,10 +253,18 @@ void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t *d
 #endif
 } //onframedmx
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////// onArtNetFrame //////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void onArtNetFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t *data)
 {
-  // if (k32->remote->getState() == REMOTE_MANU)
-  //   k32->remote->setAuto();
-  if (k32->remote->getState() == REMOTE_AUTO)
+  if (data[adr + 13] >= 251)
+  {
+    k32->remote->setAuto_Lock();
+  }
+  if (k32->remote->getState() < 2 || k32->remote->getState() == REMOTE_MANU_LAMP) // == REMOTE_AUTO || REMOTE_AUTO_LOCK
+  {
     onDmxFrame(universe, length, sequence, data);
+  }
 }

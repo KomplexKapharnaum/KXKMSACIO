@@ -1,7 +1,6 @@
 
 /////////////////////////////////////////def RUBAN_TYPE & LULU_TYPE /////////////////////////////////////////
 
-
 #ifdef LULU_TYPE
   #if LULU_TYPE == 1
     #define RUBAN_SIZE 120
@@ -29,7 +28,6 @@
     #define L_TYPE "Atom"
   #endif
 #endif
-
 
 void k32_settings()
 {
@@ -77,16 +75,18 @@ String L_type;
 #else
   RUBAN_size = k32->system->preferences.getUInt("RUBAN_size", 300);
 #endif
- 
 
   // Calculate adr // channels
   LULU_adr = (1 + (LULU_id - 1) * (LULU_PATCHSIZE));
 
   // NAME
   nodeName = L_type;
-  if (RUBAN_type == LED_SK6812_V1) nodeName += "_SK";
-  else if (RUBAN_type == LED_SK6812W_V1) nodeName += "_SKW";
-  else nodeName += "_WS";
-  nodeName += "-"+String(LULU_id)+ "-v" + String(LULU_VER);
+  if (RUBAN_type == LED_SK6812_V1)
+    nodeName += "_SK";
+  else if (RUBAN_type == LED_SK6812W_V1)
+    nodeName += "_SKW";
+  else
+    nodeName += "_WS";
+  nodeName += "-" + String(LULU_id) + "-v" + String(LULU_VER);
 
 } //k32_settings()
