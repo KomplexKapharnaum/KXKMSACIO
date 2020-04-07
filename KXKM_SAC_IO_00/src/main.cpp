@@ -100,9 +100,9 @@ void setup()
 
   // MOD TEST
     K32_anim* artnet = k32->light->anim("artnet");
-    artnet->push(MEM[8], LULU_PATCHSIZE)->setdata(0,255)->play();
-    artnet->modulate(7, "sin_pos", new K32_mod_sinus)->period(1000)->play();
-    artnet->modulate(0, "fadeout", new K32_mod_fadeout)->period(1000)->mini(100)->play();
+    artnet->push(MEM[9], LULU_PATCHSIZE)->setdata(0,100)->play();
+    // artnet->modulate(9, "tri_strobe", new K32_mod_triangle)->period(10000)->play();
+    // artnet->modulate(0, "fadeout", new K32_mod_fadeout)->period(1000)->mini(100)->play();
 
 
   // Start OSC
