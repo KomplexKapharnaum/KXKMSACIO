@@ -28,7 +28,6 @@ int start_color, end_color;
 int mod;
 int pix_mod;
 unsigned long str_ws_last = 0;
-#define STROB_ON_MS 15
 int pix_start_v;
 int ref_pix_pos;
 float pix_coef;
