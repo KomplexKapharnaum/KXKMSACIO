@@ -8,6 +8,7 @@
 #include "mem.h"
 
 int manu_counter = -1;
+bool state_btn = false;
 
 void boutons_init() 
 {
@@ -42,7 +43,7 @@ void boutons_loop()
     }
 
     //////////////////////  REMOTE CONTROL   ///////////////////////////
-/*
+/*                                                                      // !!! IMPLEMENT
     remote_status(k32->remote->getState()); //
 
     if (k32->remote->getState() > 3)

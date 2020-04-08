@@ -3,7 +3,7 @@
 bool etat_r = false;
 int lrc = 0;
 
-void get_percentage()
+void get_percentage()                                               // !!! IMPLEMENT
 {
   int percentage = k32->system->stm32->battery();
 

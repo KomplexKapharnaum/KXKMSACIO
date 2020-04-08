@@ -42,9 +42,6 @@ unsigned long lastRefresh_bat = 0;
 #include <K32.h> // remote https://github.com/KomplexKapharnaum/K32-lib
 K32 *k32;
 
-///////////////////////////////Lib esp32_digital_led_lib//////////////////////////////
-#include "variables.h"
-
 ///////////////////////////////////////////////// include ////////////////////////////////////////
 
 #include "k32_settings.h"
