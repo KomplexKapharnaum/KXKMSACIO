@@ -1,3 +1,6 @@
+#ifndef mem_h
+#define mem_h
+
 #define NUMBER_OF_MEM 13 // stm leave in last mem
 int MEM[NUMBER_OF_MEM][LULU_PATCHSIZE] = {
     {  255,  35,  45,  15,   0,     235,       127,      127,        0,          0,       0,       0,       0,       0,           0,  255,     0,    0}, // bleu blanc rouge
@@ -34,3 +37,5 @@ int MEM_PREV[NUMBER_OF_MEM][LULU_PREVSIZE] = {
     {COEF_PREV, 0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0},    // BLACK stm leave last mem
 };
 //  {master,   r1,g1,b1,w1, r2,g2,b2,w2, r3,g3,w3,w3, r4,g4,b4,w4, r5,g5,b5,w5, r6,g6,b6,w6},
+
+#endif

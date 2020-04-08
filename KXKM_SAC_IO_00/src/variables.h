@@ -41,7 +41,7 @@ float str_blind_ws = 1;
 
 ////////////////////////////////// btn variables////////////////////////////////////
 
-int manu_counter = -1;
+
 bool state_btn = false;
 int mem_call = -1;
 int gpm;

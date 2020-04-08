@@ -48,6 +48,7 @@ K32 *k32;
 ///////////////////////////////////////////////// include ////////////////////////////////////////
 
 #include "k32_settings.h"
+#include "boutons.h"
 #include "bat_custom.h"
 #include "mem.h"
 
@@ -100,9 +101,9 @@ void setup()
 
   // MOD TEST
     K32_anim* artnet = k32->light->anim("artnet");
-    artnet->push(MEM[9], LULU_PATCHSIZE)->setdata(0,100)->play();
-    // artnet->modulate(9, "tri_strobe", new K32_mod_triangle)->period(10000)->play();
-    // artnet->modulate(0, "fadeout", new K32_mod_fadeout)->period(1000)->mini(100)->play();
+    artnet->push(MEM[9], LULU_PATCHSIZE)->set(0,100)->play();
+    artnet->mod("tri_strobe", new K32_mod_triangle)->at(9)->period(10000)->play();
+    artnet->mod("fadeout", new K32_mod_fadeout)->at(0)->period(1000)->mini(100)->play();
 
 
   // Start OSC
@@ -127,7 +128,7 @@ void setup()
       .address    = LULU_adr,
       .framesize  = LULU_PATCHSIZE
   });
-  
+ 
   // event: new artnet frame received
   //
   k32->artnet->onDmx( [](uint8_t* data, int length) 
@@ -139,19 +140,20 @@ void setup()
   //
   k32->wifi->onDisconnect( [&]()
   { 
-    k32->light->anim("artnet")->push(0);  // @master 0
+    k32->light->anim("artnet")->push(0);  // @master 0   
   });
 
 
-  ///////////////////////////////////////////////// ATOM  //////////////////////////////////////
-  if (k32->system->hw() == 3) pinMode(39, INPUT_PULLUP);
+  ///////////////////// BOUTONS ///////////////////////
+  boutons_init();
 
 
-  ///////////////////////////////////////////////// INFO //////////////////////////////////////
+  ///////////////////// INFO //////////////////////////////////////
   //
-  k32->timer->every(REFRESH_INFO, [](){
-    // k32->light->anim("battery")->push( k32->system->stm32->battery() );
-    // k32->light->anim("rssi")->push( k32->wifi->getRSSI() );
+  k32->timer->every(REFRESH_INFO, []()
+  {
+    k32->light->anim("battery")->push( k32->system->stm32->battery() );
+    k32->light->anim("rssi")->push( k32->wifi->getRSSI() );
   });
 
 } //pushup
@@ -159,53 +161,9 @@ void setup()
 ///////////////////////////////////////// LOOP /////////////////////////////////////////////////
 void loop()
 {
-  //////////////////     Click on ESP   ////////////////////
-  if (k32->system->stm32->clicked())
-  {
-    manu_counter = (manu_counter+1) % NUMBER_OF_MEM;
 
-    k32->light->anim("manu")->push( MEM[manu_counter], LULU_PATCHSIZE );
-    // k32->light->anim("preview")->push( MEM_PREV[manu_counter], LULU_PREVSIZE );
-  }
-
-
-  //////////////////    Click on Atom    ////////////////////
-  if (k32->system->hw() == 3)
-  {
-    if ((digitalRead(39) >= 1) && (state_btn != false)) state_btn = false;
-    else if ((digitalRead(39) <= 0) && (state_btn != true))
-    {
-      state_btn = true;
-      manu_counter = (manu_counter+1) % NUMBER_OF_MEM;
-
-      k32->light->anim("manu")->push( MEM[manu_counter], LULU_PATCHSIZE );
-      // k32->light->anim("preview")->push( MEM_PREV[manu_counter], LULU_PREVSIZE );
-
-    }
-  }
-
-  //////////////////////  REMOTE CONTROL   ///////////////////////////
-
-  // k32->light->anim("remote")->push( k32->remote->getState() );
-
-  // int gpm = k32->remote->getPreviewMacro();
-  // if (last_gpm != gpm)
-  // {
-  //   last_gpm = gpm;
-  //   // k32->light->anim("preview")->push( MEM_PREV[gpm], LULU_PREVSIZE );
-  // }
-
-  // if (k32->remote->getState() != REMOTE_AUTO)
-  // {
-  //   // Remote Active
-  //   gpm = k32->remote->getActiveMacro();
-  //   k32->light->anim("manu")->push( MEM[gpm], LULU_PATCHSIZE );
-    
-  // }
-
-
-
-  /////////////////////  boutons   ///////////////////////
-  // boutons();
+  ///////////////////// BOUTONS ///////////////////////
+  boutons_loop();
   
+
 } //loop

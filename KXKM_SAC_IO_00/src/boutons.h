@@ -2,45 +2,47 @@
 //////////////////////////////////////  BOUTONS   ///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
 
-void boutons()
+#ifndef boutons_h
+#define boutons_h
+
+#include "mem.h"
+
+int manu_counter = -1;
+
+void boutons_init() 
+{
+    if (k32->system->hw() == 3) pinMode(39, INPUT_PULLUP);
+}
+
+
+void boutons_loop()
 {
     //////////////////     Click on ESP   ////////////////////
-    if (k32->system->hw() <= 2)
+    if (k32->system->stm32->clicked())
     {
-        if (k32->system->stm32->clicked())
-        {
-            // k32->remote->setManu_Stm();
+        manu_counter = (manu_counter+1) % NUMBER_OF_MEM;
 
-            if (state_btn == false || k32->remote->getState() > 1)
-            {
-                state_btn = true;
-                k32->remote->setManu_Stm();
-            }
-            active_frame(++manu_counter);
-            preview_frame(manu_counter);
-            gam = manu_counter;
-        } // Click on ESP
+        k32->light->anim("manu")->push( MEM[manu_counter], LULU_PATCHSIZE );
+        // k32->light->anim("preview")->push( MEM_PREV[manu_counter], LULU_PREVSIZE );
     }
 
     //////////////////    Click on Atom    ////////////////////
-    else if (k32->system->hw() == 3)
+    if (k32->system->hw() == 3)
     {
-        if ((digitalRead(39) >= 1) && (state_btn != false))
+        if ((digitalRead(39) >= 1) && (state_btn != false)) state_btn = false;
+        else if ((digitalRead(39) <= 0) && (state_btn != true))
         {
-            state_btn = false;
-        }
-        if ((digitalRead(39) <= 0) && (state_btn != true))
-        {
-            state_btn = true;
-            k32->remote->setManu_Stm();
-            active_frame(++manu_counter);
-            preview_frame(manu_counter);
-            gam = manu_counter;
+        state_btn = true;
+        manu_counter = (manu_counter+1) % NUMBER_OF_MEM;
+
+        k32->light->anim("manu")->push( MEM[manu_counter], LULU_PATCHSIZE );
+        // k32->light->anim("preview")->push( MEM_PREV[manu_counter], LULU_PREVSIZE );
+
         }
     }
 
     //////////////////////  REMOTE CONTROL   ///////////////////////////
-
+/*
     remote_status(k32->remote->getState()); //
 
     if (k32->remote->getState() > 3)
@@ -148,4 +150,9 @@ void boutons()
         LOGF(" * NEW STATE = %d\n", log_get);
 #endif
     } // if (log_get != old_log_get)
+
+    */
 } // void boutons();
+
+
+#endif
