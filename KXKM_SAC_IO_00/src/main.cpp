@@ -122,6 +122,7 @@ void setup()
   // bat_de_sac
   // bat_custom_on();
 
+
   /////////////////////////////////////////////// ARTNET //////////////////////////////////////
   k32->init_artnet({
       .universe   = LULU_uni,
@@ -129,15 +130,18 @@ void setup()
       .framesize  = LULU_PATCHSIZE
   });
  
-  // event: new artnet frame received
-  //
+
+  // EVENT: new artnet frame received
   k32->artnet->onDmx( [](uint8_t* data, int length) 
   {
-      k32->light->anim("artnet")->push(data, length);
+    if (data[14] > 250) {
+      k32->remote->setAuto_Lock();
+    }
+    k32->light->anim("artnet")->push(data, length);
   });
 
-  // event: wifi lost
-  //
+
+  // EVENT: wifi lost
   k32->wifi->onDisconnect( [&]()
   { 
     k32->light->anim("artnet")->push(0);  // @master 0   

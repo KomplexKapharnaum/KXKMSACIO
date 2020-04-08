@@ -46,7 +46,7 @@ void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t *d
     offset = ((NUM_LEDS_PER_STRIP_max - zoom) / 2) * 1.0;
 
     /////////////////////////////////////////LAMP/////////////////////////////////////////
-    if (k32->remote->getState() != REMOTE_MANU_LAMP)
+    if (k32->remote->getState() != REMOTE_MANU_LAMP)                    // !!!IMPLEMENT
     {
       if (k32->remote->getLamp() == -1)
       {
@@ -263,7 +263,7 @@ void onArtNetFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t
   {
     k32->remote->setAuto_Lock();
   }
-  if (k32->remote->getState() < 2 || k32->remote->getState() == REMOTE_MANU_LAMP) // == REMOTE_AUTO || REMOTE_AUTO_LOCK
+  if (k32->remote->getState() < 2 || k32->remote->getState() == REMOTE_MANU_LAMP) // == REMOTE_AUTO || REMOTE_AUTO_LOCK   // !!!IMPLEMENT
   {
     onDmxFrame(universe, length, sequence, data);
   }
