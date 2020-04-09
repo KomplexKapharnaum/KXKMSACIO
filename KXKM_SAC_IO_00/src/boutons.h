@@ -43,6 +43,10 @@ void boutons_loop()
     }
 
     //////////////////////  REMOTE CONTROL   ///////////////////////////
+
+    k32->light->anim("remote")->push( k32->remote->getState() );            // remote_status()
+    k32->light->anim("preview")->push( k32->remote->getPreviewMacro() );    // preview_frame()
+
 /*                                                                      // !!! IMPLEMENT
     remote_status(k32->remote->getState()); //
 

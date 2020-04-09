@@ -20,7 +20,11 @@
 // #define DEBUG_btn 1
 
 #define LULU_PATCHSIZE 19 // Taille du patch DMX pour cet Fixture
-#define LULU_PREVSIZE 25 // Taille du patch DMX pour cet Fixture
+#define LULU_PREVPIX 6    // Nombre de pixel pour la prévisu
+
+#define MASTER_PREV 25    // Luminosité prévisu
+
+#define REFRESH_INFO 5000 // Refresh affichage Wifi & Battery
 
 /////////////////////////////////////////Adresse/////////////////////////////////////
 int LULU_id;
@@ -33,9 +37,6 @@ String nodeName;
 int RUBAN_type;
 int RUBAN_size;
 
-/////////////////////////////////////////lib/////////////////////////////////////////
-unsigned long lastRefresh_bat = 0;
-#define REFRESH_INFO 300
 
 /////////////////////////////////////////K32/////////////////////////////////////////
 
@@ -48,6 +49,8 @@ K32 *k32;
 #include "boutons.h"
 #include "bat_custom.h"
 #include "mem.h"
+
+#include "animations.h"
 
 ///////////////////////////////////////////////// SETUP ////////////////////////////////////////
 void setup()
@@ -76,16 +79,16 @@ void setup()
   k32->init_light( RUBAN_type, RUBAN_size );
 
   // ADD NEW ANIMS (name, anim, strip, size, offset)
-  k32->light->anim( "test0",   new K32_anim_test, 0 );
-  k32->light->anim( "test1",   new K32_anim_test, 1 );
+  k32->light->anim( 0, "test0",   new K32_anim_test );
+  k32->light->anim( 1, "test1",   new K32_anim_test );
 
-  k32->light->anim( "artnet",  new K32_anim_dmx, 0, RUBAN_size);
-  k32->light->anim( "manu",    new K32_anim_dmx, 0, RUBAN_size);
+  k32->light->anim( 0, "artnet",  new K32_anim_dmx, RUBAN_size);
+  k32->light->anim( 0, "manu",    new K32_anim_dmx, RUBAN_size);
 
-  // k32->light->anim( "preview", new K32_anim_preview, 0, 6, RUBAN_size+2);
-  // k32->light->anim( "remote",  new K32_anim_remote,  0, 6, RUBAN_size+2);
-  // k32->light->anim( "rssi",    new K32_anim_rssi,    0, 6, RUBAN_size+2);
-  // k32->light->anim( "battery", new K32_anim_battery, 0, 6, RUBAN_size+2);
+  k32->light->anim( 0, "battery", new Anim_battery,  4, RUBAN_size+1) ->master(MASTER_PREV);
+  k32->light->anim( 0, "rssi",    new Anim_rssi,     1, RUBAN_size+17)->master(MASTER_PREV*2);
+  k32->light->anim( 0, "remote",  new Anim_remote,   LULU_PREVPIX+3, RUBAN_size+6) ->master(MASTER_PREV);
+  k32->light->anim( 0, "preview", new Anim_preview,  LULU_PREVPIX,   RUBAN_size+8) ->master(MASTER_PREV);
 
 
   // INIT TEST
