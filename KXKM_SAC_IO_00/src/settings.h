@@ -29,7 +29,7 @@
   #endif
 #endif
 
-void k32_settings()
+void settings()
 {
 
 // Save to EEPROM if DEFINE

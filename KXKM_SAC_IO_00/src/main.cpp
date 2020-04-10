@@ -13,7 +13,7 @@
 
 /////////////////////////////////////////Debug///////////////////////////////////////
 
-// #define DEBUG_dmx 1
+// #define DEBUG_dmx 1              // !!! IMPLEMENT
 // #define DEBUG_dmxframe 1
 // #define DEBUG_STR 1
 // #define DEBUG_calibre_btn 1
@@ -40,14 +40,15 @@ int RUBAN_size;
 
 /////////////////////////////////////////K32/////////////////////////////////////////
 
-#include <K32.h> // remote https://github.com/KomplexKapharnaum/K32-lib
+#include <K32.h>          // https://github.com/KomplexKapharnaum/K32-lib
 K32 *k32;
 
 ///////////////////////////////////////////////// include ////////////////////////////////////////
 
 #include "settings.h"
-#include "animations.h"
 #include "mem.h"
+#include "anim_monitoring.h"
+#include "anim_dmx.h"
 #include "boutons.h"
 #include "bat_custom.h"
 
@@ -61,66 +62,61 @@ void setup()
   //////////////////////////////////////// K32 modules ////////////////////////////////////
   k32->init_stm32();
 
-  k32_settings();
+  settings();
   LOG("LULU:   " + nodeName + "\n");
 
   // WIFI
-  k32->init_wifi(nodeName);
-  // k32->wifi->staticIP("2.0.0." + String(k32->system->id() + 100), "2.0.0.1", "255.0.0.0");
-  // k32->wifi->connect("kxkm24", NULL);//KXKM
-  // k32->wifi->connect("riri_new", "B2az41opbn6397");
-  k32->wifi->connect("interweb", "superspeed37");
+    k32->init_wifi(nodeName);
+    // k32->wifi->staticIP("2.0.0." + String(k32->system->id() + 100), "2.0.0.1", "255.0.0.0");
+    // k32->wifi->connect("kxkm24", NULL);//KXKM
+    // k32->wifi->connect("riri_new", "B2az41opbn6397");
+    k32->wifi->connect("interweb", "superspeed37");
 
 
   // PWM
-  k32->init_pwm();
+    k32->init_pwm();
 
   // LEDS
-  k32->init_light( RUBAN_type, RUBAN_size );
+    k32->init_light( RUBAN_type, RUBAN_size );
 
-  // ADD NEW ANIMS (name, anim, strip, size, offset)
-  k32->light->anim( 0, "test0",   new K32_anim_test );
-  k32->light->anim( 1, "test1",   new K32_anim_test );
-
-  k32->light->anim( 0, "artnet",  new K32_anim_dmx, RUBAN_size);
-  k32->light->anim( 0, "manu",    new K32_anim_dmx, RUBAN_size);
-
-  k32->light->anim( 0, "battery", new Anim_battery,  4, RUBAN_size+1) ->master(MASTER_PREV);
-  k32->light->anim( 0, "rssi",    new Anim_rssi,     1, RUBAN_size+17)->master(MASTER_PREV*2);
-  k32->light->anim( 0, "remote",  new Anim_remote,   LULU_PREVPIX+3, RUBAN_size+6) ->master(MASTER_PREV);
-  k32->light->anim( 0, "preview", new Anim_preview,  LULU_PREVPIX,   RUBAN_size+8) ->master(MASTER_PREV);
-
+  // ADD NEW ANIMS (strip, name, anim, size, offset=0)
+    k32->light->anim( 0, "artnet",  new Anim_dmx, RUBAN_size);
+    k32->light->anim( 0, "manu",    new Anim_dmx, RUBAN_size);
+    k32->light->anim( 0, "battery", new Anim_battery,  4, RUBAN_size+1) ->master(MASTER_PREV);
+    k32->light->anim( 0, "rssi",    new Anim_rssi,     1, RUBAN_size+17)->master(MASTER_PREV*2);
+    k32->light->anim( 0, "remote",  new Anim_remote,   LULU_PREVPIX+3, RUBAN_size+6) ->master(MASTER_PREV);
+    k32->light->anim( 0, "preview", new Anim_preview,  LULU_PREVPIX,   RUBAN_size+8) ->master(MASTER_PREV);
 
   // INIT TEST
-    // k32->light->anim("test0")->push(50)->loop(false)->play()->wait();
-    // k32->light->anim("test1")->push(50)->loop(false)->play()->wait();
+    k32->light->anim( 0, "test0",   new K32_anim_test )->push(50)->play();
+    k32->light->anim( 1, "test1",   new K32_anim_test )->push(50)->play()->wait();
 
-  // COLOR T0EST
-    // k32->light->anim("colorA", new K32_anim_color, 0, 10, 5 );
-    // k32->light->anim("colorA")->push(50, 255, 200, 0, 0)->play(1000);
+  // COLOR TEST
+    // k32->light->anim("colorA", new K32_anim_color, 0, 10, 5 )->push(50, 255, 200, 0, 0)->play(1000);
 
-  // MOD TEST
+  // DMX TEST
     K32_anim* artnet = k32->light->anim("artnet");
     artnet->push(MEM[9], LULU_PATCHSIZE)->set(0,100)->play();
+    artnet->mod("sinus",    new K32_mod_sinus)->at(7);
     artnet->mod("tri_strobe", new K32_mod_triangle)->at(9)->period(10000)->play();
-    artnet->mod("fadeout", new K32_mod_fadeout)->at(0)->period(1000)->mini(100)->play();
+    artnet->mod("fadeout",  new K32_mod_fadeout)->at(0)->period(1000)->mini(100)->play();
 
 
   // Start OSC
-  // k32->init_osc({
-  //     .port_in = 1818,       // osc port input (0 = disable)  // 1818
-  //     .port_out = 1819,      // osc port output (0 = disable) // 1819
-  //     .beatInterval = 0,     // heartbeat interval milliseconds (0 = disable)
-  //     .beaconInterval = 3000 // full beacon interval milliseconds (0 = disable)
-  // });                        // OSC
+    // k32->init_osc({
+    //     .port_in = 1818,       // osc port input (0 = disable)  // 1818
+    //     .port_out = 1819,      // osc port output (0 = disable) // 1819
+    //     .beatInterval = 0,     // heartbeat interval milliseconds (0 = disable)
+    //     .beaconInterval = 3000 // full beacon interval milliseconds (0 = disable)
+    // });                        // OSC
 
-  // remote
-  k32->init_remote(NUMBER_OF_MEM);
-  // last_gpm = NUMBER_OF_MEM - 1;
-  // gpm = NUMBER_OF_MEM - 1;
+  // Remote
+    k32->init_remote(NUMBER_OF_MEM);
+    // last_gpm = NUMBER_OF_MEM - 1;
+    // gpm = NUMBER_OF_MEM - 1;
 
-  // bat_de_sac
-  // bat_custom_on();
+  // BAT Custom
+    // bat_custom_on();
 
 
   /////////////////////////////////////////////// ARTNET //////////////////////////////////////
@@ -132,20 +128,20 @@ void setup()
  
 
   // EVENT: new artnet frame received
-  k32->artnet->onDmx( [](uint8_t* data, int length) 
-  {
-    if (data[14] > 250) {
-      k32->remote->setAuto_Lock();
-    }
-    k32->light->anim("artnet")->push(data, length);
-  });
+    k32->artnet->onDmx( [](uint8_t* data, int length) 
+    {
+      if (data[14] > 250) {
+        k32->remote->setAuto_Lock();
+      }
+      k32->light->anim("artnet")->push(data, length);
+    });
 
 
   // EVENT: wifi lost
-  k32->wifi->onDisconnect( [&]()
-  { 
-    k32->light->anim("artnet")->push(0);  // @master 0   
-  });
+    k32->wifi->onDisconnect( [&]()
+    { 
+      k32->light->anim("artnet")->push(0);  // @master 0   
+    });
 
 
   ///////////////////// BOUTONS ///////////////////////
@@ -153,14 +149,15 @@ void setup()
 
 
   ///////////////////// INFO //////////////////////////////////////
-  //
-  k32->timer->every(REFRESH_INFO, []()
-  {
-    k32->light->anim("battery")->push( k32->system->stm32->battery() );
-    k32->light->anim("rssi")->push( k32->wifi->getRSSI() );
-  });
+  
+  // Monitoring refresh
+    k32->timer->every(REFRESH_INFO, []()
+    {
+      k32->light->anim("battery")->push( k32->system->stm32->battery() );
+      k32->light->anim("rssi")->push( k32->wifi->getRSSI() );
+    });
 
-} //pushup
+}
 
 ///////////////////////////////////////// LOOP /////////////////////////////////////////////////
 void loop()
