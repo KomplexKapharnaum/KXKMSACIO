@@ -80,12 +80,19 @@ void setup()
     k32->init_light( RUBAN_type, RUBAN_size );
 
   // ADD NEW ANIMS (strip, name, anim, size, offset=0)
+    
+    // ANIM artnet
     k32->light->anim( 0, "artnet",  new Anim_dmx, RUBAN_size);
+
+    // ANIM manuframe
     k32->light->anim( 0, "manu",    new Anim_dmx, RUBAN_size);
+
+    // ANIM monitoring
     k32->light->anim( 0, "battery", new Anim_battery,  4, RUBAN_size+1) ->master(MASTER_PREV);
     k32->light->anim( 0, "rssi",    new Anim_rssi,     1, RUBAN_size+17)->master(MASTER_PREV*2);
-    k32->light->anim( 0, "remote",  new Anim_remote,   LULU_PREVPIX+3, RUBAN_size+6) ->master(MASTER_PREV);
+    k32->light->anim( 0, "remote",  new Anim_remote,   LULU_PREVPIX+4, RUBAN_size+6) ->master(MASTER_PREV);
     k32->light->anim( 0, "preview", new Anim_preview,  LULU_PREVPIX,   RUBAN_size+8) ->master(MASTER_PREV);
+
 
   // INIT TEST
     k32->light->anim( 0, "test0",   new K32_anim_test )->push(50)->play();
@@ -97,9 +104,9 @@ void setup()
   // DMX TEST
     K32_anim* artnet = k32->light->anim("artnet");
     artnet->push(MEM[9], LULU_PATCHSIZE)->set(0,100)->play();
-    artnet->mod("sinus",    new K32_mod_sinus)->at(7);
-    artnet->mod("tri_strobe", new K32_mod_triangle)->at(9)->period(10000)->play();
-    artnet->mod("fadeout",  new K32_mod_fadeout)->at(0)->period(1000)->mini(100)->play();
+    artnet->mod("sinus",    new K32_mod_sinus)      ->at(7)->play();
+    artnet->mod("tri_strobe", new K32_mod_triangle) ->at(9)->period(10000)->play();
+    artnet->mod("fadeout",  new K32_mod_fadeout)    ->at(0)->period(1000)->mini(100)->play();
 
 
   // Start OSC
@@ -112,11 +119,12 @@ void setup()
 
   // Remote
     k32->init_remote(NUMBER_OF_MEM);
-    // last_gpm = NUMBER_OF_MEM - 1;
-    // gpm = NUMBER_OF_MEM - 1;
 
   // BAT Custom
-    // bat_custom_on();
+    bat_custom_on();
+
+  // Boutons
+    boutons_init();
 
 
   /////////////////////////////////////////////// ARTNET //////////////////////////////////////
@@ -130,31 +138,46 @@ void setup()
   // EVENT: new artnet frame received
     k32->artnet->onDmx( [](uint8_t* data, int length) 
     {
-      if (data[14] > 250) {
-        k32->remote->setAuto_Lock();
+      // Force Auto
+      if (data[14] > 250) 
+        k32->remote->setState(REMOTE_AUTO_LOCK);
+
+      // Set PWM
+      if (k32->remote->getLamp() == -1)
+      {
+        k32->pwm->set(0, data[16]);
+        k32->pwm->set(1, data[17]);
       }
+
+      // Draw
       k32->light->anim("artnet")->push(data, length);
+
     });
 
 
   // EVENT: wifi lost
     k32->wifi->onDisconnect( [&]()
     { 
+      LOG("WIFI: connection lost..");
+
       k32->light->anim("artnet")->push(0);  // @master 0   
     });
 
 
-  ///////////////////// BOUTONS ///////////////////////
-  boutons_init();
-
-
   ///////////////////// INFO //////////////////////////////////////
-  
+
   // Monitoring refresh
     k32->timer->every(REFRESH_INFO, []()
     {
       k32->light->anim("battery")->push( k32->system->stm32->battery() );
       k32->light->anim("rssi")->push( k32->wifi->getRSSI() );
+    });
+
+
+  // Remote status refresh
+    k32->timer->every(50, []()
+    {
+      k32->light->anim("remote")->push( k32->remote->getState() );
     });
 
 }
@@ -165,6 +188,10 @@ void loop()
 
   ///////////////////// BOUTONS ///////////////////////
   boutons_loop();
+
+  delay(5);
+
+  LOGF("Free memory: ", ESP.getFreeHeap());
   
 
 } //loop

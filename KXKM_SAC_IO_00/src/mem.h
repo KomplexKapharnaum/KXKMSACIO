@@ -2,6 +2,7 @@
 #define mem_h
 
 #define NUMBER_OF_MEM 13 // stm leave in last mem
+
 uint8_t MEM[NUMBER_OF_MEM][LULU_PATCHSIZE] = {
     {  255,  35,  45,  15,   0,     235,       127,      127,        0,          0,       0,       0,       0,       0,           0,  255,     0,    0}, // bleu blanc rouge
     {  255,   0,   0,   0, 255,       0,         0,        0,        0,          0,      90,      90,      90,      90,           0,  255,    30,  255}, // white

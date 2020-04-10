@@ -15,7 +15,6 @@ public:
     // Loop
     void draw()
     {
-        
         if (rssi > -45)       this->all( {  0, 255,   0} );
         else if (rssi > -58)  this->all( {  0, 128,   0} );
         else if (rssi > -71)  this->all( {255,  64,   0} );
@@ -32,17 +31,14 @@ class Anim_preview : public K32_anim
 {
 public:
 
-    int& mem = data[0];
-
     // Loop
     void draw()
-    {
-        if (mem < NUMBER_OF_MEM)
-            for(int i=0; i<LULU_PREVPIX; i++) 
-            {
-                CRGBW color{MEM_PREV[mem][i*4], MEM_PREV[mem][i*4+1], MEM_PREV[mem][i*4+2], MEM_PREV[mem][i*4+3]};
-                this->pixel(i, color);
-            }
+    {   
+        for(int i=0; i<LULU_PREVPIX; i++) 
+        {
+            CRGBW color{data[i*4], data[i*4+1], data[i*4+2], data[i*4+3]};
+            this->pixel(i, color*255);
+        }
     }
 };
 

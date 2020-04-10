@@ -14,7 +14,7 @@ enum color_mode {
   COLOR_SD        
 };
 
-static  CRGBW colorPreset[25] = {
+CRGBW colorPreset[25] = {
   {CRGBW::Black},         // 0
   {CRGBW::Red},           // 1
   {CRGBW::Green},         // 2
@@ -103,13 +103,6 @@ Anim_dmx hérite de la classe K32_anim.
         *  mod("sinus", new K3_mod_sinus)->at(3)  attache à data[3] un nouveau modulateur K32_mod_sinus, avec pour alias "sinus"
         *  mod("sinus")                           permet de rappeler un modulateur
         
-        Ces méthodes sont utiles pour un modulateur automatique, mais n'est pas la seule façon d'utiliser les modulateurs.
-        Anim_dmx utilise plutôt des modulateurs indépendant auquel on viendra demander la valeur.
-        Ces modulateurs indépendant sont définis comme des attributs internes de la classe.
-
-            K32_mod_pulse* strobe{};
-            K32_mod_sinus* smooth{};
-        
 
     - Anim_dmx doit definir une fonction    void draw()  qui lui est propre.
       Cette fonction sera appelée à chaque fois que des nouvelles données sont disponibles afin de générer et dessiner
@@ -131,10 +124,10 @@ Anim_dmx hérite de la classe K32_anim.
 
         *  startTime    time du lancement de l'animation, à l'appel de play()
 
-    - il est également possible de définir une function    void inti()   qui sera appelée à chaque lancement de l'animation via play()
+    - il est également possible de définir une function    void init()   qui sera appelée à chaque lancement de l'animation via play()
 
     - Les functions et variables présentées ci-dessus sont communes à toutes les K32_anim.
-      Il est cependant possible de créer des variables et functions internes spécifiques à une animation (comme les modulateurs internes à Anim_dmx)
+      Il est cependant possible de créer des variables et functions internes spécifiques à une animation.
       Il est également possible de créer des alias sur les data[], par exemple:
         
             int& red = data[1];
@@ -155,14 +148,18 @@ en utilisant les fonctions évoquées ci-dessus.
 class Anim_dmx : public K32_anim {
   public:
 
-    // Alias exemple
-    int& red = data[1];
+    // Setup
+    void init()
+    {   
+        // Clear previous modulators
+        this->unmod();
 
-    // Strobe modulator (pulse)
-    K32_mod_pulse* strobe{};
+        // Strobe (using)
+        this->mod("strobe", new K32_mod_pulse)->param(0, STROB_ON_MS);
 
-    // Smooth modulator (sinus)
-    K32_mod_sinus* smooth{};
+        // Smooth
+        this->mod("smooth", new K32_mod_sinus);
+    }
 
 
     // Loop
@@ -356,20 +353,20 @@ class Anim_dmx : public K32_anim {
 
       // strobe modulator
       if (strobeMode == 1 || btw(strobeMode, 3, 10)) 
-      { 
-        this->strobe
-                ->period( strobePeriod )
-                ->param(0, STROB_ON_MS);
-
-        // OFF
-        if ( this->strobe->value() == 0) {
-          this->clear();
-          return;
-        }
+      {
+        this->mod("strobe")->period( strobePeriod )->play();
+        
+        data[0] = scale255( data[0], this->mod("strobe")->value() );    // modulate master
       }
+      else 
+        this->mod("strobe")->stop();
+
+    
+      // BLINK
+      /////////////////////////////////////////////////////////////////////////
 
       // strobe blink (3xstrobe -> blind 1+s)
-      else if (strobeMode == 11 || btw(strobeMode, 12, 19)) 
+      if (strobeMode == 11 || btw(strobeMode, 12, 19)) 
       {
         // int count = this->strobe->periodCount() % 3;  // ERROR: periodCount is moving.. -> count is not linear !
         // // LOG(count);
@@ -394,10 +391,12 @@ class Anim_dmx : public K32_anim {
       // smooth modulator
       if (strobeMode == 2) 
       {
-        this->smooth->period( strobePeriod * 10 );
+        this->mod("smooth")->period( strobePeriod * 10 )->play();
 
-        for(int i=0; i<segmentSize; i++) segment[i] %= this->smooth->value();
+        data[0] = scale255( data[0], this->mod("smooth")->value() );    // modulate master
       }
+      else 
+        this->mod("smooth")->stop();
 
       
       // RANDOM
@@ -421,7 +420,7 @@ class Anim_dmx : public K32_anim {
       // MASTER
       /////////////////////////////////////////////////////////////////////////
 
-      this->master(data[0]);
+      for(int i=0; i<segmentSize; i++) segment[i] %= (uint8_t)data[0];
 
 
 
