@@ -21,6 +21,8 @@ uint8_t MEM[NUMBER_OF_MEM][LULU_PATCHSIZE] = {
 //{0      , 1  , 2  , 3  , 4  ,5       , 6        , 7       , 8       , 9         , 10     , 11     , 12     , 13     , 14         , 15   , 16  , 17  } adr + -1
 
 
+
+
 uint8_t MEM_PREV[NUMBER_OF_MEM][LULU_PREVPIX*4] = {
     {0, 0, 1, 0,  0, 0, 1, 0,  0, 0, 0, 1,  0, 0, 0, 1,  1, 0, 0, 0,  1, 0, 0, 0},    // bleu blanc rouge
     {0, 0, 0, 1,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0},    // white
