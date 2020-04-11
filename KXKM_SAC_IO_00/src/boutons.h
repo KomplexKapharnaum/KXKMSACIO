@@ -78,16 +78,24 @@ void boutons_loop()
         // add modulators
         //
         if (activeMacro == 8) {
-            manu->mod(new K32_mod_fadeout) ->at(0, 16, 17) ->period(5000);
+            manu->mod(new K32_mod_fadeout) ->at(0)->at(16)->at(17) ->period(5000);
         }
         else if (activeMacro == 10) {
             manu->mod(new K32_mod_sinus) ->at(15) ->period(1000);                      
         }
         else if (activeMacro == 11) {
-            manu->mod(new K32_mod_sinus) ->at(1, 16, 17) ->period(5000);
-            manu->mod(new K32_mod_sinus) ->at(2) ->period(5000) ->phase(120);
-            manu->mod(new K32_mod_sinus) ->at(3) ->period(5000) ->phase(240);
+            manu->mod(new K32_mod_sinus) ->at(1)->at(16)->at(17) ->period(5000);
+            manu->mod(new K32_mod_sinus) ->at(2)  ->period(5000) ->phase(120);
+            manu->mod(new K32_mod_sinus) ->at(3)  ->period(5000) ->phase(240);
         }
+
+        // Set PWM
+        if (k32->remote->getLamp() == -1)
+        {
+            k32->pwm->set(0, MEM[ activeMacro ][16]);
+            k32->pwm->set(1, MEM[ activeMacro ][17]);
+        }
+        
     }
 
 

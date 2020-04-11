@@ -10,11 +10,11 @@ class Anim_rssi : public K32_anim
 {
 public:
 
-    int& rssi = data[0];
-
     // Loop
-    void draw()
+    void draw(int data[ANIM_DATA_SLOTS])
     {
+        int& rssi = data[0];
+
         if (rssi > -45)       this->all( {  0, 255,   0} );
         else if (rssi > -58)  this->all( {  0, 128,   0} );
         else if (rssi > -71)  this->all( {255,  64,   0} );
@@ -32,12 +32,12 @@ class Anim_preview : public K32_anim
 public:
 
     // Loop
-    void draw()
+    void draw(int data[ANIM_DATA_SLOTS])
     {   
         for(int i=0; i<LULU_PREVPIX; i++) 
         {
             CRGBW color{data[i*4], data[i*4+1], data[i*4+2], data[i*4+3]};
-            this->pixel(i, color*255);
+            this->pixel(i, color*(uint8_t)255);
         }
     }
 };
@@ -51,11 +51,11 @@ class Anim_remote : public K32_anim
 {
 public:
 
-    int& state = data[0];
-
     // Loop
-    void draw()
+    void draw(int data[ANIM_DATA_SLOTS])
     {
+        int& state = data[0];
+
         int first = 0;
         int last = this->size()-1;
 
@@ -100,15 +100,14 @@ class Anim_battery : public K32_anim
 {
 public:
 
-    int& battery = data[0];
-
     K32_mod_pulse* blink{};
     K32_mod_triangle* chase{};
 
 
     // Loop
-    void draw()
+    void draw(int data[ANIM_DATA_SLOTS])
     {
+        int& battery = data[0];
 
         clear();
 

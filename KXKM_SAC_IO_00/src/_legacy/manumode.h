@@ -3,7 +3,7 @@
 
 /////////////////////////////////////////active_frame/////////////////////////////////////
 
-void active_frame(int mem)                // !!! IMPLEMENT
+void active_frame(int mem)         
 {
 
   mem = mem % NUMBER_OF_MEM;

@@ -163,7 +163,7 @@ class Anim_dmx : public K32_anim {
 
 
     // Loop
-    void draw ()
+    void draw (int data[ANIM_DATA_SLOTS])
     {
       //
       // ONDMXFRAME
