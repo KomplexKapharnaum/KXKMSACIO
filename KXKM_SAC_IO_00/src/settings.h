@@ -24,7 +24,7 @@
     #define RUBAN_SIZE 35
     #define L_TYPE "Phone"
   #elif LULU_TYPE == 8
-    #define RUBAN_SIZE 25
+    #define RUBAN_SIZE 5
     #define L_TYPE "Atom"
   #endif
 #endif

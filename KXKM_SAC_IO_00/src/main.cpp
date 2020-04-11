@@ -8,7 +8,7 @@
 
 // #define RUBAN_TYPE LED_WS2812_V1  // LED_WS2812_V1  LED_WS2812B_V1  LED_WS2812B_V2  LED_WS2812B_V3  LED_WS2813_V1  LED_WS2813_V2   LED_WS2813_V3  LED_WS2813_V4  LED_SK6812_V1  LED_SK6812W_V1,
 // #define LULU_ID 1                 // permet de calculer l'adresse DMX
-// #define LULU_TYPE 8               // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom"
+ #define LULU_TYPE 8               // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom"
 // #define LULU_UNI 0                // Univers DM
 
 /////////////////////////////////////////Debug///////////////////////////////////////
@@ -22,9 +22,9 @@
 #define LULU_PATCHSIZE 19 // Taille du patch DMX pour cet Fixture
 #define LULU_PREVPIX 6    // Nombre de pixel pour la prévisu
 
-#define MASTER_PREV 25    // Luminosité prévisu
+#define MASTER_PREV 40    // Luminosité prévisu
 
-#define REFRESH_INFO 5000 // Refresh affichage Wifi & Battery
+#define REFRESH_INFO 1000 // Refresh affichage Wifi & Battery
 
 /////////////////////////////////////////Adresse/////////////////////////////////////
 int LULU_id;
@@ -77,36 +77,36 @@ void setup()
     k32->init_pwm();
 
   // LEDS
-    k32->init_light( RUBAN_type, RUBAN_size );
+    k32->init_light( RUBAN_type, RUBAN_size+30 );
 
   // ADD NEW ANIMS (strip, name, anim, size, offset=0)
     
     // ANIM artnet
-    k32->light->anim( 0, "artnet",  new Anim_dmx, RUBAN_size);
+    k32->light->anim( 0, "artnet",  new Anim_dmx, RUBAN_size)->play();
 
     // ANIM manuframe
     k32->light->anim( 0, "manu",    new Anim_dmx, RUBAN_size);
 
     // ANIM monitoring
-    k32->light->anim( 0, "battery", new Anim_battery,  4, RUBAN_size+1) ->master(MASTER_PREV);
-    k32->light->anim( 0, "rssi",    new Anim_rssi,     1, RUBAN_size+17)->master(MASTER_PREV*2);
-    k32->light->anim( 0, "remote",  new Anim_remote,   LULU_PREVPIX+4, RUBAN_size+6) ->master(MASTER_PREV);
-    k32->light->anim( 0, "preview", new Anim_preview,  LULU_PREVPIX,   RUBAN_size+8) ->master(MASTER_PREV);
+    k32->light->anim( 0, "battery", new Anim_battery,  4, RUBAN_size+1) ->master(MASTER_PREV)->play();
+    k32->light->anim( 0, "rssi",    new Anim_rssi,     1, RUBAN_size+17)->master(MASTER_PREV*1.5)->play();
+    k32->light->anim( 0, "remote",  new Anim_remote,   LULU_PREVPIX+4, RUBAN_size+6) ->master(MASTER_PREV)->play();
+    k32->light->anim( 0, "preview", new Anim_preview,  LULU_PREVPIX,   RUBAN_size+8) ->master(MASTER_PREV)->play();
 
 
   // INIT TEST
-    k32->light->anim( 0, "test0",   new K32_anim_test )->push(50)->play();
-    k32->light->anim( 1, "test1",   new K32_anim_test )->push(50)->play()->wait();
+    // k32->light->anim( 0, "test0",   new K32_anim_test )->push(300)->master(MASTER_PREV)->play();
+    // k32->light->anim( 1, "test1",   new K32_anim_test )->push(300)->master(MASTER_PREV)->play()->wait();
 
   // COLOR TEST
     // k32->light->anim("colorA", new K32_anim_color, 0, 10, 5 )->push(50, 255, 200, 0, 0)->play(1000);
 
   // DMX TEST
     K32_anim* artnet = k32->light->anim("artnet");
-    artnet->push(MEM[9], LULU_PATCHSIZE)->set(0,100)->play();
-    artnet->mod("sinus",    new K32_mod_sinus)      ->at(7)->play();
-    artnet->mod("triangle", new K32_mod_triangle)   ->at(9)->period(10000)->play();
-    artnet->mod("fadeout",  new K32_mod_fadeout)    ->at(0)->period(1000)->mini(100)->play();
+    artnet->push(MEM[8], LULU_PATCHSIZE)->push(100);
+    // artnet->mod("saw",    new K32_mod_sinus)  ->at(0)->play();
+    // artnet->mod("triangle", new K32_mod_triangle)   ->at(15)->period(10000)->play();
+    // artnet->mod("fadeout",  new K32_mod_fadeout)    ->at(0)->period(1000)->play();
 
 
   // Start OSC
@@ -189,9 +189,9 @@ void loop()
   ///////////////////// BOUTONS ///////////////////////
   boutons_loop();
 
-  delay(5);
+  delay(1000);
 
-  LOGF("Free memory: ", ESP.getFreeHeap());
+  // LOGF("Free memory: %d\n", ESP.getFreeHeap());
   
 
 } //loop

@@ -4,7 +4,7 @@
 // OUTILS
 //
 
-#define STROB_ON_MS  2000/LEDS_SHOW_FPS
+#define STROB_ON_MS  12
 
 enum color_mode { 
   COLOR_BI,
@@ -17,7 +17,7 @@ enum color_mode {
 CRGBW colorPreset[25] = {
   {CRGBW::Black},         // 0
   {CRGBW::Red},           // 1
-  {CRGBW::Green},         // 2
+  {CRGBW::Lime},         // 2
   {CRGBW::Blue},          // 3
   {CRGBW::White},         // 4
   {CRGBW::Yellow},        // 5
@@ -406,7 +406,7 @@ class Anim_dmx : public K32_anim {
 
       // smooth modulator
       if (strobeMode == 2) 
-        this->mod("smooth")->period( strobePeriod * 10 )->play();
+        this->mod("smooth")->period( strobePeriod * 4 )->play();
       else 
         this->mod("smooth")->stop();
 
