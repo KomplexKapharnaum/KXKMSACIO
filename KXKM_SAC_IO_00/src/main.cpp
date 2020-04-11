@@ -105,7 +105,7 @@ void setup()
     K32_anim* artnet = k32->light->anim("artnet");
     artnet->push(MEM[9], LULU_PATCHSIZE)->set(0,100)->play();
     artnet->mod("sinus",    new K32_mod_sinus)      ->at(7)->play();
-    artnet->mod("tri_strobe", new K32_mod_triangle) ->at(9)->period(10000)->play();
+    artnet->mod("triangle", new K32_mod_triangle)   ->at(9)->period(10000)->play();
     artnet->mod("fadeout",  new K32_mod_fadeout)    ->at(0)->period(1000)->mini(100)->play();
 
 

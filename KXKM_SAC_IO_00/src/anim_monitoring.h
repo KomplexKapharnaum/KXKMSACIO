@@ -100,9 +100,12 @@ class Anim_battery : public K32_anim
 {
 public:
 
-    K32_mod_pulse* blink{};
-    K32_mod_triangle* chase{};
-
+    // Constructor
+    Anim_battery() : K32_anim() 
+    {
+        this->mod("blink", new K32_mod_pulse)->param(1, 50);
+        this->mod("chase", new K32_mod_triangle)->maxi(this->size()-1);
+    }
 
     // Loop
     void draw(int data[ANIM_DATA_SLOTS])
@@ -147,8 +150,8 @@ public:
 
         else if (battery > 11)
         {   
-            blink->period(500)->param(1, 50);        
-            if ( blink->value() == 0 ) return;   // Blink OFF, nothing to draw
+            mod("blink")->period(500)->play();        
+            if ( mod("blink")->value() == 0 ) return;   // Blink OFF, nothing to draw
             
             pixel(0, CRGBW::Red);
 
@@ -162,13 +165,18 @@ public:
 
         else
         {   
-            blink->period(300)->param(1, 50);
-            if ( blink->value() == 0 ) return;   // Blink OFF, nothing to draw
-
-            chase->period(1000*battery/10)->maxi(this->size()-1);
-            pixel( chase->value() , CRGBW::Red);
+            
+            mod("blink")->period(300)->play();
+            if ( mod("blink")->value() == 0 ) return;   // Blink OFF, nothing to draw
+            
+            mod("chase")->period(1000*battery/10)->play();
+            pixel( mod("chase")->value(), CRGBW::Red);
         }
         
+
+        /// STOP MODS IF NO IN USE
+        if (battery > 16) mod("blink")->stop();
+        if (battery > 11) mod("chase")->stop();
 
     }
 };

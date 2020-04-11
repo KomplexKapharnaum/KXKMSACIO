@@ -69,7 +69,9 @@ Anim_dmx hérite de la classe K32_anim.
             RUBAN_size      = nombre de pixels utiles pour l'animation (optionnel -> defaut = full strip size)
             0               = décalage en pixel à partir du début du strip (optionnel -> defaut = 0)
 
+
     - Une anim existante peut être rappelée en utilisant    k32->light->anim("artnet");
+
 
     - Dans le programme principal, une animation propose les fonctions publiques suivantes.
       Elles peuvent être chainnées ainsi:   k32->light->anim("artnet")->master(100)->play()->wait(1000)->push(200);
@@ -95,18 +97,11 @@ Anim_dmx hérite de la classe K32_anim.
         *  push()               ne fourni aucune donnée, déclenche le rafraichissement de l'animation (comme si les data avaient changées)
         *  set(i, value)        enregistre data[i] à <value>, mais n'est pas considéré comme un changement de donnée. appeler push() pour appliquer ! 
     
-        Il est possible d'ajouter des modulateurs automatiques à une animation.
-        Ces modulateur sont attachés à une case data particulière de l'animation et la fera varier automatiquement dans le temps.
-        Si le modulateur est branché sur data[3] par exemple, cette valeur sera automatiquement modifiée, 
-        déclenchant le rafraichissement de l'animation. => voir doc sur les modulateur pour détails de leur utilisation.
-
-        *  mod("sinus", new K3_mod_sinus)->at(3)  attache à data[3] un nouveau modulateur K32_mod_sinus, avec pour alias "sinus"
-        *  mod("sinus")                           permet de rappeler un modulateur
         
-
     - Anim_dmx doit definir une fonction    void draw()  qui lui est propre.
       Cette fonction sera appelée à chaque fois que des nouvelles données sont disponibles afin de générer et dessiner
       une nouvelle image sur le strip.
+
 
     - Dans draw(), en plus des fonctions publiques listées ci-dessus,  
       il est possible d'accéder à un certain nombre de fonctions et variables internes propres à une K32_anim:
@@ -115,7 +110,8 @@ Anim_dmx hérite de la classe K32_anim.
                     Ces données sont fournies par le programme principal qui utilise la fonction ->push() de l'animation
                     Dans KXKMSACIO c'est soit la portion utile de la trame ArtNet qui est fournie, soit une mémoire du fichier mem.h
                     L'animation peut donc utiliser ce tableau data[] comme base pour construire l'image.
-                    Attention: il est inutile de modifier ce tableau, les modifs depuis l'animation seront perdues lors de l'appel suivant.
+                    Avant d'arriver à l'animation, data[] passe par les modulateurs qui peuvent les modifier.
+                    Attention: il est inutile de modifier ce tableau, les modifs depuis l'animation seront écrasée lors de l'appel suivant.
 
         *  clear()                                      noir sur tous les pixels de l'animation
         *  all(CRGBW color)                             <color> sur tous les pixels de l'animation
@@ -124,7 +120,9 @@ Anim_dmx hérite de la classe K32_anim.
 
         *  startTime    time du lancement de l'animation, à l'appel de play()
 
+
     - il est également possible de définir une function    void init()   qui sera appelée à chaque lancement de l'animation via play()
+
 
     - Les functions et variables présentées ci-dessus sont communes à toutes les K32_anim.
       Il est cependant possible de créer des variables et functions internes spécifiques à une animation.
@@ -135,8 +133,29 @@ Anim_dmx hérite de la classe K32_anim.
       Permet ensuite dans l'animation d'utiliser la variable red à la place de data[1] ce qui clarifie l'écriture de la logique draw()
       Cette technique n'est pas utilisée ici mais dans anim_monitoring.h
 
-      Comme vu précédemment, Anim_dmx utilise également des modulateurs internes qui ne sont pas executés automatiquement, 
-      mais utilisé en appelant  strobe->value()  
+
+    - Il est possible d'ajouter des modulateurs à une animation.
+        Les modulateurs peuvent être nommés (créé une fois, puis accessible avec leur alias), ou anonyme (pour les modulateurs "jetables").
+
+        * mod("sincity", new K3_mod_sinus)  modulateur nommé, pour être rappelé avec    mod("sincity")  
+                                                n'est pas lancé automatiquement, nécessite l'appel à    mod("sincity")->play()
+        
+        * mod(new K3_mod_pulse)             modulateur jetable, ne pourra pas être rappelé. lancé automatiquement.
+      
+        * unmod()                           permet de supprimer tous les modulateurs d'une animation  
+
+        Les modulateurs peuvent être attaché à une ou plusieurs cases data de l'animation   mod("sincity")->at(1)->at(2)
+        Lorsqu'il est lancé, il viendra moduler la case data en fonction de sa valeur propre 
+        cette modulation est relative, comme application d'un "master".
+
+        Les modulateurs non attachés peuvent être utilisés en appelant  mod("sincity")->value()  afin d'obtenir sa valeur
+        et d'en faire bon usage.
+
+        Lorsque un modulateur est lancé (qu'il soit attaché ou non), il va déclencher le rafraichissement de l'animation dès que sa valeur interne change. 
+        Il est donc important d'arrêter un modulateur qui n'est plus utilisé avec    mod("sincity")->stop()
+        Ou en supprimant tous les modulateurs avec la fonction    unmod()   de l'animation.
+
+        Pour configurer les modulateur, voir K32_mods.h
 
 
 La logique spécifique de Anim_dmx consiste à préparer un segment élémentaire et le dessiner ensuite (avec eventuel zoom & mirror) sur le strip
@@ -148,17 +167,14 @@ en utilisant les fonctions évoquées ci-dessus.
 class Anim_dmx : public K32_anim {
   public:
 
-    // Setup
-    void init()
-    {   
-        // Clear previous modulators
-        this->unmod();
+    // Constructor
+    Anim_dmx() : K32_anim() 
+    {
+        // Strobe on data[0] (master)
+        this->mod("strobe", new K32_mod_pulse)->param(0, STROB_ON_MS)->at(0);
 
-        // Strobe (using)
-        this->mod("strobe", new K32_mod_pulse)->param(0, STROB_ON_MS);
-
-        // Smooth
-        this->mod("smooth", new K32_mod_sinus);
+        // Smooth on data[0] (master)
+        this->mod("smooth", new K32_mod_sinus)->at(0);
     }
 
 
@@ -168,6 +184,10 @@ class Anim_dmx : public K32_anim {
       //
       // ONDMXFRAME
       //
+
+      // Master @0 = nothing to draw
+      if (data[0] == 0)
+        return this->clear();
       
       // Mirror & Zoom -> Segment size
       int mirrorMode  = simplifyDmxRange(data[14]);
@@ -353,11 +373,7 @@ class Anim_dmx : public K32_anim {
 
       // strobe modulator
       if (strobeMode == 1 || btw(strobeMode, 3, 10)) 
-      {
         this->mod("strobe")->period( strobePeriod )->play();
-        
-        data[0] = scale255( data[0], this->mod("strobe")->value() );    // modulate master
-      }
       else 
         this->mod("strobe")->stop();
 
@@ -390,11 +406,7 @@ class Anim_dmx : public K32_anim {
 
       // smooth modulator
       if (strobeMode == 2) 
-      {
         this->mod("smooth")->period( strobePeriod * 10 )->play();
-
-        data[0] = scale255( data[0], this->mod("smooth")->value() );    // modulate master
-      }
       else 
         this->mod("smooth")->stop();
 
