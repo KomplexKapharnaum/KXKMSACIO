@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include <JPEGDecoder.h> //https://github.com/Bodmer/JPEGDecoder
 
-#define LULU_VER 100
+#define LULU_VER 51
 
 /////////////////////////////////////////ID/////////////////////////////////////////
 
