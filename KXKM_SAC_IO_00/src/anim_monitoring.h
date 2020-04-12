@@ -106,7 +106,6 @@ public:
 
     void init () 
     {
-        this->unmod();
         this->mod("blink", new K32_mod_pulse)->param(1, 50);
         this->mod("chase", new K32_mod_triangle)->maxi(this->size()-1);
     }

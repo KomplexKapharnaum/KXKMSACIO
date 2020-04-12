@@ -171,8 +171,6 @@ class Anim_dmx : public K32_anim {
     // Setup
     void init() {
 
-      this->unmod();
-
       // Strobe on data[0] (master)
       this->mod("strobe", new K32_mod_pulse)->param(0, STROB_ON_MS)->at(0);
 

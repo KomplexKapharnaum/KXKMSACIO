@@ -69,9 +69,13 @@ void boutons_loop()
     {   
         K32_anim* manu = k32->light->anim("manu");
 
-        // remove modulators && push new data (from mem.h)
+        // remove disposable modulators
         //
-        manu->unmod()->push( MEM[ activeMacro ], LULU_PATCHSIZE );  
+        manu->unmod();
+
+        // push new data (from mem.h)
+        //
+        manu->push( MEM[ activeMacro ], LULU_PATCHSIZE );  
         
         // add modulators
         //

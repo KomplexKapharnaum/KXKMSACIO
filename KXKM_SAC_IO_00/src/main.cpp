@@ -51,6 +51,7 @@ K32 *k32;
 #include "anim_dmx.h"
 #include "boutons.h"
 #include "bat_custom.h"
+#include "test.h"
 
 
 ///////////////////////////////////////////////// SETUP ////////////////////////////////////////
@@ -79,6 +80,8 @@ void setup()
   // LEDS
     k32->init_light( RUBAN_type, RUBAN_size+30 );
 
+    light_tests();
+
   // ADD NEW ANIMS (strip, name, anim, size, offset=0)
     
     // ANIM artnet
@@ -92,22 +95,6 @@ void setup()
     k32->light->anim( 0, "rssi",    new Anim_rssi,     1, RUBAN_size+17)->master(MASTER_PREV*1.5)->play();
     k32->light->anim( 0, "remote",  new Anim_remote,   LULU_PREVPIX+4, RUBAN_size+6) ->master(MASTER_PREV)->play();
     k32->light->anim( 0, "preview", new Anim_preview,  LULU_PREVPIX,   RUBAN_size+8) ->master(MASTER_PREV)->play();
-
-
-  // INIT TEST
-    // k32->light->anim( 0, "test0",   new K32_anim_test )->push(300)->master(MASTER_PREV)->play();
-    // k32->light->anim( 1, "test1",   new K32_anim_test )->push(300)->master(MASTER_PREV)->play()->wait();
-
-  // COLOR TEST
-    // k32->light->anim("colorA", new K32_anim_color, 0, 10, 5 )->push(50, 255, 200, 0, 0)->play(1000);
-
-  // DMX TEST
-    K32_anim* artnet = k32->light->anim("artnet");
-    artnet->push(MEM[8], LULU_PATCHSIZE)->push(100);
-    // artnet->mod("saw",    new K32_mod_sinus)  ->at(0)->play();
-    // artnet->mod("triangle", new K32_mod_triangle)   ->at(15)->period(10000)->play();
-    // artnet->mod("fadeout",  new K32_mod_fadeout)    ->at(0)->period(1000)->play();
-
 
   // Start OSC
     // k32->init_osc({
@@ -169,8 +156,8 @@ void setup()
   // Monitoring refresh
     k32->timer->every(REFRESH_INFO, []()
     {
-      // k32->light->anim("battery")->push( k32->system->stm32->battery() );
-      // k32->light->anim("rssi")->push( k32->wifi->getRSSI() );
+      k32->light->anim("battery")->push( k32->system->stm32->battery() );
+      k32->light->anim("rssi")->push( k32->wifi->getRSSI() );
     });
 
 
@@ -178,6 +165,16 @@ void setup()
     k32->timer->every(50, []()
     {
       k32->light->anim("remote")->push( k32->remote->getState() );
+    });
+
+
+  // Heap Memory log
+    k32->timer->every(1000, []()
+    { 
+      static int lastheap = 0;
+      int heap = ESP.getFreeHeap();
+      LOGF2("Free memory: %d / %d\n", heap, heap-lastheap);
+      lastheap = heap;
     });
 
 }
@@ -189,9 +186,6 @@ void loop()
   ///////////////////// BOUTONS ///////////////////////
   boutons_loop();
 
-  delay(200);
-
-  // LOGF("Free memory: %d\n", ESP.getFreeHeap());
-  
+  delay(20);
 
 } //loop
