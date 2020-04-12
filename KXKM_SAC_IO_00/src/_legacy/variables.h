@@ -39,6 +39,9 @@ int old_S_seuil = 0;
 int a;
 float str_blind_ws = 1;
 
+int ligne_mod, ligne, pos_ligne;
+ uint8_t start_Pixels;
+
 ////////////////////////////////// btn variables////////////////////////////////////
 
 

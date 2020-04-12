@@ -24,6 +24,8 @@ void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t *d
     bb = (data[adr + 2] * data[adr + 2]) / 255;
     ww = (data[adr + 3] * data[adr + 3]) / 255;
 
+    ligne_mod = data[adr + 3];
+
     pix_mod = data[adr + 4];
     pix_pos_v = data[adr + 6];
 
@@ -32,6 +34,9 @@ void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t *d
 
     start_color = data[adr + 9];
     end_color = data[adr + 10];
+    ligne = data[adr + 11] ;
+    pos_ligne = data[adr + 12];
+
     srr = (data[adr + 9] * data[adr + 9]) / 255;
     sgg = (data[adr + 10] * data[adr + 10]) / 255;
     sbb = (data[adr + 11] * data[adr + 11]) / 255;
@@ -72,20 +77,24 @@ void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t *d
     {
       color_mode = 15; // COLOR PICKER
     }
+    else if (pix_mod >= 121 && pix_mod <= 180)
+    {
+      color_mode = 25; // SD
+    }
 
     ////////////////////////////////////////PIX MODE/////////////////////////////////////////
-    if ((pix_mod >= 0 && pix_mod <= 20) || (pix_mod >= 61 && pix_mod <= 80))
+    if ((pix_mod >= 0 && pix_mod <= 20) || (pix_mod >= 61 && pix_mod <= 80)|| (pix_mod >= 121 && pix_mod <= 140))
     {
       pix_start = (((data[adr + 5] * N_L_P_S) / 255) - 1);
       pix_end = pix_start + pix_start;
       pix_pos = map(pix_pos_v, 0, 255, -N_L_P_S, N_L_P_S);
     }
-    else if ((pix_mod >= 21 && pix_mod <= 30) || (pix_mod >= 81 && pix_mod <= 90))
+    else if ((pix_mod >= 21 && pix_mod <= 30) || (pix_mod >= 81 && pix_mod <= 90)|| (pix_mod >= 141 && pix_mod <= 150))
     {
       pix_start = (((data[adr + 5] * N_L_P_S) / 255) - 1);
       pix_pos = map(pix_pos_v, 0, 255, 0, N_L_P_S);
     }
-    else if ((pix_mod >= 31 && pix_mod <= 60) || (pix_mod >= 91 && pix_mod <= 120))
+    else if ((pix_mod >= 31 && pix_mod <= 60) || (pix_mod >= 91 && pix_mod <= 120)|| (pix_mod >= 151 && pix_mod <= 180))
     {
       rap_tri = ((data[adr + 5] * N_L_P_S) / 255);
       pix_start = ((rap_tri - 1) * 2);

@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <JPEGDecoder.h> //https://github.com/Bodmer/JPEGDecoder
 
 #define LULU_VER 100
 
@@ -77,6 +78,9 @@ void setup()
   // PWM
     k32->init_pwm();
 
+
+  /////////////////////////////////////////////// LIGHT //////////////////////////////////////
+
   // LEDS
     k32->init_light( RUBAN_type, RUBAN_size+30 );
 
@@ -112,6 +116,9 @@ void setup()
 
   // Boutons
     boutons_init();
+
+  // sampler jpeg sd
+    k32->init_samplerjpeg();
 
 
   /////////////////////////////////////////////// ARTNET //////////////////////////////////////

@@ -1,4 +1,3 @@
-
 void Map1code(void *pvParameters)
 {
   //void Map1code() {
@@ -123,8 +122,94 @@ void Map1code(void *pvParameters)
 
       } //for (i = 0 ; i < NUM_LEDS_PER_STRIP ; i++)
     }   //(color_mode >= 11 && color_mode <= 20)
+    else if (color_mode >= 21 && color_mode <= 30)
+    {
+      File jpgFile = SD.open(k32->samplerjpeg->path(start_color, end_color), FILE_READ);
+      if (JpegDec.decodeSdFile(k32->samplerjpeg->path(start_color, end_color)))
+      {
+        uint32_t mcuPixels = JpegDec.MCUWidth * JpegDec.MCUHeight;
+        int ci = 0;
 
-  } //while
+        while (JpegDec.read())
+        {
+          uint16_t *pImg = JpegDec.pImage;
+          for (uint8_t i = 0; i < mcuPixels; i++)
+          {
+            // Extract the red, green, blue values from each pixel
+            uint8_t jpeg_b = uint8_t((*pImg & 0x001F) << 3);   // 5 LSB for blue
+            uint8_t jpeg_g = uint8_t((*pImg & 0x07C0) >> 3);   // 6 'middle' bits for green
+            uint8_t jpeg_r = uint8_t((*pImg++ & 0xF800) >> 8); // 5 MSB for red
+
+            // if (ligne_mod >= 0 && ligne_mod <= 10) // horizon
+            // {
+
+            if (JpegDec.MCUy == ligne / 8)
+            {
+              if (i >= ((ligne % 8) * 8) && i <= ((ligne % 8) * 8) + 7)
+              {
+                ci++;
+
+                if (ci <= NUM_LEDS_PER_STRIP)
+                {
+                  pi_1_r[ci] = (jpeg_r * rr) / 255;
+                  pi_1_g[ci] = (jpeg_g * gg) / 255;
+                  pi_1_b[ci] = (jpeg_b * bb) / 255;
+                  pi_1_w[ci] = 0;
+                  pi_1_sr[ci] = 0;
+                  pi_1_sg[ci] = 0;
+                  pi_1_sb[ci] = 0;
+                  pi_1_sw[ci] = 0;
+
+                  // LOGINL(i);
+                  // LOGINL(" ligne = ");
+                  // LOGINL(ligne);
+                  // LOGINL(" width = ");
+                  // LOGINL(JpegDec.width);
+                  // LOGINL(" height = ");
+                  // LOGINL(JpegDec.height);
+                  // LOGINL(" comps = ");
+                  // LOGINL(JpegDec.comps);
+                  // LOGINL(" MCUSPerRow = ");
+                  // LOGINL(JpegDec.MCUSPerRow);
+                  // LOGINL(" MCUSPerCol = ");
+                  // LOGINL(JpegDec.MCUSPerCol);
+                  // LOGINL(" MCUWidth = ");
+                  // LOGINL(JpegDec.MCUWidth);
+                  // LOGINL(" MCUHeight = ");
+                  // LOGINL(JpegDec.MCUHeight);
+                  // LOGINL(" MCUx = ");
+                  // LOGINL(JpegDec.MCUx);
+                  // LOGINL(" MCUy= ");
+                  // LOGINL(JpegDec.MCUy);
+
+                  // LOGINL(" mcupix = ");
+                  // LOGINL(mcuPixels);
+                  // LOGINL(" ci = ");
+                  // LOGINL(ci);
+                  // LOGINL(" r = ");
+                  // LOGINL(jpeg_r);
+                  // LOGINL(" g = ");
+                  // LOGINL(jpeg_g);
+                  // LOGINL(" b = ");
+                  // LOGINL(jpeg_b);
+                  // LOG(" ");
+                }
+              }
+            }
+            else if (JpegDec.MCUy > ligne / 8)
+            {
+              JpegDec.abort();
+            }
+            // else if (ligne_mod >= 11 && ligne_mod >= 20) // vertical
+            // {
+            // }
+            // JpegDec.abort();
+            // }
+          }
+        } //while
+      }   //if JpegDec.decodeSdFile
+    }     //(color_mode >= 21 && color_mode <= 30)
+  }       //while
 } //Map1code
 
 void effTask(void *pvParameters)
