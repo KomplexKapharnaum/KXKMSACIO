@@ -24,7 +24,7 @@
     #define RUBAN_SIZE 35
     #define L_TYPE "Phone"
   #elif LULU_TYPE == 8
-    #define RUBAN_SIZE 5
+    #define RUBAN_SIZE 25       // 5 pour tester avec les jauges de monitoring
     #define L_TYPE "Atom"
   #endif
 #endif
