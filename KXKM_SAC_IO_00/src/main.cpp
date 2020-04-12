@@ -169,8 +169,8 @@ void setup()
   // Monitoring refresh
     k32->timer->every(REFRESH_INFO, []()
     {
-      k32->light->anim("battery")->push( k32->system->stm32->battery() );
-      k32->light->anim("rssi")->push( k32->wifi->getRSSI() );
+      // k32->light->anim("battery")->push( k32->system->stm32->battery() );
+      // k32->light->anim("rssi")->push( k32->wifi->getRSSI() );
     });
 
 
@@ -189,7 +189,7 @@ void loop()
   ///////////////////// BOUTONS ///////////////////////
   boutons_loop();
 
-  delay(1000);
+  delay(200);
 
   // LOGF("Free memory: %d\n", ESP.getFreeHeap());
   

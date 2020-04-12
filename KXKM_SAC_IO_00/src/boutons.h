@@ -57,9 +57,7 @@ void boutons_loop()
     {   
         int btn = digitalRead(39);
         if ( didChange(W_ATOMBTN, btn) && btn == 0) 
-        {
             k32->remote->nextActiveMacro();       
-        } 
     }
 
 

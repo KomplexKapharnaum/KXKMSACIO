@@ -142,7 +142,7 @@ Anim_dmx hérite de la classe K32_anim.
         
         * mod(new K3_mod_pulse)             modulateur jetable, ne pourra pas être rappelé. lancé automatiquement.
       
-        * unmod()                           permet de supprimer tous les modulateurs d'une animation  
+        * unmod()                           permet de supprimer tous les modulateurs anonymes d'une animation  (ajouter true pour supprimer TOUS les modulateurs)
 
         Les modulateurs peuvent être attaché à une ou plusieurs cases data de l'animation   mod("sincity")->at(1)->at(2)
         Lorsqu'il est lancé, il viendra moduler la case data en fonction de sa valeur propre 
@@ -167,14 +167,18 @@ en utilisant les fonctions évoquées ci-dessus.
 class Anim_dmx : public K32_anim {
   public:
 
-    // Constructor
-    Anim_dmx() : K32_anim() 
-    {
-        // Strobe on data[0] (master)
-        this->mod("strobe", new K32_mod_pulse)->param(0, STROB_ON_MS)->at(0);
 
-        // Smooth on data[0] (master)
-        this->mod("smooth", new K32_mod_sinus)->at(0);
+    // Setup
+    void init() {
+
+      this->unmod();
+
+      // Strobe on data[0] (master)
+      this->mod("strobe", new K32_mod_pulse)->param(0, STROB_ON_MS)->at(0);
+
+      // Smooth on data[0] (master)
+      this->mod("smooth", new K32_mod_sinus)->at(0);
+
     }
 
 
