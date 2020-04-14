@@ -67,7 +67,7 @@ void boutons_loop()
     int activeMacro = k32->remote->getActiveMacro();
     if ( didChange(W_ACTIVEMACRO, activeMacro) ) 
     {   
-        LOGF("REMOTE: -> set Active MAcro = %d\n", activeMacro);
+        LOGF("REMOTE: -> set Active Macro = %d\n", activeMacro);
 
         K32_anim* manu = k32->light->anim("manu");
 
@@ -107,7 +107,7 @@ void boutons_loop()
     int previewMacro = k32->remote->getPreviewMacro();
     if ( didChange(W_PREVMACRO, previewMacro) ) 
     {
-        LOGF("REMOTE: -> set Preview MAcro = %d\n", previewMacro);
+        LOGF("REMOTE: -> set Preview Macro = %d\n", previewMacro);
 
         k32->light->anim("preview")->push( MEM_PREV[ previewMacro ], LULU_PREVPIX*4 );  
     }
