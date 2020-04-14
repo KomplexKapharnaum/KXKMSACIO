@@ -94,7 +94,7 @@ void setup()
     k32->light->anim( 0, "manu",    new Anim_dmx, RUBAN_size);
 
     // ANIM monitoring
-    k32->light->anim( 0, "battery", new Anim_battery,  4, RUBAN_size+1)->play();
+    k32->light->anim( 0, "battery", new Anim_battery,  4, RUBAN_size+1)->master(MASTER_PREV)->play();
     k32->light->anim( 0, "rssi",    new Anim_rssi,     1, RUBAN_size+17)->master(MASTER_PREV)->play();
     k32->light->anim( 0, "remote",  new Anim_remote,   LULU_PREVPIX+4, RUBAN_size+6) ->master(MASTER_PREV)->play();
     k32->light->anim( 0, "preview", new Anim_preview,  LULU_PREVPIX,   RUBAN_size+8) ->master(MASTER_PREV)->play();
