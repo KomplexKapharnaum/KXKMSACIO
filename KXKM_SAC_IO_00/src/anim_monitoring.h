@@ -180,5 +180,9 @@ public:
         if (battery > 16) mod("blink")->stop();
         if (battery > 11) mod("chase")->stop();
 
+        // SET MASTER
+        if (battery > 11) master(MASTER_PREV);
+        else master(255);
+
     }
 };
