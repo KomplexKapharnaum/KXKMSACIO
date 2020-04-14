@@ -140,6 +140,7 @@ void setup()
       {
         k32->pwm->set(0, data[16]);
         k32->pwm->set(1, data[17]);
+        LOGF2("ARTNET: -> Lamp %d %d \n", data[16], data[17]);
       }
 
       // Draw
@@ -179,7 +180,7 @@ void setup()
     { 
       static int lastheap = 0;
       int heap = ESP.getFreeHeap();
-      LOGF2("Free memory: %d / %d\n", heap, heap-lastheap);
+      // LOGF2("Free memory: %d / %d\n", heap, heap-lastheap);
       lastheap = heap;
     });
 
