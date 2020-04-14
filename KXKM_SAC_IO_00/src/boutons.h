@@ -114,7 +114,7 @@ void boutons_loop()
         {
             k32->light->anim("manu")->stop();
             k32->light->anim("preview")->stop();
-            k32->light->anim("artnet")->play()->push();
+            k32->light->anim("artnet")->play();     
             LOG("REMOTE: -> Mode AUTO");
         }
         
