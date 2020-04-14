@@ -115,6 +115,8 @@ public:
     {
         int& battery = data[0];
 
+        // LOGF("ANIM: battery, received value: %d\n", battery);
+
         clear();
 
         /////////////////////  GREEN   ///////////////////////
