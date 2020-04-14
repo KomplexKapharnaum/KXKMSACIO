@@ -149,9 +149,13 @@ void boutons_loop()
 
     // LAMP
     int lamp = k32->remote->getLamp();
-    if ( didChange(W_LAMP, lamp) && lamp >= 0) 
+    if ( didChange(W_LAMP, lamp)) 
     {
-        k32->pwm->setAll(lamp);
+        if (lamp >= 0) k32->pwm->setAll(lamp);
+        else {
+            k32->light->anim("artnet")->push();
+            k32->light->anim("manu")->push();
+        }
         LOGF("REMOTE: -> getLAMP @%d\n", lamp);
     }
 
