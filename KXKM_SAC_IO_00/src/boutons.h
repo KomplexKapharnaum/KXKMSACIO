@@ -98,6 +98,7 @@ void boutons_loop()
         {
             k32->pwm->set(0, MEM[ activeMacro ][16]);
             k32->pwm->set(1, MEM[ activeMacro ][17]);
+            LOGF2("MANU: -> set LAMP %d %d\n", MEM[ activeMacro ][16], MEM[ activeMacro ][17]);
         }
     }
 
@@ -159,7 +160,7 @@ void boutons_loop()
     if ( didChange(W_LAMP, lamp)) 
     {
         k32->pwm->setAll(lamp);
-        LOGF("REMOTE: -> set LAMP @%d\n", lamp);
+        LOGF("REMOTE: -> getLAMP @%d\n", lamp);
     }
 
 
