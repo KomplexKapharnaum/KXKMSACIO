@@ -4,10 +4,28 @@
 
 void light_tests() {
 
-    // INIT TEST
-    k32->light->anim( 0, "test0",   new K32_anim_test )->push(300)->master(MASTER_PREV)->play();
-    k32->light->anim( 1, "test1",   new K32_anim_test )->push(300)->master(MASTER_PREV)->play()->wait();
+  int timeStep = 300;
 
+  // INIT TEST
+    k32->light->anim( 0, "test0",   new K32_anim_test )->push(timeStep)->master(MASTER_PREV)->play();
+    k32->light->anim( 1, "test1",   new K32_anim_test )->push(timeStep)->master(MASTER_PREV)->play();
+
+  // PWM TEST
+    k32->pwm->set(0, 50);
+    k32->pwm->set(1, 0);
+    delay(timeStep);
+    k32->pwm->set(0, 0);
+    k32->pwm->set(1, 50);
+    delay(timeStep);
+    k32->pwm->set(0, 50);
+    k32->pwm->set(1, 50);
+    delay(timeStep);
+    k32->pwm->set(0, 0);
+    k32->pwm->set(1, 0);
+
+  // WAIT END
+    k32->light->anim("test1")->wait();
+  
   // COLOR TEST
     // k32->light->anim("colorA", new K32_anim_color, 0, 10, 5 )->push(50, 255, 200, 0, 0)->play(1000);
 
