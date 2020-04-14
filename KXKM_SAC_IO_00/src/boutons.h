@@ -36,7 +36,7 @@ void boutons_init()
     for (int i=0; i<WATCH_SLOTS; i++) 
         watchValues[i] = -128;
 
-    k32->remote->setState(REMOTE_AUTO);
+    k32->remote->setState(REMOTE_AUTO_LOCK);
 
     if (k32->system->hw() == 3) 
         pinMode(39, INPUT_PULLUP);
@@ -114,7 +114,7 @@ void boutons_loop()
         {
             k32->light->anim("manu")->stop();
             k32->light->anim("preview")->stop();
-            k32->light->anim("artnet")->play()->push();         // !!!! BUG should not be necessary to push again !
+            k32->light->anim("artnet")->play();
             LOG("REMOTE: -> Mode AUTO");
         }
         

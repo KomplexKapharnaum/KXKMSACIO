@@ -195,6 +195,12 @@ class Anim_dmx : public K32_anim {
         // LOGF3("ANIM: -> Red %d Lamp %d %d \n", data[1], data[16], data[17]);
       }
 
+      // LOGF("ANIM: %s frame ", name());
+      // for (int i=0; i<LULU_PATCHSIZE; i++) {
+      //   LOGINL(data[i]); LOGINL(" ");
+      // }
+      // LOG("");
+
       // Master @0 = nothing to draw
       if (data[0] == 0)
         return this->clear();
