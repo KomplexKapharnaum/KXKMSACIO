@@ -192,7 +192,7 @@ class Anim_dmx : public K32_anim {
       {
         k32->pwm->set(0, data[16]);
         k32->pwm->set(1, data[17]);
-        // LOGF3("ANIM: -> Red %d Lamp %d %d \n", data[1], data[16], data[17]);
+        LOGF3("ANIM: -> Red %d Lamp %d %d \n", data[1], data[16], data[17]);
       }
 
       // Master @0 = nothing to draw
