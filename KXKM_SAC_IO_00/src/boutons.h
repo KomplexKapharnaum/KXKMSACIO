@@ -92,14 +92,6 @@ void boutons_loop()
             manu->mod(new K32_mod_sinus) ->at(2)  ->period(5000) ->phase(120);
             manu->mod(new K32_mod_sinus) ->at(3)  ->period(5000) ->phase(240);
         }
-
-        // Set PWM
-        if (k32->remote->getLamp() == -1)
-        {
-            k32->pwm->set(0, MEM[ activeMacro ][16]);
-            k32->pwm->set(1, MEM[ activeMacro ][17]);
-            LOGF2("MANU: -> set LAMP %d %d\n", MEM[ activeMacro ][16], MEM[ activeMacro ][17]);
-        }
     }
 
 
@@ -156,8 +148,8 @@ void boutons_loop()
 
 
     // LAMP
-    int lamp = max(0, k32->remote->getLamp());
-    if ( didChange(W_LAMP, lamp)) 
+    int lamp = k32->remote->getLamp();
+    if ( didChange(W_LAMP, lamp) && lamp >= 0) 
     {
         k32->pwm->setAll(lamp);
         LOGF("REMOTE: -> getLAMP @%d\n", lamp);

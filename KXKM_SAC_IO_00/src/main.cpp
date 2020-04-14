@@ -135,19 +135,9 @@ void setup()
       if (data[14] > 250) 
         k32->remote->setState(REMOTE_AUTO_LOCK);
 
-
       // Draw
       k32->light->anim("artnet")->push(data, length);
-
-      // Set PWM  // !!! TODO: meilleur manière pour débrayer la lampe -> boutons.h ?
-      if (k32->light->anim("artnet")->isPlaying())
-        if (k32->remote->getLamp() == -1)
-        {
-          k32->pwm->set(0, data[16]);
-          k32->pwm->set(1, data[17]);
-          LOGF2("ARTNET: -> Lamp %d %d \n", data[16], data[17]);
-        }
-
+      
     });
 
 
