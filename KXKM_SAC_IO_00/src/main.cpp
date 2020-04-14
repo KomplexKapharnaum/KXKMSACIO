@@ -139,7 +139,7 @@ void setup()
       // Draw
       k32->light->anim("artnet")->push(data, length);
 
-      // Set PWM
+      // Set PWM  // !!! TODO: meilleur manière pour débrayer la lampe -> boutons.h
       if (k32->light->anim("artnet")->isPlaying())
         if (k32->remote->getLamp() == -1)
         {

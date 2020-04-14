@@ -49,7 +49,7 @@ void boutons_loop()
     //////////////////     Click on ESP   ////////////////////
     if (k32->system->stm32->clicked()) 
     {
-        k32->remote->nextActiveMacro();
+        k32->remote->stmNext();
     }
 
     //////////////////    Click on Atom    ////////////////////
@@ -57,7 +57,7 @@ void boutons_loop()
     {   
         int btn = digitalRead(39);
         if ( didChange(W_ATOMBTN, btn) && btn == 0) 
-            k32->remote->nextActiveMacro();       
+            k32->remote->stmNext();       
     }
 
 
@@ -130,7 +130,7 @@ void boutons_loop()
         else if (stateR == REMOTE_MANU_STM || stateR == REMOTE_MANU_STM_LOCK)
         {
             k32->light->anim("artnet")->stop();
-            k32->light->anim("preview")->stop();
+            k32->light->anim("preview")->play();
             k32->light->anim("manu")->play();
             LOG("REMOTE: -> Mode STM");
         }
