@@ -183,8 +183,8 @@ public:
         if (battery > 11) mod("chase")->stop();
 
         // SET MASTER
-        if (battery > 11) master(MASTER_PREV)->push();
-        else master(255)->push();
+        if (battery > 11) master(MASTER_PREV);      // !!! ERROR apply now !
+        else master(255);
 
     }
 };
