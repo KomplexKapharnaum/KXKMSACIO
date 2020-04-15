@@ -115,7 +115,7 @@ public:
     {
         int& battery = data[0];
 
-        LOGF("ANIM: battery, received value: %d\n", battery);
+        // LOGF("ANIM: battery, received value: %d\n", battery);
 
         clear();
 
@@ -183,8 +183,8 @@ public:
         if (battery > 11) mod("chase")->stop();
 
         // SET MASTER
-        if (battery > 11) master(MASTER_PREV);
-        else master(255);
+        if (battery > 11) master(MASTER_PREV)->push();
+        else master(255)->push();
 
     }
 };
