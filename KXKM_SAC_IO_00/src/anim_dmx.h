@@ -4,7 +4,7 @@
 // OUTILS
 //
 
-#define STROB_ON_MS  15
+#define STROB_ON_MS  12
 
 enum color_mode { 
   COLOR_BI,
