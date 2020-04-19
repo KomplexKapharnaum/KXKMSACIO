@@ -117,6 +117,10 @@ public:
 
         // LOGF("ANIM: battery, received value: %d\n", battery);
 
+        // SET MASTER
+        if (battery > 11) master(MASTER_PREV);
+        else master(255);
+
         clear();
 
         /////////////////////  GREEN   ///////////////////////
@@ -181,10 +185,6 @@ public:
         /// STOP MODS IF NO IN USE
         if (battery > 16) mod("blink")->stop();
         if (battery > 11) mod("chase")->stop();
-
-        // SET MASTER
-        if (battery > 11) master(MASTER_PREV);      // !!! ERROR apply now !
-        else master(255);
 
     }
 };
