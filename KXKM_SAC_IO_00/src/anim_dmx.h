@@ -222,7 +222,7 @@ class Anim_dmx : public K32_anim {
       if (pixMode == 23) colorMode = COLOR_TRI;
       else if (pixMode == 24) colorMode = COLOR_QUAD;
       else if (btw(pixMode, 6, 11)) colorMode = COLOR_PICKER; 
-      else if (btw(pixMode, 12, 17)) colorMode = COLOR_SD;
+      // else if (btw(pixMode, 12, 17)) colorMode = COLOR_SD;
 
 
       // Segment Buffer
@@ -312,7 +312,7 @@ class Anim_dmx : public K32_anim {
         if (pixMode == 1 || pixMode == 7) 
         {
           for(int i=0; i<segmentSize; i++) 
-            if (i < dashOffset && i >= dashOffset+dashLength) segment[i] = backColor;
+            if (i < dashOffset || i >= dashOffset+dashLength) segment[i] = backColor;
         }
 
         // 01:02 = color1 + backColor dash 
