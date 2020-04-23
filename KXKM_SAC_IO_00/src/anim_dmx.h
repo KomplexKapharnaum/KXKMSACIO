@@ -216,6 +216,7 @@ class Anim_dmx : public K32_anim {
 
       // Modes
       int pixMode     = simplifyDmxRange(data[5]);
+      // LOGF("pixMode: %d\n", pixMode);
 
       int colorMode = COLOR_BI;
       if (pixMode == 23) colorMode = COLOR_TRI;
@@ -304,7 +305,7 @@ class Anim_dmx : public K32_anim {
         if (colorMode == COLOR_BI) backColor = CRGBW{data[10], data[11], data[12], data[13]};
 
         // Dash Length + Offset
-        int dashLength  = max(1, scale255(segmentSize, data[6]) );          // pix_start
+        int dashLength  = max(2, scale255(segmentSize, data[6]) );          // pix_start
         int dashOffset  =  scale255(segmentSize, data[7]);                  // pix_pos
 
         // 2 colors = color1 one-dash / backColor background
@@ -317,7 +318,7 @@ class Anim_dmx : public K32_anim {
         // 01:02 = color1 + backColor dash 
         if (pixMode == 2 || pixMode == 8) 
         {
-          dashLength = data[6];   // on this one, length is absolute and not relative to segementSize
+          dashLength = max(1, data[6]);   // on this one, length is absolute and not relative to segementSize
 
           for(int i=0; i<segmentSize; i++) 
             if ( (i+dashOffset)/dashLength % 2 == 1 ) segment[i] = backColor;
@@ -342,6 +343,7 @@ class Anim_dmx : public K32_anim {
         // rusf<  = color1 one-dash fade L / color2 background
         else if (pixMode == 4 || pixMode == 10) 
         {
+          // LOGF("dashLength: %d\n", dashLength);
           for(int i=0; i<segmentSize; i++) 
           {
             if (i >= dashOffset && i < dashOffset+dashLength) 
@@ -353,6 +355,7 @@ class Anim_dmx : public K32_anim {
             }
             else segment[i] = backColor;
           }
+          // LOG("dash done");
         }
 
         // rusf<>  = color1 one-dash fade LR / color2 background
