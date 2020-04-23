@@ -4,4 +4,4 @@
 ~$pour trash.xlsx
 ~$zoom_cal.xlsx
 .~lock.sac_v2_io.xlsx#
-KXKM_SAC_IO_00/.vscode/settings.json
+*.vscode*
