@@ -5,7 +5,7 @@
 void light_tests() {
 
   int timeStep = 300;
-
+  
   // INIT TEST
     k32->light->anim( 0, "test0",   new K32_anim_test )->push(timeStep)->master(MASTER_PREV)->play();
     k32->light->anim( 1, "test1",   new K32_anim_test )->push(timeStep)->master(MASTER_PREV)->play();
@@ -27,7 +27,7 @@ void light_tests() {
     k32->light->anim("test1")->wait();
   
   // COLOR TEST
-    // k32->light->anim("colorA", new K32_anim_color, 0, 10, 5 )->push(50, 255, 200, 0, 0)->play(1000);
+    // k32->light->anim(0, "colorA", new K32_anim_color, 10, 0)->push(50, 255, 200, 0, 0)->play(1000)->wait();
 
   // DMX TEST
     // K32_anim* artnet = k32->light->anim("artnet");
