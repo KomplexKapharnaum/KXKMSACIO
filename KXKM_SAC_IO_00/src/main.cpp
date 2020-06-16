@@ -80,6 +80,11 @@ void setup()
   // Remote
     k32->init_remote(NUMBER_OF_MEM);
 
+  // Power
+    k32->init_power(); 
+    k32->system->power->setAdaptiveGauge(true, LIPO, 0) ; 
+
+
   /////////////////////////////////////////////// LIGHT //////////////////////////////////////
 
   // LEDS
