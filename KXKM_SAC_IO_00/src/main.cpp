@@ -1,12 +1,12 @@
 #include <Arduino.h>
 
-#define LULU_VER 51
+#define LULU_VER 52
 
 /////////////////////////////////////////ID/////////////////////////////////////////
 
-// #define K32_SET_NODEID 82       // board unique id
+// #define K32_SET_NODEID 37       // board unique id
 
-// #define RUBAN_TYPE LED_SK6812W_V1    // LED_WS2812_V1  LED_WS2812B_V1  LED_WS2812B_V2  LED_WS2812B_V3  LED_WS2813_V1  LED_WS2813_V2   LED_WS2813_V3  LED_WS2813_V4  LED_SK6812_V1  LED_SK6812W_V1,
+// #define RUBAN_TYPE LED_WS2812B_V1    // LED_WS2812_V1  LED_WS2812B_V1  LED_WS2812B_V2  LED_WS2812B_V3  LED_WS2813_V1  LED_WS2813_V2   LED_WS2813_V3  LED_WS2813_V4  LED_SK6812_V1  LED_SK6812W_V1,
 // #define LULU_ID 1                 // permet de calculer l'adresse DMX
 // #define LULU_TYPE 1               // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom"
 // #define LULU_UNI 0                // Univers DM
@@ -69,8 +69,8 @@ void setup()
   // WIFI
     k32->init_wifi(nodeName);
     k32->wifi->staticIP("2.0.0." + String(k32->system->id() + 100), "2.0.0.1", "255.0.0.0");
-    // k32->wifi->connect("kxkm24", NULL);//KXKM
-    k32->wifi->connect("riri_new", "B2az41opbn6397");
+    k32->wifi->connect("kxkm24", NULL);//KXKM
+    // k32->wifi->connect("riri_new", "B2az41opbn6397");
     // k32->wifi->connect("interweb", "superspeed37");
 
 
@@ -88,9 +88,14 @@ void setup()
   /////////////////////////////////////////////// LIGHT //////////////////////////////////////
 
   // LEDS
-    k32->init_light( RUBAN_type, RUBAN_size+30 );
+    k32->init_light( RUBAN_type, RUBAN_size+30);
 
+    // clone every strip from strip 0
+    k32->light->cloneStrips(0);
+
+    // test sequence
     light_tests();
+
 
   // ADD NEW ANIMS (strip, name, anim, size, offset=0)
     
