@@ -1,10 +1,10 @@
 #include <Arduino.h>
 
-#define LULU_VER 52
+#define LULU_VER 53
 
 /////////////////////////////////////////ID/////////////////////////////////////////
 
-#define K32_SET_NODEID 123       // board unique id
+//#define K32_SET_NODEID 123       // board unique id
 
 #define RUBAN_TYPE LED_SK6812W_V1    // LED_WS2812_V1  LED_WS2812B_V1  LED_WS2812B_V2  LED_WS2812B_V3  LED_WS2813_V1  LED_WS2813_V2   LED_WS2813_V3  LED_WS2813_V4  LED_SK6812_V1  LED_SK6812W_V1,
 #define LULU_ID 1                 // permet de calculer l'adresse DMX
@@ -78,11 +78,7 @@ void setup()
     k32->init_pwm();
 
   // Remote
-    k32->init_remote(NUMBER_OF_MEM);
-
-  // Power
-    k32->init_power(); 
-    k32->system->power->setAdaptiveGauge(true, LIPO, 0) ; 
+    k32->init_remote(NUMBER_OF_MEM); 
 
 
   /////////////////////////////////////////////// LIGHT //////////////////////////////////////
@@ -122,6 +118,12 @@ void setup()
 
   // sampler jpeg sd
     // k32->init_samplerjpeg();
+
+
+  /////////////////////////////////////////////// POWER ////////////////////////////////////
+    // Power
+    k32->init_power(); 
+    k32->system->power->setAdaptiveGauge(true, LIPO, 0) ;
 
 
   /////////////////////////////////////////////// ARTNET //////////////////////////////////////
