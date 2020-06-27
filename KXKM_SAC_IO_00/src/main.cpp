@@ -78,11 +78,7 @@ void setup()
     k32->init_pwm();
 
   // Remote
-    k32->init_remote(NUMBER_OF_MEM);
-
-  // Power
-    k32->init_power(); 
-    k32->system->power->setAdaptiveGauge(true, LIPO, 0) ; 
+    k32->init_remote(NUMBER_OF_MEM); 
 
 
   /////////////////////////////////////////////// LIGHT //////////////////////////////////////
@@ -122,6 +118,12 @@ void setup()
 
   // sampler jpeg sd
     // k32->init_samplerjpeg();
+
+
+  /////////////////////////////////////////////// POWER ////////////////////////////////////
+    // Power
+    k32->init_power(); 
+    k32->system->power->setAdaptiveGauge(true, LIPO, 0) ;
 
 
   /////////////////////////////////////////////// ARTNET //////////////////////////////////////
