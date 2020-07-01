@@ -1,14 +1,14 @@
 #include <Arduino.h>
 
-#define LULU_VER 53
+#define LULU_VER 54
 
 /////////////////////////////////////////ID/////////////////////////////////////////
 
-// #define K32_SET_NODEID 113       // board unique id
+// #define K32_SET_NODEID 88       // board unique id
 
 // #define RUBAN_TYPE LED_SK6812W_V1    // LED_WS2812_V1  LED_WS2812B_V1  LED_WS2812B_V2  LED_WS2812B_V3  LED_WS2813_V1  LED_WS2813_V2   LED_WS2813_V3  LED_WS2813_V4  LED_SK6812_V1  LED_SK6812W_V1,
-// #define LULU_ID 8                 // permet de calculer l'adresse DMX
-// #define LULU_TYPE 1               // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom"
+// #define LULU_ID 1                 // permet de calculer l'adresse DMX
+// #define LULU_TYPE 2               // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom"
 // #define LULU_UNI 0                // Univers DM
 
 /////////////////////////////////////////Debug///////////////////////////////////////
@@ -69,7 +69,8 @@ void setup()
   // WIFI
     k32->init_wifi(nodeName);
     k32->wifi->staticIP("2.0.0." + String(k32->system->id() + 100), "2.0.0.1", "255.0.0.0");
-    k32->wifi->connect("kxkm24", NULL);//KXKM
+    k32->wifi->connect("kxkm24lulu", NULL);//KXKM
+    // k32->wifi->connect("kxkm24", NULL);//KXKM
     // k32->wifi->connect("riri_new", "B2az41opbn6397");
     // k32->wifi->connect("interweb", "superspeed37");
 
@@ -87,7 +88,10 @@ void setup()
     k32->init_light( RUBAN_type, RUBAN_size+30);
 
     // clone every strip from strip 0
-    k32->light->cloneStrips(0);
+    // k32->light->cloneStrips(0);
+
+    // copy preview from strip 0 to strip 1
+    k32->light->copyStrip( {0, RUBAN_size, RUBAN_size+18, 1, 0} );
 
     // test sequence
     light_tests();
@@ -103,9 +107,9 @@ void setup()
 
     // ANIM monitoring
     k32->light->anim( 0, "battery", new Anim_battery,  4, RUBAN_size+1)              ->master(MASTER_PREV)->play();
-    k32->light->anim( 0, "rssi",    new Anim_rssi,     1, RUBAN_size+17)             ->master(MASTER_PREV*1.5)->play();
     k32->light->anim( 0, "remote",  new Anim_remote,   LULU_PREVPIX+4, RUBAN_size+6) ->master(MASTER_PREV)->play();
     k32->light->anim( 0, "preview", new Anim_preview,  LULU_PREVPIX,   RUBAN_size+8) ->master(MASTER_PREV)->play();
+    k32->light->anim( 0, "rssi",    new Anim_rssi,     1, RUBAN_size+17)             ->master(MASTER_PREV*1.5)->play();
 
     
 

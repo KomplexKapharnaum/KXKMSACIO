@@ -1,7 +1,7 @@
 #ifndef mem_h
 #define mem_h
 
-#define NUMBER_OF_MEM 13 // stm leave in last mem
+#define NUMBER_OF_MEM 14 // stm leave in last mem
 
 uint8_t MEM[NUMBER_OF_MEM][LULU_PATCHSIZE] = {
     {  255,  35,  45,  15,   0,     235,       127,      127,        0,          0,       0,       0,       0,       0,           0,  255,     0,    0}, // bleu blanc rouge
@@ -16,6 +16,7 @@ uint8_t MEM[NUMBER_OF_MEM][LULU_PATCHSIZE] = {
     {  255, 255, 255, 255, 255,       0,         0,        0,       11,         80,     110,     110,     110,     110,           0,  255,   255,   30}, // str white
     {  255, 255, 255, 255,   0,      65,       255,      127,        0,          0,     127,     255,       0,       0,           0,  255,   240,   60}, // arc mouv
     {  255, 100, 100, 100,   0,       0,         0,        0,        0,          0,      90,      90,      90,      90,           0,  255,   100,  100}, // modulo rvb
+    {  255,  25,  45,  15,   0,     235,       127,      127,        0,          0,       0,       0,       0,       0,           0,  255,     0,    0}, // vert blanc rouge
     {    0,   0,   0,   0,   0,       0,         0,        0,        0,          0,       0,       0,       0,       0,           0,    0,     0,    0}, // BLACK stm leave lst mem
 };
 //{master , r  , g  , b  , w  ,pix mod , pix long , pix_pos , str_mod , str_speed , r_fond , g_fond , b_fond , w_fond , mirror_mod , zoom , pw1 , pw2 }
@@ -37,6 +38,7 @@ uint8_t MEM_PREV[NUMBER_OF_MEM][LULU_PREVPIX*4] = {
     {0, 0, 0, 1,  0, 0, 0, 0,  0, 0, 0, 1,  0, 0, 0, 0,  0, 0, 0, 1,  0, 0, 0, 0},    // str white
     {1, 0, 0, 0,  1, 1, 0, 0,  0, 1, 0, 0,  0, 1, 1, 0,  0, 0, 1, 0,  1, 0, 1, 0},    // Arc mouv
     {1, 0, 0, 0,  0, 1, 0, 0,  0, 0, 1, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0},    // modulo rvb
+    {0, 1, 0, 0,  0, 1, 0, 0,  0, 0, 0, 1,  0, 0, 0, 1,  1, 0, 0, 0,  1, 0, 0, 0},    // vert blanc rouge
     {0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0},    // BLACK stm leave last mem
 };
 //  {r1,g1,b1,w1, r2,g2,b2,w2, r3,g3,w3,w3, r4,g4,b4,w4, r5,g5,b5,w5, r6,g6,b6,w6},

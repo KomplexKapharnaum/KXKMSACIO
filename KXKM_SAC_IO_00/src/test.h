@@ -8,6 +8,7 @@ void light_tests() {
   
   // INIT TEST
     k32->light->anim( 0, "test0",   new K32_anim_test )->push(timeStep)->master(MASTER_PREV)->play();
+    k32->light->anim( 1, "test1",   new K32_anim_test )->push(timeStep)->master(MASTER_PREV)->play();
 
   // PWM TEST
     k32->pwm->set(0, 50);
