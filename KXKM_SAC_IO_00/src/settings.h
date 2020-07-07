@@ -2,31 +2,34 @@
 /////////////////////////////////////////def RUBAN_TYPE & LULU_TYPE /////////////////////////////////////////
 
 #ifdef LULU_TYPE
-  #if LULU_TYPE == 1
-    #define RUBAN_SIZE 120
-    #define L_TYPE "Sac"
-  #elif LULU_TYPE == 2
-    #define RUBAN_SIZE 120
-    #define L_TYPE "Barre"
-  #elif LULU_TYPE == 3
-    #define RUBAN_SIZE 17
-    #define L_TYPE "Pince"
-  #elif LULU_TYPE == 4
-    #define RUBAN_SIZE 73
-    #define L_TYPE "Fluo"
-  #elif LULU_TYPE == 5
-    #define RUBAN_SIZE 186
-    #define L_TYPE "Flex"
-  #elif LULU_TYPE == 6
-    #define RUBAN_SIZE 60
-    #define L_TYPE "HideSee"
-  #elif LULU_TYPE == 7
-    #define RUBAN_SIZE 35
-    #define L_TYPE "Phone"
-  #elif LULU_TYPE == 8
-    #define RUBAN_SIZE 25       // 5 pour tester avec les jauges de monitoring
-    #define L_TYPE "Atom"
-  #endif
+#if LULU_TYPE == 1
+#define RUBAN_SIZE 120
+#define L_TYPE "Sac"
+#elif LULU_TYPE == 2
+#define RUBAN_SIZE 120
+#define L_TYPE "Barre"
+#elif LULU_TYPE == 3
+#define RUBAN_SIZE 17
+#define L_TYPE "Pince"
+#elif LULU_TYPE == 4
+#define RUBAN_SIZE 73
+#define L_TYPE "Fluo"
+#elif LULU_TYPE == 5
+#define RUBAN_SIZE 186
+#define L_TYPE "Flex"
+#elif LULU_TYPE == 6
+#define RUBAN_SIZE 60
+#define L_TYPE "HideSee"
+#elif LULU_TYPE == 7
+#define RUBAN_SIZE 35
+#define L_TYPE "Phone"
+#elif LULU_TYPE == 8
+#define RUBAN_SIZE 25 // 5 pour tester avec les jauges de monitoring
+#define L_TYPE "Atom"
+#elif LULU_TYPE == 9
+#define RUBAN_SIZE 120
+#define L_TYPE "Chariot"
+#endif
 #endif
 
 void settings()
@@ -61,7 +64,7 @@ void settings()
   RUBAN_type = k32->system->preferences.getUInt("LULU_ruban", LED_SK6812W_V1);
 #endif
 
-String L_type;
+  String L_type;
 #ifdef L_TYPE
   k32->system->preferences.putString("L_type", L_TYPE);
   L_type = L_TYPE;
