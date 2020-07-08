@@ -67,7 +67,7 @@ void setup()
   // WIFI
   k32->init_wifi(nodeName);
   k32->wifi->staticIP("2.0.0." + String(k32->system->id() + 100), "2.0.0.1", "255.0.0.0");
-  // k32->wifi->connect("kxkm24lulu2", NULL);//KXKM
+  // k32->wifi->connect("kxkm24lulu", NULL);//KXKM
   k32->wifi->connect("kxkm24", NULL); //KXKM
   // k32->wifi->connect("riri_new", "B2az41opbn6397");
   // k32->wifi->connect("interweb", "superspeed37");
