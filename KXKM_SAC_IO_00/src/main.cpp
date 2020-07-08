@@ -86,8 +86,12 @@ void setup()
   // clone every strip from strip 0
   // k32->light->cloneStrips(0);
 
+  
+  //struct copyStrip({ srcStrip, srcStart, srcStop, destStrip, destPos};
+
   // copy preview from strip 0 to strip 1
-  k32->light->copyStrip({0, RUBAN_size, RUBAN_size + 18, 1, 0});
+  // k32->light->copyStrip({0, RUBAN_size, RUBAN_size + 18, 1, 0});// jauge sortie 2
+  k32->light->copyStrip({0, 0, RUBAN_size, 1, 0});// chariot clone
 
   // test sequence
   light_tests();
