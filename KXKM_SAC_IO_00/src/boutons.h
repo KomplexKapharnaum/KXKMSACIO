@@ -84,8 +84,10 @@ void boutons_loop()
         if (activeMacro == 8) {
             manu->mod(new K32_mod_fadeout) ->at(0)->at(16)->at(17) ->period(5000);
         }
-        else if (activeMacro == 10) {
-            manu->mod(new K32_mod_sinus) ->at(15) ->period(1000);                      
+        else if (activeMacro == 10) 
+        {
+            manu->mod(new K32_mod_pulse) ->at(8)        ->maxi(MEM[activeMacro][8]) ->param(1, 66) ->period(1000);   
+            manu->mod(new K32_mod_pulse) ->at(1)->at(2) ->maxi(0)->mini(255)        ->param(1, 66) ->period(1000);   
         }
         else if (activeMacro == 11) {
             manu->mod(new K32_mod_sinus) ->at(1)->at(16)->at(17) ->period(5000);
