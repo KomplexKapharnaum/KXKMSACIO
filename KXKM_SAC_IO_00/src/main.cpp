@@ -17,7 +17,7 @@
 // #define DEBUG_dmxframe 1
 // #define DEBUG_STR 1
 // #define DEBUG_calibre_btn 1
-#define DEBUG_btn 1
+// #define DEBUG_btn 1
 
 #define LULU_PATCHSIZE 18 // Taille du patch DMX pour cet Fixture
 #define LULU_PREVPIX 6    // Nombre de pixel pour la prévisu
@@ -90,8 +90,8 @@ void setup()
   //struct copyStrip({ srcStrip, srcStart, srcStop, destStrip, destPos};
 
   // copy preview from strip 0 to strip 1
-  k32->light->copyStrip({0, RUBAN_size, RUBAN_size + 18, 1, 0});// jauge sortie 2
-  // k32->light->copyStrip({0, 0, RUBAN_size, 1, 0});// chariot clone
+  // k32->light->copyStrip({0, RUBAN_size, RUBAN_size + 18, 1, 0});// jauge sortie 2
+   k32->light->copyStrip({0, 0, RUBAN_size, 1, 0});// chariot clone
 
   // test sequence
   light_tests();
