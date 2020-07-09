@@ -79,13 +79,29 @@ void boutons_loop()
         //
         if (activeMacro == 1)
         {
-            manu->mod(new K32_mod_sinus)->at(0)->period(4250)->mini(38)->maxi(217);
+            manu->mod(new K32_mod_sinus)->at(0)->period(8500)->mini(38)->maxi(217);
+        }
+        else if (activeMacro == 2)
+        {
+            manu->mod(new K32_mod_sinus)->at(0)->period(4800)->mini(38)->maxi(217);
+        }
+        else if (activeMacro == 8)
+        {
+            manu->mod(new K32_mod_sawtooth)->at(9)->mini(229)->maxi(238)->period(3700)
+        }
+        else if (activeMacro == 9)
+        {
+            manu->mod(new K32_mod_sawtooth)->at(7)->mini(1)->maxi(255)->period(1000)
         }
         else if (activeMacro == 10)
         {
-            manu->mod(new K32_mod_sinus)->at(15)->period(1000);
+            manu->mod(new K32_mod_pulse)->at(8)->maxi(MEM[activeMacro][8])->param(1, 66)->period(7000);
+            manu->mod(new K32_mod_pulse)->at(1)->at(2)->param(1, 66)->period(7000);
         }
-        
+        if (activeMacro == 13)
+        {
+            manu->mod(new K32_mod_sinus)->at(0)->period(8500)->mini(38)->maxi(217);
+        }
     }
 
     // PREVIEW Macro
