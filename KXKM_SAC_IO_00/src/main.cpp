@@ -33,6 +33,7 @@ int LULU_uni;
 int LULU_adr;
 
 String nodeName;
+bool wifiMode = true;
 
 int RUBAN_type;
 int RUBAN_size;
@@ -59,24 +60,30 @@ void setup()
   k32 = new K32();
 
   //////////////////////////////////////// K32 modules ////////////////////////////////////
-  k32->init_stm32();
-
   settings();
   LOG("NAME:   " + nodeName + "\n");
-
-  // WIFI
-  k32->init_wifi(nodeName);
-  k32->wifi->staticIP("2.0.0." + String(k32->system->id() + 100), "2.0.0.1", "255.0.0.0");
-  // k32->wifi->connect("kxkm24lulu", NULL);//KXKM
-  k32->wifi->connect("kxkm24", NULL); //KXKM
-  // k32->wifi->connect("riri_new", "B2az41opbn6397");
-  // k32->wifi->connect("interweb", "superspeed37");
+  
+  // STM32
+  k32->init_stm32();
 
   // PWM
   k32->init_pwm();
 
+  /////////////////////////////////////////////// EXTENSION ////////////////////////////////////
+
+  // Power
+  if (k32->system->hw() < 3) { 
+    bat_custom_on();      // Default profile .. (without current gauge)
+    k32->init_power();
+    k32->system->power->setAdaptiveGauge(true, LIPO, 0);
+  }
+
   // Remote
   k32->init_remote(NUMBER_OF_MEM);
+  boutons_init();
+
+  // WIFI/BT switch
+  wifiMode = false;
 
   /////////////////////////////////////////////// LIGHT //////////////////////////////////////
 
@@ -107,67 +114,79 @@ void setup()
   k32->light->anim(0, "preview", new Anim_preview, LULU_PREVPIX, RUBAN_size + 8)->master(MASTER_PREV)->play();
   k32->light->anim(0, "rssi", new Anim_rssi, 1, RUBAN_size + 17)->master(MASTER_PREV * 1.5)->play();
 
-  // BAT Custom
-  bat_custom_on();
-
-  // Boutons
-  boutons_init();
-
   // sampler jpeg sd
   // k32->init_samplerjpeg();
 
-  /////////////////////////////////////////////// POWER ////////////////////////////////////
-  // Power
-  k32->init_power();
-  k32->system->power->setAdaptiveGauge(true, LIPO, 0);
+  /////////////////////////////////////////////// NETWORK //////////////////////////////////////
 
-  /////////////////////////////////////////////// ARTNET //////////////////////////////////////
-  k32->init_artnet({.universe = LULU_uni,
-                    .address = LULU_adr,
-                    .framesize = LULU_PATCHSIZE});
+  ////////////////// WIFI MODE
+  if (wifiMode) 
+  {
 
-  // EVENT: new artnet frame received
-  k32->artnet->onDmx([](uint8_t *data, int length) {
-    // Force Auto
-    if (data[14] > 250)
-      k32->remote->setState(REMOTE_AUTO_LOCK);
+    /////////////////////////////////////////////// WIFI //////////////////////////////////////
+    LOG("INIT WIFI");
+    k32->init_wifi(nodeName);
+    // k32->wifi->staticIP("2.0.0." + String(k32->system->id() + 100), "2.0.0.1", "255.0.0.0");
+    // k32->wifi->connect("kxkm24lulu", NULL);//KXKM
+    // k32->wifi->connect("kxkm24", NULL); //KXKM
+    k32->wifi->connect("interweb", "superspeed37");
 
-    // Draw
-    k32->light->anim("artnet")->push(data, length);
-  });
 
-  // EVENT: wifi lost
-  k32->wifi->onDisconnect([&]() {
-    LOG("WIFI: connection lost..");
+    /////////////////////////////////////////////// ARTNET //////////////////////////////////////
+    k32->init_artnet({.universe = LULU_uni,
+                      .address = LULU_adr,
+                      .framesize = LULU_PATCHSIZE});
 
-    k32->light->anim("artnet")->push(0); // @master 0
-  });
+    // EVENT: new artnet frame received
+    k32->artnet->onDmx([](uint8_t *data, int length) {
+      // Force Auto
+      if (data[14] > 250)
+        k32->remote->setState(REMOTE_AUTO_LOCK);
 
-  /////////////////////////////////////// MQTT //////////////////////////////////////
-  // k32->init_mqtt({
-  //     .broker = "2.0.0.1",
-  //     .beatInterval = 0,        // heartbeat interval milliseconds (0 = disable)
-  //     .beaconInterval = 0       // full beacon interval milliseconds (0 = disable)
-  // });
+      // Draw
+      k32->light->anim("artnet")->push(data, length);
+    });
 
-  /////////////////////////////////////////////// OSC //////////////////////////////////////
-  // k32->init_osc({
-  //     .port_in = 1818,       // osc port input (0 = disable)  // 1818
-  //     .port_out = 1819,      // osc port output (0 = disable) // 1819
-  //     .beatInterval = 0,     // heartbeat interval milliseconds (0 = disable)
-  //     .beaconInterval = 3000 // full beacon interval milliseconds (0 = disable)
-  // });                        // OSC
+    // EVENT: wifi lost
+    k32->wifi->onDisconnect([&]() {
+      LOG("WIFI: connection lost..");
 
-  /////////////////////////////////////// BLUETOOTH //////////////////////////////////////
-  //LOG("INIT BT");
-  //k32->init_bt("RastaBT");
+      k32->light->anim("artnet")->push(0); // @master 0
+    });
+
+
+    /////////////////////////////////////// MQTT //////////////////////////////////////
+    // k32->init_mqtt({
+    //     .broker = "2.0.0.1",
+    //     .beatInterval = 0,        // heartbeat interval milliseconds (0 = disable)
+    //     .beaconInterval = 0       // full beacon interval milliseconds (0 = disable)
+    // });
+
+
+    /////////////////////////////////////////////// OSC //////////////////////////////////////
+    // k32->init_osc({
+    //     .port_in = 1818,       // osc port input (0 = disable)  // 1818
+    //     .port_out = 1819,      // osc port output (0 = disable) // 1819
+    //     .beatInterval = 0,     // heartbeat interval milliseconds (0 = disable)
+    //     .beaconInterval = 3000 // full beacon interval milliseconds (0 = disable)
+    // });                        // OSC
+  }
+
+  ////////////////// BLUETOOTH
+  else 
+  {
+    k32->init_bt("RastaBT");
+
+    //k32->light->anim("artnet")->push(data, length);
+  }
+
 
   ///////////////////// INFO //////////////////////////////////////
 
   // Monitoring refresh
   k32->timer->every(REFRESH_INFO, []() {
     k32->light->anim("battery")->push(k32->system->stm32->battery());
-    k32->light->anim("rssi")->push(k32->wifi->getRSSI());
+    if (wifiMode) k32->light->anim("rssi")->push(k32->wifi->getRSSI());
   });
 
   // Remote status refresh
@@ -176,12 +195,12 @@ void setup()
   });
 
   // Heap Memory log
-  k32->timer->every(1000, []() {
-    static int lastheap = 0;
-    int heap = ESP.getFreeHeap();
-    // LOGF2("Free memory: %d / %d\n", heap, heap-lastheap);
-    lastheap = heap;
-  });
+  // k32->timer->every(1000, []() {
+  //   static int lastheap = 0;
+  //   int heap = ESP.getFreeHeap();
+  //   LOGF2("Free memory: %d / %d\n", heap, heap-lastheap);
+  //   lastheap = heap;
+  // });
 }
 
 ///////////////////////////////////////// LOOP /////////////////////////////////////////////////
