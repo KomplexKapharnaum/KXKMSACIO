@@ -87,11 +87,11 @@ void boutons_loop()
         }
         else if (activeMacro == 8)
         {
-            manu->mod(new K32_mod_sawtooth)->at(9)->mini(229)->maxi(238)->period(3700)
+            manu->mod(new K32_mod_sawtooth)->at(9)->mini(229)->maxi(238)->period(3700);
         }
         else if (activeMacro == 9)
         {
-            manu->mod(new K32_mod_sawtooth)->at(7)->mini(1)->maxi(255)->period(1000)
+            manu->mod(new K32_mod_sawtooth)->at(7)->mini(1)->maxi(255)->period(1000);
         }
         else if (activeMacro == 10)
         {

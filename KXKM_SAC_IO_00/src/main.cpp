@@ -1,14 +1,14 @@
 #include <Arduino.h>
 
-#define LULU_VER 57
+#define LULU_VER 58
 
 /////////////////////////////////////////ID/////////////////////////////////////////
 
-// #define K32_SET_NODEID 105 // board unique id
+// #define K32_SET_NODEID 37         // board unique id
 
-// #define RUBAN_TYPE LED_SK6812W_V1 // LED_WS2812_V1  LED_WS2812B_V1  LED_WS2812B_V2  LED_WS2812B_V3  LED_WS2813_V1  LED_WS2813_V2   LED_WS2813_V3  LED_WS2813_V4  LED_SK6812_V1  LED_SK6812W_V1,
-// #define LULU_ID 10                // permet de calculer l'adresse DMX
-// #define LULU_TYPE 9               // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot"
+// #define RUBAN_TYPE LED_WS2812_V1 // LED_WS2812_V1  LED_WS2812B_V1  LED_WS2812B_V2  LED_WS2812B_V3  LED_WS2813_V1  LED_WS2813_V2   LED_WS2813_V3  LED_WS2813_V4  LED_SK6812_V1  LED_SK6812W_V1,
+// #define LULU_ID 37                // permet de calculer l'adresse DMX
+// #define LULU_TYPE 8               // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot"
 // #define LULU_UNI 0                // Univers DM
 
 /////////////////////////////////////////Debug///////////////////////////////////////
@@ -62,7 +62,7 @@ void setup()
   k32->init_stm32();
 
   settings();
-  LOG("LULU:   " + nodeName + "\n");
+  LOG("NAME:   " + nodeName + "\n");
 
   // WIFI
   k32->init_wifi(nodeName);
@@ -85,13 +85,10 @@ void setup()
 
   // clone every strip from strip 0
   // k32->light->cloneStrips(0);
-
   
   //struct copyStrip({ srcStrip, srcStart, srcStop, destStrip, destPos};
-
-  // copy preview from strip 0 to strip 1
-  // k32->light->copyStrip({0, RUBAN_size, RUBAN_size + 18, 1, 0});// jauge sortie 2
-   k32->light->copyStrip({0, 0, RUBAN_size, 1, 0});// chariot clone
+  if (LULU_type == 9) k32->light->copyStrip({0, 0, RUBAN_size, 1, 0});// chariot clone
+  else k32->light->copyStrip({0, RUBAN_size, RUBAN_size + 18, 1, 0});// jauge sortie 2
 
   // test sequence
   light_tests();
@@ -146,6 +143,13 @@ void setup()
     k32->light->anim("artnet")->push(0); // @master 0
   });
 
+  /////////////////////////////////////// MQTT //////////////////////////////////////
+  // k32->init_mqtt({
+  //     .broker = "2.0.0.1",
+  //     .beatInterval = 0,        // heartbeat interval milliseconds (0 = disable)
+  //     .beaconInterval = 0       // full beacon interval milliseconds (0 = disable)
+  // });
+
   /////////////////////////////////////////////// OSC //////////////////////////////////////
   // k32->init_osc({
   //     .port_in = 1818,       // osc port input (0 = disable)  // 1818
@@ -153,6 +157,10 @@ void setup()
   //     .beatInterval = 0,     // heartbeat interval milliseconds (0 = disable)
   //     .beaconInterval = 3000 // full beacon interval milliseconds (0 = disable)
   // });                        // OSC
+
+  /////////////////////////////////////// BLUETOOTH //////////////////////////////////////
+  //LOG("INIT BT");
+  //k32->init_bt("RastaBT");
 
   ///////////////////// INFO //////////////////////////////////////
 
