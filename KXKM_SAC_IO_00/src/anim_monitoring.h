@@ -22,7 +22,7 @@ public:
         else if (rssi > -78)  this->all( CRGBW::Gold );
         else                  this->all( CRGBW::Red );
 
-        // LOGF("rssi %d\n", rssi);
+        //LOGF("rssi %d\n", rssi);
     }
 };
 

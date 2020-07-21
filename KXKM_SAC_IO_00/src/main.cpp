@@ -204,7 +204,7 @@ void setup()
 
     // Wifi
     if (wifiMode) {
-      uint8_t rssi = k32->wifi->getRSSI();
+      int rssi = k32->wifi->getRSSI();
       if (rssi < 0 || toggleRSSI) k32->light->anim("rssi")->push(rssi);
       else k32->light->anim("rssi")->push(-100);
     }
