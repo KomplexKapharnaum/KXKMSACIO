@@ -1,6 +1,6 @@
 
 #include <light/K32_light.h>
-#include <remote/K32_remote.h>
+#include <xtension/K32_remote.h>
 #include "mem.h"
 
 // ANIM RSSI
@@ -15,7 +15,8 @@ public:
     {
         int& rssi = data[0];
         
-        if (rssi == 0)        this->all( CRGBW::Blue );
+        if (rssi == 1)        this->all( CRGBW::Blue );     // Bluetooth
+        else if (rssi == 0)   this->all( CRGBW::Black );
         else if (rssi > -50)  this->all( CRGBW::Lime );
         else if (rssi > -67)  this->all( CRGBW::Chartreuse );
         else if (rssi > -78)  this->all( CRGBW::Gold );
@@ -59,38 +60,19 @@ public:
     void draw(int data[ANIM_DATA_SLOTS])
     {
         int& state = data[0];
+        int& locked = data[1];
 
+        // KEYS pixel
         int first = 0;
-        int last = this->size()-1;
+        if (locked) this->pixel( first, CRGBW::Red);
+        else        this->pixel( first, CRGBW::Lime);  
 
-        if (state == REMOTE_AUTO) {
-            this->pixel( first, CRGBW::Lime);  
-            this->pixel(  last, CRGBW::Black); 
-        }
-        else if (state == REMOTE_AUTO_LOCK) {
-            this->pixel( first, CRGBW::Red);
-            this->pixel(  last, CRGBW::Black);
-        }
-        else  if (state == REMOTE_MANU) {
-            this->pixel( first, CRGBW::Lime);
-            this->pixel(  last, CRGBW::Lime);
-        }
-        else if (state == REMOTE_MANU_LOCK) {
-            this->pixel( first, CRGBW::Red);
-            this->pixel(  last, CRGBW::Lime);
-        }
-        else  if (state == REMOTE_MANU_STM) {
-            this->pixel( first, CRGBW::Blue);
-            this->pixel(  last, CRGBW::Blue);
-        }
-        else if (state == REMOTE_MANU_STM_LOCK) {
-            this->pixel( first, CRGBW::Red);
-            this->pixel(  last, CRGBW::Blue);
-        }
-        else  if (state == REMOTE_MANU_LAMP) {
-            this->pixel( first, CRGBW::Lime);
-            this->pixel(  last, {0, 255, 0, 255});
-        }
+        // MODE pixel
+        int last = this->size()-1;
+        if (state == REMOTE_AUTO)           this->pixel(  last, CRGBW::Black); 
+        else if (state == REMOTE_MANU)      this->pixel(  last, CRGBW::Lime);
+        else if (state == REMOTE_MANU_STM)  this->pixel(  last, CRGBW::Blue);
+        else if (state == REMOTE_MANU_LAMP) this->pixel(  last, {0, 255, 0, 255});
 
     }
 };

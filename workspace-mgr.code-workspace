@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"path": "KXKM_SAC_IO_00"
+		},
+		{
+			"path": "../K32-OS-duino/lib/K32-lib"
+		},
+		{
+			"name": "test-bluetooth",
+			"path": "../../Documents/PlatformIO/Projects/test-bluetooth"
+		}
+	],
+	"settings": {}
+}

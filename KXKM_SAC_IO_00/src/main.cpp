@@ -17,7 +17,7 @@
 // #define DEBUG_dmxframe 1
 // #define DEBUG_STR 1
 // #define DEBUG_calibre_btn 1
-// #define DEBUG_btn 1
+#define DEBUG_btn 1
 
 #define LULU_PATCHSIZE 18 // Taille du patch DMX pour cet Fixture
 #define LULU_PREVPIX 6    // Nombre de pixel pour la prévisu
@@ -78,12 +78,16 @@ void setup()
     k32->system->power->setAdaptiveGauge(true, LIPO, 0);
   }
 
+  // MCP
+  k32->init_mcp();
+
   // Remote
   k32->init_remote(NUMBER_OF_MEM);
   boutons_init();
 
   // WIFI/BT switch
-  wifiMode = false;
+  k32->mcp->input(14);
+
 
   /////////////////////////////////////////////// LIGHT //////////////////////////////////////
 
@@ -119,6 +123,14 @@ void setup()
 
   /////////////////////////////////////////////// NETWORK //////////////////////////////////////
 
+  if (k32->system->hw() < 3) wifiMode = !k32->mcp->state(14);
+  else wifiMode = false;
+  
+  LOGINL("NETWORK: ");
+  if (wifiMode) LOG("wifi");
+  else LOG("bluetooth");
+
+
   ////////////////// WIFI MODE
   if (wifiMode) 
   {
@@ -126,10 +138,10 @@ void setup()
     /////////////////////////////////////////////// WIFI //////////////////////////////////////
     LOG("INIT WIFI");
     k32->init_wifi(nodeName);
-    // k32->wifi->staticIP("2.0.0." + String(k32->system->id() + 100), "2.0.0.1", "255.0.0.0");
+    k32->wifi->staticIP("2.0.0." + String(k32->system->id() + 100), "2.0.0.1", "255.0.0.0");
+    k32->wifi->connect("kxkm24", NULL); //KXKM
     // k32->wifi->connect("kxkm24lulu", NULL);//KXKM
-    // k32->wifi->connect("kxkm24", NULL); //KXKM
-    k32->wifi->connect("interweb", "superspeed37");
+    // k32->wifi->connect("interweb", "superspeed37");
 
 
     /////////////////////////////////////////////// ARTNET //////////////////////////////////////
@@ -141,7 +153,8 @@ void setup()
     k32->artnet->onDmx([](uint8_t *data, int length) {
       // Force Auto
       if (data[14] > 250)
-        k32->remote->setState(REMOTE_AUTO_LOCK);
+        k32->remote->setState(REMOTE_AUTO);
+        k32->remote->lock();
 
       // Draw
       k32->light->anim("artnet")->push(data, length);
@@ -175,9 +188,7 @@ void setup()
   ////////////////// BLUETOOTH
   else 
   {
-    k32->init_bt("RastaBT");
-
-    //k32->light->anim("artnet")->push(data, length);
+    k32->init_bt("k32-"+String(k32->system->id()));
   }
 
 
@@ -185,13 +196,30 @@ void setup()
 
   // Monitoring refresh
   k32->timer->every(REFRESH_INFO, []() {
+    
     k32->light->anim("battery")->push(k32->system->stm32->battery());
-    if (wifiMode) k32->light->anim("rssi")->push(k32->wifi->getRSSI());
+
+    static bool toggleRSSI = false;
+    toggleRSSI = !toggleRSSI;
+
+    // Wifi
+    if (wifiMode) {
+      uint8_t rssi = k32->wifi->getRSSI();
+      if (rssi < 0 || toggleRSSI) k32->light->anim("rssi")->push(rssi);
+      else k32->light->anim("rssi")->push(-100);
+    }
+
+    // Bluetooth
+    else {
+      if (k32->bt->isConnected() || toggleRSSI) k32->light->anim("rssi")->push(1);
+      else k32->light->anim("rssi")->push(0);
+    }
+
   });
 
   // Remote status refresh
   k32->timer->every(50, []() {
-    k32->light->anim("remote")->push(k32->remote->getState());
+    k32->light->anim("remote")->push(k32->remote->getState(), k32->remote->isLocked());
   });
 
   // Heap Memory log
@@ -212,4 +240,4 @@ void loop()
 
   delay(20);
 
-} //loop
+} //loopk32->wifi->getRSSI()

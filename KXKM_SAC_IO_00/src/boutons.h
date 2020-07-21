@@ -34,8 +34,9 @@ void boutons_init()
 {
     for (int i = 0; i < WATCH_SLOTS; i++)
         watchValues[i] = -128;
-
-    k32->remote->setState(REMOTE_AUTO_LOCK);
+    
+    k32->remote->setState(REMOTE_AUTO);
+    k32->remote->lock();
 
     if (k32->system->hw() == 3)
         pinMode(39, INPUT_PULLUP);
@@ -118,7 +119,7 @@ void boutons_loop()
     if (didChange(W_STATE, stateR))
     {
         // AUTO
-        if (stateR == REMOTE_AUTO || stateR == REMOTE_AUTO_LOCK)
+        if (stateR == REMOTE_AUTO)
         {
             k32->light->anim("manu")->stop();
             k32->light->anim("preview")->stop();
@@ -127,7 +128,7 @@ void boutons_loop()
         }
 
         // STM
-        else if (stateR == REMOTE_MANU_STM || stateR == REMOTE_MANU_STM_LOCK)
+        else if (stateR == REMOTE_MANU_STM)
         {
             k32->light->anim("artnet")->stop();
             k32->light->anim("preview")->play();
@@ -136,7 +137,7 @@ void boutons_loop()
         }
 
         // MANU
-        else if (stateR == REMOTE_MANU || stateR == REMOTE_MANU_LOCK || stateR == REMOTE_MANU_LAMP)
+        else if (stateR == REMOTE_MANU || stateR == REMOTE_MANU_LAMP)
         {
             k32->light->anim("preview")->play();
             LOG("REMOTE: -> Mode MANU");
@@ -145,7 +146,7 @@ void boutons_loop()
 
     // GO Active Macro
     if (k32->remote->getSendMacro())
-        if (stateR == REMOTE_MANU || stateR == REMOTE_MANU_LOCK || stateR == REMOTE_MANU_LAMP)
+        if (stateR == REMOTE_MANU || stateR == REMOTE_MANU_LAMP)
         {
             k32->light->anim("artnet")->stop();
             k32->light->anim("manu")->play();
@@ -156,8 +157,10 @@ void boutons_loop()
     int lamp = k32->remote->getLamp();
     if (didChange(W_LAMP, lamp))
     {
-        if (lamp >= 0)
-            k32->pwm->setAll(lamp);
+        if (lamp >= 0) {
+            k32->pwm->set(0, lamp);
+            k32->pwm->set(1, lamp);
+        }
         else
         {
             k32->light->anim("artnet")->push();
