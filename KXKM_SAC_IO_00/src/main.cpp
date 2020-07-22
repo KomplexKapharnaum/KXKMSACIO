@@ -169,11 +169,11 @@ void setup()
 
 
     /////////////////////////////////////// MQTT //////////////////////////////////////
-    // k32->init_mqtt({
-    //     .broker = "2.0.0.1",
-    //     .beatInterval = 0,        // heartbeat interval milliseconds (0 = disable)
-    //     .beaconInterval = 0       // full beacon interval milliseconds (0 = disable)
-    // });
+    k32->init_mqtt({
+        .broker = "2.0.0.1",
+        .beatInterval = 0,          // heartbeat interval milliseconds (0 = disable)
+        .beaconInterval = 0         // full beacon interval milliseconds (0 = disable)
+    });
 
 
     /////////////////////////////////////////////// OSC //////////////////////////////////////
