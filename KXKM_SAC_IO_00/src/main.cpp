@@ -189,6 +189,10 @@ void setup()
   else 
   {
     k32->init_bt("k32-"+String(k32->system->id()));
+
+    k32->bt->onConnect([&](){
+      k32->bt->send("Yo Rasta!");
+    });
   }
 
 
@@ -205,13 +209,16 @@ void setup()
     // Wifi
     if (wifiMode) {
       int rssi = k32->wifi->getRSSI();
-      if (rssi < 0 || toggleRSSI) k32->light->anim("rssi")->push(rssi);
-      else k32->light->anim("rssi")->push(-100);
+      if (rssi < 0) k32->light->anim("rssi")->push(rssi);
+      else if (toggleRSSI) k32->light->anim("rssi")->push(-100);
+      else k32->light->anim("rssi")->push(0);
     }
 
     // Bluetooth
     else {
-      if (k32->bt->isConnected() || toggleRSSI) k32->light->anim("rssi")->push(1);
+      int rssi = k32->bt->getRSSI();
+      if (rssi > 0) k32->light->anim("rssi")->push(rssi);
+      else if (toggleRSSI) k32->light->anim("rssi")->push(100);
       else k32->light->anim("rssi")->push(0);
     }
 

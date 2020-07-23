@@ -14,13 +14,24 @@ public:
     void draw(int data[ANIM_DATA_SLOTS])
     {
         int& rssi = data[0];
-        
-        if (rssi == 1)        this->all( CRGBW::Blue );     // Bluetooth
-        else if (rssi == 0)   this->all( CRGBW::Black );
-        else if (rssi > -50)  this->all( CRGBW::Lime );
-        else if (rssi > -67)  this->all( CRGBW::Chartreuse );
-        else if (rssi > -78)  this->all( CRGBW::Gold );
-        else                  this->all( CRGBW::Red );
+
+        if (rssi == 0)      this->all( CRGBW::Black );
+
+        // WIFI
+        else if (rssi < 0) {
+            if (rssi > -50)       this->all( CRGBW::Lime );
+            else if (rssi > -67)  this->all( CRGBW::Chartreuse );
+            else if (rssi > -78)  this->all( CRGBW::Gold );
+            else                  this->all( CRGBW::Red ); 
+        }
+
+        // BT
+        else if (rssi > 0) {
+            if (rssi < 50)        this->all( CRGBW::LightCyan );
+            else if (rssi < 67)   this->all( CRGBW::Cyan );
+            else if (rssi < 78)   this->all( CRGBW::DarkCyan );
+            else                  this->all( CRGBW::Blue ); 
+        }
 
         //LOGF("rssi %d\n", rssi);
     }
