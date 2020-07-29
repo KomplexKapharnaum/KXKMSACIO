@@ -1,6 +1,6 @@
 #include <Arduino.h>
 
-#define LULU_VER 61
+#define LULU_VER 62
 
 /////////////////////////////////////////ID/////////////////////////////////////////
 
@@ -37,6 +37,8 @@ bool wifiMode = true;
 
 int RUBAN_type;
 int RUBAN_size;
+
+int FAKE_current;
 
 /////////////////////////////////////////K32/////////////////////////////////////////
 
@@ -75,7 +77,7 @@ void setup()
 
   // Power
   if (k32->system->hw() < 3) { 
-    k32->init_power(LIPO, true, 12500);  // Batt type, auto gauge, fake external current (if no sensor) mA
+    k32->init_power(LIPO, true, FAKE_current);  // Batt type, auto gauge, fake external current (if no sensor) mA
   }
 
   // Remote
