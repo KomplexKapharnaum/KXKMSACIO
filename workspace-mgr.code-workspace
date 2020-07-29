@@ -17,7 +17,10 @@
 			"functional": "cpp",
 			"string_view": "cpp",
 			"ratio": "cpp",
-			"streambuf": "cpp"
+			"streambuf": "cpp",
+			"cstdlib": "cpp",
+			"shared_mutex": "cpp",
+			"regex": "cpp"
 		}
 	}
 }

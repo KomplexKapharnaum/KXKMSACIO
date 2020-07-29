@@ -109,75 +109,81 @@ public:
         int& battery = data[0];
 
         // LOGF("ANIM: battery, received value: %d\n", battery);
-
-        // SET MASTER
-        if (battery > 11) master(MASTER_PREV);
-        else master(255);
-
         clear();
 
-        /////////////////////  GREEN   ///////////////////////
-        if (battery > 50) 
-        {
-            pixel(0, CRGBW::Lime );
+        // SET MASTER
+        master(MASTER_PREV);
 
-            if (battery > 62) pixel(1, CRGBW::Lime);
-            if (battery > 74) pixel(2, CRGBW::Lime);
-            if (battery > 86) pixel(3, CRGBW::Lime);
+
+        /////////////////////  GREEN   ///////////////////////
+        if (battery >= 50) 
+        {
+            pixel(0, CRGBW::Lime );                       // 62-50%
+            if (battery >= 62) pixel(1, CRGBW::Lime);     // 75-62%
+            if (battery >= 75) pixel(2, CRGBW::Lime);     // 87-75%
+            if (battery >= 87) pixel(3, CRGBW::Lime);     // 100-87%
         }
 
-        /////////////////////  ORANGE   ///////////////////////
+        /////////////////////  YELLOW   ///////////////////////
 
-        else if (battery > 33) 
+        else if (battery >= 15) 
         {   
-            pixel(0, CRGBW::Gold);
-
-            if (battery > 38) pixel(1, CRGBW::Gold);
-            if (battery > 42) pixel(2, CRGBW::Gold);
-            if (battery > 46) pixel(3, CRGBW::Gold);
+            pixel(0, CRGBW::Gold);                        // 22-15%
+            if (battery >= 23) pixel(1, CRGBW::Gold);     // 31-23%
+            if (battery >= 32) pixel(2, CRGBW::Gold);     // 40-32%
+            if (battery >= 41) pixel(3, CRGBW::Gold);     // 49-41%
         }
 
         /////////////////////    RED     ///////////////////////
 
-        else if (battery > 16) 
+        else if (battery >= 10)  // SacVP: ~10 min restant
         {   
-            pixel(0, CRGBW::Red);
-
-            if (battery > 20) pixel(1, CRGBW::Red);
-            if (battery > 25) pixel(2, CRGBW::Red);
-            if (battery > 29) pixel(3, CRGBW::Red);
+            pixel(0, CRGBW::Red);                        // 10-11%
+            if (battery >= 12) pixel(1, CRGBW::Red);     // 12%
+            if (battery >= 13) pixel(2, CRGBW::Red);     // 13%
+            if (battery >= 14) pixel(3, CRGBW::Red);     // 14%
         }
 
         /////////////////////  BLINK   ///////////////////////
 
-        else if (battery > 11)
+        else if (battery >= 4)  // SacVP: ~5 min restant
         {   
+            master(255);
+
             mod("blink")->period(500)->play();      
             if ( mod("blink")->value() == 0 ) return;   // Blink OFF, nothing to draw
             
-            pixel(0, CRGBW::Red);
-
-            if (battery > 12) pixel(1, CRGBW::Red);
-            if (battery > 13) pixel(2, CRGBW::Red);
-            if (battery > 14) pixel(3, CRGBW::Red);
+            pixel(0, CRGBW::Red);                        // 4-5%
+            if (battery >= 6) pixel(1, CRGBW::Red);      // 6-7%
+            if (battery >= 8) pixel(2, CRGBW::Red);      // 8%
+            if (battery >= 9) pixel(3, CRGBW::Red);      // 9%
 
         }
 
         /////////////////////  CHASE+BLINK  ///////////////////////
 
-        else
+        else if (battery >= 0)    // 0-4%       // SacVP: 3 min (bonus)
         {   
-            mod("blink")->period( max(500*battery/10, 100) )->play();
+            master(255);
+
+            mod("blink")->period( 100 )->play();
             if ( mod("blink")->value() == 0 ) return;   // Blink OFF, nothing to draw
             
-            mod("chase")->period( max(1500*battery/10, 300) )->play();
+            mod("chase")->period( 300 )->play();
             pixel( mod("chase")->value(), CRGBW::Red);
         }
         
+        /////////////////////  CHASE BLUE  ///////////////////////
+
+        else    // -1
+        {   
+            mod("chase")->period( 700 )->play();
+            pixel( mod("chase")->value(), CRGBW::DarkBlue);
+        }
 
         /// STOP MODS IF NO IN USE
-        if (battery > 16) mod("blink")->stop();
-        if (battery > 11) mod("chase")->stop();
+        if (battery >= 10) mod("blink")->stop();
+        if (battery >= 4) mod("chase")->stop();
 
     }
 };

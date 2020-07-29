@@ -50,7 +50,6 @@ K32 *k32;
 #include "anim_monitoring.h"
 #include "anim_dmx.h"
 #include "boutons.h"
-#include "bat_custom.h"
 #include "test.h"
 
 ///////////////////////////////////////////////// SETUP ////////////////////////////////////////
@@ -71,15 +70,13 @@ void setup()
 
   /////////////////////////////////////////////// EXTENSION ////////////////////////////////////
 
-  // Power
-  if (k32->system->hw() < 3) { 
-    bat_custom_on();      // Default profile .. (without current gauge)
-    k32->init_power();
-    k32->system->power->setAdaptiveGauge(true, LIPO, 0);
-  }
-
   // MCP
   k32->init_mcp();
+
+  // Power
+  if (k32->system->hw() < 3) { 
+    k32->init_power(LIPO, true, 12500);  // Batt type, auto gauge, fake external current (if no sensor) mA
+  }
 
   // Remote
   k32->init_remote(NUMBER_OF_MEM);
