@@ -46,10 +46,8 @@ class ServiceListener(object):
                     new = False
                     break
 
-            if 'name' not in cli:
-                clients.append(cli)
-
             cli['name'] = name
+            cli['shortname'] = name.split(type)[0][0:-1]
             cli['ip'] = info.parsed_addresses()[0]
             cli['port'] = str(info.port)
             try:
@@ -58,11 +56,24 @@ class ServiceListener(object):
                 cli['version'] = 0
 
             cli['upgradeVersion'] = (not version_filter or cli['version'] != version_filter)
-            cli['upgradeType'] = (not type_filter or type_filter in cli['name'].lower())
+            cli['upgradeType'] = (not type_filter or type_filter in cli['shortname'].lower())
             cli['upgrade'] = cli['upgradeVersion'] and cli['upgradeType']
 
-            if new:
-                print("["+("x" if cli['upgrade'] else " ")+"]["+str(len(clients)-1).rjust(2)+"] ", cli['name'].split(type)[0])
+            if new and cli['upgradeType']:
+                clients.append(cli)
+
+                nameSplit = cli['shortname'].split('-')
+                print("["+("x" if cli['upgrade'] else " ")+"]["+str(len(clients)-1).rjust(2)+"]", 
+                            nameSplit[0].rjust(4), 
+                            nameSplit[1].rjust(4), 
+                            '', 
+                            '-'.join(nameSplit[2:-1]).ljust(16), 
+                            nameSplit[-1].rjust(4),
+                            '',
+                            cli['ip']
+                            )
+
+                    
 
 
 
@@ -74,14 +85,14 @@ class Upgrader(Thread):
         self.info = info
 
     def run(self):
-        stri = "Uploading to "+str(self.info['ip'])
+        stri = "Uploading to "+self.info['shortname']+"  "+str(self.info['ip'])
         print(stri)
         cmd = 'python3 ~/.platformio/packages/tool-espotapy/espota.py -i '+self.info['ip']+' -I '+ip_of_sender+' -p '+self.info['port']+' -P '+str(self.port)+' -f '+firmware
         p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         if (p.wait() == 0):
-            stri = "Updated " + str(self.info['ip'])
+            stri = "Updated " +self.info['shortname']+"  "+str(self.info['ip'])
         else:
-            stri = "Failed " + str(self.info['ip']) + " " + cmd
+            stri = "Failed " +self.info['shortname']+"  "+str(self.info['ip'])
         print(stri)
 
  
@@ -120,9 +131,14 @@ if __name__ == '__main__':
             os.kill(os.getpid(), signal.SIGKILL)
 
         r.close()
-        #time.sleep(2)
-        upgradables = [cli for cli in clients if cli['upgrade']]
-        y = input("Upload to "+str(len(upgradables))+" Devices ?... [y/n]\n\n")
+
+        if a.isnumeric():
+            if int(a) >= len(clients): continue
+            upgradables = [clients[int(a)]]
+            y = input("Upload to "+upgradables[0]['shortname']+" ?... [y/n]\n\n")
+        else:
+            upgradables = [cli for cli in clients if cli['upgrade']]
+            y = input("Upload to "+str(len(upgradables))+" Devices ?... [y/n]\n\n")
         if y != 'y':
             continue
             
