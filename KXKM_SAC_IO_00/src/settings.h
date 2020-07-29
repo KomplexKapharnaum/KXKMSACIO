@@ -85,11 +85,11 @@ void settings()
   // NAME
   nodeName = L_type;
   if (RUBAN_type == LED_SK6812_V1)
-    nodeName += "_SK";
+    nodeName += "-SK";
   else if (RUBAN_type == LED_SK6812W_V1)
-    nodeName += "_SKW";
+    nodeName += "-SKW";
   else
-    nodeName += "_WS";
+    nodeName += "-WS";
   nodeName += "-" + String(LULU_id) + "-v" + String(LULU_VER);
 
 } //k32_settings()
