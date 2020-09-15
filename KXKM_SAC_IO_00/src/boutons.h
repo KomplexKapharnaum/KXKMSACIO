@@ -5,8 +5,6 @@
 #ifndef boutons_h
 #define boutons_h
 
-#include "mem.h"
-
 #define WATCH_SLOTS 8
 
 enum watchSlot
@@ -66,43 +64,7 @@ void boutons_loop()
     {
         LOGF("REMOTE: -> set Active Macro = %d\n", activeMacro);
 
-        K32_anim *manu = k32->light->anim("manu");
-
-        // remove disposable modulators
-        //
-        manu->unmod();
-
-        // push new data (from mem.h)
-        //
-        manu->push(MEM[activeMacro], LULU_PATCHSIZE);
-
-        // add modulators
-        //
-        if (activeMacro == 2)
-        {
-            manu->mod(new K32_mod_sinus)->at(0)->period(8500)->mini(38)->maxi(217);
-        }
-        else if (activeMacro == 3)
-        {
-            manu->mod(new K32_mod_sinus)->at(0)->period(4800)->mini(38)->maxi(217);
-        }
-        else if (activeMacro == 9)
-        {
-            manu->mod(new K32_mod_sawtooth)->at(9)->mini(229)->maxi(238)->period(3700);
-        }
-        else if (activeMacro == 10)
-        {
-            manu->mod(new K32_mod_sawtooth)->at(7)->period(7000);
-        }
-        else if (activeMacro == 11)
-        {
-            manu->mod(new K32_mod_pulse)->at(1)->at(2)->at(4)->param(1, 66)->period(7000);
-            manu->mod(new K32_mod_pulse)->at(8)              ->param(1, 66)->period(7000);
-        }
-        else if (activeMacro == 14)
-        {
-            manu->mod(new K32_mod_sinus)->at(0)->period(8500)->mini(38)->maxi(217);
-        }
+        load_mem( k32->light->anim("manu"), activeMacro );
     }
 
     // PREVIEW Macro

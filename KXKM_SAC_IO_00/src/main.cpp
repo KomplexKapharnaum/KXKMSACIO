@@ -1,6 +1,6 @@
 #include <Arduino.h>
 
-#define LULU_VER 62
+#define LULU_VER 63
 
 /////////////////////////////////////////ID/////////////////////////////////////////
 
@@ -8,7 +8,7 @@
 
 // #define RUBAN_TYPE LED_SK6812W_V1 // LED_WS2812_V1  LED_WS2812B_V1  LED_WS2812B_V2  LED_WS2812B_V3  LED_WS2813_V1  LED_WS2813_V2   LED_WS2813_V3  LED_WS2813_V4  LED_SK6812_V1  LED_SK6812W_V1,
 // #define LULU_ID 1                // permet de calculer l'adresse DMX
-// #define LULU_TYPE 1               // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot" 10="power"
+// #define LULU_TYPE 8               // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot" 10="power"
 // #define LULU_UNI 0                // Univers DM
 
 /////////////////////////////////////////Debug///////////////////////////////////////
@@ -45,6 +45,11 @@ int FAKE_current;
 #include <K32.h> // https://github.com/KomplexKapharnaum/K32-lib
 K32 *k32;
 
+///////////////////////////////////////////////// LIGHT MACRO ////////////////////////////////////////
+#include "macro/mem.h"
+// #include "macro/mem_h&s.h"
+// #include "macro/mem_test.h"
+
 ///////////////////////////////////////////////// include ////////////////////////////////////////
 
 #include "settings.h"
@@ -53,6 +58,8 @@ K32 *k32;
 #include "anim_dmx.h"
 #include "boutons.h"
 #include "test.h"
+
+
 
 ///////////////////////////////////////////////// SETUP ////////////////////////////////////////
 void setup()
@@ -122,8 +129,8 @@ void setup()
 
   /////////////////////////////////////////////// NETWORK //////////////////////////////////////
 
-  if (k32->system->hw() < 3) wifiMode = !k32->mcp->state(14);
-  else wifiMode = false;
+  if (k32->system->hw() < 3) wifiMode = k32->mcp->state(14);
+  else wifiMode = true;
   
   LOGINL("NETWORK: ");
   if (wifiMode) LOG("wifi");
