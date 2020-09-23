@@ -70,7 +70,6 @@ K32 *k32;
 #define DMX_SERIAL_OUTPUT_PIN 16
 #define DMX_SERIAL_INPUT_PIN 17
 
-uint8_t level;
 uint8_t dmxbuffer[DMX_MAX_FRAME];
 
     ///////////////////////////////////////////////// SETUP ////////////////////////////////////////
@@ -281,13 +280,3 @@ void loop()
   delay(20);
 
 } //loop
-
-void copyDMXToOutput(void)
-{
-  xSemaphoreTake(ESP32DMX.lxDataLock, portMAX_DELAY);
-  for (int i = 1; i < DMX_MAX_FRAME; i++)
-  {
-    ESP32DMX.setSlot(i, dmxbuffer[i]);
-  }
-  xSemaphoreGive(ESP32DMX.lxDataLock);
-} // copyDMXtoOuput
