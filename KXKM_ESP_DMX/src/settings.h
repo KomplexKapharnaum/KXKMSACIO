@@ -39,6 +39,9 @@
   #elif LULU_TYPE == 12
     #define RUBAN_SIZE 0
     #define L_TYPE "Dmx_par"
+  #elif LULU_TYPE == 13
+    #define RUBAN_SIZE 60
+    #define L_TYPE "Cube"
   #endif
 #endif
 
