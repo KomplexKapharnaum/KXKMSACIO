@@ -18,7 +18,7 @@
 // #define DEBUG_calibre_btn 1
 #define DEBUG_btn 1
 
-#define LULU_PATCHSIZE 16 // Taille du patch DMX pour cet Fixture
+#define LULU_PATCHSIZE 16 // Taille du patch DMX pour cet Fixture ** 18 = sk_pw 16 = strobe led 5 par led 
 #define LULU_PREVPIX 6    // Nombre de pixel pour la prévisu
 
 #define MASTER_PREV 40 // Luminosité prévisu
@@ -49,6 +49,7 @@ K32 *k32;
 // #include "macro/mem_h&s.h"
 // #include "macro/mem_test.h"
 #include "macro/mem_strobe.h"
+// #include "macro/mem_parled.h"
 
 ///////////////////////////////////////////////// include ////////////////////////////////////////
 
@@ -181,7 +182,7 @@ uint8_t dmxbuffer[DMX_MAX_FRAME];
     // EVENT: new artnet frame received
     k32->artnet->onDmx([](uint8_t *data, int length) {
       // Force Auto
-      if (data[14] > 250)
+      if (data[14] > 250) // data 14 = sk data 
         k32->remote->setState(REMOTE_AUTO);
       k32->remote->lock();
 
