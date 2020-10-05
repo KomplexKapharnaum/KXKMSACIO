@@ -21,7 +21,7 @@ public:
 
         xSemaphoreTake(ESP32DMX.lxDataLock, portMAX_DELAY);
 
-        for (int i = 0; i < LULU_PATCHSIZE; i++)
+        for (int i = 0; i < LULU_PATCHSIZE - 4; i++)
         {
             ESP32DMX.setSlot(i + 1, data[i]);
         }
