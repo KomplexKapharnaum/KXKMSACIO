@@ -182,7 +182,7 @@ uint8_t dmxbuffer[DMX_MAX_FRAME];
     // EVENT: new artnet frame received
     k32->artnet->onDmx([](uint8_t *data, int length) {
       // Force Auto
-      if (data[14] > 250) // data 14 = sk data 
+      if (data[512] > 250) // data 512 = end dmx trame 
         k32->remote->setState(REMOTE_AUTO);
       k32->remote->lock();
 
