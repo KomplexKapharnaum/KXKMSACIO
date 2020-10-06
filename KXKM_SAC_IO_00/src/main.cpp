@@ -160,7 +160,7 @@ void setup()
     k32->artnet->onFullDmx([](uint8_t *data, int length) 
     {
       // Force Auto
-      if (length > 512 && data[512] > 250) // data 512 = end dmx trame 
+      if (length > 511 && data[511] > 250) // data 512 = end dmx trame 
       {
         k32->remote->setState(REMOTE_AUTO);
         k32->remote->lock();

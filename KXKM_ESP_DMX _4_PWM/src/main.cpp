@@ -178,13 +178,21 @@ void setup()
                       .address = LULU_adr,
                       .framesize = LULU_PATCHSIZE});
 
-    // EVENT: new artnet frame received
-    k32->artnet->onDmx([](uint8_t *data, int length) {
+    // EVENT: full frame
+    k32->artnet->onFullDmx([](uint8_t *data, int length) 
+    {
       // Force Auto
-      if (data[512] > 250) // data 512 = end dmx trame 
+      if (length > 511 && data[511] > 250) // data 512 = end dmx trame 
+      {
         k32->remote->setState(REMOTE_AUTO);
-      k32->remote->lock();
+        k32->remote->lock();
+      }
+    });
 
+
+    // EVENT: new artnet frame received
+    k32->artnet->onDmx([](uint8_t *data, int length) 
+    {
       // Draw
       k32->light->anim("artnet")->push(data, length);
     });
