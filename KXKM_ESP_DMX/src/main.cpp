@@ -4,11 +4,11 @@
 
 /////////////////////////////////////////ID/////////////////////////////////////////
 
-#define K32_SET_NODEID 109 // board unique id
+// #define K32_SET_NODEID 109 // board unique id
 
-#define LULU_ID 1    // permet de calculer l'adresse DMX
-#define LULU_TYPE 11 // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot" 10="power" 11="DMX_strobe" 12="DMX_Par_led"
-#define LULU_UNI 3   // Univers DM
+// #define LULU_ID 1    // permet de calculer l'adresse DMX
+// #define LULU_TYPE 11 // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot" 10="power" 11="DMX_strobe" 12="DMX_Par_led"
+// #define LULU_UNI 3   // Univers DM   0=SAC 1=Barre 2=Chariot 3=Dmx 4=Cube
 
 /////////////////////////////////////////Debug///////////////////////////////////////
 
