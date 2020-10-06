@@ -1,15 +1,15 @@
 #include <Arduino.h>
 
 #define LULU_VER 64
+#define LULU_TYPE 1 // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot" 10="power" 11="DMX_strobe" 12="DMX_Par_led" 13="Cube_str" 14="Cube_par"
 
 /////////////////////////////////////////ID/////////////////////////////////////////
 
-#define K32_SET_NODEID 125         // board unique id
+// #define K32_SET_NODEID 125         // board unique id
 
-#define RUBAN_TYPE LED_SK6812W_V1 // LED_WS2812_V1  LED_WS2812B_V1  LED_WS2812B_V2  LED_WS2812B_V3  LED_WS2813_V1  LED_WS2813_V2   LED_WS2813_V3  LED_WS2813_V4  LED_SK6812_V1  LED_SK6812W_V1,
-#define LULU_ID 1                // permet de calculer l'adresse DMX
-#define LULU_TYPE 13               // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot" 10="power" 11="DMX_strobe" 12="DMX_Par_led" 13="Cube"
-#define LULU_UNI 0                // Univers DM  0=SAC 1=Barre 2=Chariot 3=Dmx 4=Cube
+// #define RUBAN_TYPE LED_SK6812W_V1 // LED_WS2812_V1  LED_WS2812B_V1  LED_WS2812B_V2  LED_WS2812B_V3  LED_WS2813_V1  LED_WS2813_V2   LED_WS2813_V3  LED_WS2813_V4  LED_SK6812_V1  LED_SK6812W_V1,
+// #define LULU_ID 1                // permet de calculer l'adresse DMX
+
 
 /////////////////////////////////////////Debug///////////////////////////////////////
 
@@ -19,7 +19,6 @@
 // #define DEBUG_calibre_btn 1
 #define DEBUG_btn 1
 
-#define LULU_PATCHSIZE 18 // Taille du patch DMX pour cet Fixture
 #define LULU_PREVPIX 6    // Nombre de pixel pour la prévisu
 
 #define MASTER_PREV 40 // Luminosité prévisu
@@ -45,6 +44,8 @@ int FAKE_current;
 #include <K32.h> // https://github.com/KomplexKapharnaum/K32-lib
 K32 *k32;
 
+#include "settings.h"
+
 ///////////////////////////////////////////////// LIGHT MACRO ////////////////////////////////////////
 #include "macro/mem.h"
 // #include "macro/mem_h&s.h"
@@ -52,7 +53,6 @@ K32 *k32;
 
 ///////////////////////////////////////////////// include ////////////////////////////////////////
 
-#include "settings.h"
 #include "mem.h"
 #include "anim_monitoring.h"
 #include "anim_dmx.h"
