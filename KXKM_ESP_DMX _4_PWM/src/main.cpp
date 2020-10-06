@@ -7,7 +7,7 @@
 #define K32_SET_NODEID 127 // board unique id
 
 #define LULU_ID 1    // permet de calculer l'adresse DMX
-#define LULU_TYPE 13 // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot" 10="power" 11="DMX_strobe" 12="DMX_Par_led" 13="Cube"
+#define LULU_TYPE 13 // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot" 10="power" 11="DMX_strobe" 12="DMX_Par_led" 13="Cube_str" 14="Cube_par"
 #define LULU_UNI 4   // Univers DM    0=SAC 1=Barre 2=Chariot 3=Dmx 4=Cube
 
 /////////////////////////////////////////Debug///////////////////////////////////////
@@ -18,7 +18,10 @@
 // #define DEBUG_calibre_btn 1
 #define DEBUG_btn 1
 
-#define LULU_PATCHSIZE 20 // Taille du patch DMX pour cet Fixture ** 18 = sk_pw 16 = strobe led 5 par led 20 = cube strobe dmx
+// auto in settings.h
+// #define LULU_PATCHSIZE 20 // Taille du patch DMX pour cet Fixture ** 18 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx 
+// auto in settings.h
+
 #define LULU_PREVPIX 6    // Nombre de pixel pour la prévisu
 
 #define MASTER_PREV 40 // Luminosité prévisu
@@ -48,9 +51,12 @@ K32 *k32;
 // #include "macro/mem.h"
 // #include "macro/mem_h&s.h"
 // #include "macro/mem_test.h"
-// #include "macro/mem_strobe.h"
-// #include "macro/mem_parled.h"
-#include "macro/mem_pwm_dmx.h"
+
+
+// #include "macro/mem_strobe.h"                // auto in settings.h
+// #include "macro/mem_parled.h"                // auto in settings.h   
+// #include "macro/mem_pwm_strobe_dmx.h"        // auto in settings.h
+// #include "macro/mem_pwm_parled_dmx.h"        // auto in settings.h
 
 ///////////////////////////////////////////////// include ////////////////////////////////////////
 
