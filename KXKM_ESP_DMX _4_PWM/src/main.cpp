@@ -1,8 +1,8 @@
 #include <Arduino.h>
 
 #define LULU_VER 64
-#define LULU_TYPE 15 // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot" 10="power" 11="DMX_strobe" 12="DMX_Par_led" 13="Cube_str" 14="Cube_par"
-                     // 15="Sucette"
+#define LULU_TYPE 20 // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot" 10="power" 11="DMX_strobe" 12="DMX_Par_led" 
+                     // 20="Cube_str" 21="Cube_par" 22="Sucette"
 
 /////////////////////////////////////////ID/////////////////////////////////////////
 
@@ -143,6 +143,14 @@ void setup()
   // ANIM artnet
   k32->light->anim(1, "artnet", new Anim_Out_dmx, 1)->play();
 
+  #ifdef LULU_TYPE
+     #if LULU_TYPE >= 20
+     {
+       k32->light->anim("artnet")->push(MEM_NO_WIFI, LULU_PATCHSIZE);
+     }
+     #endif
+    #endif
+
   // ANIM manuframe
   k32->light->anim(1, "manu", new Anim_Out_dmx, 1);
 
@@ -209,12 +217,9 @@ void setup()
       LOG("WIFI: connection lost..");
 
   #ifdef LULU_TYPE
-     #if LULU_TYPE == 15
+     #if LULU_TYPE >= 20
      {
-        k32->pwm->set(0, ON_NO_WIFI);
-        k32->pwm->set(1, ON_NO_WIFI);
-        k32->pwm->set(2, ON_NO_WIFI);
-        k32->pwm->set(3, ON_NO_WIFI);
+       k32->light->anim("artnet")->push(MEM_NO_WIFI, LULU_PATCHSIZE);
      }
      #elif
      {
