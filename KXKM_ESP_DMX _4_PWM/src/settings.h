@@ -77,6 +77,13 @@
     #define LULU_PATCHSIZE 9 // Taille du patch DMX pour cet Fixture ** 18 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx 
     #define LULU_UNI 5   // Univers DM    0=SAC 1=Barre 2=Chariot 3=Dmx 4=Cube_strobe 5=Cube_parled
     #include "macro/mem_pwm_parled_dmx.h"
+  #elif LULU_TYPE == 15
+    #define RUBAN_SIZE 60
+    #define L_TYPE "Sucette"
+    #define LULU_PATCHSIZE 9 // Taille du patch DMX pour cet Fixture ** 18 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx
+    #define LULU_UNI 6   // Univers DM    0=SAC 1=Barre 2=Chariot 3=Dmx 4=Cube_strobe 5=Cube_parled 6=Sucette
+    #include "macro/mem_pwm_parled_sucette.h" 
+    #define ON_NO_WIFI 255
   #endif
 #endif
 
