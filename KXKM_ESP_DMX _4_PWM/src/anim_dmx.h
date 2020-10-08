@@ -194,7 +194,7 @@ class Anim_dmx : public K32_anim {
         k32->pwm->set(1, data[17]);
         k32->pwm->set(2, data[18]);
         k32->pwm->set(3, data[19]);
-        LOGF5("ANIM: -> Red %d PWM %d %d %d %d \n", data[3], data[16], data[17], data[18], data[19]);
+        // LOGF5("ANIM: -> Red %d PWM %d %d %d %d \n", data[3], data[16], data[17], data[18], data[19]);
       }
 
       // LOGF("ANIM: %s frame ", name());
