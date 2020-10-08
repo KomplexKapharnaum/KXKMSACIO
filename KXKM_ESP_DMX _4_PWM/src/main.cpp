@@ -1,7 +1,8 @@
 #include <Arduino.h>
 
 #define LULU_VER 64
-#define LULU_TYPE 13 // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot" 10="power" 11="DMX_strobe" 12="DMX_Par_led" 13="Cube_str" 14="Cube_par"
+#define LULU_TYPE 15 // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot" 10="power" 11="DMX_strobe" 12="DMX_Par_led" 13="Cube_str" 14="Cube_par"
+                     // 15="Sucette"
 
 /////////////////////////////////////////ID/////////////////////////////////////////
 
@@ -207,7 +208,20 @@ void setup()
     k32->wifi->onDisconnect([&]() {
       LOG("WIFI: connection lost..");
 
+  #ifdef LULU_TYPE
+     #if LULU_TYPE == 15
+     {
+        k32->pwm->set(0, ON_NO_WIFI);
+        k32->pwm->set(1, ON_NO_WIFI);
+        k32->pwm->set(2, ON_NO_WIFI);
+        k32->pwm->set(3, ON_NO_WIFI);
+     }
+     #elif
+     {
       k32->light->anim("artnet")->push(0); // @master 0
+     }
+     #endif
+    #endif
     });
 
     /////////////////////////////////////// MQTT //////////////////////////////////////
