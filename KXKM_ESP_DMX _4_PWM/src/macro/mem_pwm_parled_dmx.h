@@ -7,10 +7,10 @@
 // MEM ANIMATOR DATA ! modulateur relatif a la valeur du tableau
 //
 uint8_t MEM[NUMBER_OF_MEM][LULU_PATCHSIZE] = {
-    {  255, 255,   0,   0,   0,  255,  170,  126,   82}, // 00 Red
-    {  255,   0, 255,   0,   0,   82,  255,  170,  126}, // 01 Green
-    {  255,   0,   0, 255,   0,  126,   82,  255,  170}, // 02 Blue
-    {  255, 255, 255, 255,   0,  170,  126,   82,  255}, // 03 White
+    {  255, 255,   0,   0,   0,  255,  255,  255,  255}, // 00 Red
+    {  255,   0, 255,   0,   0,  170,  170,  170,  170}, // 01 Green
+    {  255,   0,   0, 255,   0,  126,  126,  126,  126}, // 02 Blue
+    {  255, 255, 255, 255,   0,   82,   82,   82,   82}, // 03 White
     {  255, 255, 255, 255,   0,  255,  255,  255,  255}, // 04 rvb **3 4 5**
     {  255, 255, 255, 255,  29,    0,    0,    0,    0}, // 05 str rnd 67
     {  255, 255, 255, 255,  58,  255,  170,  126,   82}, // 06 str all 67
@@ -69,9 +69,10 @@ void load_mem(K32_anim *anim, int macro) {
     //
     if (macro == 4)
     {
-        anim->mod(new K32_mod_sinus)->at(1)->at(5)->at(8)->period(8500)->phase(0)->mini(100)->maxi(255);
-        anim->mod(new K32_mod_sinus)->at(2)->at(6)->period(8500)->phase(120)->mini(100)->maxi(255);
-        anim->mod(new K32_mod_sinus)->at(3)->at(7)->period(8500)->phase(240)->mini(100)->maxi(255);
+        anim->mod(new K32_mod_sinus)->at(1)->at(5)->period(8500)->phase(0)->mini(80)->maxi(255);
+        anim->mod(new K32_mod_sinus)->at(2)->at(6)->period(8500)->phase(90)->mini(80)->maxi(255);
+        anim->mod(new K32_mod_sinus)->at(3)->at(7)->period(8500)->phase(180)->mini(80)->maxi(255);
+        anim->mod(new K32_mod_sinus)->at(8)->period(8500)->phase(270)->mini(80)->maxi(255);
     }
     else if (macro == 9)
     {
