@@ -5,9 +5,9 @@
 
 /////////////////////////////////////////ID/////////////////////////////////////////
 
-#define K32_SET_NODEID 127 // board unique id
+// #define K32_SET_NODEID 97 // board unique id
 
-#define LULU_ID 1    // permet de calculer l'adresse DMX
+// #define LULU_ID 1    // permet de calculer l'adresse DMX
 
 /////////////////////////////////////////Debug///////////////////////////////////////
 
@@ -46,6 +46,8 @@ int FAKE_current;
 #include <K32.h> // https://github.com/KomplexKapharnaum/K32-lib
 K32 *k32;
 
+#include "settings.h"
+
 ///////////////////////////////////////////////// LIGHT MACRO ////////////////////////////////////////
 // #include "macro/mem.h"
 // #include "macro/mem_h&s.h"
@@ -59,7 +61,6 @@ K32 *k32;
 
 ///////////////////////////////////////////////// include ////////////////////////////////////////
 
-#include "settings.h"
 #include "mem.h"
 #include "anim_monitoring.h"
 #include "anim_dmx.h"
