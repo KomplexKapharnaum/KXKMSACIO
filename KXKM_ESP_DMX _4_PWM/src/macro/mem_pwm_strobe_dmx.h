@@ -27,6 +27,7 @@ uint8_t MEM[NUMBER_OF_MEM][LULU_PATCHSIZE] = {
 //{master , str,str speed, r  , g  , b  , color mod, color eff,type eff, blast eff ,  ? eff , r eff , g eff , b eff , dim eff , background dim , pwm1, pwm2, pwm3, pwm4}
 //{0      , 1  ,      2  , 3  , 4  , 5  , 6        ,  7       , 8      , 9         , 10     , 11    , 12    , 13    , 14      , 15             , 16  , 17  , 18  , 19  } adr + -1
 
+uint8_t MEM_NO_WIFI[LULU_PATCHSIZE] = { 255,2,0,0,0,0,0,0,0,0,0,0,0,0,0,255,  ON_NO_WIFI,  ON_NO_WIFI,  ON_NO_WIFI,  ON_NO_WIFI};
 
 // 
 // PREVIEW PIXEL MAP
