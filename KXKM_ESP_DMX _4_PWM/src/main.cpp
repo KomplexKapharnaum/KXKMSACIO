@@ -1,13 +1,14 @@
 #include <Arduino.h>
 
 #define LULU_VER 64
-#define LULU_TYPE 13 // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot" 10="power" 11="DMX_strobe" 12="DMX_Par_led" 13="Cube_str" 14="Cube_par"
+#define LULU_TYPE 20 // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot" 10="power" 11="DMX_strobe" 12="DMX_Par_led" 
+                     // 20="Cube_str" 21="Cube_par" 22="Sucette"
 
 /////////////////////////////////////////ID/////////////////////////////////////////
 
-#define K32_SET_NODEID 127 // board unique id
+// #define K32_SET_NODEID 97 // board unique id
 
-#define LULU_ID 1    // permet de calculer l'adresse DMX
+// #define LULU_ID 1    // permet de calculer l'adresse DMX
 
 /////////////////////////////////////////Debug///////////////////////////////////////
 
@@ -46,6 +47,8 @@ int FAKE_current;
 #include <K32.h> // https://github.com/KomplexKapharnaum/K32-lib
 K32 *k32;
 
+#include "settings.h"
+
 ///////////////////////////////////////////////// LIGHT MACRO ////////////////////////////////////////
 // #include "macro/mem.h"
 // #include "macro/mem_h&s.h"
@@ -59,7 +62,6 @@ K32 *k32;
 
 ///////////////////////////////////////////////// include ////////////////////////////////////////
 
-#include "settings.h"
 #include "mem.h"
 #include "anim_monitoring.h"
 #include "anim_dmx.h"
@@ -141,6 +143,14 @@ void setup()
   // ANIM artnet
   k32->light->anim(1, "artnet", new Anim_Out_dmx, 1)->play();
 
+  #ifdef LULU_TYPE
+     #if LULU_TYPE >= 20
+     {
+       k32->light->anim("artnet")->push(MEM_NO_WIFI, LULU_PATCHSIZE);
+     }
+     #endif
+    #endif
+
   // ANIM manuframe
   k32->light->anim(1, "manu", new Anim_Out_dmx, 1);
 
@@ -206,7 +216,17 @@ void setup()
     k32->wifi->onDisconnect([&]() {
       LOG("WIFI: connection lost..");
 
+  #ifdef LULU_TYPE
+     #if LULU_TYPE >= 20
+     {
+       k32->light->anim("artnet")->push(MEM_NO_WIFI, LULU_PATCHSIZE);
+     }
+     #elif
+     {
       k32->light->anim("artnet")->push(0); // @master 0
+     }
+     #endif
+    #endif
     });
 
     /////////////////////////////////////// MQTT //////////////////////////////////////

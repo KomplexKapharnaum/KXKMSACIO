@@ -162,7 +162,7 @@ public:
 
         /////////////////////  CHASE+BLINK  ///////////////////////
 
-        else if (battery >= 0)    // 0-4%       // SacVP: 3 min (bonus)
+        else if (battery >= 1)    // 1-4%       // SacVP: 3 min (bonus)
         {   
             master(255);
 
