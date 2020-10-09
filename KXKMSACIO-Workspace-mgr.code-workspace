@@ -5,10 +5,6 @@
 			"path": "KXKM_SAC_IO_00"
 		},
 		{
-			"name": "KXKM_ESP_DMX",
-			"path": "KXKM_ESP_DMX"
-		},
-		{
 			"name": "KXKM_ESP_DMX _4_PWM",
 			"path": "KXKM_ESP_DMX _4_PWM"
 		},

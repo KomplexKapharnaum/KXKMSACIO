@@ -171,10 +171,10 @@ class Anim_dmx : public K32_anim {
     // Setup
     void init() {
 
-      // Strobe on data[0] (master)
+      // Strobe on data[0] (animMaster)
       this->mod("strobe", new K32_mod_pulse)->param(0, STROB_ON_MS)->at(0);
 
-      // Smooth on data[0] (master)
+      // Smooth on data[0] (animMaster)
       this->mod("smooth", new K32_mod_sinus)->at(0);
 
     }
@@ -201,7 +201,7 @@ class Anim_dmx : public K32_anim {
       // }
       // LOG("");
 
-      // Master @0 = nothing to draw
+      // animMaster @0 = nothing to draw
       if (data[0] == 0)
         return this->clear();
       
@@ -448,7 +448,7 @@ class Anim_dmx : public K32_anim {
       }
 
 
-      // MASTER
+      // ANIM-MASTER
       /////////////////////////////////////////////////////////////////////////
 
       for(int i=0; i<segmentSize; i++) segment[i] %= (uint8_t)data[0];
