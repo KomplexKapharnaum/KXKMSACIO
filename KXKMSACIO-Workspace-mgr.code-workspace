@@ -1,9 +1,23 @@
 {
 	"folders": [
 		{
+			"name": "KXKM_SAC_IO_00",
 			"path": "KXKM_SAC_IO_00"
 		},
 		{
+			"name": "KXKM_ESP_DMX",
+			"path": "KXKM_ESP_DMX"
+		},
+		{
+			"name": "KXKM_ESP_DMX _4_PWM",
+			"path": "KXKM_ESP_DMX _4_PWM"
+		},
+		{
+			"name": "KXKM_ESP_POWER",
+			"path": "KXKM_ESP_POWER"
+		},
+		{
+			"name": "K32-lib",
 			"path": "../K32-OS-duino/lib/K32-lib"
 		}
 	],
