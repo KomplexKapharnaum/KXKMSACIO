@@ -109,8 +109,8 @@ void setup()
   // ADD NEW ANIMS (strip, name, anim, size, offset=0)
 
   // ANIM artnet
-  //k32->light->anim(1, "artnet", new Anim_dmx_out, 1)->play();
-  k32->light->anim(0, "artnet", new Anim_dmx_strip, RUBAN_size)->play();
+  k32->light->anim(1, "artnet", new Anim_dmx_out, 1)->play();
+  // k32->light->anim(0, "artnet", new Anim_dmx_strip, RUBAN_size)->play();
 
   #ifdef LULU_TYPE
      #if LULU_TYPE >= 20
@@ -121,8 +121,8 @@ void setup()
   #endif
 
   // ANIM manuframe
-  // k32->light->anim(1, "manu", new Anim_dmx_out, 1);
-  k32->light->anim(0, "manu", new Anim_dmx_strip, RUBAN_size);
+  k32->light->anim(1, "manu", new Anim_dmx_out, 1);
+  // k32->light->anim(0, "manu", new Anim_dmx_strip, RUBAN_size);
 
   // ANIM monitoring
   k32->light->anim(0, "battery", new Anim_battery, 4, RUBAN_size + 1)->master(MASTER_PREV)->play();
