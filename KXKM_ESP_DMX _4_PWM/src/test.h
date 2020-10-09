@@ -4,7 +4,7 @@
 
 void light_tests() {
 
-  int timeStep = 800;
+  int timeStep = 300;
   
   // INIT TEST
     k32->light->anim( 0, "test0",   new K32_anim_test )->push(timeStep)->master(MASTER_PREV)->play();
