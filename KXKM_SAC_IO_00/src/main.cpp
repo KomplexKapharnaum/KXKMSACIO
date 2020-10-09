@@ -1,7 +1,7 @@
 #include <Arduino.h>
 
 #define LULU_VER 64
-#define LULU_TYPE 1 // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot" 10="power" 11="DMX_strobe" 12="DMX_Par_led" 13="Cube_str" 14="Cube_par"
+#define LULU_TYPE 8 // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot" 10="power" 11="DMX_strobe" 12="DMX_Par_led" 13="Cube_str" 14="Cube_par"
 
 /////////////////////////////////////////ID/////////////////////////////////////////
 
@@ -92,7 +92,8 @@ void setup()
   boutons_init();
 
   // WIFI/BT switch
-  k32->mcp->input(14);
+  if (k32->mcp)
+    k32->mcp->input(14);
 
 
   /////////////////////////////////////////////// LIGHT //////////////////////////////////////
@@ -129,7 +130,7 @@ void setup()
 
   /////////////////////////////////////////////// NETWORK //////////////////////////////////////
 
-  if (k32->system->hw() < 3) wifiMode = k32->mcp->state(14);
+  if (k32->mcp) wifiMode = k32->mcp->state(14);
   else wifiMode = true;
   
   LOGINL("NETWORK: ");

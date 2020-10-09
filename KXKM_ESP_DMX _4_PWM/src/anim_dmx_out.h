@@ -2,7 +2,7 @@
 #include <light/K32_dmx.h>
 
 
-class Anim_Out_dmx : public K32_anim
+class Anim_dmx_out : public K32_anim
 {
 
 public:

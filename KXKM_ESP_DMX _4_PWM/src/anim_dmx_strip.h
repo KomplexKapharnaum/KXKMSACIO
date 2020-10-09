@@ -164,7 +164,7 @@ en utilisant les fonctions évoquées ci-dessus.
 */
 
 
-class Anim_dmx : public K32_anim {
+class Anim_dmx_strip : public K32_anim {
   public:
 
 
