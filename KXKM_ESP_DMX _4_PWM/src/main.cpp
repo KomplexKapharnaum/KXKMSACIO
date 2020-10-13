@@ -6,9 +6,8 @@
 
 /////////////////////////////////////////ID/////////////////////////////////////////
 
-#define K32_SET_NODEID 135 // board unique id
-
-#define LULU_ID 6    // permet de calculer l'adresse DMX
+// #define K32_SET_NODEID 97  // board unique id
+// #define LULU_ID 1          // permet de calculer l'adresse DMX
 
 /////////////////////////////////////////Debug///////////////////////////////////////
 
@@ -18,14 +17,8 @@
 // #define DEBUG_calibre_btn 1
 #define DEBUG_btn 1
 
-//////////////////////////////////////////////////////////////////////////////////// auto in settings.h //////////////////////////////////////////////////////////////
-// #define LULU_PATCHSIZE 20 // Taille du patch DMX pour cet Fixture ** 18 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx
-//////////////////////////////////////////////////////////////////////////////////// auto in settings.h //////////////////////////////////////////////////////////////
-
-#define LULU_PREVPIX 6 // Nombre de pixel pour la prévisu
-
-#define MASTER_PREV 40 // Luminosité prévisu
-
+#define LULU_PREVPIX 6    // Nombre de pixel pour la prévisu
+#define MASTER_PREV 40    // Luminosité prévisu
 #define REFRESH_INFO 1000 // Refresh affichage Wifi & Battery
 
 /////////////////////////////////////////Adresse/////////////////////////////////////
@@ -61,23 +54,12 @@ K32 *k32;
 
 ///////////////////////////////////////////////// include ////////////////////////////////////////
 
-#include "mem.h"
 #include "anim_monitoring.h"
-#include "anim_dmx.h"
-#include "out_dmx.h"
+#include "anim_dmx_strip.h"
+#include "anim_dmx_out.h"
 #include "boutons.h"
 #include "test.h"
 
-//////////////////////////////////////////////////  DMX
-
-#include <LXESP32DMX.h>
-#include "esp_task_wdt.h"
-
-#define DMX_DIRECTION_PIN 4
-#define DMX_SERIAL_OUTPUT_PIN 16
-#define DMX_SERIAL_INPUT_PIN 17
-
-uint8_t dmxbuffer[DMX_MAX_FRAME];
 
 ///////////////////////////////////////////////// SETUP ////////////////////////////////////////
 void setup()
@@ -96,11 +78,7 @@ void setup()
   k32->init_pwm();
 
   // DMX
-  pinMode(DMX_DIRECTION_PIN, OUTPUT);
-  digitalWrite(DMX_DIRECTION_PIN, HIGH);
-
-  pinMode(DMX_SERIAL_OUTPUT_PIN, OUTPUT);
-  ESP32DMX.startOutput(DMX_SERIAL_OUTPUT_PIN);
+  k32->init_dmx(DMX_OUT);
 
   /////////////////////////////////////////////// EXTENSION ////////////////////////////////////
 
@@ -118,7 +96,8 @@ void setup()
   boutons_init();
 
   // WIFI/BT switch
-  k32->mcp->input(14);
+  if (k32->mcp)
+    k32->mcp->input(14);
 
   /////////////////////////////////////////////// LIGHT //////////////////////////////////////
 
@@ -140,18 +119,20 @@ void setup()
   // ADD NEW ANIMS (strip, name, anim, size, offset=0)
 
   // ANIM artnet
-  k32->light->anim(1, "artnet", new Anim_Out_dmx, 1)->play();
+  k32->light->anim(1, "artnet", new Anim_dmx_out, 1)->play();
+  // k32->light->anim(0, "artnet", new Anim_dmx_strip, RUBAN_size)->play();
 
-#ifdef LULU_TYPE
-#if LULU_TYPE >= 20
-  {
-    k32->light->anim("artnet")->push(MEM_NO_WIFI, LULU_PATCHSIZE);
-  }
-#endif
-#endif
+  #ifdef LULU_TYPE
+     #if LULU_TYPE >= 20
+     {
+       k32->light->anim("artnet")->push(MEM_NO_WIFI, LULU_PATCHSIZE);
+     }
+     #endif
+  #endif
 
   // ANIM manuframe
-  k32->light->anim(1, "manu", new Anim_Out_dmx, 1);
+  k32->light->anim(1, "manu", new Anim_dmx_out, 1);
+  // k32->light->anim(0, "manu", new Anim_dmx_strip, RUBAN_size);
 
   // ANIM monitoring
   k32->light->anim(0, "battery", new Anim_battery, 4, RUBAN_size + 1)->master(MASTER_PREV)->play();
@@ -164,10 +145,8 @@ void setup()
 
   /////////////////////////////////////////////// NETWORK //////////////////////////////////////
 
-  if (k32->system->hw() < 3)
-    wifiMode = k32->mcp->state(14);
-  else
-    wifiMode = true;
+  if (k32->mcp) wifiMode = k32->mcp->state(14);
+  else wifiMode = true;
 
   LOGINL("NETWORK: ");
   if (wifiMode)
@@ -212,17 +191,17 @@ void setup()
     k32->wifi->onDisconnect([&]() {
       LOG("WIFI: connection lost..");
 
-#ifdef LULU_TYPE
-#if LULU_TYPE >= 20
-      {
-        k32->light->anim("artnet")->push(MEM_NO_WIFI, LULU_PATCHSIZE);
-      }
-#elif
-      {
-        k32->light->anim("artnet")->push(0); // @master 0
-      }
-#endif
-#endif
+      #ifdef LULU_TYPE
+        #if LULU_TYPE >= 20
+        {
+          k32->light->anim("artnet")->push(MEM_NO_WIFI, LULU_PATCHSIZE);
+        }
+        #else
+        {
+          k32->light->anim("artnet")->push(0); // @master 0
+        }
+        #endif
+        #endif
     });
 
     /////////////////////////////////////// MQTT //////////////////////////////////////

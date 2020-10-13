@@ -164,17 +164,17 @@ en utilisant les fonctions évoquées ci-dessus.
 */
 
 
-class Anim_dmx : public K32_anim {
+class Anim_dmx_strip : public K32_anim {
   public:
 
 
     // Setup
     void init() {
 
-      // Strobe on data[0] (master)
+      // Strobe on data[0] (animMaster)
       this->mod("strobe", new K32_mod_pulse)->param(0, STROB_ON_MS)->at(0);
 
-      // Smooth on data[0] (master)
+      // Smooth on data[0] (animMaster)
       this->mod("smooth", new K32_mod_sinus)->at(0);
 
     }
@@ -190,10 +190,10 @@ class Anim_dmx : public K32_anim {
       //PWM
       if (k32->pwm)
       {
-        k32->pwm->set(0, data[16]);
-        k32->pwm->set(1, data[17]);
-        k32->pwm->set(2, data[18]);
-        k32->pwm->set(3, data[19]);
+        k32->pwm->set(0, data[16]*this->master()/255 );
+        k32->pwm->set(1, data[17]*this->master()/255 );
+        k32->pwm->set(2, data[18]*this->master()/255 );
+        k32->pwm->set(3, data[19]*this->master()/255 );
         // LOGF5("ANIM: -> Red %d PWM %d %d %d %d \n", data[3], data[16], data[17], data[18], data[19]);
       }
 
@@ -203,7 +203,7 @@ class Anim_dmx : public K32_anim {
       // }
       // LOG("");
 
-      // Master @0 = nothing to draw
+      // animMaster @0 = nothing to draw
       if (data[0] == 0)
         return this->clear();
       
@@ -450,7 +450,7 @@ class Anim_dmx : public K32_anim {
       }
 
 
-      // MASTER
+      // ANIM-MASTER
       /////////////////////////////////////////////////////////////////////////
 
       for(int i=0; i<segmentSize; i++) segment[i] %= (uint8_t)data[0];
