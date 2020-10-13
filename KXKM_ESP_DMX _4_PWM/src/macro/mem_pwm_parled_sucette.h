@@ -13,7 +13,7 @@ uint8_t MEM[NUMBER_OF_MEM][LULU_PATCHSIZE] = {
     {  255, 255, 255, 255,   0,   82,   82,   82,   82}, // 03 White
     {  255, 255, 255, 255,   0,  255,  255,  255,  255}, // 04 rvb **3 4 5**
     {  255, 255, 255, 255,  29,    0,    0,    0,    0}, // 05 str rnd 67
-    {  255, 255, 255, 255,  58,  255,  170,  126,   82}, // 06 str all 67
+    {  255, 255, 255, 255,  58,  255,  255,  255,  255}, // 06 str all 67
     {  255, 255, 255, 255, 100,  170,  126,   82,    0}, // 07 str all 42
     {  255, 255, 255, 255, 230,  126,   82,    0,  255}, // 08 str all lent
     {  255, 255, 255, 255,   0,   82,    0,  255,  170}, // 09 circule w **9** 20>255
@@ -70,10 +70,14 @@ void load_mem(K32_anim *anim, int macro) {
     //
     if (macro == 4)
     {
-        anim->mod(new K32_mod_sinus)->at(1)->at(5)->period(8500)->phase(0)->mini(80)->maxi(255);
-        anim->mod(new K32_mod_sinus)->at(2)->at(6)->period(8500)->phase(90)->mini(80)->maxi(255);
-        anim->mod(new K32_mod_sinus)->at(3)->at(7)->period(8500)->phase(180)->mini(80)->maxi(255);
-        anim->mod(new K32_mod_sinus)->at(8)->period(8500)->phase(270)->mini(80)->maxi(255);
+        anim->mod(new K32_mod_sinus)->at(1)->at(5)->at(8)->at(3)->at(7)->at(2)->at(6)->period(8500)->phase(0)->mini(80)->maxi(255);
+        // anim->mod(new K32_mod_sinus)->at(2)->at(6)->period(8500)->phase(90)->mini(80)->maxi(255);
+        // anim->mod(new K32_mod_sinus)->at(3)->at(7)->period(8500)->phase(180)->mini(80)->maxi(255);
+        // anim->mod(new K32_mod_sinus)->at(8)->period(8500)->phase(270)->mini(80)->maxi(255);
+    }
+    else if (macro == 6)
+    {
+        anim->mod(new K32_mod_pulse)->at(1)->at(2)->at(3)->at(7)->at(8)->at(6)->at(5)->param(1, 10)->period(70);
     }
     else if (macro == 9)
     {
