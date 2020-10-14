@@ -74,6 +74,10 @@ void load_mem(K32_anim *anim, int macro) {
         anim->mod(new K32_mod_sinus)->at(2)->period(8500)->phase(90)->mini(0)->maxi(255);
         anim->mod(new K32_mod_sinus)->at(3)->period(8500)->phase(180)->mini(0)->maxi(255);
     }
+     else if (macro == 6)
+    {
+        anim->mod(new K32_mod_pulse)->at(1)->at(2)->at(3)->at(7)->at(8)->at(6)->at(5)->param(1, 10)->period(70);
+    }
     else if (macro == 9)
     {
         anim->mod(new K32_mod_sinus)->at(0)->mini(100)->maxi(255)->period(2000);
