@@ -1,13 +1,13 @@
 #include <Arduino.h>
 
-#define LULU_VER 64
+#define LULU_VER 66
 #define LULU_TYPE 22 // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot" 10="power" 11="DMX_strobe" 12="DMX_Par_led" \
                      // 20="Cube_str" 21="Cube_par" 22="Sucette"
 
 /////////////////////////////////////////ID/////////////////////////////////////////
 
-// #define K32_SET_NODEID 97  // board unique id
-// #define LULU_ID 1          // permet de calculer l'adresse DMX
+// #define K32_SET_NODEID 138  // board unique id
+// #define LULU_ID 5          // permet de calculer l'adresse DMX
 
 /////////////////////////////////////////Debug///////////////////////////////////////
 
