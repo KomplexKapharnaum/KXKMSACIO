@@ -116,15 +116,15 @@
     #define FAKE_CURRENT 0
     #define ON_NO_WIFI 255
     // #include "macro/mem_pwm_parled_dmx.h"
-    // #include "macro/mem_pwm_cube_baro_127.h"   // cube 1 3 5 7 9
-    #include "macro/mem_pwm_cube_baro_125.h"   // cube 2 4 6 8 10
+    #include "macro/mem_pwm_cube_baro_127.h"   // cube 1 3 5 7 9
+    // #include "macro/mem_pwm_cube_baro_125.h"   // cube 2 4 6 8 10
   #elif LULU_TYPE == 22
     #define RUBAN_SIZE 60
     #define L_TYPE "Sucette"
     #define LULU_PATCHSIZE 9 // Taille du patch DMX pour cet Fixture ** 18 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx
     #define LULU_UNI 6   // Univers DM    0=SAC 1=Barre 2=Chariot 3=Dmx 4=Cube_strobe 5=Cube_parled 6=Sucette
     #define FAKE_CURRENT 0
-    #define ON_NO_WIFI 255
+    #define ON_NO_WIFI 255 // 82 niveau pour les statics baronnie
     // #include "macro/mem_pwm_parled_sucette.h"     // base
     // #include "macro/mem_pwm_sucette_baro_131.h"   // vincent
     #include "macro/mem_pwm_sucette_baro_132.h"   // jerome
