@@ -7,3 +7,4 @@
 *.vscode*
 *.pio*
 KXKM_SAC_IO_00/platformio.ini
+*.code-workspace
