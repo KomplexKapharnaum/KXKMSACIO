@@ -1,33 +1,32 @@
 #ifndef mem_pwm_minikolor_dmx_h
 #define mem_pwm_minikolor_dmx_h
 
+#ifndef NUMBER_OF_MEM
 #define NUMBER_OF_MEM 16 // stm leave in last mem
+#endif
 
 // 
 // MEM ANIMATOR DATA ! modulateur relatif a la valeur du tableau
 //
-uint8_t MEM[NUMBER_OF_MEM][LULU_PATCHSIZE] = {
-    {  255, 255,   0,   0,    0,    0,    0,    0,    0,  255,  255,  255,  255}, // 00 Red
-    {  255,   0, 255,   0,    0,    0,    0,    0,    0,  170,  170,  170,  170}, // 01 Green
-    {  255,   0,   0, 255,    0,    0,    0,    0,    0,  126,  126,  126,  126}, // 02 Blue
-    {  255, 255, 255, 255,    0,    0,    0,    0,    0,   82,   82,   82,   82}, // 03 White
-    {  255, 255, 255, 255,    0,    0,    0,    0,    0,  255,  255,  255,  255}, // 04 rvb **3 4 5**
-    {  255, 255, 255, 255,    0,   29,    0,    0,    0,    0,    0,    0,    0}, // 05 str rnd 67
-    {  255, 255, 255, 255,    0,   58,    0,    0,    0,  255,  170,  126,   82}, // 06 str all 67
-    {  255, 255, 255, 255,    0,  100,    0,    0,    0,  170,  126,   82,    0}, // 07 str all 42
-    {  255, 255, 255, 255,    0,  230,    0,    0,    0,  126,   82,    0,  255}, // 08 str all lent
-    {  255, 255, 255, 255,    0,    0,    0,    0,    0,   82,    0,  255,  170}, // 09 circule w **9** 20>255
-    {  255, 255, 255, 255,    0,    0,    0,    0,    0,    0,  255,  170,  126}, // 10 circus w b **7** 1>255
-    {  255, 255, 255, 255,    0,   10,    0,    0,    0,  170,  126,   82,    0}, // 12 color form
-    {  255, 255, 255, 255,    0,   89,    0,    0,    0,  255,  170,  126,   82}, // 11 str w -> blue
-    {  255,   0, 127, 255,    0,    0,    0,    0,    0,  126,   82,    0,  255}, // 13 blue parcielle
-    {  255,   0,  80, 200,    0,    0,    0,    0,    0,   82,    0,  255,  170}, // 14 respi blue **0**38 > 217 
-    {    0,   0,   0,   0,    0,    0,    0,    0,    0,   0,    0,    0,    0}, // 15 BLACK stm leave lset mem
-};
-//{master , r  , g  , b  ,macro, str , auto,speed, id  ,pwm1, pwm2, pwm3, pwm4}
-//{0      , 1  , 2  , 3  ,  4  ,  5  ,  6  ,  7  ,  8  , 9  , 10  , 11  , 12  } adr + -1
+uint8_t MEM[NUMBER_OF_MEM][LULU_PATCHSIZE] = {};
+uint8_t MEM_NO_WIFI[LULU_PATCHSIZE] = {};
 
-uint8_t MEM_NO_WIFI[LULU_PATCHSIZE] = { 255,0,0,0,0,  ON_NO_WIFI,  ON_NO_WIFI,  ON_NO_WIFI,  ON_NO_WIFI};
+void init_mem()
+{
+  for (int n = 0 ; n < NUMBER_OF_MEM ; n++)
+   {
+      for (int i = 0 ; i < LULU_PATCHSIZE -4 ; i++) 
+      {
+           MEM[n][i] = MEM_MINIKOLOR[n][i];
+           MEM_NO_WIFI[i] = MEM_MINIKOLOR_NO_WIFI[i];
+      }
+      for (int i = LULU_PATCHSIZE -4 ; i < LULU_PATCHSIZE  ; i++) 
+      {
+           MEM[n][i]=MEM_PWM[n][i - LULU_PATCHSIZE -4];
+           MEM_NO_WIFI[i] = MEM_PWM_NO_WIFI[i - LULU_PATCHSIZE -4];
+      }
+   }
+}
 
 // 
 // PREVIEW PIXEL MAP
