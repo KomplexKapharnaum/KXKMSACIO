@@ -115,20 +115,15 @@
     #define LULU_UNI 5   // Univers DMX   0=SAC 1=Barre 2=Chariot 3=Dmx 4=Cube_strobe 5=Cube_parled 6=Sucette 7=minikolor
     #define FAKE_CURRENT 0
     #define ON_NO_WIFI 255
-    // #include "macro/Type/parled/mem_pwm_parled_dmx.h"
-    // #include "macro/Show/Baro/mem_pwm_cube_baro_127.h"   // cube 1 3 5 7 9
-    #include "macro/Show/Baro/mem_pwm_cube_baro_125.h"   // cube 2 4 6 8 10
+    #include "macro/Type/parled/mem_parled.h"
+
+    #include "macro/Show/Baro/mem_pwm_baro_127.h"   // cube 1 3 5 7 9
+    #include "macro/mem_cube_baro_127.h"
+
+    // #include "macro/Show/Baro/mem_pwm_baro_125.h"   // cube 2 4 6 8 10
+    // #include "macro/mem_cube_baro_125.h"
+
   #elif LULU_TYPE == 22
-    #define RUBAN_SIZE 60
-    #define L_TYPE "Sucette"
-    #define LULU_PATCHSIZE 9 // 18 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
-    #define LULU_UNI 6   // Univers DMX   0=SAC 1=Barre 2=Chariot 3=Dmx 4=Cube_strobe 5=Cube_parled 6=Sucette 7=minikolor
-    #define FAKE_CURRENT 0
-    #define ON_NO_WIFI 255 // 82 niveau pour les statics baronnie
-    // #include "macro/Type/parled/mem_pwm_parled_sucette.h"     // base
-    // #include "macro/Show/Baro/mem_pwm_sucette_baro_131.h"   // vincent
-    #include "macro/Show/Baro/mem_pwm_sucette_baro_132.h"   // jerome
-  #elif LULU_TYPE == 23
     #define RUBAN_SIZE 60
     #define L_TYPE "Cube_minikolor"
     #define LULU_PATCHSIZE 13 //  18 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
@@ -138,7 +133,37 @@
     // #include "macro/Type/minikolor/mem_pwm_minikolor_dmx.h"       //
     #include "macro/Type/4pwm/mem_4pwm_base.h"          // 
     #include "macro/Type/minikolor/mem_minikolor_dmx.h" //
-    #include "macro/mem_pwm_minikolor_dmx.h"     //  
+    #include "macro/mem_pwm_minikolor_dmx.h"     // 
+
+  #elif LULU_TYPE == 23
+    #define RUBAN_SIZE 60
+    #define L_TYPE "Cube_elp"
+    #define LULU_PATCHSIZE 7 //  18 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor / = elp
+    #define LULU_UNI 7   // Univers DMX   0=SAC 1=Barre 2=Chariot 3=Dmx 4=Cube_strobe 5=Cube_parled 6=Sucette 7=minikolor 8=elp
+    #define FAKE_CURRENT 0
+    #define ON_NO_WIFI 255
+    #include "macro/Type/4pwm/mem_4pwm_base.h"          // 
+    #include "macro/Type/elp/mem_elp.h" //
+    #include "macro/mem_pwm_elp_dmx.h"     //   
+
+#elif LULU_TYPE == 30
+    #define RUBAN_SIZE 60
+    #define L_TYPE "Sucette"
+    #define LULU_PATCHSIZE 9 // 18 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
+    #define LULU_UNI 6   // Univers DMX   0=SAC 1=Barre 2=Chariot 3=Dmx 4=Cube_strobe 5=Cube_parled 6=Sucette 7=minikolor
+    #define FAKE_CURRENT 0
+    #define ON_NO_WIFI 255 // 82 niveau pour les statics baronnie
+    #include "macro/Type/parled/mem_parled.h"
+
+    // #include "macro/Type/parled/mem_pwm_parled_sucette.h"     // base
+    
+    
+    // #include "macro/Show/Baro/mem_pwm_baro_131.h"   // vincent
+    // #include "macro/mem_sucette_baro_131.h"
+    
+    #include "macro/Show/Baro/mem_pwm_baro_132.h"   // jerome
+    #include "macro/mem_sucette_baro_132.h"
+
 
   #endif
 #endif

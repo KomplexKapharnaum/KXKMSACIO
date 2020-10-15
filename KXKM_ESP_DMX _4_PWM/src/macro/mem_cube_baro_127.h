@@ -1,33 +1,32 @@
-#ifndef mem_pwm_sucette_baro_132_h
-#define mem_pwm_sucette_baro_132_h
+#ifndef mem_cube_baro_127_h
+#define mem_cube_baro_127_h
 
+#ifndef NUMBER_OF_MEM
 #define NUMBER_OF_MEM 16 // stm leave in last mem
+#endif
 
 // 
 // MEM ANIMATOR DATA ! modulateur relatif a la valeur du tableau
 //
-uint8_t MEM[NUMBER_OF_MEM][LULU_PATCHSIZE] = {
-    {  255, 255,   0,   0,   0,  255,  255,  255,  255}, // 00 Red on
-    {  255,   0, 255,   0,   0,  170,  170,  170,  170}, // 01 Green grad
-    {  255,   0,   0, 255,   0,  126,  126,  126,  126}, // 02 Blue grad +
-    {  255, 255, 255, 255,   0,   82,   82,   82,   82}, // 03 White grad ++
-    {  255, 255, 255, 255,   0,  255,  255,  255,  255}, // 04 fade  **5 6 7 8**
-    {    0, 255, 255, 255,  29,  255,  255,  255,  255}, // 05 fade  **5 6 7 8** jerome solo
-    {  255, 255, 255, 255,  58,  255,  255,  255,  255}, // 06 str all 
-    {  255, 255, 255, 255, 100,    0,    0,    0,    0}, // 07 301 on 302 off
-    {  255, 255, 255, 255, 230,  255,  255,  255,  255}, // 08 301 off 302 on
-    {  255, 255, 255, 255,   0,    0,    0,    0,    0}, // 09  off
-    {  255, 255, 255, 255,   0,    0,  255,  170,  126}, // 10  
-    {  255, 255, 255, 255,  89,  255,  170,  126,   82}, // 11 str w -> blue
-    {  255, 255, 255, 255,  10,  170,  126,   82,    0}, // 12 color form
-    {  255,   0, 127, 255,   0,  126,   82,    0,  255}, // 13 blue parcielle
-    {  255,   0,  80, 200,   0,   82,    0,  255,  170}, // 14 respi blue **0**38 > 217 
-    {    0,   0,   0,   0,   0,    0,    0,    0,    0}, // 15 BLACK stm leave lset mem
-};
-//{master , r  , g  , b  , str , pwm1, pwm2, pwm3, pwm4}
-//{0      , 1  , 2  , 3  ,  4  ,  5  ,  6  ,  7  , 8   } adr + -1
+uint8_t MEM[NUMBER_OF_MEM][LULU_PATCHSIZE] = {};
+uint8_t MEM_NO_WIFI[LULU_PATCHSIZE] = {};
 
-uint8_t MEM_NO_WIFI[LULU_PATCHSIZE] = {  255, 0,   0,   0,   0,  ON_NO_WIFI,  ON_NO_WIFI,  ON_NO_WIFI,  ON_NO_WIFI};
+void init_mem()
+{
+  for (int n = 0 ; n < NUMBER_OF_MEM ; n++)
+   {
+      for (int i = 0 ; i < LULU_PATCHSIZE -4 ; i++) 
+      {
+           MEM[n][i] = MEM_PARLED[n][i];
+           MEM_NO_WIFI[i] = MEM_PARLED_NO_WIFI[i];
+      }
+      for (int i = LULU_PATCHSIZE -4 ; i < LULU_PATCHSIZE  ; i++) 
+      {
+           MEM[n][i]=MEM_PWM[n][i - LULU_PATCHSIZE -4];
+           MEM_NO_WIFI[i] = MEM_PWM_NO_WIFI[i - LULU_PATCHSIZE -4];
+      }
+   }
+}
 
 // 
 // PREVIEW PIXEL MAP
@@ -37,8 +36,8 @@ uint8_t MEM_PREV[NUMBER_OF_MEM][LULU_PREVPIX*4] = {
     {0, 1, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0},    // 01 Green
     {0, 0, 1, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0},    // 02 Blue
     {0, 0, 0, 1,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0},    // 03 White
-    {1, 0, 0, 0,  0, 1, 0, 0,  0, 0, 1, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0},    // 04 fade  **5 6 7 8**
-    {0, 0, 0, 1,  0, 0, 0, 1,  0, 0, 0, 1,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0},    // 05 fade  **5 6 7 8** jerome solo
+    {1, 0, 0, 0,  0, 1, 0, 0,  0, 0, 1, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0},    // 04 rvb **3 4 5**
+    {0, 0, 0, 1,  0, 0, 0, 1,  0, 0, 0, 1,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0},    // 05 str rnd 67
     {0, 0, 0, 1,  0, 0, 0, 1,  0, 0, 0, 1,  0, 0, 0, 1,  0, 0, 0, 0,  0, 0, 0, 0},    // 06 str all 67
     {0, 0, 0, 1,  0, 0, 0, 1,  0, 0, 0, 1,  0, 0, 0, 1,  0, 0, 0, 1,  0, 0, 0, 0},    // 07 str all 42
     {0, 0, 0, 0,  0, 0, 0, 1,  0, 0, 0, 1,  0, 0, 0, 0,  0, 0, 0, 1,  0, 0, 0, 1},    // 08 str all lent
@@ -56,6 +55,9 @@ uint8_t MEM_PREV[NUMBER_OF_MEM][LULU_PREVPIX*4] = {
 // 
 // APPLY MACRO WITH CUSTOM MODULATORS INTO anim
 //
+//{master , r  , g  , b  , str , pwm1, pwm2, pwm3, pwm4}
+//{0      , 1  , 2  , 3  ,  4  ,  5  ,  6  ,  7  , 8   } adr + -1
+
 void load_mem(K32_anim *anim, int macro) {
 
     // remove disposable modulators

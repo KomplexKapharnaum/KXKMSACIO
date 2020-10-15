@@ -27,7 +27,7 @@ uint8_t MEM_PWM[NUMBER_OF_MEM][4] = {
     {    0,    0,    0,    0}, // 15 BLACK stm leave lset mem
 };
 //  { pwm1, pwm2, pwm3, pwm4}
-
+//{  5  ,  6  ,  7  , 8   } adr + -1
 
 uint8_t MEM_PWM_NO_WIFI[4] = { ON_NO_WIFI,  ON_NO_WIFI,  ON_NO_WIFI,  ON_NO_WIFI};
 
