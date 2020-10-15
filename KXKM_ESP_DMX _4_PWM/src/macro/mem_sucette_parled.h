@@ -1,5 +1,5 @@
-#ifndef mem_pwm_minikolor_dmx_h
-#define mem_pwm_minikolor_dmx_h
+#ifndef mem_sucette_parled_h
+#define mem_sucette_parled_h
 
 #ifndef NUMBER_OF_MEM
 #define NUMBER_OF_MEM 16 // stm leave in last mem
@@ -17,8 +17,8 @@ void init_mem()
    {
       for (int i = 0 ; i < LULU_PATCHSIZE -4 ; i++) 
       {
-           MEM[n][i] = MEM_MINIKOLOR[n][i];
-           MEM_NO_WIFI[i] = MEM_MINIKOLOR_NO_WIFI[i];
+           MEM[n][i] = MEM_PARLED[n][i];
+           MEM_NO_WIFI[i] = MEM_PARLED_NO_WIFI[i];
       }
       for (int i = LULU_PATCHSIZE -4 ; i < LULU_PATCHSIZE  ; i++) 
       {
@@ -55,6 +55,9 @@ uint8_t MEM_PREV[NUMBER_OF_MEM][LULU_PREVPIX*4] = {
 // 
 // APPLY MACRO WITH CUSTOM MODULATORS INTO anim
 //
+//{master , r  , g  , b  , str , pwm1, pwm2, pwm3, pwm4}
+//{0      , 1  , 2  , 3  ,  4  ,  5  ,  6  ,  7  , 8   } adr + -1
+
 void load_mem(K32_anim *anim, int macro) {
 
     // remove disposable modulators
@@ -69,13 +72,11 @@ void load_mem(K32_anim *anim, int macro) {
     //
     if (macro == 4)
     {
-        anim->mod(new K32_mod_sinus)->at(1)->at(5)->at(6)->at(7)->at(8)->period(8500)->phase(0)->mini(0)->maxi(255);
-        anim->mod(new K32_mod_sinus)->at(2)->period(8500)->phase(90)->mini(0)->maxi(255);
-        anim->mod(new K32_mod_sinus)->at(3)->period(8500)->phase(180)->mini(0)->maxi(255);
+        anim->mod(new K32_mod_sinus)->at(1)->at(5)->at(8)->at(3)->at(7)->at(2)->at(6)->period(8500)->phase(0)->mini(-50)->maxi(255);
     }
-     else if (macro == 6)
+    else if (macro == 6)
     {
-        anim->mod(new K32_mod_pulse)->at(1)->at(2)->at(3)->at(7)->at(8)->at(6)->at(5)->param(1, 10)->period(70);
+        anim->mod(new K32_mod_pulse)->at(1)->at(2)->at(3)->at(7)->at(8)->at(6)->at(5)->param(1, 10)->period(500);
     }
     else if (macro == 9)
     {

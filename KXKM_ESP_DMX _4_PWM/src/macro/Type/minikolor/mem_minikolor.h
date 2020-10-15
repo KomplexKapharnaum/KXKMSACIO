@@ -1,5 +1,5 @@
-#ifndef mem_minikolor_dmx_h
-#define mem_minikolor_dmx_h
+#ifndef mem_minikolor_h
+#define mem_minikolor_h
 
 #ifndef NUMBER_OF_MEM
 #define NUMBER_OF_MEM 16 // stm leave in last mem

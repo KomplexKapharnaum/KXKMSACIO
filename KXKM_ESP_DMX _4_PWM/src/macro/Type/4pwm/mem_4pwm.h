@@ -1,5 +1,5 @@
-#ifndef mem4pwm_base_h
-#define mem4pwm_base_h
+#ifndef mem_4pwm_h
+#define mem_4pwm_h
 
 #ifndef NUMBER_OF_MEM
 #define NUMBER_OF_MEM 16 // stm leave in last mem

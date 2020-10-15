@@ -1,5 +1,5 @@
-#ifndef mem_pwm_elp_dmx_h
-#define mem_pwm_elp_dmx_h
+#ifndef mem_cube_minikolor_h
+#define mem_cube_minikolor_h
 
 #ifndef NUMBER_OF_MEM
 #define NUMBER_OF_MEM 16 // stm leave in last mem
@@ -17,8 +17,8 @@ void init_mem()
    {
       for (int i = 0 ; i < LULU_PATCHSIZE -4 ; i++) 
       {
-           MEM[n][i] = MEM_ELP[n][i];
-           MEM_NO_WIFI[i] = MEM_ELP_NO_WIFI[i];
+           MEM[n][i] = MEM_MINIKOLOR[n][i];
+           MEM_NO_WIFI[i] = MEM_MINIKOLOR_NO_WIFI[i];
       }
       for (int i = LULU_PATCHSIZE -4 ; i < LULU_PATCHSIZE  ; i++) 
       {
@@ -69,9 +69,9 @@ void load_mem(K32_anim *anim, int macro) {
     //
     if (macro == 4)
     {
-        anim->mod(new K32_mod_sinus)->at(0)->at(3)->at(4)->at(5)->at(6)->period(8500)->phase(0)->mini(0)->maxi(255);
-        anim->mod(new K32_mod_sinus)->at(1)->period(8500)->phase(90)->mini(0)->maxi(255);
-        anim->mod(new K32_mod_sinus)->at(2)->period(8500)->phase(180)->mini(0)->maxi(255);
+        anim->mod(new K32_mod_sinus)->at(1)->at(5)->at(6)->at(7)->at(8)->period(8500)->phase(0)->mini(0)->maxi(255);
+        anim->mod(new K32_mod_sinus)->at(2)->period(8500)->phase(90)->mini(0)->maxi(255);
+        anim->mod(new K32_mod_sinus)->at(3)->period(8500)->phase(180)->mini(0)->maxi(255);
     }
      else if (macro == 6)
     {
@@ -79,25 +79,25 @@ void load_mem(K32_anim *anim, int macro) {
     }
     else if (macro == 9)
     {
-        anim->mod(new K32_mod_sinus)->at(0)->at(1)->at(2)->mini(100)->maxi(255)->period(2000);
+        anim->mod(new K32_mod_sinus)->at(0)->mini(100)->maxi(255)->period(2000);
     }
     else if (macro == 10)
     {
-        anim->mod(new K32_mod_sinus)->at(0)->at(1)->at(2)->period(8500)->phase(0)->mini(0)->maxi(255);
+        anim->mod(new K32_mod_sinus)->at(1)->at(2)->period(8500)->phase(0)->mini(0)->maxi(255);
     }
     else if (macro == 11)
     {
-        anim->mod(new K32_mod_pulse)->at(0)->at(1)->at(2)->param(1, 100)->period(7000);
+        anim->mod(new K32_mod_pulse)->at(2)->at(3)->param(1, 100)->period(7000);
     }
     else if (macro == 12)
     {
-        anim->mod(new K32_mod_sinus)->at(0)->period(8500)->phase(0)->mini(0)->maxi(255);
-        anim->mod(new K32_mod_sinus)->at(1)->period(8500)->phase(120)->mini(0)->maxi(255);
-        anim->mod(new K32_mod_sinus)->at(2)->period(8500)->phase(240)->mini(0)->maxi(255);
+        anim->mod(new K32_mod_sinus)->at(1)->period(8500)->phase(0)->mini(0)->maxi(255);
+        anim->mod(new K32_mod_sinus)->at(2)->period(8500)->phase(120)->mini(0)->maxi(255);
+        anim->mod(new K32_mod_sinus)->at(3)->period(8500)->phase(240)->mini(0)->maxi(255);
     }
     else if (macro == 14)
     {
-        anim->mod(new K32_mod_sinus)->at(0)->at(1)->at(2)->period(8500)->mini(38)->maxi(217);
+        anim->mod(new K32_mod_sinus)->at(0)->period(8500)->mini(38)->maxi(217);
     }
 }
 
