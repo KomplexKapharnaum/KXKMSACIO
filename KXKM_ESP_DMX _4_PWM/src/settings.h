@@ -97,7 +97,7 @@
     #define LULU_PATCHSIZE 5 // 18 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
     #define LULU_UNI 5   // Univers DMX   0=SAC 1=Barre 2=Chariot 3=Dmx 4=Cube_strobe 5=Cube_parled 6=Sucette 7=minikolor
     #define FAKE_CURRENT 0
-    #include "macro/Type/parled/mem_parled.h" 
+    #include "macro/Type/parled/mem_parled_dmx.h" 
 
   #elif LULU_TYPE == 20
     #define RUBAN_SIZE 60
