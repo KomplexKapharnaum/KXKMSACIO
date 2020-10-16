@@ -119,8 +119,11 @@
     #define ON_NO_WIFI 255
     #include "macro/Type/parled/mem_parled.h"
 
-    #include "macro/Show/Baro/mem_pwm_baro_127.h"   // cube 1 3 5 7 9
-    #include "macro/Show/Baro/mem_cube_baro_127.h"
+    #include "macro/Type/4pwm/mem_4pwm.h"   // defo
+    #include "macro/mem_cube_parled.h"
+
+    // #include "macro/Show/Baro/mem_pwm_baro_127.h"   // cube 1 3 5 7 9
+    // #include "macro/Show/Baro/mem_cube_baro_127.h"
 
     // #include "macro/Show/Baro/mem_pwm_baro_125.h"   // cube 2 4 6 8 10
     // #include "macro/Show/Baro/mem_cube_baro_125.h"
