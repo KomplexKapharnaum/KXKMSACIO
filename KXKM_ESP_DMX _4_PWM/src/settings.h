@@ -106,7 +106,9 @@
     #define LULU_UNI 4   // Univers DMX   0=SAC 1=Barre 2=Chariot 3=Dmx 4=Cube_strobe 5=Cube_parled 6=Sucette 7=minikolor
     #define FAKE_CURRENT 0
     #define ON_NO_WIFI 255
-    #include "macro/Type/strobe/mem_pwm_strobe_dmx.h"
+    #include "macro/Type/strobe/mem_strobe.h"
+    #include "macro/Type/4pwm/mem_4pwm.h"
+    #include "macro/mem_cube_strobe.h"
 
   #elif LULU_TYPE == 21
     #define RUBAN_SIZE 60
@@ -144,6 +146,7 @@
     #include "macro/Type/4pwm/mem_4pwm.h"  // 
     #include "macro/Type/elp/mem_elp.h"    //
     #include "macro/mem_cube_elp.h"         //   
+
 
 #elif LULU_TYPE == 30
     #define RUBAN_SIZE 60
