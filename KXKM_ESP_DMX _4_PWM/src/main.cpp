@@ -1,10 +1,10 @@
 #include <Arduino.h>
 
 #define LULU_VER 67
-#define LULU_TYPE 30 // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot" 
+#define LULU_TYPE 31 // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot" 
                      // 10="power" 11="DMX_strobe" 12="DMX_Par_led" 
                      // 20="Cube_str" 21="Cube_par"  22="Cube_MiniKOLOR" 23="Cube_Elp"
-                     // 30="Sucette"
+                     // 30="Sucette_parled" 31="sucette_str"
 
 /////////////////////////////////////////ID/////////////////////////////////////////
 

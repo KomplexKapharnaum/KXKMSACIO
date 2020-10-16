@@ -1,7 +1,9 @@
 #ifndef mem_pwm_strobe_dmx_h
 #define mem_pwm_strobe_dmx_h
 
+#ifndef NUMBER_OF_MEM
 #define NUMBER_OF_MEM 16 // stm leave in last mem
+#endif
 
 // 
 // MEM ANIMATOR DATA ! modulateur relatif a la valeur du tableau
