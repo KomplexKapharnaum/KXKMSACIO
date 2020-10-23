@@ -29,6 +29,6 @@ uint8_t MEM_NEW_FLUO[NUMBER_OF_MEM][16] = {
 //{master , r  , g  , b  , w  ,pix mod , pix long , pix_pos , str_mod , str_speed , r_fond , g_fond , b_fond , w_fond , mirror_mod , zoom  }
 //{0      , 1  , 2  , 3  , 4  ,5       , 6        , 7       , 8       , 9         , 10     , 11     , 12     , 13     , 14         , 15    } adr + -1
 
-uint8_t MEM_NEW_FLUO_NO_WIFI[16] = { 255,0,40,255,20,0,0,0,0,0,0,0,0,0,0,255};
+uint8_t MEM_NEW_FLUO_NO_WIFI[16] = { 150,0,255,255,20,0,0,0,0,0,0,0,0,0,0,255};
 
 #endif
