@@ -20,8 +20,8 @@
     // #include "macro/Type/SK/mem.h" 
 
     #define ON_NO_WIFI 0
-
-    #include "macro/Type/4pwm/mem_4pwm.h"
+    #include "macro/Type/4pwm/mem_4pwm.h"  // deo
+    // #include "macro/Type/SK/mem_sk.h"  // defo
     #include "macro/Show/larochelle/mem_sk_roch.h"
     #include "macro/mem_barre_pwm.h"
 
