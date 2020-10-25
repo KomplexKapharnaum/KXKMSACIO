@@ -55,8 +55,8 @@ uint8_t MEM_PREV[NUMBER_OF_MEM][LULU_PREVPIX*4] = {
 // 
 // APPLY MACRO WITH CUSTOM MODULATORS INTO anim
 //
-//{master , r  , g  , b  , str , pwm1, pwm2, pwm3, pwm4}
-//{0      , 1  , 2  , 3  ,  4  ,  5  ,  6  ,  7  , 8   } adr + -1
+//{master , r  , g  , b  , w  ,pix mod , pix long , pix_pos , str_mod , str_speed , r_fond , g_fond , b_fond , w_fond , mirror_mod , zoom }
+//{0      , 1  , 2  , 3  , 4  ,5       , 6        , 7       , 8       , 9         , 10     , 11     , 12     , 13     , 14         , 15   } adr + -1
 
 void load_mem(K32_anim *anim, int macro) {
 
