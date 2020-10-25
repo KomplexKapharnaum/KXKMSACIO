@@ -110,7 +110,7 @@ void setup()
   k32->init_light(RUBAN_type, RUBAN_size + 30);
 
   // clone every strip from strip 0
-  k32->light->cloneStrips(0);
+  // k32->light->cloneStrips(0); 
 
   //struct copyStrip({ srcStrip, srcStart, srcStop, destStrip, destPos};
   if (LULU_type == 9)
