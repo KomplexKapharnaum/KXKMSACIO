@@ -75,7 +75,7 @@
     #define LULU_PATCHSIZE 18 // 18 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
     #define LULU_UNI 0   // Univers DMX   0=SAC 1=Barre 2=Chariot 3=Dmx 4=Cube_strobe 5=Cube_parled 6=Sucette 7=minikolor
     #define FAKE_CURRENT 0
-    // #include "macro/Type/SK/mem.h" 
+    // #include "macro/Type/SK/mem.h" // mem global sk & pwm
 
     #define ON_NO_WIFI 0
     #include "macro/Type/4pwm/mem_4pwm.h"  // defo
@@ -89,7 +89,12 @@
     #define LULU_PATCHSIZE 18 // 18 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
     #define LULU_UNI 1   // Univers DMX   0=SAC 1=Barre 2=Chariot 3=Dmx 4=Cube_strobe 5=Cube_parled 6=Sucette 7=minikolor
     #define FAKE_CURRENT 0
-    #include "macro/Type/SK/mem.h" 
+    // #include "macro/Type/SK/mem.h" // mem global sk & pwm
+
+    #define ON_NO_WIFI 0
+    #include "macro/Type/4pwm/mem_4pwm.h"  // defo
+    #include "macro/Type/SK/mem_sk.h"  // defo
+    #include "macro/mem_phone_pwm.h"
 
   #elif LULU_TYPE == 8
     #define L_TYPE "Atom" 
