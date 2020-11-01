@@ -9,25 +9,13 @@
 			"path": "KXKM_ESP_DMX _4_PWM"
 		},
 		{
-			"name": "KXKM_ESP_POWER",
-			"path": "KXKM_ESP_POWER"
-		},
-		{
 			"name": "K32-lib",
 			"path": "../K32-OS-duino/lib/K32-lib"
+		},
+		{
+			"name": "M5Face-remote",
+			"path": "M5Face-remote"
 		}
 	],
-	"settings": {
-		"files.associations": {
-			"*.tcc": "cpp",
-			"bitset": "cpp",
-			"string": "cpp",
-			"unordered_map": "cpp",
-			"unordered_set": "cpp",
-			"functional": "cpp",
-			"string_view": "cpp",
-			"ratio": "cpp",
-			"streambuf": "cpp"
-		}
-	}
+	"settings": {}
 }
