@@ -1,5 +1,5 @@
-#ifndef memhs_h
-#define memhs_h
+#ifndef mem_hs_h
+#define mem_hs_h
 
 #define NUMBER_OF_MEM 16 // stm leave in last mem
 

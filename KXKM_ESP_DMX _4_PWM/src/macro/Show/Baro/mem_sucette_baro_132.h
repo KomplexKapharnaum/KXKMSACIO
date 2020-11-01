@@ -1,32 +1,32 @@
-#ifndef memparled_h
-#define memparled_h
+#ifndef mem_sucette_baro_132_h
+#define mem_sucette_baro_132_h
 
+#ifndef NUMBER_OF_MEM
 #define NUMBER_OF_MEM 16 // stm leave in last mem
+#endif
 
 // 
-// MEM ANIMATOR DATA 
+// MEM ANIMATOR DATA ! modulateur relatif a la valeur du tableau
 //
-uint8_t MEM[NUMBER_OF_MEM][LULU_PATCHSIZE] = {
-    {  255, 255,   0,   0,   0}, // 00 Red
-    {  255,   0, 255,   0,   0}, // 01 Green
-    {  255,   0,   0, 255,   0}, // 02 Blue
-    {  255, 255, 255, 255,   0}, // 03 White
-    {  255, 255, 255, 255,   0}, // 04 rvb **3 4 5**
-    {  255, 255, 255, 255,  29}, // 05 str rnd 67
-    {  255, 255, 255, 255,  58}, // 06 str all 67
-    {  255, 255, 255, 255, 100}, // 07 str all 42
-    {  255, 255, 255, 255, 230}, // 08 str all lent
-    {  255, 255, 255, 255,   0}, // 09 circule w **9** 20>255
-    {  255, 255, 255, 255,   0}, // 10 circus w b **7** 1>255
-    {  255, 255, 255, 255,  89}, // 11 str w -> blue
-    {  255, 255, 255, 255,  10}, // 12 color form
-    {  255,   0, 127, 255,   0}, // 13 blue parcielle
-    {  255,   0,  80, 200,   0}, // 14 respi blue **0**38 > 217 
-    {    0,   0,   0,   0,   0}, // 15 BLACK stm leave lset mem
-};
-//{master , r  , g  , b  , str }
-//{0      , 1  , 2  , 3  , 4  } adr + -1
+uint8_t MEM[NUMBER_OF_MEM][LULU_PATCHSIZE] = {};
+uint8_t MEM_NO_WIFI[LULU_PATCHSIZE] = {};
 
+void init_mem()
+{
+  for (int n = 0 ; n < NUMBER_OF_MEM ; n++)
+   {
+      for (int i = 0 ; i < LULU_PATCHSIZE -4 ; i++) 
+      {
+           MEM[n][i] = MEM_PARLED[n][i];
+           MEM_NO_WIFI[i] = MEM_PARLED_NO_WIFI[i];
+      }
+      for (int i = LULU_PATCHSIZE -4 ; i < LULU_PATCHSIZE  ; i++) 
+      {
+           MEM[n][i]=MEM_PWM[n][i - LULU_PATCHSIZE - 4];
+           MEM_NO_WIFI[i] = MEM_PWM_NO_WIFI[i -4];
+      }
+   }
+}
 
 // 
 // PREVIEW PIXEL MAP
@@ -36,8 +36,8 @@ uint8_t MEM_PREV[NUMBER_OF_MEM][LULU_PREVPIX*4] = {
     {0, 1, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0},    // 01 Green
     {0, 0, 1, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0},    // 02 Blue
     {0, 0, 0, 1,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0},    // 03 White
-    {1, 0, 0, 0,  0, 1, 0, 0,  0, 0, 1, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0},    // 04 rvb **3 4 5**
-    {0, 0, 0, 1,  0, 0, 0, 1,  0, 0, 0, 1,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0},    // 05 str rnd 67
+    {1, 0, 0, 0,  0, 1, 0, 0,  0, 0, 1, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0},    // 04 fade  **5 6 7 8**
+    {0, 0, 0, 1,  0, 0, 0, 1,  0, 0, 0, 1,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0},    // 05 fade  **5 6 7 8** jerome solo
     {0, 0, 0, 1,  0, 0, 0, 1,  0, 0, 0, 1,  0, 0, 0, 1,  0, 0, 0, 0,  0, 0, 0, 0},    // 06 str all 67
     {0, 0, 0, 1,  0, 0, 0, 1,  0, 0, 0, 1,  0, 0, 0, 1,  0, 0, 0, 1,  0, 0, 0, 0},    // 07 str all 42
     {0, 0, 0, 0,  0, 0, 0, 1,  0, 0, 0, 1,  0, 0, 0, 0,  0, 0, 0, 1,  0, 0, 0, 1},    // 08 str all lent
@@ -55,6 +55,8 @@ uint8_t MEM_PREV[NUMBER_OF_MEM][LULU_PREVPIX*4] = {
 // 
 // APPLY MACRO WITH CUSTOM MODULATORS INTO anim
 //
+//{master , r  , g  , b  , str , pwm1, pwm2, pwm3, pwm4}
+//{0      , 1  , 2  , 3  ,  4  ,  5  ,  6  ,  7  , 8   } adr + -1
 void load_mem(K32_anim *anim, int macro) {
 
     // remove disposable modulators
@@ -69,9 +71,15 @@ void load_mem(K32_anim *anim, int macro) {
     //
     if (macro == 4)
     {
-        anim->mod(new K32_mod_sinus)->at(1)->period(8500)->phase(0)->mini(0)->maxi(255);
-        anim->mod(new K32_mod_sinus)->at(2)->period(8500)->phase(120)->mini(0)->maxi(255);
-        anim->mod(new K32_mod_sinus)->at(3)->period(8500)->phase(240)->mini(0)->maxi(255);
+        anim->mod(new K32_mod_sinus)->at(1)->at(5)->at(8)->at(3)->at(7)->at(2)->at(6)->period(8500)->phase(0)->mini(-50)->maxi(255);
+    }
+    else if (macro == 5)
+    {
+        anim->mod(new K32_mod_sinus)->at(1)->at(5)->at(8)->at(3)->at(7)->at(2)->at(6)->period(8500)->phase(0)->mini(-50)->maxi(255);
+    }
+    else if (macro == 6)
+    {
+        anim->mod(new K32_mod_pulse)->at(1)->at(2)->at(3)->at(7)->at(8)->at(6)->at(5)->param(1, 10)->period(500);
     }
     else if (macro == 9)
     {

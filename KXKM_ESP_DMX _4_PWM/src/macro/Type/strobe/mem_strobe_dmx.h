@@ -1,5 +1,5 @@
-#ifndef memstrobe_h
-#define memstrobe_h
+#ifndef mem_strobe_dmx_h
+#define mem_strobe_dmx_h
 
 #define NUMBER_OF_MEM 16 // stm leave in last mem
 

@@ -1,13 +1,16 @@
 #include <Arduino.h>
 
-#define LULU_VER 66
-#define LULU_TYPE 8 // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot" 10="power" 11="DMX_strobe" 12="DMX_Par_led" \
-                     // 20="Cube_str" 21="Cube_par" 22="Sucette"
+#define LULU_VER 68
+#define LULU_TYPE 6 // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot" 
+                     // 10="power" 11="DMX_strobe" 12="DMX_Par_led" 
+                     // 20="Cube_str" 21="Cube_par"  22="Cube_MiniKOLOR" 23="Cube_Elp"
+                     // 30="Sucette_parled" 31="Sucette_Strobe" 32="Sucette_MiniKolor" 33="sucette_Elp"
+                     // 40="New_Fluo" 
 
 /////////////////////////////////////////ID/////////////////////////////////////////
 
-#define K32_SET_NODEID 37  // board unique id
-#define LULU_ID 37          // permet de calculer l'adresse DMX
+// #define K32_SET_NODEID 62  // board unique id
+// #define LULU_ID 1          // permet de calculer l'adresse DMX
 
 /////////////////////////////////////////Debug///////////////////////////////////////
 
@@ -101,15 +104,19 @@ void setup()
 
   /////////////////////////////////////////////// LIGHT //////////////////////////////////////
 
+  init_mem();
+
   // LEDS
   k32->init_light(RUBAN_type, RUBAN_size + 30);
 
   // clone every strip from strip 0
-  // k32->light->cloneStrips(0);
+  // k32->light->cloneStrips(0); 
 
   //struct copyStrip({ srcStrip, srcStart, srcStop, destStrip, destPos};
   if (LULU_type == 9)
     k32->light->copyStrip({0, 0, RUBAN_size, 1, 0}); // chariot clone
+  else if (LULU_type == 40)
+    k32->light->copyStrip({0, 0, RUBAN_size, 1, 0}); // fluo clone
   else
     k32->light->copyStrip({0, RUBAN_size, RUBAN_size + 18, 1, 0}); // jauge sortie 2
 
@@ -119,20 +126,23 @@ void setup()
   // ADD NEW ANIMS (strip, name, anim, size, offset=0)
 
   // ANIM artnet
-  // k32->light->anim(1, "artnet", new Anim_dmx_out, 1)->play();
-  k32->light->anim(0, "artnet", new Anim_dmx_strip, RUBAN_size)->play();
+  // k32->light->anim(1, "artnet", new Anim_dmx_out, 1)->play();  // dmx
+  k32->light->anim(0, "artnet", new Anim_dmx_strip, RUBAN_size)->play(); // sk
 
+  // ANIM manuframe
+  // k32->light->anim(1, "manu", new Anim_dmx_out, 1);// dmx
+  k32->light->anim(0, "manu", new Anim_dmx_strip, RUBAN_size);// sk
+
+
+  // MEM NO WIFI
   #ifdef LULU_TYPE
-     #if LULU_TYPE >= 20
+     #if (LULU_TYPE >= 20 || LULU_TYPE == 2 || LULU_TYPE == 6)
      {
        k32->light->anim("artnet")->push(MEM_NO_WIFI, LULU_PATCHSIZE);
+       k32->light->anim("artnet")->mod(new K32_mod_sinus)->at(2)->period(8500)->phase(0)->mini(-255)->maxi(255);  // modulo 
      }
      #endif
   #endif
-
-  // ANIM manuframe
-  // k32->light->anim(1, "manu", new Anim_dmx_out, 1);
-  k32->light->anim(0, "manu", new Anim_dmx_strip, RUBAN_size);
 
   // ANIM monitoring
   k32->light->anim(0, "battery", new Anim_battery, 4, RUBAN_size + 1)->master(MASTER_PREV)->play();
