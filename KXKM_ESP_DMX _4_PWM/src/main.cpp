@@ -1,11 +1,11 @@
 #include <Arduino.h>
 
 #define LULU_VER 68
-#define LULU_TYPE 2 // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot" 
-                     // 10="power" 11="DMX_strobe" 12="DMX_Par_led" 
-                     // 20="Cube_str" 21="Cube_par"  22="Cube_MiniKOLOR" 23="Cube_Elp"
-                     // 30="Sucette_parled" 31="Sucette_Strobe" 32="Sucette_MiniKolor" 33="sucette_Elp"
-                     // 40="New_Fluo" 
+#define LULU_TYPE 2 // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot" \
+                    // 10="power" 11="DMX_strobe" 12="DMX_Par_led"                                          \
+                    // 20="Cube_str" 21="Cube_par"  22="Cube_MiniKOLOR" 23="Cube_Elp"                       \
+                    // 30="Sucette_parled" 31="Sucette_Strobe" 32="Sucette_MiniKolor" 33="sucette_Elp"      \
+                    // 40="New_Fluo"
 
 /////////////////////////////////////////ID/////////////////////////////////////////
 
@@ -63,7 +63,6 @@ K32 *k32;
 #include "boutons.h"
 #include "test.h"
 
-
 ///////////////////////////////////////////////// SETUP ////////////////////////////////////////
 void setup()
 {
@@ -110,7 +109,7 @@ void setup()
   k32->init_light(RUBAN_type, RUBAN_size + 30);
 
   // clone every strip from strip 0
-  // k32->light->cloneStrips(0); 
+  // k32->light->cloneStrips(0);
 
   //struct copyStrip({ srcStrip, srcStart, srcStop, destStrip, destPos};
   if (LULU_type == 9)
@@ -131,18 +130,17 @@ void setup()
 
   // ANIM manuframe
   // k32->light->anim(1, "manu", new Anim_dmx_out, 1);// dmx
-  k32->light->anim(0, "manu", new Anim_dmx_strip, RUBAN_size);// sk
+  k32->light->anim(0, "manu", new Anim_dmx_strip, RUBAN_size); // sk
 
-
-  // MEM NO WIFI
-  #ifdef LULU_TYPE
-     #if (LULU_TYPE >= 20 || LULU_TYPE == 2 || LULU_TYPE == 6)
-     {
-       k32->light->anim("artnet")->push(MEM_NO_WIFI, LULU_PATCHSIZE);
-       k32->light->anim("artnet")->mod(new K32_mod_sinus)->at(2)->period(8500)->phase(0)->mini(-255)->maxi(255);  // modulo 
-     }
-     #endif
-  #endif
+// MEM NO WIFI
+#ifdef LULU_TYPE
+#if (LULU_TYPE >= 20 || LULU_TYPE == 2 || LULU_TYPE == 6)
+  {
+    k32->light->anim("artnet")->push(MEM_NO_WIFI, LULU_PATCHSIZE);
+    k32->light->anim("artnet")->mod(new K32_mod_sinus)->at(2)->period(8500)->phase(0)->mini(-255)->maxi(255); // modulo
+  }
+#endif
+#endif
 
   // ANIM monitoring
   k32->light->anim(0, "battery", new Anim_battery, 4, RUBAN_size + 1)->master(MASTER_PREV)->play();
@@ -155,8 +153,10 @@ void setup()
 
   /////////////////////////////////////////////// NETWORK //////////////////////////////////////
 
-  if (k32->mcp) wifiMode = k32->mcp->state(14);
-  else wifiMode = true;
+  if (k32->mcp)
+    wifiMode = k32->mcp->state(14);
+  else
+    wifiMode = true;
 
   LOGINL("NETWORK: ");
   if (wifiMode)
@@ -172,10 +172,11 @@ void setup()
     LOG("INIT WIFI");
     k32->init_wifi(nodeName);
     k32->wifi->staticIP("2.0.0." + String(k32->system->id() + 100), "2.0.0.1", "255.0.0.0");
-    // k32->wifi->connect("mgr4g", NULL); //KXKM
-    // k32->wifi->connect("kxkm24lulu", NULL);//KXKM
-    // k32->wifi->connect("interweb", "superspeed37");
-    k32->wifi->connect("kxkm24", NULL);//KXKM
+    k32->wifi->connect("kxkm24", NULL); //KXKM
+    // k32->wifi->connect("kxkm24lulu", NULL); //KXKM
+
+    // k32->wifi->connect("mgr4g", NULL); //Maigre dev
+    // k32->wifi->connect("interweb", "superspeed37"); //Maigre dev home
 
     /////////////////////////////////////////////// ARTNET //////////////////////////////////////
     k32->init_artnet({.universe = LULU_uni,
@@ -202,17 +203,17 @@ void setup()
     k32->wifi->onDisconnect([&]() {
       LOG("WIFI: connection lost..");
 
-      #ifdef LULU_TYPE
-        #if LULU_TYPE >= 20
-        {
-          k32->light->anim("artnet")->push(MEM_NO_WIFI, LULU_PATCHSIZE);
-        }
-        #else
-        {
-          k32->light->anim("artnet")->push(0); // @master 0
-        }
-        #endif
-        #endif
+#ifdef LULU_TYPE
+#if LULU_TYPE >= 20
+      {
+        k32->light->anim("artnet")->push(MEM_NO_WIFI, LULU_PATCHSIZE);
+      }
+#else
+      {
+        k32->light->anim("artnet")->push(0); // @master 0
+      }
+#endif
+#endif
     });
 
     /////////////////////////////////////// MQTT //////////////////////////////////////
