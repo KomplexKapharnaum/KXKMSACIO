@@ -19,7 +19,7 @@
   #elif LULU_TYPE == 2
     #define L_TYPE "Barre" 
     #define RUBAN_SIZE 120
-    #define LULU_PATCHSIZE 18 // Taille du patch DMX pour cet Fixture ** 18 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx
+    #define LULU_PATCHSIZE 22 // Taille du patch DMX pour cet Fixture ** 18 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx
     #define LULU_UNI 1   // Univers DMX   0=SAC 1=Barre 2=Chariot 3=Dmx 4=Cube_strobe 5=Cube_parled 6=Sucette 7=minikolor
     #define FAKE_CURRENT 0
     // #include "macro/Type/SK/mem.h" // mem global sk & pwm
@@ -27,7 +27,8 @@
     #define ON_NO_WIFI 0
     #include "macro/Type/4pwm/mem_4pwm.h"  // defo
     // #include "macro/Type/SK/mem_sk.h"  // defo
-    #include "macro/Show/larochelle/mem_sk_roch.h"
+    // #include "macro/Show/larochelle/mem_sk_roch.h"
+    #include "macro/Show/esch/mem_sk_esch.h"
     #include "macro/mem_barre_pwm.h"
 
   #elif LULU_TYPE == 3
