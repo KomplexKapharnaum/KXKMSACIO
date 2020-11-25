@@ -202,7 +202,6 @@
     #include "macro/Type/elp/mem_elp.h"    //
     #include "macro/mem_cube_elp.h"         //   
 
-
 #elif LULU_TYPE == 30
     #define RUBAN_SIZE 60
     #define L_TYPE "Sucette_parled"
@@ -215,11 +214,16 @@
     // #include "macro/Type/4pwm/mem_4pwm.h"            // defo
     // #include "macro/mem_sucette_parled.h"    
     
-    #include "macro/Show/Baro/mem_pwm_baro_131.h"     // vincent
-    #include "macro/Show/Baro/mem_sucette_baro_131.h"
+    //////////////////////////////// Baronie
+    // #include "macro/Show/Baro/mem_pwm_baro_131.h"     // vincent
+    // #include "macro/Show/Baro/mem_sucette_baro_131.h"
     
     // #include "macro/Show/Baro/mem_pwm_baro_132.h"     // jerome
     // #include "macro/Show/Baro/mem_sucette_baro_132.h"
+
+    //////////////////////////////// Esch
+    #include "macro/Show/esch/mem_pwm_esch.h"
+    #include "macro/Show/esch/mem_sucette_esch.h"
 
   #elif LULU_TYPE == 31
     #define RUBAN_SIZE 60

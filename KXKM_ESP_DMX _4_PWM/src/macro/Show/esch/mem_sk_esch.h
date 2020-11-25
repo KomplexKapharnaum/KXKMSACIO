@@ -1,5 +1,5 @@
-#ifndef mem_sk_roch_h
-#define mem_sk_roch_h
+#ifndef mem_sk_esch_h
+#define mem_sk_esch_h
 
 #define NUMBER_OF_MEM 16 // stm leave in last mem
 
