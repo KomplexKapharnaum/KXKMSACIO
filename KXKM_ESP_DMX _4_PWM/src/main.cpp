@@ -1,7 +1,7 @@
 #include <Arduino.h>
 
 #define LULU_VER 68
-#define LULU_TYPE 6 // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot" 
+#define LULU_TYPE 2 // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot" 
                      // 10="power" 11="DMX_strobe" 12="DMX_Par_led" 
                      // 20="Cube_str" 21="Cube_par"  22="Cube_MiniKOLOR" 23="Cube_Elp"
                      // 30="Sucette_parled" 31="Sucette_Strobe" 32="Sucette_MiniKolor" 33="sucette_Elp"
@@ -9,8 +9,8 @@
 
 /////////////////////////////////////////ID/////////////////////////////////////////
 
-// #define K32_SET_NODEID 62  // board unique id
-// #define LULU_ID 1          // permet de calculer l'adresse DMX
+// #define K32_SET_NODEID 112  // board unique id
+// #define LULU_ID 2         // permet de calculer l'adresse DMX
 
 /////////////////////////////////////////Debug///////////////////////////////////////
 
@@ -171,10 +171,11 @@ void setup()
     /////////////////////////////////////////////// WIFI //////////////////////////////////////
     LOG("INIT WIFI");
     k32->init_wifi(nodeName);
-    // k32->wifi->staticIP("2.0.0." + String(k32->system->id() + 100), "2.0.0.1", "255.0.0.0");
-    k32->wifi->connect("mgr4g", NULL); //KXKM
+    k32->wifi->staticIP("2.0.0." + String(k32->system->id() + 100), "2.0.0.1", "255.0.0.0");
+    // k32->wifi->connect("mgr4g", NULL); //KXKM
     // k32->wifi->connect("kxkm24lulu", NULL);//KXKM
     // k32->wifi->connect("interweb", "superspeed37");
+    k32->wifi->connect("kxkm24", NULL);//KXKM
 
     /////////////////////////////////////////////// ARTNET //////////////////////////////////////
     k32->init_artnet({.universe = LULU_uni,
@@ -216,7 +217,7 @@ void setup()
 
     /////////////////////////////////////// MQTT //////////////////////////////////////
     k32->init_mqtt({
-        .broker = "192.168.43.100",
+        .broker = "2.0.0.1",
         .beatInterval = 0,  // heartbeat interval milliseconds (0 = disable)
         .beaconInterval = 0 // full beacon interval milliseconds (0 = disable)
     });
