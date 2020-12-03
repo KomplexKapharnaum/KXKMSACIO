@@ -125,7 +125,7 @@ void setup()
   // ADD NEW ANIMS (strip, name, anim, size, offset=0)
 
   // ANIM artnet
-  k32->light->anim(1, "artnet-dmx", new Anim_dmx_out, 1)->play(); 
+  k32->light->anim(1, "artnet-dmx", new Anim_dmx_out, 1)->play();  
   k32->light->anim(0, "artnet-sk", new Anim_dmx_strip, RUBAN_size)->play();
 
   // ANIM manuframe
