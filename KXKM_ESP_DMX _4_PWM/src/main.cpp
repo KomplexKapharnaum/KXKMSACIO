@@ -120,7 +120,7 @@ void setup()
     k32->light->copyStrip({0, RUBAN_size, RUBAN_size + 18, 1, 0}); // jauge sortie 2
 
   // test sequence
-  light_tests();
+  light_tests(); 
 
   // ADD NEW ANIMS (strip, name, anim, size, offset=0)
 
