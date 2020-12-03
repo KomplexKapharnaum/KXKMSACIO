@@ -38,7 +38,7 @@ void light_tests() {
     // k32->light->anim(0, "colorA", new K32_anim_color, 10, 0)->push(50, 255, 200, 0, 0)->play(1000)->wait();
 
   // DMX TEST
-    // K32_anim* artnet = k32->light->anim("artnet");
+    // K32_anim* artnet = k32->light->anim("artnet-sk");
     // artnet->push(MEM[8], LULU_PATCHSIZE)->push(100);
     // artnet->mod("saw",    new K32_mod_sinus)  ->at(0)->play();
     // artnet->mod("triangle", new K32_mod_triangle)   ->at(15)->period(10000)->play();

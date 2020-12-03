@@ -85,14 +85,16 @@ void boutons_loop()
         {
             k32->light->anim("manu")->stop();
             k32->light->anim("preview")->stop();
-            k32->light->anim("artnet")->play();
+            k32->light->anim("artnet-sk")->play();
+            k32->light->anim("artnet-dmx")->play();
             LOG("REMOTE: -> Mode AUTO");
         }
 
         // STM
         else if (stateR == REMOTE_MANU_STM)
         {
-            k32->light->anim("artnet")->stop();
+            k32->light->anim("artnet-sk")->stop();
+            k32->light->anim("artnet-dmx")->stop();
             k32->light->anim("preview")->play();
             k32->light->anim("manu")->play();
             LOG("REMOTE: -> Mode STM");
@@ -110,7 +112,8 @@ void boutons_loop()
     if (k32->remote->getSendMacro())
         if (stateR == REMOTE_MANU || stateR == REMOTE_MANU_LAMP)
         {
-            k32->light->anim("artnet")->stop();
+            k32->light->anim("artnet-sk")->stop();
+            k32->light->anim("artnet-dmx")->stop();
             k32->light->anim("manu")->play();
             LOG("REMOTE: -> MANU -> GO Macro !");
         }
@@ -125,7 +128,8 @@ void boutons_loop()
         }
         else
         {
-            k32->light->anim("artnet")->push();
+            k32->light->anim("artnet-sk")->push();
+            k32->light->anim("artnet-dmx")->push();
             k32->light->anim("manu")->push();
         }
         LOGF("REMOTE: -> getLAMP @%d\n", lamp);

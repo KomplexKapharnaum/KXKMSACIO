@@ -1,7 +1,7 @@
 #include <Arduino.h>
 
 #define LULU_VER 69
-#define LULU_TYPE 2 // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot" \
+#define LULU_TYPE 21 // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot" \
                     // 10="power" 11="DMX_strobe" 12="DMX_Par_led"                                          \
                     // 20="Cube_str" 21="Cube_par"  22="Cube_MiniKOLOR" 23="Cube_Elp"                       \
                     // 30="Sucette_parled" 31="Sucette_Strobe" 32="Sucette_MiniKolor" 33="sucette_Elp"      \
@@ -9,8 +9,8 @@
 
 /////////////////////////////////////////ID/////////////////////////////////////////
 
-// #define K32_SET_NODEID 88  // board unique id
-// #define LULU_ID 6         // permet de calculer l'adresse DMX
+#define K32_SET_NODEID 127 // board unique id
+#define LULU_ID 1          // permet de calculer l'adresse DMX
 
 /////////////////////////////////////////Debug///////////////////////////////////////
 
@@ -125,19 +125,19 @@ void setup()
   // ADD NEW ANIMS (strip, name, anim, size, offset=0)
 
   // ANIM artnet
-  // k32->light->anim(1, "artnet", new Anim_dmx_out, 1)->play();  // dmx
-  k32->light->anim(0, "artnet", new Anim_dmx_strip, RUBAN_size)->play(); // sk
+  k32->light->anim(1, "artnet-dmx", new Anim_dmx_out, 1)->play(); 
+  k32->light->anim(0, "artnet-sk", new Anim_dmx_strip, RUBAN_size)->play();
 
   // ANIM manuframe
-  // k32->light->anim(1, "manu", new Anim_dmx_out, 1);// dmx
-  k32->light->anim(0, "manu", new Anim_dmx_strip, RUBAN_size); // sk
+  k32->light->anim(1, "manu", new Anim_dmx_out, 1); // dmx
+  // k32->light->anim(0, "manu", new Anim_dmx_strip, RUBAN_size); // sk
 
 // MEM NO WIFI
 #ifdef LULU_TYPE
 #if (LULU_TYPE >= 20 || LULU_TYPE == 2 || LULU_TYPE == 6)
   {
-    k32->light->anim("artnet")->push(MEM_NO_WIFI, LULU_PATCHSIZE);
-    // k32->light->anim("artnet")->mod(new K32_mod_sinus)->at(2)->period(8500)->phase(0)->mini(-255)->maxi(255); // modulo
+    k32->light->anim("artnet-sk")->push(MEM_NO_WIFI, LULU_PATCHSIZE);
+    // k32->light->anim("artnet-sk")->mod(new K32_mod_sinus)->at(2)->period(8500)->phase(0)->mini(-255)->maxi(255); // modulo
   }
 #endif
 #endif
@@ -191,12 +191,20 @@ void setup()
         k32->remote->setState(REMOTE_AUTO);
         k32->remote->lock();
       }
+
+      int *dataa = new int[length];
+      for (int i = 0; i < length; i++)
+      {
+        dataa[i] = data[i];
+      }
+      k32->light->anim("artnet-dmx")->push(dataa, length);
+      
     });
 
     // EVENT: new artnet frame received
     k32->artnet->onDmx([](uint8_t *data, int length) {
       // Draw
-      k32->light->anim("artnet")->push(data, length);
+      k32->light->anim("artnet-sk")->push(data, length);
     });
 
     // EVENT: wifi lost
@@ -206,11 +214,11 @@ void setup()
 #ifdef LULU_TYPE
 #if LULU_TYPE >= 20
       {
-        k32->light->anim("artnet")->push(MEM_NO_WIFI, LULU_PATCHSIZE);
+        k32->light->anim("artnet-sk")->push(MEM_NO_WIFI, LULU_PATCHSIZE);
       }
 #else
       {
-        k32->light->anim("artnet")->push(0); // @master 0
+        k32->light->anim("artnet-sk")->push(0); // @master 0
       }
 #endif
 #endif
