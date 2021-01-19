@@ -1,7 +1,7 @@
 #include <Arduino.h>
 
 #define LULU_VER 69
-#define LULU_TYPE 22 // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot" \
+#define LULU_TYPE 1 // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot" \
                     // 10="power" 11="DMX_strobe" 12="DMX_Par_led"                                          \
                     // 20="Cube_str" 21="Cube_par"  22="Cube_MiniKOLOR" 23="Cube_Elp"                       \
                     // 30="Sucette_parled" 31="Sucette_Strobe" 32="Sucette_MiniKolor" 33="sucette_Elp"      \
@@ -9,8 +9,8 @@
 
 /////////////////////////////////////////ID/////////////////////////////////////////
 
-// #define K32_SET_NODEID 88  // board unique id
-// #define LULU_ID 6         // permet de calculer l'adresse DMX
+#define K32_SET_NODEID 81  // board unique id
+#define LULU_ID 1         // permet de calculer l'adresse DMX
 
 /////////////////////////////////////////Debug///////////////////////////////////////
 
@@ -125,12 +125,12 @@ void setup()
   // ADD NEW ANIMS (strip, name, anim, size, offset=0)
 
   // ANIM artnet
-  k32->light->anim(1, "artnet", new Anim_dmx_out, 1)->play();  // dmx
-  // k32->light->anim(0, "artnet", new Anim_dmx_strip, RUBAN_size)->play(); // sk
+  // k32->light->anim(1, "artnet", new Anim_dmx_out, 1)->play();  // dmx
+  k32->light->anim(0, "artnet", new Anim_dmx_strip, RUBAN_size)->play(); // sk
 
   // ANIM manuframe
-  k32->light->anim(1, "manu", new Anim_dmx_out, 1);// dmx
-  // k32->light->anim(0, "manu", new Anim_dmx_strip, RUBAN_size); // sk
+  // k32->light->anim(1, "manu", new Anim_dmx_out, 1);// dmx
+  k32->light->anim(0, "manu", new Anim_dmx_strip, RUBAN_size); // sk
 
 // MEM NO WIFI
 #ifdef LULU_TYPE
@@ -172,11 +172,12 @@ void setup()
     LOG("INIT WIFI");
     k32->init_wifi(nodeName);
     k32->wifi->staticIP("2.0.0." + String(k32->system->id() + 100), "2.0.0.1", "255.0.0.0");
-    k32->wifi->connect("kxkm24", NULL); //KXKM
+    // k32->wifi->connect("kxkm24", NULL); //KXKM
     // k32->wifi->connect("kxkm24lulu", NULL); //KXKM
 
     // k32->wifi->connect("mgr4g", NULL); //Maigre dev
     // k32->wifi->connect("interweb", "superspeed37"); //Maigre dev home
+    k32->wifi->connect("riri_new", "B2az41opbn6397"); //Riri dev home
 
     /////////////////////////////////////////////// ARTNET //////////////////////////////////////
     k32->init_artnet({.universe = LULU_uni,
@@ -218,7 +219,8 @@ void setup()
 
     /////////////////////////////////////// MQTT //////////////////////////////////////
     k32->init_mqtt({
-        .broker = "2.0.0.1",
+        // .broker = "2.0.0.1",// Komplex
+        .broker = "2.0.0.10", // Riri dev home
         .beatInterval = 0,  // heartbeat interval milliseconds (0 = disable)
         .beaconInterval = 0 // full beacon interval milliseconds (0 = disable)
     });
