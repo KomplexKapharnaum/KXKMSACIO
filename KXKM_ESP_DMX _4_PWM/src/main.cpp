@@ -1,5 +1,10 @@
 #include <Arduino.h>
 
+#include <WebServer.h>
+#include <SPIFFS.h> // platformio run --target uploadfs // cmd console download spiff
+
+WebServer server(80);
+
 #define LULU_VER 70
 #define LULU_TYPE 1 // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot" \
                     // 10="power" 11="DMX_strobe" 12="DMX_Par_led"                                          \
@@ -9,11 +14,12 @@
 
 /////////////////////////////////////////ID/////////////////////////////////////////
 
-#define K32_SET_NODEID 81  // board unique id
+#define K32_SET_NODEID 81 // board unique id
 #define LULU_ID 1         // permet de calculer l'adresse DMX
 
 /////////////////////////////////////////Debug///////////////////////////////////////
 
+#define DEBUG
 // #define DEBUG_dmx 1              // !!! IMPLEMENT
 // #define DEBUG_dmxframe 1
 // #define DEBUG_STR 1
@@ -62,6 +68,7 @@ K32 *k32;
 #include "anim_dmx_out.h"
 #include "boutons.h"
 #include "test.h"
+#include "fonction_spiffs.h"
 
 ///////////////////////////////////////////////// SETUP ////////////////////////////////////////
 void setup()
@@ -121,7 +128,7 @@ void setup()
 
   // test sequence
   light_tests();
-  
+
   // ADD NEW ANIMS (strip, name, anim, size, offset=0)
 
   // ANIM artnet
@@ -217,11 +224,55 @@ void setup()
 #endif
     });
 
+    //////////////////////////////////////////////////// SPIFFS //////////////////////////////////////
+
+    // bool formatted = SPIFFS.format();
+    // if (formatted)
+    // {
+    //   Serial.println("\n\nSuccess formatting");
+    // }
+    // else
+    // {
+    //   Serial.println("\n\nError formatting");
+    // }
+
+    SPIFFS.begin();
+
+    listDir(SPIFFS, "/", 0);
+
+    //////////////////////////////////////////////////// SERVER INIT //////////////////////////////////////
+    //list directory
+    server.on("/list", HTTP_GET, handleFileList);
+    //load editor
+    server.on("/edit", HTTP_GET, []() {
+      if (!handleFileRead("/edit.html"))
+        server.send(404, "text/plain", "FileNotFound");
+    });
+    //create file
+    server.on("/edit", HTTP_PUT, handleFileCreate);
+    //delete file
+    server.on("/edit", HTTP_DELETE, handleFileDelete);
+    //first callback is called after the request has ended with all parsed arguments
+    //second callback handles file uploads at that location
+    server.on(
+        "/edit", HTTP_POST, []() {
+          server.send(200, "text/plain", "");
+        },
+        handleFileUpload);
+
+    //called when the url is not defined here
+    //use it to load content from SPIFFS
+    server.onNotFound([]() {
+      if (!handleFileRead(server.uri()))
+        server.send(404, "text/plain", "FileNotFound");
+    }); //server.onNotFound
+
     /////////////////////////////////////// MQTT //////////////////////////////////////
     k32->init_mqtt({
-        .broker = "2.0.0.1",
-        .beatInterval = 0,  // heartbeat interval milliseconds (0 = disable)
-        .beaconInterval = 0 // full beacon interval milliseconds (0 = disable)
+        // .broker = "2.0.0.1",// Komplex
+        .broker = "2.0.0.10", // Riri dev home
+        .beatInterval = 0,    // heartbeat interval milliseconds (0 = disable)
+        .beaconInterval = 0   // full beacon interval milliseconds (0 = disable)
     });
 
     /////////////////////////////////////////////// OSC //////////////////////////////////////
