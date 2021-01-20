@@ -11,11 +11,13 @@ void setup()
 {
 #include <themes/dark.h>
   ez.begin();
+
   M5.Power.begin();
   M5.Speaker.mute();
 
   ez.screen.clear();
-  ez.header.show("Rasta-Remote");
+
+  ez.header.show("M5-Remote");
   ez.canvas.lmargin(10);
   ez.canvas.scroll(true);
   ez.canvas.font(&FreeSans9pt7b);
@@ -29,8 +31,8 @@ void setup()
   k32 = new K32();
 
   /////////////////////////////////////////////// WIFI //////////////////////////////////////
-  k32->init_wifi("Rasta-Remote");
-  k32->wifi->staticIP("2.0.0.11" , "2.0.0.1", "255.0.0.0");
+  k32->init_wifi("M5-Remote");
+  k32->wifi->staticIP("2.0.0.11", "2.0.0.1", "255.0.0.0");
   // k32->wifi->connect("kxkm24", NULL); //KXKM
   // k32->wifi->connect("mgr4g", NULL); //MGR
   k32->wifi->connect("riri_new", "B2az41opbn6397"); //Riri dev home
@@ -61,6 +63,7 @@ void loop()
 
   if (M5.BtnB.wasPressed())
   {
+    ez.settings.menu();
   };
 
   // FACE
@@ -86,24 +89,45 @@ void loop()
       case '8':
       case '9':
         k32->mqtt->publish("k32/all/leds/mem", msg.c_str(), 1);
-        msg += ": k32/all/leds/mem " + msg;
+        msg += "k32/all/leds/mem " + msg;
         break;
 
       case '.':
         k32->mqtt->publish("k32/all/leds/stop", nullptr, 1);
-        msg += ": k32/all/leds/stop";
+        msg += "k32/all/leds/stop";
         break;
-        // case '=': k32->mqtt->publish("/event/KEY_KPENTER-down"); break;
-        // case '-': k32->mqtt->publish("/event/KEY_KPMINUS-down"); break;
-        // case '+': k32->mqtt->publish("/event/KEY_KPPLUS-down"); break;
+      case '=':
+        k32->mqtt->publish("/k32/all/leds/master", "fadeout", 1);
+        msg += "/k32/all/leds/master/fadeout";
+        break;
+      case '-':
+        k32->mqtt->publish("/k32/all/leds/master", "less", 1);
+        msg += "/k32/all/leds/master/less";
+        break;
+      case '+':
+        k32->mqtt->publish("/k32/all/leds/master", "more", 1);
+        msg += "/k32/all/leds/master/more";
+        break;
 
-        // case 'A': k32->mqtt->publish("/event/btn1"); break;
-        // case 'M': k32->mqtt->publish("/event/btn2"); break;
-        // case '%': k32->mqtt->publish("/event/btn3"); break;
-        // case '/': k32->mqtt->publish("/event/btn4"); break;
+      case 'A':
+        k32->mqtt->publish("/event/btn1");
+        msg += "/event/btn1";
+        break;
+      case 'M':
+        k32->mqtt->publish("/event/btn2");
+        msg += "/event/btn2";
+        break;
+      case '%':
+        k32->mqtt->publish("/event/btn3");
+        msg += "/event/btn3";
+        break;
+      case '/':
+        k32->mqtt->publish("/event/btn4");
+        msg += "/event/btn4";
+        break;
       }
       LOG(msg);
-      ez.msgBox("Rasta Remote", msg, "", false);
+      ez.msgBox("M5 MQTT", msg, "", false);
     }
   }
 }
