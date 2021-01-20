@@ -97,16 +97,16 @@ void loop()
         msg += "k32/all/leds/stop";
         break;
       case '=':
-        k32->mqtt->publish("/k32/all/leds/master/fadeout", nullptr, 1);
-        msg += "/k32/all/leds/master/fadeout";
+        k32->mqtt->publish("k32/all/leds/master/fadeout", nullptr, 1);
+        msg += "k32/all/leds/master/fadeout";
         break;
       case '-':
-        k32->mqtt->publish("/k32/all/leds/master/less", nullptr, 1);
-        msg += "/k32/all/leds/master/less";
+        k32->mqtt->publish("k32/all/leds/master/less", nullptr, 1);
+        msg += "k32/all/leds/master/less";
         break;
       case '+':
-        k32->mqtt->publish("/k32/all/leds/master/more", nullptr, 1);
-        msg += "/k32/all/leds/master/more";
+        k32->mqtt->publish("k32/all/leds/master/more", nullptr, 1);
+        msg += "k32/all/leds/master/more";
         break;
 
       case 'A':
