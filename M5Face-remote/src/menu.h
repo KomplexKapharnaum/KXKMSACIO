@@ -1,12 +1,11 @@
 
 void mainmenu_mqtt()
 {
-
-    ez.msgBox("M5 MQTT", "Welcome", "menu # master # up ", false);
     uint8_t fonction = 0;
-    String fonct;
+    String fonct = "Master";
     uint8_t page_mem = 0;
-    String page_me;
+    String page_me = "0-9";
+    ez.msgBox("M5 MQTT", "Welcome", "menu #" + fonct + "#" + page_me, false);
 
     while (true)
     {
@@ -36,11 +35,25 @@ void mainmenu_mqtt()
                 fonct = "Speed";
             }
 
-            ez.msgBox("M5 MQTT", fonct, "menu #" + fonct + "# up ", false);
+            ez.msgBox("M5 MQTT", fonct, "menu #" + fonct + "#" + page_me, false);
         };
 
-        if (M5.BtnC.wasPressed() || M5.BtnC.isPressed())
+        if (M5.BtnC.wasPressed())
         {
+            page_mem += 1;
+            if (page_mem >= 2)
+            {
+                page_mem = 0;
+            }
+            if (page_mem == 0)
+            {
+                page_me = "0-9";
+            }
+            else if (page_mem == 1)
+            {
+                page_me = "10-19";
+            }
+            ez.msgBox("M5 MQTT", page_me, "menu #" + fonct + "#" + page_me, false);
         };
 
         // FACE
@@ -65,8 +78,8 @@ void mainmenu_mqtt()
                 case '7':
                 case '8':
                 case '9':
-                    k32->mqtt->publish("k32/all/leds/mem", msg.c_str(), 1);
-                    msg += " k32/all/leds/mem " + msg;
+                    k32->mqtt->publish("k32/all/leds/mem", (page_mem + msg).c_str(), 1);
+                    msg += " k32/all/leds/mem " + (page_mem + msg);
                     break;
 
                 case '.':
@@ -122,10 +135,7 @@ void mainmenu_mqtt()
                     break;
                 }
                 LOG(msg);
-                if (fonction == 0)
-                    ez.msgBox("M5 MQTT", msg, "menu # Master # up ", false);
-                else if (fonction == 1)
-                    ez.msgBox("M5 MQTT", msg, "menu # Speed # up ", false);
+                ez.msgBox("M5 MQTT", msg, "menu #" + fonct + "#" + page_me, false);
             }
         }
     }
