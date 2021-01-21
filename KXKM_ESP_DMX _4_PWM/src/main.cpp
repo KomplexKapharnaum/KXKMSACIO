@@ -1,6 +1,6 @@
 #include <Arduino.h>
 
-#define LULU_VER 69
+#define LULU_VER 70
 #define LULU_TYPE 1 // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot" \
                     // 10="power" 11="DMX_strobe" 12="DMX_Par_led"                                          \
                     // 20="Cube_str" 21="Cube_par"  22="Cube_MiniKOLOR" 23="Cube_Elp"                       \
@@ -9,8 +9,8 @@
 
 /////////////////////////////////////////ID/////////////////////////////////////////
 
-#define K32_SET_NODEID 81  // board unique id
-#define LULU_ID 1         // permet de calculer l'adresse DMX
+// #define K32_SET_NODEID 81  // board unique id
+// #define LULU_ID 1         // permet de calculer l'adresse DMX
 
 /////////////////////////////////////////Debug///////////////////////////////////////
 
@@ -221,7 +221,7 @@ void setup()
     k32->init_mqtt({
         // .broker = "2.0.0.1",// Komplex
         .broker = "2.0.0.10", // Riri dev home
-        .beatInterval = 0,  // heartbeat interval milliseconds (0 = disable)
+        .beatInterval = 2000,  // heartbeat interval milliseconds (0 = disable)
         .beaconInterval = 0 // full beacon interval milliseconds (0 = disable)
     });
 
