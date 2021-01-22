@@ -41,7 +41,7 @@ void mainmenu_mqtt()
         if (M5.BtnC.wasPressed())
         {
             page_mem += 1;
-            if (page_mem >= 2)
+            if (page_mem >= 3)
             {
                 page_mem = 0;
             }
@@ -52,6 +52,10 @@ void mainmenu_mqtt()
             else if (page_mem == 1)
             {
                 page_me = "10-19";
+            }
+            else if (page_mem == 2)
+            {
+                page_me = "20-29";
             }
             ez.msgBox("M5 MQTT", page_me, "menu #" + fonct + "#" + page_me, false);
         };
@@ -104,6 +108,8 @@ void mainmenu_mqtt()
                     }
                     else if (fonction == 1)
                     {
+                        k32->mqtt->publish("k32/all/leds/mod/slower", nullptr, 1);
+                        msg += " k32/all/leds/mod/slower";
                     }
                     break;
                 case '+':
@@ -114,25 +120,48 @@ void mainmenu_mqtt()
                     }
                     else if (fonction == 1)
                     {
+                        k32->mqtt->publish("k32/all/leds/mod/faster", nullptr, 1);
+                        msg += " k32/all/leds/mod/faster";
                     }
                     break;
 
                 case 'A':
-                    k32->mqtt->publish("/event/btn1");
-                    msg += " /event/btn1";
+                    if (fonction == 0)
+                    {
+                        k32->mqtt->publish("k32/all/leds/master/full", nullptr, 1);
+                        msg += " k32/all/leds/mem/full";
+                    }
+                    else if (fonction == 1)
+                    {
+                    }
                     break;
                 case 'M':
-                    k32->mqtt->publish("/event/btn2");
-                    msg += " /event/btn2";
+                    if (fonction == 0)
+                    {
+                        k32->mqtt->publish("k32/all/leds/master/fadein", nullptr, 1);
+                        msg += " k32/all/leds/mem/fadein";
+                    }
+                    else if (fonction == 1)
+                    {
+                    }
                     break;
                 case '%':
-                    k32->mqtt->publish("/event/btn3");
-                    msg += " /event/btn3";
+                    if (fonction == 0)
+                    {
+                        k32->mqtt->publish("k32/all/leds/master/fadeout", nullptr, 1);
+                        msg += " k32/all/leds/mem/fadeout";
+                    }
+                    else if (fonction == 1)
+                    {
+                    }
                     break;
                 case '/':
-                    k32->mqtt->publish("/event/btn4");
-                    msg += " /event/btn4";
-                    break;
+                    if (fonction == 0)
+                    {
+                    }
+                    else if (fonction == 1)
+                    {
+                    }
                 }
                 LOG(msg);
                 ez.msgBox("M5 MQTT", msg, "menu #" + fonct + "#" + page_me, false);
