@@ -5,7 +5,7 @@ void mainmenu_mqtt()
     String fonct = "Master";
     uint8_t page_mem = 0;
     String page_me = "0-9";
-    ez.msgBox("M5 MQTT", "Welcome", "menu #" + fonct + "#" + page_me, false);
+    ez.msgBox("M5 MQTT", "Welcome", "Menu #" + fonct + "#" + page_me, false);
 
     while (true)
     {
@@ -35,7 +35,7 @@ void mainmenu_mqtt()
                 fonct = "Speed";
             }
 
-            ez.msgBox("M5 MQTT", fonct, "menu #" + fonct + "#" + page_me, false);
+            ez.msgBox("M5 MQTT", fonct, "Menu #" + fonct + "#" + page_me, false);
         };
 
         if (M5.BtnC.wasPressed())
@@ -57,7 +57,7 @@ void mainmenu_mqtt()
             {
                 page_me = "20-29";
             }
-            ez.msgBox("M5 MQTT", page_me, "menu #" + fonct + "#" + page_me, false);
+            ez.msgBox("M5 MQTT", page_me, "Menu #" + fonct + "#" + page_me, false);
         };
 
         // FACE
@@ -164,7 +164,7 @@ void mainmenu_mqtt()
                     }
                 }
                 LOG(msg);
-                ez.msgBox("M5 MQTT", msg, "menu #" + fonct + "#" + page_me, false);
+                ez.msgBox("M5 MQTT", msg, "Menu #" + fonct + "#" + page_me, false);
             }
         }
     }
@@ -172,11 +172,17 @@ void mainmenu_mqtt()
 
 void powerOff() { m5.powerOFF(); }
 
+void mainmenu_monitor()
+{
+
+}
+
 void mainmenu()
 {
     ezMenu mainmenu("Welcome to M5");
     mainmenu.txtBig();
     mainmenu.addItem("MQTT", mainmenu_mqtt);
+    mainmenu.addItem("MONITOR", mainmenu_monitor);
     mainmenu.addItem("SET UP", ez.settings.menu);
     mainmenu.addItem("POWER OFF", powerOff);
     mainmenu.upOnFirst("last|up");
