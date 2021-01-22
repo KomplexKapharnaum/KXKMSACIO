@@ -11,3 +11,20 @@ stack:
 0x40134ed2: ethernet_input at /home/runner/work/esp32-arduino-lib-builder/esp32-arduino-lib-builder/esp-idf/components/lwip/lwip/src/netif/ethernet.c:184
 0x401210cf: tcpip_thread at /home/runner/work/esp32-arduino-lib-builder/esp32-arduino-lib-builder/esp-idf/components/lwip/lwip/src/api/tcpip.c:483
 0x4008f6b1: vPortTaskWrapper at /home/runner/work/esp32-arduino-lib-builder/esp32-arduino-lib-builder/esp-idf/components/freertos/port.c:355 (discriminator 1)
+
+22/01/21 12H09
+
+Backtrace: 0x40092f9c:0x3fff2b70 0x400931cd:0x3fff2b90 0x40141c87:0x3fff2bb0 0x40141cce:0x3fff2bd0 0x4014182f:0x3fff2bf0 0x4014191e:0x3fff2c10 0x401418d5:0x3fff2c30 0x401d9faf:0x3fff2c50 0x40145bc9:0x3fff2c90 0x400d5c42:0x3fff2cc0 0x4008f6b1:0x3fff2ce0
+
+stack:
+0x40092f9c: invoke_abort at /home/runner/work/esp32-arduino-lib-builder/esp32-arduino-lib-builder/esp-idf/components/esp32/panic.c:707
+0x400931cd: abort at /home/runner/work/esp32-arduino-lib-builder/esp32-arduino-lib-builder/esp-idf/components/esp32/panic.c:707
+0x40141c87: __cxxabiv1::__terminate(void (*)()) at /builds/idf/crosstool-NG/.build/src/gcc-5.2.0/libstdc++-v3/libsupc++/eh_terminate.cc:112
+0x40141cce: std::terminate() at /builds/idf/crosstool-NG/.build/src/gcc-5.2.0/libstdc++-v3/libsupc++/eh_terminate.cc:112
+0x4014182f: __cxa_throw at /builds/idf/crosstool-NG/.build/src/gcc-5.2.0/libstdc++-v3/libsupc++/eh_throw.cc:87
+0x4014191e: operator new(unsigned int) at /builds/idf/crosstool-NG/.build/src/gcc-5.2.0/libstdc++-v3/libsupc++/new_op.cc:54
+0x401418d5: operator new[](unsigned int) at /builds/idf/crosstool-NG/.build/src/gcc-5.2.0/libstdc++-v3/libsupc++/new_opv.cc:32
+0x401d9faf: WiFiUDP::parsePacket() at C:\Users\ririf\.platformio\packages\framework-arduinoespressif32\libraries\WiFi\src/WiFiUdp.cpp:129
+0x40145bc9: ArtnetWifi::read() at F:\github\KXKMSACIO\KXKM_ESP_DMX _4_PWM/.pio\libdeps\hw2-kxkm\ArtnetWifi\src/ArtnetWifi.cpp:45
+0x400d5c42: K32_artnet::check(void*) at F:\github\KXKMSACIO\KXKM_ESP_DMX _4_PWM/.pio\libdeps\hw2-kxkm\K32-lib\src\network/K32_artnet.cpp:65
+0x4008f6b1: vPortTaskWrapper at /home/runner/work/esp32-arduino-lib-builder/esp32-arduino-lib-builder/esp-idf/components/freertos/port.c:355 (discriminator 1)

@@ -14,7 +14,7 @@ void mainmenu_mqtt()
 
         // BTN A/B/C    || M5.BtnA.isPressed()
         //
-        if (M5.BtnA.wasPressed())
+        if (m5.BtnA.pressedFor(ez.theme->longpress_time))
         {
             break;
         };
