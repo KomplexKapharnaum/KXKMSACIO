@@ -218,11 +218,13 @@ void setup()
     });
 
     /////////////////////////////////////// MQTT //////////////////////////////////////
-    k32->init_mqtt({
+    k32->init_mqtt();
+
+    k32->mqtt->start({
         // .broker = "2.0.0.1",// Komplex
         .broker = "2.0.0.10", // Riri dev home
         .beatInterval = 2000,  // heartbeat interval milliseconds (0 = disable)
-        .beaconInterval = 0 // full beacon interval milliseconds (0 = disable)
+        .beaconInterval = 5000 // full beacon interval milliseconds (0 = disable)
     });
 
     /////////////////////////////////////////////// OSC //////////////////////////////////////
