@@ -185,10 +185,34 @@ void setup()
 
 
     /////////////////////////////////////// MQTT //////////////////////////////////////
-    k32->init_mqtt({
-        .broker = "2.0.0.1",
-        .beatInterval = 0,          // heartbeat interval milliseconds (0 = disable)
-        .beaconInterval = 0         // full beacon interval milliseconds (0 = disable)
+    k32->init_mqtt();
+
+    // k32->mqtt->subscribe({
+    //   .topic = "k32/monitor/beat",
+    //   .qos = 0,
+    //   .callback = [](char *payload, size_t length) 
+    //               {
+    //                 LOGINL("-- BEAT received:");
+    //                 LOGINL(" ");
+    //                 LOG(payload);
+    //               }
+    // });
+
+    // k32->mqtt->subscribe({
+    //   .topic = "k32/monitor/status",
+    //   .qos = 0,
+    //   .callback = [](char *payload, size_t length) 
+    //               {
+    //                 LOGINL("-- STATUS received:");
+    //                 LOGINL(" ");
+    //                 LOG(payload);
+    //               }
+    // });
+
+    k32->mqtt->start({
+        .broker = "2.0.37.37",
+        .beatInterval = 2000,          // heartbeat interval milliseconds (0 = disable)
+        .beaconInterval = 10000         // full beacon interval milliseconds (0 = disable)
     });
 
 

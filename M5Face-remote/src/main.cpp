@@ -40,7 +40,31 @@ void setup()
   k32->wifi->connect("riri_new", "B2az41opbn6397"); //Riri dev home
 
   ///////////////////////////////////////////// MQTT ////////////////////////////////////////
-  k32->init_mqtt({
+  k32->init_mqtt();
+
+      k32->mqtt->subscribe({
+      .topic = "k32/monitor/beat",
+      .qos = 0,
+      .callback = [](char *payload, size_t length) 
+                  {
+                    LOGINL("-- BEAT received:");
+                    LOGINL(" ");
+                    LOG(payload);
+                  }
+    });
+
+    k32->mqtt->subscribe({
+      .topic = "k32/monitor/status",
+      .qos = 0,
+      .callback = [](char *payload, size_t length) 
+                  {
+                    LOGINL("-- STATUS received:");
+                    LOGINL(" ");
+                    LOG(payload);
+                  }
+    });
+    
+  k32->mqtt->start({
       // .broker = "2.0.0.1",// Komplex
       .broker = "2.0.0.10", // Riri dev home
       // .broker = "192.168.43.100",//MGR
