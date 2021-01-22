@@ -210,7 +210,7 @@ void setup()
     // });
 
     k32->mqtt->start({
-        .broker = "2.0.37.37",
+        .broker = "2.0.0.1", 
         .beatInterval = 2000,          // heartbeat interval milliseconds (0 = disable)
         .beaconInterval = 10000         // full beacon interval milliseconds (0 = disable)
     });
