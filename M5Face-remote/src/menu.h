@@ -172,9 +172,36 @@ void mainmenu_mqtt()
 
 void powerOff() { m5.powerOFF(); }
 
+void mainmenu_mon_id()
+{
+    ez.header.show("Monitor");
+    ez.canvas.lmargin(10);
+    ez.canvas.println("");
+}
+
 void mainmenu_monitor()
 {
+    ezMenu mainmenu_monitor("ESP find");
 
+    if (clients == 0)
+    {
+        ez.header.show("NO ESP");
+        ez.buttons.wait("EXIT");
+        return;
+    }
+    else
+    {
+        // if (clients > max_clients)
+        //     clients = max_clients;
+        for (int k = 1; k < clients; k++)
+        {
+            mainmenu_monitor.addItem(String(k) + " ESP : " + String(T_ID[k - 1]), mainmenu_mon_id); //, mainmenu_mon_id(k - 1)
+        }
+    }
+    mainmenu_monitor.upOnFirst("last|up");
+    mainmenu_monitor.downOnLast("first|down");
+    mainmenu_monitor.buttons("up#Back#select##down#");
+    mainmenu_monitor.run();
 }
 
 void mainmenu()
