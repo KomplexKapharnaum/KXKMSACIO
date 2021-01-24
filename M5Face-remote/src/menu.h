@@ -176,7 +176,7 @@ void mainmenu_mon_id()
 {
     ez.header.show("Monitor");
     ez.canvas.lmargin(10);
-    ez.canvas.println("");
+    ez.canvas.println(" hi ");
 }
 
 void mainmenu_monitor()
@@ -191,11 +191,14 @@ void mainmenu_monitor()
     }
     else
     {
-        // if (clients > max_clients)
-        //     clients = max_clients;
         for (int k = 1; k < clients; k++)
         {
-            mainmenu_monitor.addItem(String(k) + " ESP : " + String(T_ID[k - 1]), mainmenu_mon_id); //, mainmenu_mon_id(k - 1)
+            mainmenu_monitor.addItem(String(k) + " ESP : " + String(T_ID[k - 1])); //, mainmenu_mon_id(k - 1)
+        }
+        while (mainmenu_monitor.runOnce())
+        {
+            String result = mainmenu_monitor.pickName();
+            LOG(result);
         }
     }
     mainmenu_monitor.upOnFirst("last|up");
