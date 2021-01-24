@@ -1,3 +1,4 @@
+int16_t who_result;
 
 void mainmenu_mqtt()
 {
@@ -171,12 +172,28 @@ void mainmenu_mqtt()
 }
 
 void powerOff() { m5.powerOFF(); }
+void bat()
+{
+    int niv_bat = T_BAT[who_result - 1].toInt();
+    ezMenu mainmenu_mon_id("ESP MONITOR");
+    ezProgressBar pb("Batterie", niv_bat + "  100 %", "Ok");
+    pb.value(niv_bat);
+}
 
 void mainmenu_mon_id()
 {
-    ez.header.show("Monitor");
-    ez.canvas.lmargin(10);
-    ez.canvas.println(" hi ");
+    String msg;
+    int16_t m = who_result - 1;
+
+    ezMenu mainmenu_mon_id("ESP MONITOR");
+    mainmenu_mon_id.txtBig();
+    msg += "Esp " + T_ID[m] + " | Channel " + T_CHA[m] + " | Version " + T_VER[m];
+    msg += " | IP " + T_IP[m] + " | Reception " + T_WIF[m] + " db | Batterie " + T_BAT[m] + " %";
+    msg += " | Playeur " + T_RUN[m];  
+    ez.msgBox("ESP MONITOR", msg , "up#Back#OK##down#", true);
+
+    // mainmenu_mon_id.buttons("up#Back#select##down#");
+    mainmenu_mon_id.run();
 }
 
 void mainmenu_monitor()
@@ -193,13 +210,10 @@ void mainmenu_monitor()
     {
         for (int k = 1; k < clients; k++)
         {
-            mainmenu_monitor.addItem(String(k) + " ESP : " + String(T_ID[k - 1])); //, mainmenu_mon_id(k - 1)
+            mainmenu_monitor.addItem(String(k) + " ESP : " + String(T_ID[k - 1]), mainmenu_mon_id);
         }
-        while (mainmenu_monitor.runOnce())
-        {
-            String result = mainmenu_monitor.pickName();
-            LOG(result);
-        }
+
+        who_result = mainmenu_monitor.pick();
     }
     mainmenu_monitor.upOnFirst("last|up");
     mainmenu_monitor.downOnLast("first|down");
