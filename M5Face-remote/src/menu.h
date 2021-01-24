@@ -172,33 +172,34 @@ void mainmenu_mqtt()
 }
 
 void powerOff() { m5.powerOFF(); }
-void bat()
-{
-    int niv_bat = T_BAT[who_result - 1].toInt();
-    ezMenu mainmenu_mon_id("ESP MONITOR");
-    ezProgressBar pb("Batterie", niv_bat + "  100 %", "Ok");
-    pb.value(niv_bat);
-}
 
 void mainmenu_mon_id()
 {
     String msg;
     int16_t m = who_result - 1;
+    // LOGINL("************MON ID******  ");
+    // LOGINL(" id = ");
+    // LOG(m);
+    // LOGINL(" who = ");
+    // LOG(who_result);
 
     ezMenu mainmenu_mon_id("ESP MONITOR");
     mainmenu_mon_id.txtBig();
     msg += "Esp " + T_ID[m] + " | Channel " + T_CHA[m] + " | Version " + T_VER[m];
     msg += " | IP " + T_IP[m] + " | Reception " + T_WIF[m] + " db | Batterie " + T_BAT[m] + " %";
-    msg += " | Playeur " + T_RUN[m];  
-    ez.msgBox("ESP MONITOR", msg , "up#Back#OK##down#", true);
+    msg += " | Playeur " + T_RUN[m];
+    ez.msgBox("ESP MONITOR", msg, "up#Back#OK##down#", true);
 
-    // mainmenu_mon_id.buttons("up#Back#select##down#");
     mainmenu_mon_id.run();
 }
 
 void mainmenu_monitor()
 {
+    who_result = 0;
     ezMenu mainmenu_monitor("ESP find");
+    mainmenu_monitor.upOnFirst("last|up");
+    mainmenu_monitor.downOnLast("first|down");
+    mainmenu_monitor.buttons("up#Back#select##down#");
 
     if (clients == 0)
     {
@@ -210,14 +211,16 @@ void mainmenu_monitor()
     {
         for (int k = 1; k < clients; k++)
         {
-            mainmenu_monitor.addItem(String(k) + " ESP : " + String(T_ID[k - 1]), mainmenu_mon_id);
+            mainmenu_monitor.addItem(String(k) + " ESP : " + String(T_ID[k - 1])); // , mainmenu_mon_id
         }
 
-        who_result = mainmenu_monitor.pick();
+        while (mainmenu_monitor.runOnce())
+        { 
+            who_result = mainmenu_monitor.pick();
+            if (who_result > 0) mainmenu_mon_id();
+        }
     }
-    mainmenu_monitor.upOnFirst("last|up");
-    mainmenu_monitor.downOnLast("first|down");
-    mainmenu_monitor.buttons("up#Back#select##down#");
+    
     mainmenu_monitor.run();
 }
 
