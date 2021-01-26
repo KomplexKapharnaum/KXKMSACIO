@@ -176,7 +176,7 @@ void powerOff() { m5.powerOFF(); }
 void mainmenu_mon_id()
 {
     String msg;
-    int16_t m = who_result - 1;
+    int16_t m = who_result;
     // LOGINL("************MON ID******  ");
     // LOGINL(" id = ");
     // LOG(m);
