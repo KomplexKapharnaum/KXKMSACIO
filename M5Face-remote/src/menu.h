@@ -197,7 +197,7 @@ void mainmenu_monitor()
 {
     who_result = 0;
 
-    if (clients == 1)
+    if (clients == 0)
     {
         ezMenu mainmenu_monitor("NO ESP");
         ez.msgBox("NO ESP", "NO ESP FOUND", "#Back####", true);
@@ -212,7 +212,7 @@ void mainmenu_monitor()
 
         for (int k = 1; k < clients; k++)
         {
-            mainmenu_monitor.addItem(String(k) + " ESP : " + String(T_ID[k - 1])); 
+            mainmenu_monitor.addItem(String(k) + " ESP : " + String(T_ID[k])); 
         }
 
         while (mainmenu_monitor.runOnce())

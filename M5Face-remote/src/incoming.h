@@ -2,7 +2,8 @@
 
 void update_tableau(char *payload, int num)
 {
- LOG("***************UPDATE******  ");
+    // num -= 1;
+    LOG("***************UPDATE******  ");
     int z = 0;
     char input[strlen(payload)];
     strcpy(input, payload);
@@ -12,58 +13,61 @@ void update_tableau(char *payload, int num)
         z += 1;
         if (z == 1)
         {
-            T_ID[num - 1] = String(ID_CHECK);
+            LOGINL("num ");
+            LOG(num);
+            T_ID[num] = String(ID_CHECK);
             LOGINL("T_ID ");
-            LOG(T_ID[num - 1]);
+            LOG(T_ID[num]);
         }
         else if (z == 2)
         {
-            T_CHA[num - 1] = String(ID_CHECK);
+            T_CHA[num] = String(ID_CHECK);
             LOGINL("T_CHA ");
-            LOG(T_CHA[num - 1]);
+            LOG(T_CHA[num]);
         }
         else if (z == 3)
         {
-            T_VER[num - 1] = String(ID_CHECK);
+            T_VER[num] = String(ID_CHECK);
             LOGINL("T_VER ");
-            LOG(T_VER[num - 1]);
+            LOG(T_VER[num]);
         }
         else if (z == 4)
         {
-            T_MAC[num - 1] = String(ID_CHECK);
+            T_MAC[num] = String(ID_CHECK);
             LOGINL("T_MAC ");
-            LOG(T_MAC[num - 1]);
+            LOG(T_MAC[num]);
         }
         else if (z == 5)
         {
-            T_IP[num - 1] = String(ID_CHECK);
+            T_IP[num] = String(ID_CHECK);
             LOGINL("T_IP ");
-            LOG(T_IP[num - 1]);
+            LOG(T_IP[num]);
         }
         else if (z == 6)
         {
-            T_WIF[num - 1] = String(ID_CHECK);
+            T_WIF[num] = String(ID_CHECK);
             LOGINL("T_WIF ");
-            LOG(T_WIF[num - 1]);
+            LOG(T_WIF[num]);
         }
         else if (z == 8)
         {
-            T_BAT[num - 1] = String(ID_CHECK);
+            T_BAT[num] = String(ID_CHECK);
             LOGINL("T_BAT ");
-            LOG(T_BAT[num - 1]);
+            LOG(T_BAT[num]);
         }
         else if (z == 10)
         {
-            T_RUN[num - 1] = String(ID_CHECK);
+            T_RUN[num] = String(ID_CHECK);
             LOGINL("T_RUN ");
-            LOG(T_RUN[num - 1]);
+            LOG(T_RUN[num]);
         }
-        ID_CHECK = strtok (NULL , "§");
+        ID_CHECK = strtok(NULL, "§");
     }
 }
 
 void store_tableau(char *payload, int num)
 {
+    // num -= 1;
     LOG("***************STORE******  ");
     int z = 0;
     char input[strlen(payload)];
@@ -74,53 +78,55 @@ void store_tableau(char *payload, int num)
         z += 1;
         if (z == 1)
         {
-            T_ID[num - 2] = String(ID_CHECK);
+            LOGINL("num ");
+            LOG(num);
+            T_ID[num] = String(ID_CHECK);
             LOGINL("T_ID ");
-            LOG(T_ID[num - 2]);
+            LOG(T_ID[num]);
         }
         else if (z == 2)
         {
-            T_CHA[num - 2] = String(ID_CHECK);
+            T_CHA[num] = String(ID_CHECK);
             LOGINL("T_CHA ");
-            LOG(T_CHA[num - 2]);
+            LOG(T_CHA[num]);
         }
         else if (z == 3)
         {
-            T_VER[num - 2] = String(ID_CHECK);
+            T_VER[num] = String(ID_CHECK);
             LOGINL("T_VER ");
-            LOG(T_VER[num - 2]);
+            LOG(T_VER[num]);
         }
         else if (z == 4)
         {
-            T_MAC[num - 2] = String(ID_CHECK);
+            T_MAC[num] = String(ID_CHECK);
             LOGINL("T_MAC ");
-            LOG(T_MAC[num - 2]);
+            LOG(T_MAC[num]);
         }
         else if (z == 5)
         {
-            T_IP[num - 2] = String(ID_CHECK);
+            T_IP[num - 1] = String(ID_CHECK);
             LOGINL("T_IP ");
-            LOG(T_IP[num - 2]);
+            LOG(T_IP[num]);
         }
         else if (z == 6)
         {
-            T_WIF[num - 2] = String(ID_CHECK);
+            T_WIF[num - 1] = String(ID_CHECK);
             LOGINL("T_WIF ");
-            LOG(T_WIF[num - 2]);
+            LOG(T_WIF[num]);
         }
         else if (z == 8)
         {
-            T_BAT[num - 2] = String(ID_CHECK);
+            T_BAT[num - 1] = String(ID_CHECK);
             LOGINL("T_BAT ");
-            LOG(T_BAT[num - 2]);
+            LOG(T_BAT[num]);
         }
         else if (z == 10)
         {
-            T_RUN[num - 2] = String(ID_CHECK);
+            T_RUN[num] = String(ID_CHECK);
             LOGINL("T_RUN ");
-            LOG(T_RUN[num - 2]);
+            LOG(T_RUN[num]);
         }
-        ID_CHECK = strtok (NULL , "§");
+        ID_CHECK = strtok(NULL, "§");
     }
 }
 
@@ -143,9 +149,9 @@ void incoming(char *payload, size_t length)
         count = max_clients;
     }
 
-    for (int k = 1; k < count + 1; k++)
+    for (int k = 0; k < count; k++)
     {
-        if (T_ID[k - 1] == result)
+        if (T_ID[k] == result)
         {
             check = true;
             update_tableau(payload, k);
@@ -153,9 +159,7 @@ void incoming(char *payload, size_t length)
     }
     if (count + 1 <= max_clients && check != true)
     {
-        clients = count + 1;
-        check = false;
-
+        clients += 1;
         if (clients <= max_clients)
         {
             store_tableau(payload, clients);
@@ -164,5 +168,6 @@ void incoming(char *payload, size_t length)
         {
             LOG("***************CLIENTS MAX");
         }
+        check = false;
     }
 }
