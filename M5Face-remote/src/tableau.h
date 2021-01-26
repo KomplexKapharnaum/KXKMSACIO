@@ -1,6 +1,6 @@
 #define max_clients 10
 
-uint8_t clients = 1;
+uint8_t clients = 0;
 String T_ID[max_clients];  // id
 String T_CHA[max_clients]; // channel
 String T_VER[max_clients]; // version

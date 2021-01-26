@@ -196,32 +196,33 @@ void mainmenu_mon_id()
 void mainmenu_monitor()
 {
     who_result = 0;
-    ezMenu mainmenu_monitor("ESP find");
-    mainmenu_monitor.upOnFirst("last|up");
-    mainmenu_monitor.downOnLast("first|down");
-    mainmenu_monitor.buttons("up#Back#select##down#");
 
-    if (clients == 0)
+    if (clients == 1)
     {
-        ez.header.show("NO ESP");
-        ez.buttons.wait("EXIT");
-        return;
+        ezMenu mainmenu_monitor("NO ESP");
+        ez.msgBox("NO ESP", "NO ESP FOUND", "#Back####", true);
+        mainmenu_monitor.run();
     }
     else
     {
+        ezMenu mainmenu_monitor("ESP find");
+        mainmenu_monitor.upOnFirst("last|up");
+        mainmenu_monitor.downOnLast("first|down");
+        mainmenu_monitor.buttons("up#Back#select##down#");
+
         for (int k = 1; k < clients; k++)
         {
-            mainmenu_monitor.addItem(String(k) + " ESP : " + String(T_ID[k - 1])); // , mainmenu_mon_id
+            mainmenu_monitor.addItem(String(k) + " ESP : " + String(T_ID[k - 1])); 
         }
 
         while (mainmenu_monitor.runOnce())
-        { 
+        {
             who_result = mainmenu_monitor.pick();
-            if (who_result > 0) mainmenu_mon_id();
+            if (who_result > 0)
+                mainmenu_mon_id();
         }
+        mainmenu_monitor.run();
     }
-    
-    mainmenu_monitor.run();
 }
 
 void mainmenu()
