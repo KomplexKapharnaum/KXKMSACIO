@@ -54,3 +54,18 @@ stack:
 0x4017ce5e: _async_service_task(void*) at F:\github\KXKMSACIO\M5Face-remote/.pio\libdeps\m5stack-core-esp32\AsyncTCP\src/AsyncTCP.cpp:661
   \-> inlined by: _async_service_task at F:\github\KXKMSACIO\M5Face-remote/.pio\libdeps\m5stack-core-esp32\AsyncTCP\src/AsyncTCP.cpp:197
 0x40089acd: vPortTaskWrapper at /home/runner/work/esp32-arduino-lib-builder/esp32-arduino-lib-builder/esp-idf/components/freertos/port.c:355 (discriminator 1)
+
+27/01/21 11H49
+
+Backtrace: 0x4016861a:0x3ffd7170 0x401686c2:0x3ffd71e0 0x4017cad1:0x3ffd7200 0x4017cb15:0x3ffd7240 0x4017cfba:0x3ffd7260 0x40089acd:0x3ffd7290
+
+stack:
+0x4016861a: AsyncMqttClient::_onData(AsyncClient*, char*, unsigned int) at F:\github\KXKMSACIO\M5Face-remote/.pio\libdeps\m5stack-core-esp32\AsyncMqttClient\src/AsyncMqttClient.cpp:100
+0x401686c2: std::_Function_handler<void (void*, AsyncClient*, void*, unsigned int), AsyncMqttClient::AsyncMqttClient()::{lambda(void*, AsyncClient*, void*, unsigned int)#6}>::_M_invoke(std::_Any_data const&, void*&&, AsyncClient*&&, std::_Any_data const&, unsigned int&&) at F:\github\KXKMSACIO\M5Face-remote/.pio\libdeps\m5stack-core-esp32\AsyncMqttClient\src/AsyncMqttClient.cpp:100
+  \-> inlined by: _M_invoke at c:\users\ririf\.platformio\packages\toolchain-xtensa32\xtensa-esp32-elf\include\c++\5.2.0/functional:1871
+0x4017cad1: std::function<void (void*, AsyncClient*, void*, unsigned int)>::operator()(void*, AsyncClient*, void*, unsigned int) const at F:\github\KXKMSACIO\M5Face-remote/.pio\libdeps\m5stack-core-esp32\AsyncTCP\src/AsyncTCP.cpp:661
+  \-> inlined by: AsyncClient::_recv(tcp_pcb*, pbuf*, signed char) at F:\github\KXKMSACIO\M5Face-remote/.pio\libdeps\m5stack-core-esp32\AsyncTCP\src/AsyncTCP.cpp:934
+0x4017cb15: AsyncClient::_s_recv(void*, tcp_pcb*, pbuf*, signed char) at F:\github\KXKMSACIO\M5Face-remote/.pio\libdeps\m5stack-core-esp32\AsyncTCP\src/AsyncTCP.cpp:661
+0x4017cfba: _async_service_task(void*) at F:\github\KXKMSACIO\M5Face-remote/.pio\libdeps\m5stack-core-esp32\AsyncTCP\src/AsyncTCP.cpp:661
+  \-> inlined by: _async_service_task at F:\github\KXKMSACIO\M5Face-remote/.pio\libdeps\m5stack-core-esp32\AsyncTCP\src/AsyncTCP.cpp:197
+0x40089acd: vPortTaskWrapper at /home/runner/work/esp32-arduino-lib-builder/esp32-arduino-lib-builder/esp-idf/components/freertos/port.c:355 (discriminator 1)
