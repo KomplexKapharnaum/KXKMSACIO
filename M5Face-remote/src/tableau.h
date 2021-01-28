@@ -1,6 +1,6 @@
 #define max_clients 10
+int clients = -1;
 
-uint8_t clients = 0;
 String T_ID[max_clients];  // id
 String T_CHA[max_clients]; // channel
 String T_VER[max_clients]; // version
@@ -12,3 +12,5 @@ String T_BAT[max_clients]; // battery
 String T_FAL[max_clients]; // ?????????
 String T_RUN[max_clients]; // playeur state
 String T_END[max_clients]; // message end , utile ?
+
+String T_inlife[max_clients];// id_beat clients

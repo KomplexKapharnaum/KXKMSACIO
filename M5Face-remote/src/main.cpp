@@ -14,6 +14,7 @@
 K32 *k32;
 
 #include "tableau.h"
+#include "incombeat.h"
 #include "incoming.h"
 #include "menu.h"
 
@@ -54,6 +55,7 @@ void setup()
                     // LOGINL("-- BEAT received:");
                     // LOGINL(" ");
                     // LOG(payload);
+                    // incombeat(payload,length);
                   }
     });
 

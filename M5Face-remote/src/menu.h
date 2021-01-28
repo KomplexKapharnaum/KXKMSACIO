@@ -176,7 +176,7 @@ void powerOff() { m5.powerOFF(); }
 void mainmenu_mon_id()
 {
     String msg;
-    int16_t m = who_result;
+    int16_t m = who_result - 1;
     // LOGINL("************MON ID******  ");
     // LOGINL(" id = ");
     // LOG(m);
@@ -210,7 +210,7 @@ void mainmenu_monitor()
         mainmenu_monitor.downOnLast("first|down");
         mainmenu_monitor.buttons("up#Back#select##down#");
 
-        for (int k = 1; k < clients; k++)
+        for (int k = 0; k < clients; k++)
         {
             mainmenu_monitor.addItem(String(k) + " ESP : " + String(T_ID[k]));
         }

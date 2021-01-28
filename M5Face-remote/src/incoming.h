@@ -149,12 +149,15 @@ void incoming(char *payload, size_t length)
         count = max_clients;
     }
 
-    for (int k = 0; k < count; k++)
+    if (count != -1)
     {
-        if (T_ID[k] == result)
+        for (int k = 0; k < count; k++)
         {
-            check = true;
-            update_tableau(payload, k);
+            if (T_ID[k] == result)
+            {
+                check = true;
+                update_tableau(payload, k);
+            }
         }
     }
     if (count + 1 <= max_clients && check != true)
