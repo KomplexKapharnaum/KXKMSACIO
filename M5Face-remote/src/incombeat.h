@@ -1,41 +1,44 @@
 void incombeat(char *payload, size_t length)
 {
+    LOGINL("in beat");
+    currentTime = millis();
     bool check = false;
     int count;
-    char result[strlen(payload)];
     char input[strlen(payload)];
     strcpy(input, payload);
     char *ID_CHECK = strtok(input, "§");
-    strcpy(result, ID_CHECK);
+    int beatresult = atoi(ID_CHECK);
 
-    if (clients <= max_clients)
-    {
-        count = clients;
-    }
-    else
-    {
-        count = max_clients;
-    }
+    // if ((currentTime - previousTime) > 3000)
 
-    for (int k = 0; k < count; k++)
+    for (int k = 0; k < max_clients; k++)
     {
-        if (T_ID[k] == result)
+        if (T_inlife[k][1] == beatresult)
         {
-            check = true;
-
+            LOGINL(" == ");
+            previousTime = T_inlife[k][2];
+            if ((currentTime - previousTime) < 2500)
+            {
+                LOGINL(" < 2500 ");
+                T_inlife[k][2] = currentTime;
+                T_inlife[k][3] = 1;
+                break;
+            }
+            else
+            {
+                LOGINL("ELSE  NOT < 2500 ");
+                T_inlife[k][2] = currentTime;
+                T_inlife[k][3] = 0;
+                break;
+            }
         }
-    }
-    if (count + 1 <= max_clients && check != true)
-    {
-        clients += 1;
-        if (clients <= max_clients)
+        else if (T_inlife[k][3] != 1)
         {
-
+            LOGINL(" != 1");
+            T_inlife[k][1] = beatresult;
+            T_inlife[k][2] = currentTime;
+            T_inlife[k][3] = 1;
+            break;
         }
-        else
-        {
-            LOG("***************CLIENTS MAX");
-        }
-        check = false;
     }
 }

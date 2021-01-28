@@ -55,7 +55,7 @@ void setup()
                     // LOGINL("-- BEAT received:");
                     // LOGINL(" ");
                     // LOG(payload);
-                    // incombeat(payload,length);
+                    incombeat(payload,length);
                   }
     });
 
