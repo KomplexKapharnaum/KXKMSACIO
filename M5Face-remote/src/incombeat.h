@@ -9,8 +9,6 @@ void incombeat(char *payload, size_t length)
     char *ID_CHECK = strtok(input, "§");
     int beatresult = atoi(ID_CHECK);
 
-    // if ((currentTime - previousTime) > 3000)
-
     for (int k = 0; k < max_clients; k++)
     {
         if (T_inlife[k][0] == beatresult)

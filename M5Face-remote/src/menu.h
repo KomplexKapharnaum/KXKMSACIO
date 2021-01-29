@@ -198,7 +198,7 @@ void mainmenu_monitor()
     who_result = 0;
     String on_off_line;
 
-    if (clients == 0)
+    if (clients == -1)
     {
         ezMenu mainmenu_monitor("NO ESP");
         ez.msgBox("NO ESP", "NO ESP FOUND", "#Back####", true);
@@ -220,13 +220,14 @@ void mainmenu_monitor()
                 {
                     currentTime = millis();
                     previousTime = T_inlife[j][1];
-                    if ((currentTime - previousTime) < 2500)
+                    if ((currentTime - previousTime) < 5000)
                     {
                         on_off_line = " ON Line";
                     }
-                    else if ((currentTime - previousTime) > 2500)
+                    else if ((currentTime - previousTime) > 5000)
                     {
-                        on_off_line = " OFF Line";
+                        on_off_line = " ... .. .";
+                        T_inlife[j][2] = 0;
                     }
                     
                 }
