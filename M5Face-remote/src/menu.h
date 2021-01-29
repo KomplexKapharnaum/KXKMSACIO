@@ -211,7 +211,7 @@ void mainmenu_monitor()
         mainmenu_monitor.downOnLast("first|down");
         mainmenu_monitor.buttons("up#Back#select##down#");
 
-        for (int k = 0; k < clients; k++)
+        for (int k = 0; k <= clients; k++)
         {
             int beatresult = atoi(T_ID[k].c_str());
             for (int j = 0; j < max_clients; j++)
@@ -223,22 +223,14 @@ void mainmenu_monitor()
                     if ((currentTime - previousTime) < 2500)
                     {
                         on_off_line = " ON Line";
-                        LOG("WHITE");
-                        // ez.theme->menu_item_color = TFT_WHITE;
-                        // ez.theme->menu_sel_bgcolor = TFT_WHITE;
-                        // ez.theme->menu_sel_fgcolor = TFT_BLACK;
                     }
                     else if ((currentTime - previousTime) > 2500)
                     {
                         on_off_line = " OFF Line";
-                        LOG("ORANGE");
-                        // ez.theme->menu_item_color = TFT_ORANGE;
-                        // ez.theme->menu_sel_bgcolor = TFT_DARKGREY;
-                        // ez.theme->menu_sel_fgcolor = TFT_ORANGE;
                     }
                     
                 }
-                break;
+            
             }
 
             mainmenu_monitor.addItem(String(k) + " ESP : " + String(T_ID[k]) + on_off_line);
