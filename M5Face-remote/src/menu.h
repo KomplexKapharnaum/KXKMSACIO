@@ -196,6 +196,7 @@ void mainmenu_mon_id()
 void mainmenu_monitor()
 {
     who_result = 0;
+    String on_off_line;
 
     if (clients == 0)
     {
@@ -212,7 +213,35 @@ void mainmenu_monitor()
 
         for (int k = 0; k < clients; k++)
         {
-            mainmenu_monitor.addItem(String(k) + " ESP : " + String(T_ID[k]));
+            int beatresult = atoi(T_ID[k].c_str());
+            for (int j = 0; j < max_clients; j++)
+            {
+                if (T_inlife[j][0] == beatresult)
+                {
+                    currentTime = millis();
+                    previousTime = T_inlife[j][1];
+                    if ((currentTime - previousTime) < 2500)
+                    {
+                        on_off_line = " ON Line";
+                        LOG("WHITE");
+                        // ez.theme->menu_item_color = TFT_WHITE;
+                        // ez.theme->menu_sel_bgcolor = TFT_WHITE;
+                        // ez.theme->menu_sel_fgcolor = TFT_BLACK;
+                    }
+                    else if ((currentTime - previousTime) > 2500)
+                    {
+                        on_off_line = " OFF Line";
+                        LOG("ORANGE");
+                        // ez.theme->menu_item_color = TFT_ORANGE;
+                        // ez.theme->menu_sel_bgcolor = TFT_DARKGREY;
+                        // ez.theme->menu_sel_fgcolor = TFT_ORANGE;
+                    }
+                    
+                }
+                break;
+            }
+
+            mainmenu_monitor.addItem(String(k) + " ESP : " + String(T_ID[k]) + on_off_line);
         }
 
         while (mainmenu_monitor.runOnce())
