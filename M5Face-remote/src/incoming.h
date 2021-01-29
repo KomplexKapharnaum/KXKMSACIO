@@ -140,18 +140,18 @@ void incoming(char *payload, size_t length)
     char *ID_CHECK = strtok(input, "§");
     strcpy(result, ID_CHECK);
 
-    if (clients <= max_clients)
+    if (clients < max_clients)
     {
         count = clients;
     }
     else
     {
-        count = max_clients;
+        count = max_clients - 1;
     }
 
     if (count != -1)
     {
-        for (int k = 0; k < count; k++)
+        for (int k = 0; k <= count; k++)
         {
             if (T_ID[k] == result)
             {
@@ -160,10 +160,10 @@ void incoming(char *payload, size_t length)
             }
         }
     }
-    if (count + 1 <= max_clients && check != true)
+    if (count + 1 < max_clients && check != true)
     {
         clients += 1;
-        if (clients <= max_clients)
+        if (clients < max_clients)
         {
             store_tableau(payload, clients);
         }
