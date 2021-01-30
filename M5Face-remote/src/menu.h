@@ -1,3 +1,10 @@
+
+void mainmenu_mqtt();
+void powerOff();
+void mainmenu_mon_id();
+void mainmenu_monitor();
+void mainmenu();
+
 int16_t who_result;
 
 void mainmenu_mqtt()
