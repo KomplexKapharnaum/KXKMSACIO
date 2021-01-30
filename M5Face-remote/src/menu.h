@@ -1,5 +1,5 @@
 
-void mainmenu_mqtt();
+void remote_mqtt();
 void powerOff();
 void mainmenu_mon_id();
 void mainmenu_monitor();
@@ -7,7 +7,7 @@ void mainmenu();
 
 int16_t who_result;
 
-void mainmenu_mqtt()
+void remote_mqtt()
 {
     uint8_t fonction = 0;
     String fonct = "Master";
@@ -258,7 +258,7 @@ void mainmenu()
 {
     ezMenu mainmenu("Welcome to M5");
     mainmenu.txtBig();
-    mainmenu.addItem("REMOTE", mainmenu_mqtt);
+    mainmenu.addItem("REMOTE", remote_mqtt);
     mainmenu.addItem("MONITOR", mainmenu_monitor);
     mainmenu.addItem("SET UP", ez.settings.menu);
     mainmenu.addItem("POWER OFF", powerOff);
