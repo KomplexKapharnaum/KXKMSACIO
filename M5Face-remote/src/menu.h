@@ -5,8 +5,83 @@ void mainmenu_mon_id();
 void menu_monitor();
 void mainmenu();
 void master_value();
+void id_value();
 
 int16_t who_result;
+String id_calling = "";
+
+void id_value()
+{
+    bool equal = false;
+    bool bad = false;
+    String res_value = "";
+    String msg = "";
+    int res;
+
+    msg += " Enter N° ID & =";
+    ez.msgBox("M5 REMOTE", msg, "#####", false);
+
+    while (equal != true)
+    {
+        res = atoi(res_value.c_str());
+        // FACE
+        //
+        if (digitalRead(KEYBOARD_INT) == LOW)
+        {
+            Wire.requestFrom(KEYBOARD_I2C_ADDR, 1); // request 1 byte from keyboard
+            while (Wire.available())
+            {
+                uint8_t key_val = Wire.read(); // receive a byte as character
+                String value((char)key_val);
+
+                switch ((char)key_val)
+                {
+                case '0':
+                case '1':
+                case '2':
+                case '3':
+                case '4':
+                case '5':
+                case '6':
+                case '7':
+                case '8':
+                case '9':
+                    if (bad == true)
+                        bad = false;
+                    res_value += value;
+                    break;
+
+                case '.':
+                    break;
+                case '=':
+                    id_calling = String(res_value);
+                    equal = true;
+                    break;
+                case '-':
+
+                    break;
+                case '+':
+
+                    break;
+
+                case 'A':
+                    res_value = "";
+
+                    break;
+                case 'M':
+
+                    break;
+                case '%':
+
+                    break;
+                }
+                LOG(value);
+                if (bad != true)
+                    ez.msgBox("M5 REMOTE", res_value, "#####", false);
+            }
+        }
+    }
+}
 
 void master_value()
 {
@@ -95,11 +170,13 @@ void master_value()
 
 void remote_mqtt()
 {
+    uint8_t id_call = 0;
+    String id_cal = "all";
     uint8_t fonction = 0;
     String fonct = "Master";
     uint8_t page_mem = 0;
     String page_me = "0-9";
-    ez.msgBox("M5 REMOTE", "Welcome", "# Menu #" + fonct + "##" + page_me + "#", false);
+    ez.msgBox("M5 REMOTE", "Welcome", id_cal + "# Menu #" + fonct + "##" + page_me + "#", false);
 
     while (true)
     {
@@ -111,6 +188,25 @@ void remote_mqtt()
         if (m5.BtnA.pressedFor(ez.theme->longpress_time))
         {
             break;
+        };
+
+        if (m5.BtnA.wasPressed())
+        {
+            id_call += 1;
+            if (id_call >= 2)
+            {
+                id_call = 0;
+            }
+            if (id_call == 0)
+            {
+                id_cal = "all";
+            }
+            else if (id_call == 1)
+            {
+                id_value();
+                id_cal = "id" + id_calling;
+                ez.msgBox("M5 REMOTE", id_cal, id_cal + "# Menu #" + fonct + "##" + page_me + "#", false);
+            }
         };
 
         if (M5.BtnB.wasPressed())
@@ -129,7 +225,7 @@ void remote_mqtt()
                 fonct = "Speed";
             }
 
-            ez.msgBox("M5 REMOTE", fonct, "# Menu #" + fonct + "##" + page_me + "#", false);
+            ez.msgBox("M5 REMOTE", fonct, id_cal + "# Menu #" + fonct + "##" + page_me + "#", false);
         };
 
         if (M5.BtnC.wasPressed())
@@ -151,7 +247,7 @@ void remote_mqtt()
             {
                 page_me = "20-29";
             }
-            ez.msgBox("M5 REMOTE", page_me, "# Menu #" + fonct + "##" + page_me + "#", false);
+            ez.msgBox("M5 REMOTE", page_me, id_cal + "# Menu #" + fonct + "##" + page_me + "#", false);
         };
 
         // FACE
@@ -258,7 +354,7 @@ void remote_mqtt()
                     }
                 }
                 LOG(msg);
-                ez.msgBox("M5 REMOTE", msg, "# Menu #" + fonct + "##" + page_me + "#", false);
+                ez.msgBox("M5 REMOTE", msg, id_cal + "# Menu #" + fonct + "##" + page_me + "#", false);
             }
         }
     }
