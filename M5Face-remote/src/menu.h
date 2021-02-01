@@ -5,8 +5,97 @@ void mainmenu_mon_id();
 void menu_monitor();
 void mainmenu();
 void master_value();
+void id_value();
 
 int16_t who_result;
+String id_calling = "";
+
+char MQTT_TOPIC[] = "k32/all/leds";
+String mqtt_topic;
+String MQTT_ID;
+String MQTT_K32 = "k32/";
+String MQTT_MEM = "/leds/mem";
+String MQTT_STOP = "/leds/stop";
+String MQTT_LESS = "/leds/master/less";
+String MQTT_SLOWER = "/leds/mod/slower";
+String MQTT_MORE = "/leds/master/more";
+String MQTT_FASTER ="/leds/mod/faster";
+String MQTT_FULL ="/leds/master/full";
+String MQTT_FADE_IN = "/leds/master/fadein";
+String MQTT_FADE_OUT = "/leds/master/fadeout";
+String MQTT_MASTER ="/leds/master";
+
+void id_value()
+{
+    bool equal = false;
+    bool bad = false;
+    String res_value = "";
+    String msg = "";
+
+    msg += " Enter N° ID & =";
+    ez.msgBox("M5 REMOTE", msg, "#####", false);
+
+    while (equal != true)
+    {
+        // FACE
+        //
+        if (digitalRead(KEYBOARD_INT) == LOW)
+        {
+            Wire.requestFrom(KEYBOARD_I2C_ADDR, 1); // request 1 byte from keyboard
+            while (Wire.available())
+            {
+                uint8_t key_val = Wire.read(); // receive a byte as character
+                String value((char)key_val);
+
+                switch ((char)key_val)
+                {
+                case '0':
+                case '1':
+                case '2':
+                case '3':
+                case '4':
+                case '5':
+                case '6':
+                case '7':
+                case '8':
+                case '9':
+                    if (bad == true)
+                        bad = false;
+                    res_value += value;
+                    break;
+
+                case '.':
+                    break;
+                case '=':
+                    MQTT_ID = String('e') + String(res_value);
+                    id_calling = String(res_value);
+                    equal = true;
+                    break;
+                case '-':
+
+                    break;
+                case '+':
+
+                    break;
+
+                case 'A':
+                    res_value = "";
+
+                    break;
+                case 'M':
+
+                    break;
+                case '%':
+
+                    break;
+                }
+                LOG(value);
+                if (bad != true)
+                    ez.msgBox("M5 REMOTE", res_value, "#####", false);
+            }
+        }
+    }
+}
 
 void master_value()
 {
@@ -55,7 +144,9 @@ void master_value()
 
                     if (res < 256)
                     {
-                        k32->mqtt->publish("k32/all/leds/master", (res_value).c_str(), 1);
+                        mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(MQTT_MASTER);
+                        mqtt_topic.toCharArray(MQTT_TOPIC, mqtt_topic.length() + 1);
+                        k32->mqtt->publish(MQTT_TOPIC,  (res_value).c_str(), 1);
                         equal = true;
                     }
                     else
@@ -95,11 +186,13 @@ void master_value()
 
 void remote_mqtt()
 {
+    uint8_t id_call = 0;
+    String id_cal = "all";
     uint8_t fonction = 0;
     String fonct = "Master";
     uint8_t page_mem = 0;
     String page_me = "0-9";
-    ez.msgBox("M5 REMOTE", "Welcome", "# Menu #" + fonct + "##" + page_me + "#", false);
+    ez.msgBox("M5 REMOTE", "Welcome", id_cal + "# Menu #" + fonct + "##" + page_me + "#", false);
 
     while (true)
     {
@@ -111,6 +204,33 @@ void remote_mqtt()
         if (m5.BtnA.pressedFor(ez.theme->longpress_time))
         {
             break;
+        };
+
+        if (m5.BtnA.wasPressed())
+        {
+            id_call += 1;
+            if (id_call >= 2)
+            {
+                id_call = 0;
+            }
+            if (id_call == 0)
+            {
+                id_cal = "all";
+                MQTT_ID = "all";
+                ez.msgBox("M5 REMOTE", id_cal, id_cal + "# Menu #" + fonct + "##" + page_me + "#", false);
+            }
+            else if (id_call == 1)
+            {
+                id_value();
+                id_cal = "id" + id_calling;
+                ez.msgBox("M5 REMOTE", id_cal, id_cal + "# Menu #" + fonct + "##" + page_me + "#", false);
+            }
+            mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(MQTT_MEM);
+            mqtt_topic.toCharArray(MQTT_TOPIC, mqtt_topic.length() + 1);
+            LOGINL("MQTT_TOPIC[] = ");
+            LOG(MQTT_TOPIC);
+            LOGINL("mqtt_topic = ");
+            LOG(mqtt_topic);
         };
 
         if (M5.BtnB.wasPressed())
@@ -129,7 +249,7 @@ void remote_mqtt()
                 fonct = "Speed";
             }
 
-            ez.msgBox("M5 REMOTE", fonct, "# Menu #" + fonct + "##" + page_me + "#", false);
+            ez.msgBox("M5 REMOTE", fonct, id_cal + "# Menu #" + fonct + "##" + page_me + "#", false);
         };
 
         if (M5.BtnC.wasPressed())
@@ -151,7 +271,7 @@ void remote_mqtt()
             {
                 page_me = "20-29";
             }
-            ez.msgBox("M5 REMOTE", page_me, "# Menu #" + fonct + "##" + page_me + "#", false);
+            ez.msgBox("M5 REMOTE", page_me, id_cal + "# Menu #" + fonct + "##" + page_me + "#", false);
         };
 
         // FACE
@@ -176,13 +296,15 @@ void remote_mqtt()
                 case '7':
                 case '8':
                 case '9':
-                    k32->mqtt->publish("k32/all/leds/mem", (page_mem + msg).c_str(), 1);
-                    msg += " k32/all/leds/mem " + (page_mem + msg);
+                    k32->mqtt->publish(MQTT_TOPIC, (page_mem + msg).c_str(), 1);
+                    msg += " " + mqtt_topic + (page_mem + msg);
                     break;
 
                 case '.':
-                    k32->mqtt->publish("k32/all/leds/stop", nullptr, 1);
-                    msg += " k32/all/leds/stop";
+                    mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(MQTT_STOP);
+                    mqtt_topic.toCharArray(MQTT_TOPIC, mqtt_topic.length() + 1);
+                    k32->mqtt->publish(MQTT_TOPIC, nullptr, 1);
+                    msg += " " + mqtt_topic;
                     break;
                 case '=':
                     if (fonction == 0)
@@ -197,33 +319,43 @@ void remote_mqtt()
                 case '-':
                     if (fonction == 0)
                     {
-                        k32->mqtt->publish("k32/all/leds/master/less", nullptr, 1);
-                        msg += " k32/all/leds/master/less";
+                        mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(MQTT_LESS);
+                        mqtt_topic.toCharArray(MQTT_TOPIC, mqtt_topic.length() + 1);
+                        k32->mqtt->publish(MQTT_TOPIC, nullptr, 1);
+                        msg += " " + mqtt_topic;
                     }
                     else if (fonction == 1)
                     {
-                        k32->mqtt->publish("k32/all/leds/mod/slower", nullptr, 1);
-                        msg += " k32/all/leds/mod/slower";
+                        mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(MQTT_SLOWER);
+                        mqtt_topic.toCharArray(MQTT_TOPIC, mqtt_topic.length() + 1);
+                        k32->mqtt->publish(MQTT_TOPIC, nullptr, 1);
+                        msg += " " + mqtt_topic;
                     }
                     break;
                 case '+':
                     if (fonction == 0)
                     {
-                        k32->mqtt->publish("k32/all/leds/master/more", nullptr, 1);
-                        msg += " k32/all/leds/master/more";
+                        mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(MQTT_MORE);
+                        mqtt_topic.toCharArray(MQTT_TOPIC, mqtt_topic.length() + 1);
+                        k32->mqtt->publish(MQTT_TOPIC, nullptr, 1);
+                        msg += " " + mqtt_topic;
                     }
                     else if (fonction == 1)
                     {
-                        k32->mqtt->publish("k32/all/leds/mod/faster", nullptr, 1);
-                        msg += " k32/all/leds/mod/faster";
+                        mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(MQTT_FASTER);
+                        mqtt_topic.toCharArray(MQTT_TOPIC, mqtt_topic.length() + 1);
+                        k32->mqtt->publish(MQTT_TOPIC, nullptr, 1);
+                        msg += " " + mqtt_topic;
                     }
                     break;
 
                 case 'A':
                     if (fonction == 0)
                     {
-                        k32->mqtt->publish("k32/all/leds/master/full", nullptr, 1);
-                        msg += " k32/all/leds/master/full";
+                        mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(MQTT_FULL);
+                        mqtt_topic.toCharArray(MQTT_TOPIC, mqtt_topic.length() + 1);
+                        k32->mqtt->publish(MQTT_TOPIC, nullptr, 1);
+                        msg += " " + mqtt_topic;
                     }
                     else if (fonction == 1)
                     {
@@ -232,8 +364,10 @@ void remote_mqtt()
                 case 'M':
                     if (fonction == 0)
                     {
-                        k32->mqtt->publish("k32/all/leds/master/fadein", nullptr, 1);
-                        msg += " k32/all/leds/master/fadein";
+                        mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(MQTT_FADE_IN);
+                        mqtt_topic.toCharArray(MQTT_TOPIC, mqtt_topic.length() + 1);
+                        k32->mqtt->publish(MQTT_TOPIC, nullptr, 1);
+                        msg += " " + mqtt_topic;
                     }
                     else if (fonction == 1)
                     {
@@ -242,8 +376,10 @@ void remote_mqtt()
                 case '%':
                     if (fonction == 0)
                     {
-                        k32->mqtt->publish("k32/all/leds/master/fadeout", nullptr, 1);
-                        msg += " k32/all/leds/master/fadeout";
+                        mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(MQTT_FADE_OUT);
+                        mqtt_topic.toCharArray(MQTT_TOPIC, mqtt_topic.length() + 1);
+                        k32->mqtt->publish(MQTT_TOPIC, nullptr, 1);
+                        msg += " " + mqtt_topic;
                     }
                     else if (fonction == 1)
                     {
@@ -258,7 +394,7 @@ void remote_mqtt()
                     }
                 }
                 LOG(msg);
-                ez.msgBox("M5 REMOTE", msg, "# Menu #" + fonct + "##" + page_me + "#", false);
+                ez.msgBox("M5 REMOTE", msg, id_cal + "# Menu #" + fonct + "##" + page_me + "#", false);
             }
         }
     }
