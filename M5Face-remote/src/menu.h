@@ -25,8 +25,10 @@ String MQTT_MEM = "/leds/mem";
 String MQTT_STOP = "/leds/stop";
 String MQTT_LESS = "/leds/master/less";
 String MQTT_SLOWER = "/leds/mod/slower";
+String MQTT_SMALLER = "/leds/mod/smaller";
 String MQTT_MORE = "/leds/master/more";
 String MQTT_FASTER = "/leds/mod/faster";
+String MQTT_BIGGER = "/leds/mod/bigger";
 String MQTT_FULL = "/leds/master/full";
 String MQTT_FADE_IN = "/leds/master/fadein";
 String MQTT_FADE_OUT = "/leds/master/fadeout";
@@ -372,6 +374,8 @@ void remote_mqtt()
                 case '9':
                     if (fonction < 2)
                     {
+                        mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(MQTT_MEM);
+                        mqtt_topic.toCharArray(MQTT_TOPIC, mqtt_topic.length() + 1);
                         k32->mqtt->publish(MQTT_TOPIC, (page_mem + msg).c_str(), 1);
                         msg += " " + mqtt_topic + (page_mem + msg);
                     }
@@ -559,7 +563,30 @@ void remote_mqtt()
                     }
                     else if (fonction == 1)
                     {
+                        mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(MQTT_SMALLER);
+                        mqtt_topic.toCharArray(MQTT_TOPIC, mqtt_topic.length() + 1);
+                        k32->mqtt->publish(MQTT_TOPIC, nullptr, 1);
+                        msg += " " + mqtt_topic;
                     }
+                    else if (fonction == 2)
+                    {
+                    }
+                    break;
+                case '*':
+                    if (fonction == 0)
+                    {
+                    }
+                    else if (fonction == 1)
+                    {
+                        mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(MQTT_BIGGER);
+                        mqtt_topic.toCharArray(MQTT_TOPIC, mqtt_topic.length() + 1);
+                        k32->mqtt->publish(MQTT_TOPIC, nullptr, 1);
+                        msg += " " + mqtt_topic;
+                    }
+                    else if (fonction == 2)
+                    {
+                    }
+                    break;
                 }
                 LOG(msg);
                 ez.msgBox("M5 REMOTE", msg, id_cal + "# Menu #" + fonct + "##" + page_me + "#", false);
