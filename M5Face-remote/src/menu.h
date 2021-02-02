@@ -6,6 +6,7 @@ void menu_monitor();
 void mainmenu();
 void master_value();
 void id_value();
+void color_value();
 
 int16_t who_result;
 String id_calling = "";
@@ -36,6 +37,237 @@ String MQTT_MASTER = "/leds/master";
 String MQTT_COLOR_ALL = "/leds/all";
 String MQTT_COLOR_STRIP = "/leds/strip";
 String MQTT_COLOR_PIXEL = "/leds/pixel";
+
+void color_value()
+{
+    bool r, g, b, w = false;
+    bool equal = false;
+    bool bad = false;
+    String res_value = "";
+    String msg = "";
+    uint8_t color_fonction = 0;
+    String color_fonct = "RED";
+    int res;
+
+    msg += " Enter RED value & =";
+    ez.msgBox("M5 REMOTE", msg, "##" + color_fonct + "###", false);
+
+    while (equal != true)
+    {
+        M5.update();
+
+        // BTN A/B/C
+        if (M5.BtnB.wasPressed())
+        {
+            color_fonction += 1;
+            if (color_fonction >= 4)
+            {
+                color_fonction = 0;
+            }
+            if (color_fonction == 0)
+            {
+                color_fonct = "RED";
+                msg = "";
+                msg += " Enter RED value & =";
+            }
+            else if (color_fonction == 1)
+            {
+                color_fonct = "GREEN";
+                msg = "";
+                msg += " Enter GREEN value & =";
+            }
+            else if (color_fonction == 2)
+            {
+                color_fonct = "BLUE";
+                msg = "";
+                msg += " Enter BLUE value & =";
+            }
+            else if (color_fonction == 3)
+            {
+                color_fonct = "WHITE";
+                msg = "";
+                msg += " Enter WHITE value & =";
+            }
+
+            ez.msgBox("M5 REMOTE", msg, "##" + color_fonct + "###", false);
+        };
+        res = atoi(res_value.c_str());
+        // FACE
+        //
+        if (digitalRead(KEYBOARD_INT) == LOW)
+        {
+            Wire.requestFrom(KEYBOARD_I2C_ADDR, 1); // request 1 byte from keyboard
+            while (Wire.available())
+            {
+                uint8_t key_val = Wire.read(); // receive a byte as character
+                String value((char)key_val);
+
+                switch ((char)key_val)
+                {
+                case '0':
+                case '1':
+                case '2':
+                case '3':
+                case '4':
+                case '5':
+                case '6':
+                case '7':
+                case '8':
+                case '9':
+                    if (bad == true)
+                        bad = false;
+                    res_value += value;
+                    break;
+
+                case '.':
+                    break;
+                case '=':
+                    if (res < 256)
+                    {
+                        if (color_fonction == 0)
+                        {
+                            red = res_value.toInt();
+                            r = true;
+                        }
+                        else if (color_fonction == 1)
+                        {
+                            green = res_value.toInt();
+                            g = true;
+                        }
+                        else if (color_fonction == 2)
+                        {
+                            blue = res_value.toInt();
+                            b = true;
+                        }
+                        else if (color_fonction == 3)
+                        {
+                            white = res_value.toInt();
+                            w = true;
+                        }
+                        color_fonction += 1;
+                        res_value = "";
+                    }
+                    else
+                    {
+                        bad = true;
+                        res_value = "";
+                        msg = "";
+                        if (color_fonction == 0)
+                        {
+                            color_fonct = "RED";
+                            msg += " Enter RED value & =";
+                            r = false;
+                        }
+                        else if (color_fonction == 1)
+                        {
+                            color_fonct = "GREEN";
+                            msg += " Enter GREEN value & =";
+                            g = false;
+                        }
+                        else if (color_fonction == 2)
+                        {
+                            color_fonct = "BLUE";
+                            msg += " Enter BLUE value & =";
+                            b = false;
+                        }
+                        else if (color_fonction == 3)
+                        {
+                            color_fonct = "WHITE";
+                            msg += " Enter WHITE value & =";
+                            w = false;
+                        }
+                        ez.msgBox("M5 REMOTE", msg, "##" + color_fonct + "###", false);
+                    }
+                    if (r == true && g == true && b == true && w == true)
+                    {
+                        equal = true;
+                    }
+                    else
+                    {
+                        bad = true;
+                        if (color_fonction >= 4)
+                        {
+                            color_fonction = 0;
+                        }
+                        if (color_fonction == 0)
+                        {
+                            color_fonct = "RED";
+                            msg = "";
+                            msg += " Enter RED value & =";
+                        }
+                        else if (color_fonction == 1)
+                        {
+                            color_fonct = "GREEN";
+                            msg = "";
+                            msg += " Enter GREEN value & =";
+                        }
+                        else if (color_fonction == 2)
+                        {
+                            color_fonct = "BLUE";
+                            msg = "";
+                            msg += " Enter BLUE value & =";
+                        }
+                        else if (color_fonction == 3)
+                        {
+                            color_fonct = "WHITE";
+                            msg = "";
+                            msg += " Enter WHITE value & =";
+                        }
+                        ez.msgBox("M5 REMOTE", msg, "##" + color_fonct + "###", false);
+                    }
+                    break;
+                case '-':
+
+                    break;
+                case '+':
+
+                    break;
+
+                case 'A':
+                    res_value = "";
+                    if (color_fonction == 0)
+                    {
+                        color_fonct = "RED";
+                        msg = "";
+                        msg += " Enter RED value & =";
+                    }
+                    else if (color_fonction == 1)
+                    {
+                        color_fonct = "GREEN";
+                        msg = "";
+                        msg += " Enter GREEN value & =";
+                    }
+                    else if (color_fonction == 2)
+                    {
+                        color_fonct = "BLUE";
+                        msg = "";
+                        msg += " Enter BLUE value & =";
+                    }
+                    else if (color_fonction == 3)
+                    {
+                        color_fonct = "WHITE";
+                        msg = "";
+                        msg += " Enter WHITE value & =";
+                    }
+
+                    ez.msgBox("M5 REMOTE", msg, "##" + color_fonct + "###", false);
+                    bad = true;
+
+                    break;
+                case 'M':
+
+                    break;
+                case '%':
+
+                    break;
+                }
+                LOG(value);
+                if (bad != true)
+                    ez.msgBox("M5 REMOTE", res_value, "##" + color_fonct + "###", false);
+            }
+        }
+    }
+}
 
 void id_value()
 {
@@ -486,6 +718,13 @@ void remote_mqtt()
                     }
                     else if (fonction == 2)
                     {
+                        color_value();
+                        mqtt_color = String(red) + String(' ') + String(green) + String(' ') + String(blue) + String(' ') + String(white);
+                        mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(MQTT_COLOR_ALL);
+                        mqtt_topic.toCharArray(MQTT_TOPIC, mqtt_topic.length() + 1);
+                        k32->mqtt->publish(MQTT_TOPIC, mqtt_color.c_str(), 1);
+                        msg = "Color SEND";
+                        msg += "|" + mqtt_topic + "|" + mqtt_color; 
                     }
                     break;
                 case '-':
