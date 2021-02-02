@@ -10,6 +10,9 @@ void id_value();
 int16_t who_result;
 String id_calling = "";
 
+uint8_t id_fonction = 0;
+String id_fonct = "ID";
+
 char MQTT_TOPIC[] = "k32/all/leds";
 String mqtt_topic;
 String MQTT_ID;
@@ -19,11 +22,11 @@ String MQTT_STOP = "/leds/stop";
 String MQTT_LESS = "/leds/master/less";
 String MQTT_SLOWER = "/leds/mod/slower";
 String MQTT_MORE = "/leds/master/more";
-String MQTT_FASTER ="/leds/mod/faster";
-String MQTT_FULL ="/leds/master/full";
+String MQTT_FASTER = "/leds/mod/faster";
+String MQTT_FULL = "/leds/master/full";
 String MQTT_FADE_IN = "/leds/master/fadein";
 String MQTT_FADE_OUT = "/leds/master/fadeout";
-String MQTT_MASTER ="/leds/master";
+String MQTT_MASTER = "/leds/master";
 
 void id_value()
 {
@@ -33,10 +36,35 @@ void id_value()
     String msg = "";
 
     msg += " Enter N° ID & =";
-    ez.msgBox("M5 REMOTE", msg, "#####", false);
+    ez.msgBox("M5 REMOTE", msg, "##" + id_fonct + "###", false);
 
     while (equal != true)
     {
+        M5.update();
+
+        // BTN A/B/C
+        if (M5.BtnB.wasPressed())
+        {
+            id_fonction += 1;
+            if (id_fonction >= 2)
+            {
+                id_fonction = 0;
+            }
+            if (id_fonction == 0)
+            {
+                id_fonct = "ID";
+                msg = "";
+                msg += " Enter N° ID & =";
+            }
+            else if (id_fonction == 1)
+            {
+                id_fonct = "CH";
+                msg = "";
+                msg += " Enter N° CH & =";
+            }
+
+            ez.msgBox("M5 REMOTE", msg, "##" + id_fonct + "###", false);
+        };
         // FACE
         //
         if (digitalRead(KEYBOARD_INT) == LOW)
@@ -67,7 +95,14 @@ void id_value()
                 case '.':
                     break;
                 case '=':
-                    MQTT_ID = String('e') + String(res_value);
+                    if (id_fonction == 0)
+                    {
+                        MQTT_ID = String('e') + String(res_value);
+                    }
+                    else if (id_fonction == 1)
+                    {
+                        MQTT_ID = String('c') + String(res_value);
+                    }
                     id_calling = String(res_value);
                     equal = true;
                     break;
@@ -91,7 +126,7 @@ void id_value()
                 }
                 LOG(value);
                 if (bad != true)
-                    ez.msgBox("M5 REMOTE", res_value, "#####", false);
+                    ez.msgBox("M5 REMOTE", res_value, "##" + id_fonct + "###", false);
             }
         }
     }
@@ -146,7 +181,7 @@ void master_value()
                     {
                         mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(MQTT_MASTER);
                         mqtt_topic.toCharArray(MQTT_TOPIC, mqtt_topic.length() + 1);
-                        k32->mqtt->publish(MQTT_TOPIC,  (res_value).c_str(), 1);
+                        k32->mqtt->publish(MQTT_TOPIC, (res_value).c_str(), 1);
                         equal = true;
                     }
                     else
@@ -222,7 +257,14 @@ void remote_mqtt()
             else if (id_call == 1)
             {
                 id_value();
-                id_cal = "id" + id_calling;
+                if (id_fonction == 0)
+                {
+                    id_cal = "id" + id_calling;
+                }
+                else if (id_fonction == 1)
+                {
+                    id_cal = "ch" + id_calling;
+                }
                 ez.msgBox("M5 REMOTE", id_cal, id_cal + "# Menu #" + fonct + "##" + page_me + "#", false);
             }
             mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(MQTT_MEM);
