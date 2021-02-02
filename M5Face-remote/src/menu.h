@@ -13,9 +13,13 @@ String id_calling = "";
 uint8_t id_fonction = 0;
 String id_fonct = "ID";
 
+uint8_t red, green, blue, white;
+String mqtt_color;
+char MQTT_COLOR[] = "0";
+
 char MQTT_TOPIC[] = "k32/all/leds";
 String mqtt_topic;
-String MQTT_ID;
+String MQTT_ID = "all";
 String MQTT_K32 = "k32/";
 String MQTT_MEM = "/leds/mem";
 String MQTT_STOP = "/leds/stop";
@@ -27,6 +31,9 @@ String MQTT_FULL = "/leds/master/full";
 String MQTT_FADE_IN = "/leds/master/fadein";
 String MQTT_FADE_OUT = "/leds/master/fadeout";
 String MQTT_MASTER = "/leds/master";
+String MQTT_COLOR_ALL = "/leds/all";
+String MQTT_COLOR_STRIP = "/leds/strip";
+String MQTT_COLOR_PIXEL = "/leds/pixel";
 
 void id_value()
 {
@@ -115,6 +122,21 @@ void id_value()
 
                 case 'A':
                     res_value = "";
+                    if (id_fonction == 0)
+                    {
+                        id_fonct = "ID";
+                        msg = "";
+                        msg += " Enter N° ID & =";
+                    }
+                    else if (id_fonction == 1)
+                    {
+                        id_fonct = "CH";
+                        msg = "";
+                        msg += " Enter N° CH & =";
+                    }
+
+                    ez.msgBox("M5 REMOTE", msg, "##" + id_fonct + "###", false);
+                    bad = true;
 
                     break;
                 case 'M':
@@ -201,7 +223,11 @@ void master_value()
                     break;
 
                 case 'A':
+                    bad = true;
                     res_value = "";
+                    msg = "";
+                    msg += " Enter value to master 0 -> 255 & =";
+                    ez.msgBox("M5 REMOTE", msg, "#####", false);
 
                     break;
                 case 'M':
@@ -221,6 +247,8 @@ void master_value()
 
 void remote_mqtt()
 {
+    mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(MQTT_MEM);
+    mqtt_topic.toCharArray(MQTT_TOPIC, mqtt_topic.length() + 1);
     uint8_t id_call = 0;
     String id_cal = "all";
     uint8_t fonction = 0;
@@ -278,7 +306,7 @@ void remote_mqtt()
         if (M5.BtnB.wasPressed())
         {
             fonction += 1;
-            if (fonction >= 2)
+            if (fonction >= 3)
             {
                 fonction = 0;
             }
@@ -289,6 +317,10 @@ void remote_mqtt()
             else if (fonction == 1)
             {
                 fonct = "Speed";
+            }
+            else if (fonction == 2)
+            {
+                fonct = "Color";
             }
 
             ez.msgBox("M5 REMOTE", fonct, id_cal + "# Menu #" + fonct + "##" + page_me + "#", false);
@@ -338,8 +370,99 @@ void remote_mqtt()
                 case '7':
                 case '8':
                 case '9':
-                    k32->mqtt->publish(MQTT_TOPIC, (page_mem + msg).c_str(), 1);
-                    msg += " " + mqtt_topic + (page_mem + msg);
+                    if (fonction < 2)
+                    {
+                        k32->mqtt->publish(MQTT_TOPIC, (page_mem + msg).c_str(), 1);
+                        msg += " " + mqtt_topic + (page_mem + msg);
+                    }
+                    else if (fonction == 2)
+                    {
+                        if ((char)key_val == '0')
+                        {
+                            red = 10;
+                            green = 10;
+                            blue = 10;
+                            white = 10;
+                            msg += " DIA ALL ";
+                        }
+                        else if ((char)key_val == '1')
+                        {
+                            red = 255;
+                            green = 0;
+                            blue = 0;
+                            white = 0;
+                            msg += " RED ";
+                        }
+                        else if ((char)key_val == '2')
+                        {
+                            green = 255;
+                            red = 0;
+                            blue = 0;
+                            white = 0;
+                            msg += " GREEN ";
+                        }
+                        else if ((char)key_val == '3')
+                        {
+                            blue = 255;
+                            red = 0;
+                            green = 0;
+                            white = 0;
+                            msg += " BLUE ";
+                        }
+                        else if ((char)key_val == '4')
+                        {
+                            white = 255;
+                            red = 0;
+                            green = 0;
+                            blue = 0;
+                            msg += " WHITE ";
+                        }
+                        else if ((char)key_val == '5')
+                        {
+                            red = 255;
+                            green = 127;
+                            blue = 0;
+                            white = 0;
+                            msg += " ORANGE ";
+                        }
+                        else if ((char)key_val == '6')
+                        {
+                            red = 255;
+                            green = 255;
+                            blue = 0;
+                            white = 0;
+                            msg += " YELLOW ";
+                        }
+                        else if ((char)key_val == '7')
+                        {
+                            green = 255;
+                            blue = 255;
+                            red = 0;
+                            white = 0;
+                            msg += " CYAN ";
+                        }
+                        else if ((char)key_val == '8')
+                        {
+                            red = 255;
+                            blue = 255;
+                            green = 0;
+                            white = 0;
+                            msg += " MAGENTA ";
+                        }
+                        else if ((char)key_val == '9')
+                        {
+                            red = 255;
+                            green = 255;
+                            blue = 255;
+                            white = 255;
+                            msg += " FULL ALL ";
+                        }
+                        mqtt_color = String(red) + String(' ') + String(green) + String(' ') + String(blue) + String(' ') + String(white);
+                        mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(MQTT_COLOR_ALL);
+                        mqtt_topic.toCharArray(MQTT_TOPIC, mqtt_topic.length() + 1);
+                        k32->mqtt->publish(MQTT_TOPIC, mqtt_color.c_str(), 1);
+                        msg += "|" + mqtt_topic + "|" + mqtt_color;
+                    }
                     break;
 
                 case '.':
@@ -355,6 +478,9 @@ void remote_mqtt()
                         msg = "Master SEND";
                     }
                     else if (fonction == 1)
+                    {
+                    }
+                    else if (fonction == 2)
                     {
                     }
                     break;
