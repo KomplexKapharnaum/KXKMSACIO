@@ -1,6 +1,5 @@
 void incombeat(char *payload, size_t length)
 {
-    LOGINL("in beat");
     currentTime = millis();
     bool check = false;
     int count;
