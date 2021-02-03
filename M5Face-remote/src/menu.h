@@ -50,13 +50,17 @@ void color_value()
     int res;
 
     msg += " Enter RED value & =";
-    ez.msgBox("M5 REMOTE", msg, "##" + color_fonct + "###", false);
+    ez.msgBox("M5 REMOTE", msg, "#Back#" + color_fonct + "###", false);
 
     while (equal != true)
     {
         M5.update();
 
         // BTN A/B/C
+        if (m5.BtnA.pressedFor(ez.theme->longpress_time))
+        {
+            remote_mqtt();
+        };
         if (M5.BtnB.wasPressed())
         {
             color_fonction += 1;
@@ -89,7 +93,7 @@ void color_value()
                 msg += " Enter WHITE value & =";
             }
 
-            ez.msgBox("M5 REMOTE", msg, "##" + color_fonct + "###", false);
+            ez.msgBox("M5 REMOTE", msg, "#Back#" + color_fonct + "###", false);
         };
         res = atoi(res_value.c_str());
         // FACE
@@ -122,7 +126,7 @@ void color_value()
                 case '.':
                     break;
                 case '=':
-                    if (res < 256)
+                    if (res < 256 && res_value != "")
                     {
                         if (color_fonction == 0)
                         {
@@ -142,6 +146,27 @@ void color_value()
                         else if (color_fonction == 3)
                         {
                             white = res_value.toInt();
+                            w = true;
+                        }
+                        color_fonction += 1;
+                        res_value = "";
+                    }
+                    else if (res_value == "")
+                    {
+                        if (color_fonction == 0)
+                        {
+                            r = true;
+                        }
+                        else if (color_fonction == 1)
+                        {
+                            g = true;
+                        }
+                        else if (color_fonction == 2)
+                        {
+                            b = true;
+                        }
+                        else if (color_fonction == 3)
+                        {
                             w = true;
                         }
                         color_fonction += 1;
@@ -176,7 +201,7 @@ void color_value()
                             msg += " Enter WHITE value & =";
                             w = false;
                         }
-                        ez.msgBox("M5 REMOTE", msg, "##" + color_fonct + "###", false);
+                        ez.msgBox("M5 REMOTE", msg, "#Back#" + color_fonct + "###", false);
                     }
                     if (r == true && g == true && b == true && w == true)
                     {
@@ -213,7 +238,7 @@ void color_value()
                             msg = "";
                             msg += " Enter WHITE value & =";
                         }
-                        ez.msgBox("M5 REMOTE", msg, "##" + color_fonct + "###", false);
+                        ez.msgBox("M5 REMOTE", msg, "#Back#" + color_fonct + "###", false);
                     }
                     break;
                 case '-':
@@ -250,7 +275,7 @@ void color_value()
                         msg += " Enter WHITE value & =";
                     }
 
-                    ez.msgBox("M5 REMOTE", msg, "##" + color_fonct + "###", false);
+                    ez.msgBox("M5 REMOTE", msg, "#Back#" + color_fonct + "###", false);
                     bad = true;
 
                     break;
@@ -263,7 +288,7 @@ void color_value()
                 }
                 LOG(value);
                 if (bad != true)
-                    ez.msgBox("M5 REMOTE", res_value, "##" + color_fonct + "###", false);
+                    ez.msgBox("M5 REMOTE", res_value, "#Back#" + color_fonct + "###", false);
             }
         }
     }
@@ -277,13 +302,18 @@ void id_value()
     String msg = "";
 
     msg += " Enter N° ID & =";
-    ez.msgBox("M5 REMOTE", msg, "##" + id_fonct + "###", false);
+    ez.msgBox("M5 REMOTE", msg, "#Back#" + id_fonct + "###", false);
 
     while (equal != true)
     {
         M5.update();
 
         // BTN A/B/C
+        if (m5.BtnA.pressedFor(ez.theme->longpress_time))
+        {
+            remote_mqtt();
+        };
+
         if (M5.BtnB.wasPressed())
         {
             id_fonction += 1;
@@ -304,7 +334,7 @@ void id_value()
                 msg += " Enter N° CH & =";
             }
 
-            ez.msgBox("M5 REMOTE", msg, "##" + id_fonct + "###", false);
+            ez.msgBox("M5 REMOTE", msg, "#Back#" + id_fonct + "###", false);
         };
         // FACE
         //
@@ -369,7 +399,7 @@ void id_value()
                         msg += " Enter N° CH & =";
                     }
 
-                    ez.msgBox("M5 REMOTE", msg, "##" + id_fonct + "###", false);
+                    ez.msgBox("M5 REMOTE", msg, "#Back#" + id_fonct + "###", false);
                     bad = true;
 
                     break;
@@ -382,7 +412,7 @@ void id_value()
                 }
                 LOG(value);
                 if (bad != true)
-                    ez.msgBox("M5 REMOTE", res_value, "##" + id_fonct + "###", false);
+                    ez.msgBox("M5 REMOTE", res_value, "#Back#" + id_fonct + "###", false);
             }
         }
     }
@@ -397,10 +427,19 @@ void master_value()
     int res;
 
     msg += " Enter value to master 0 -> 255 & =";
-    ez.msgBox("M5 REMOTE", msg, "#####", false);
+    ez.msgBox("M5 REMOTE", msg, "#Back####", false);
 
     while (equal != true)
     {
+        M5.update();
+
+        // BTN A/B/C    || M5.BtnA.isPressed()
+        //
+        if (m5.BtnA.pressedFor(ez.theme->longpress_time))
+        {
+            remote_mqtt();
+        };
+
         res = atoi(res_value.c_str());
         // FACE
         //
@@ -446,7 +485,7 @@ void master_value()
                         res_value = "";
                         msg = "";
                         msg += " Enter value to master 0 -> 255 & =";
-                        ez.msgBox("M5 REMOTE", msg, "#####", false);
+                        ez.msgBox("M5 REMOTE", msg, "#Back####", false);
                     }
                     break;
                 case '-':
@@ -461,7 +500,7 @@ void master_value()
                     res_value = "";
                     msg = "";
                     msg += " Enter value to master 0 -> 255 & =";
-                    ez.msgBox("M5 REMOTE", msg, "#####", false);
+                    ez.msgBox("M5 REMOTE", msg, "#Back####", false);
 
                     break;
                 case 'M':
@@ -473,7 +512,7 @@ void master_value()
                 }
                 LOG(value);
                 if (bad != true)
-                    ez.msgBox("M5 REMOTE", res_value, "#####", false);
+                    ez.msgBox("M5 REMOTE", res_value, "#Back####", false);
             }
         }
     }
@@ -615,10 +654,10 @@ void remote_mqtt()
                     {
                         if ((char)key_val == '0')
                         {
-                            red = 10;
-                            green = 10;
-                            blue = 10;
-                            white = 10;
+                            red = 23;
+                            green = 23;
+                            blue = 23;
+                            white = 23;
                             msg += " DIA ALL ";
                         }
                         else if ((char)key_val == '1')
@@ -693,11 +732,11 @@ void remote_mqtt()
                             white = 255;
                             msg += " FULL ALL ";
                         }
-                        mqtt_color = String(red) + String('§') + String(green) + String('§') + String(blue) + String('§') + String(white);
+                        mqtt_color = String(red) + "§ " + String(green) + "§ " + String(blue) + "§ " + String(white);
                         mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(MQTT_COLOR_ALL);
                         mqtt_topic.toCharArray(MQTT_TOPIC, mqtt_topic.length() + 1);
                         k32->mqtt->publish(MQTT_TOPIC, mqtt_color.c_str(), 1);
-                        msg += "|" + mqtt_topic + "|" + mqtt_color;
+                        msg += "|" + mqtt_topic + "|" + " " + mqtt_color;
                     }
                     break;
 
@@ -719,12 +758,12 @@ void remote_mqtt()
                     else if (fonction == 2)
                     {
                         color_value();
-                        mqtt_color = String(red) + String(' ') + String(green) + String(' ') + String(blue) + String(' ') + String(white);
+                        mqtt_color = String(red) + "§ " + String(green) + "§ " + String(blue) + "§ " + String(white);
                         mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(MQTT_COLOR_ALL);
                         mqtt_topic.toCharArray(MQTT_TOPIC, mqtt_topic.length() + 1);
                         k32->mqtt->publish(MQTT_TOPIC, mqtt_color.c_str(), 1);
                         msg = "Color SEND";
-                        msg += "|" + mqtt_topic + "|" + mqtt_color; 
+                        msg += "|" + mqtt_topic + "|" + " " + mqtt_color;
                     }
                     break;
                 case '-':
