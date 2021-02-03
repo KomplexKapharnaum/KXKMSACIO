@@ -693,7 +693,7 @@ void remote_mqtt()
                             white = 255;
                             msg += " FULL ALL ";
                         }
-                        mqtt_color = String(red) + String(' ') + String(green) + String(' ') + String(blue) + String(' ') + String(white);
+                        mqtt_color = String(red) + String('§') + String(green) + String('§') + String(blue) + String('§') + String(white);
                         mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(MQTT_COLOR_ALL);
                         mqtt_topic.toCharArray(MQTT_TOPIC, mqtt_topic.length() + 1);
                         k32->mqtt->publish(MQTT_TOPIC, mqtt_color.c_str(), 1);
