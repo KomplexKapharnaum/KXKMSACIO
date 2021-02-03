@@ -286,7 +286,6 @@ void color_value()
 
                     break;
                 }
-                LOG(value);
                 if (bad != true)
                     ez.msgBox("M5 REMOTE", res_value, "#Back#" + color_fonct + "###", false);
             }
@@ -410,7 +409,6 @@ void id_value()
 
                     break;
                 }
-                LOG(value);
                 if (bad != true)
                     ez.msgBox("M5 REMOTE", res_value, "#Back#" + id_fonct + "###", false);
             }
@@ -570,10 +568,6 @@ void remote_mqtt()
             }
             mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(MQTT_MEM);
             mqtt_topic.toCharArray(MQTT_TOPIC, mqtt_topic.length() + 1);
-            LOGINL("MQTT_TOPIC[] = ");
-            LOG(MQTT_TOPIC);
-            LOGINL("mqtt_topic = ");
-            LOG(mqtt_topic);
         };
 
         if (M5.BtnB.wasPressed())
@@ -879,11 +873,6 @@ void mainmenu_mon_id()
 {
     String msg;
     int16_t m = who_result - 1;
-    // LOGINL("************MON ID******  ");
-    // LOGINL(" id = ");
-    // LOG(m);
-    // LOGINL(" who = ");
-    // LOG(who_result);
 
     ezMenu mainmenu_mon_id("ESP MONITOR");
     mainmenu_mon_id.txtBig();
