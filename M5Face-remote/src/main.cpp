@@ -52,9 +52,6 @@ void setup()
       .qos = 0,
       .callback = [](char *payload, size_t length) 
                   {
-                    // LOGINL("-- BEAT received:");
-                    // LOGINL(" ");
-                    // LOG(payload);
                     incombeat(payload,length);
                   }
     });
@@ -64,9 +61,6 @@ void setup()
     .qos = 0,
     .callback = [](char *payload, size_t length) 
                 {
-                  // LOGINL("-- STATUS received:");
-                  // LOGINL(" ");
-                  // LOG(payload);
                   incoming (payload,length);
                 }
   });
