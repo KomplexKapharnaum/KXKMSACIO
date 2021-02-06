@@ -16,7 +16,7 @@ K32 *k32;
 #include "tableau.h"
 #include "incombeat.h"
 #include "incoming.h"
-#include "menu.h"
+#include "main_menu.h"
 
 ////\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//
 //\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\ SETUP //\\//\\//\\//\\//\\//\\//\\//\\//\\//\\/
@@ -73,7 +73,7 @@ void setup()
       .beaconInterval = 0 // full beacon interval milliseconds (0 = disable)
   });
 
-  mainmenu();
+  main_menu();
 }
 
 ///////////////////////////////////////////// LOOP //////////////////////////////////////////
