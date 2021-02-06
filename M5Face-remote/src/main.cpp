@@ -1,5 +1,5 @@
 #include <M5Stack.h>
-#include <M5ez.h>
+#include "K32_M5ez.h"
 
 #define KEYBOARD_I2C_ADDR 0X08
 #define KEYBOARD_INT 5
@@ -44,26 +44,32 @@ void setup()
   // k32->wifi->connect("mgr4g", NULL); //MGR
   k32->wifi->connect("riri_new", "B2az41opbn6397"); //Riri dev home
 
+  // k32->wifi->add("kxkm24", NULL, "2.0.0.91", "255.0.0.0", "2.0.0.1");                     //KXKM
+  // k32->wifi->add("kxkm24lulu", NULL, "2.0.0.91", "255.0.0.0", "2.0.0.1");                 //KXKM lulu
+  // k32->wifi->add("kxkm-wifi", "KOMPLEXKAPHARNAUM");                                       //KXKM
+  // k32->wifi->add("mgr4g", NULL);                                                          //MGR
+  // k32->wifi->add("interweb", "superspeed37");                                             //Maigre dev home
+  // k32->wifi->add("riri_new", "B2az41opbn6397", "2.0.0.11", "255.0.0.0", "192.168.0.254"); //Riri dev home
+  
+  // ez.wifi.add("kxkm24", "");                   //KXKM
+  // ez.wifi.add("kxkm-wifi", "KOMPLEXKAPHARNAUM"); //KXKM
+  // ez.wifi.add("mgr4g", "");                    //MGR
+  // ez.wifi.add("riri_new", "B2az41opbn6397");     //Riri dev home
+
   ///////////////////////////////////////////// MQTT ////////////////////////////////////////
   k32->init_mqtt();
 
-      k32->mqtt->subscribe({
-      .topic = "k32/monitor/beat",
-      .qos = 0,
-      .callback = [](char *payload, size_t length) 
-                  {
-                    incombeat(payload,length);
-                  }
-    });
+  k32->mqtt->subscribe({.topic = "k32/monitor/beat",
+                        .qos = 0,
+                        .callback = [](char *payload, size_t length) {
+                          incombeat(payload, length);
+                        }});
 
-  k32->mqtt->subscribe({
-    .topic = "k32/monitor/status",
-    .qos = 0,
-    .callback = [](char *payload, size_t length) 
-                {
-                  incoming (payload,length);
-                }
-  });
+  k32->mqtt->subscribe({.topic = "k32/monitor/status",
+                        .qos = 0,
+                        .callback = [](char *payload, size_t length) {
+                          incoming(payload, length);
+                        }});
 
   k32->mqtt->start({
       // .broker = "2.0.0.1",// Komplex
