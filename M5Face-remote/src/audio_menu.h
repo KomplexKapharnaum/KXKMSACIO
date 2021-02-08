@@ -1,4 +1,5 @@
 void remote_audio();
+void audio_master_value();
 
 // int16_t who_result;
 String id_calling = "";
@@ -28,6 +29,112 @@ String AUDIO_MQTT_FULL = "/volume/full";
 String AUDIO_MQTT_FADE_IN = "/volume/fadein";
 String AUDIO_MQTT_FADE_OUT = "/volume/fadeout";
 
+///////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////AUDIO_MASTER_VALUE///////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+void audio_master_value()
+{
+    bool equal = false;
+    bool bad = false;
+    String res_value = "";
+    String msg = "";
+    int res;
+
+    msg += " Enter value to master 0 -> 127 & =";
+    ez.msgBox("M5 REMOTE AUDIO", msg, "#####Back", false);
+
+    while (equal != true)
+    {
+        M5.update();
+
+        // BTN A/B/C    || M5.BtnA.isPressed()
+        //
+        if (m5.BtnC.pressedFor(ez.theme->longpress_time))
+        {
+            remote_audio();
+        };
+
+        res = atoi(res_value.c_str());
+        // FACE
+        //
+        if (digitalRead(KEYBOARD_INT) == LOW)
+        {
+            Wire.requestFrom(KEYBOARD_I2C_ADDR, 1); // request 1 byte from keyboard
+            while (Wire.available())
+            {
+                uint8_t key_val = Wire.read(); // receive a byte as character
+                String value((char)key_val);
+
+                switch ((char)key_val)
+                {
+                case '0':
+                case '1':
+                case '2':
+                case '3':
+                case '4':
+                case '5':
+                case '6':
+                case '7':
+                case '8':
+                case '9':
+                    if (bad == true)
+                        bad = false;
+                    res_value += value;
+                    break;
+
+                case '.':
+                    break;
+                case '=':
+
+                    if (res < 128)
+                    {
+                        audio_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(AUDIO_MQTT_VOLUME);
+                        audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
+                        k32->mqtt->publish(AUDIO_MQTT_TOPIC, (res_value).c_str(), 1);
+                        equal = true;
+                    }
+                    else
+                    {
+                        bad = true;
+                        res_value = "";
+                        msg = "";
+                        msg += " Enter value to master 0 -> 127 & =";
+                        ez.msgBox("M5 REMOTE AUDIO", msg, "#####Back", false);
+                    }
+                    break;
+                case '-':
+
+                    break;
+                case '+':
+
+                    break;
+
+                case 'A':
+                    bad = true;
+                    res_value = "";
+                    msg = "";
+                    msg += " Enter value to master 0 -> 127 & =";
+                    ez.msgBox("M5 REMOTE AUDIO", msg, "#####Back", false);
+
+                    break;
+                case 'M':
+
+                    break;
+                case '%':
+
+                    break;
+                }
+                LOG(value);
+                if (bad != true)
+                    ez.msgBox("M5 REMOTE AUDIO", res_value, "#####Back", false);
+            }
+        }
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////REMOTE_AUDIO/////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
 void remote_audio()
 {
     audio_mqtt_topic = String(AUDIO_MQTT_K32) + String(AUDIO_MQTT_ID) + String(AUDIO_MQTT_PLAY);
@@ -35,7 +142,7 @@ void remote_audio()
     uint8_t id_call = 0;
     String id_cal = "all";
     uint8_t fonction = 0;
-    String fonct = "Master";
+    String fonct = "Volume";
     uint8_t page_mem = 0;
     String page_me = "0-9";
     ez.msgBox("M5 REMOTE AUDIO", "Welcome", id_cal + "# Menu #" + fonct + "##" + page_me + "#", false);
@@ -91,15 +198,15 @@ void remote_audio()
             }
             if (fonction == 0)
             {
-                fonct = "Master";
+                fonct = "Volume";
             }
             else if (fonction == 1)
             {
-                fonct = "Speed";
+                fonct = "Loop";
             }
             else if (fonction == 2)
             {
-                fonct = "Color";
+                fonct = "Midi";
             }
 
             ez.msgBox("M5 REMOTE AUDIO", fonct, id_cal + "# Menu #" + fonct + "##" + page_me + "#", false);
@@ -200,8 +307,8 @@ void remote_audio()
                 case '=':
                     if (fonction == 0)
                     {
-                        master_value();
-                        msg = "Master SEND";
+                        audio_master_value();
+                        msg = "Volume SEND";
                     }
                     else if (fonction == 1)
                     {
