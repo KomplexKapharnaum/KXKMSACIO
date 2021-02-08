@@ -22,9 +22,11 @@ String MQTT_K32 = "k32/";
 String MQTT_MEM = "/leds/mem";
 String MQTT_STOP = "/leds/stop";
 String MQTT_LESS = "/leds/master/less";
+String MQTT_TENLESS = "/leds/master/tenless";
 String MQTT_SLOWER = "/leds/mod/slower";
 String MQTT_SMALLER = "/leds/mod/smaller";
 String MQTT_MORE = "/leds/master/more";
+String MQTT_TENMORE = "/leds/master/tenmore";
 String MQTT_FASTER = "/leds/mod/faster";
 String MQTT_BIGGER = "/leds/mod/bigger";
 String MQTT_FULL = "/leds/master/full";
@@ -829,6 +831,10 @@ void remote_lulu()
                 case '/':
                     if (fonction == 0)
                     {
+                        mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(MQTT_TENLESS);
+                        mqtt_topic.toCharArray(MQTT_TOPIC, mqtt_topic.length() + 1);
+                        k32->mqtt->publish(MQTT_TOPIC, nullptr, 1);
+                        msg += " " + mqtt_topic;
                     }
                     else if (fonction == 1)
                     {
@@ -844,6 +850,10 @@ void remote_lulu()
                 case '*':
                     if (fonction == 0)
                     {
+                        mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(MQTT_TENMORE);
+                        mqtt_topic.toCharArray(MQTT_TOPIC, mqtt_topic.length() + 1);
+                        k32->mqtt->publish(MQTT_TOPIC, nullptr, 1);
+                        msg += " " + mqtt_topic;
                     }
                     else if (fonction == 1)
                     {
