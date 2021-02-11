@@ -4,6 +4,7 @@
 
 #ifdef M5EZ_WIFI
 #include <WiFi.h>
+#include "network/K32_wifi.h"
 extern "C"
 {
 #include "esp_wifi.h"
@@ -1401,6 +1402,17 @@ void ezWifi::add(String ssid, String key)
     networks.push_back(new_net);
 }
 
+void ezWifi::add(String ssid, String key,String ip, String mask, String gateway)
+{
+  WifiNetwork_t new_net;
+    new_net.SSID = ssid;
+    new_net.key = key;
+    new_net.ip = ip;
+    new_net.mask = mask;
+    new_net.gateway = gateway;
+    networks.push_back(new_net);  
+}
+
 bool ezWifi::remove(int8_t index)
 {
     if (index < 0 || index >= networks.size())
@@ -1439,10 +1451,19 @@ void ezWifi::readFlash()
         String ssid = prefs.getString(idx.c_str(), "");
         idx = "key" + (String)index;
         String key = prefs.getString(idx.c_str(), "");
+        idx = "ip" + (String)index;
+        String ip = prefs.getString(idx.c_str(), "");
+        idx = "mask" + (String)index;
+        String mask = prefs.getString(idx.c_str(), "");
+        idx = "gateway" + (String)index;
+        String gateway = prefs.getString(idx.c_str(), "");
         if (ssid != "")
         {
             new_net.SSID = ssid;
             new_net.key = key;
+            new_net.ip = ip;
+            new_net.mask = mask;
+            new_net.gateway = gateway;
             networks.push_back(new_net);
 #ifdef M5EZ_WIFI_DEBUG
             Serial.println("wifiReadFlash: Read ssid:" + ssid + " key:" + key);
@@ -1472,6 +1493,12 @@ void ezWifi::writeFlash()
             break;
         idx = "key" + (String)n;
         prefs.remove(idx.c_str());
+        idx = "ip" + (String)n;
+        prefs.remove(idx.c_str());
+        idx = "mask" + (String)n;
+        prefs.remove(idx.c_str());
+        idx = "gateway" + (String)n;
+        prefs.remove(idx.c_str());
         n++;
     }
     prefs.putBool("autoconnect_on", autoConnect);
@@ -1486,8 +1513,15 @@ void ezWifi::writeFlash()
         {
             idx = "key" + (String)(n + 1);
             prefs.putString(idx.c_str(), networks[n].key);
+            idx = "ip" + (String)(n + 1);
+            prefs.putString(idx.c_str(), networks[n].ip);
+            idx = "mask" + (String)(n + 1);
+            prefs.putString(idx.c_str(), networks[n].mask);
+            idx = "gateway" + (String)(n + 1);
+            prefs.putString(idx.c_str(), networks[n].gateway);
+
 #ifdef M5EZ_WIFI_DEBUG
-            Serial.println("wifiWriteFlash: Wrote ssid:" + networks[n].SSID + " key:" + networks[n].key);
+            Serial.println("wifiWriteFlash: Wrote ssid:" + networks[n].SSID + " key:" + networks[n].key +" ip:" + networks[n].ip + " mask:" + networks[n].mask + " gateway:" + networks[n].gateway);
 #endif
         }
     }

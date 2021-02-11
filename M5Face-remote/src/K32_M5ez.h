@@ -532,6 +532,9 @@ class ezSettings {
 	struct WifiNetwork_t {
 		String SSID;
 		String key;
+		String ip;
+		String mask;
+		String gateway;
 	};
 
 	class ezWifi {
@@ -540,6 +543,7 @@ class ezSettings {
 			static bool autoConnect;
 			static void begin();
 			static void add(String ssid, String key);
+			static void add(String ssid, String key, String ip, String mask, String gateway);
 			static bool remove(int8_t index);
 			static bool remove(String ssid);
 			static int8_t indexForSSID(String ssid);

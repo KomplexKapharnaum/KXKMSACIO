@@ -1,10 +1,3 @@
-#include <M5Stack.h>
-#include "K32_M5ez.h"
-
-#define KEYBOARD_I2C_ADDR 0X08
-#define KEYBOARD_INT 5
-
-#define MAIN_DECLARED // Menu ez
 
 ///////////////////////////////////////////// ID ////////////////////////////////////////////
 #define K32_SET_NODEID 9001 // board unique id  9xxx for M5
@@ -12,6 +5,16 @@
 //////////////////////////////////////////// K32 ////////////////////////////////////////////
 #include <K32.h> // https://github.com/KomplexKapharnaum/K32-lib
 K32 *k32;
+
+//////////////////////////////////////////// M5 /////////////////////////////////////////////
+
+#include <M5Stack.h>
+#include "K32_M5ez.h"
+
+#define KEYBOARD_I2C_ADDR 0X08
+#define KEYBOARD_INT 5
+
+#define MAIN_DECLARED // Menu ez
 
 #include "tableau.h"
 #include "incombeat.h"
@@ -23,6 +26,9 @@ K32 *k32;
 ////\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//
 void setup()
 {
+  //////////////////////////////////////// K32_lib //////////////////////////////////////////
+  k32 = new K32();
+
 #include <themes/dark.h>
   ezt::setDebug(INFO);
   ez.begin();
@@ -33,9 +39,6 @@ void setup()
   //////////////////////////////////////// M5 Face Keyboard /////////////////////////////////
   Wire.begin();
   pinMode(KEYBOARD_INT, INPUT_PULLUP);
-
-  //////////////////////////////////////// K32_lib //////////////////////////////////////////
-  k32 = new K32();
 
   /////////////////////////////////////////////// WIFI //////////////////////////////////////
   k32->init_wifi("M5-Remote");
@@ -50,11 +53,18 @@ void setup()
   // k32->wifi->add("mgr4g", NULL);                                                          //MGR
   // k32->wifi->add("interweb", "superspeed37");                                             //Maigre dev home
   // k32->wifi->add("riri_new", "B2az41opbn6397", "2.0.0.11", "255.0.0.0", "192.168.0.254"); //Riri dev home
-  
+
   // ez.wifi.add("kxkm24", "");                   //KXKM
   // ez.wifi.add("kxkm-wifi", "KOMPLEXKAPHARNAUM"); //KXKM
   // ez.wifi.add("mgr4g", "");                    //MGR
   // ez.wifi.add("riri_new", "B2az41opbn6397");     //Riri dev home
+
+  ez.wifi.add("kxkm24", "", "2.0.0.91", "255.0.0.0", "2.0.0.1");                       //KXKM
+  ez.wifi.add("kxkm24lulu", "", "2.0.0.91", "255.0.0.0", "2.0.0.1");                   //KXKM lulu
+  ez.wifi.add("kxkm-wifi", "KOMPLEXKAPHARNAUM");                                       //KXKM
+  ez.wifi.add("mgr4g", "");                                                            //MGR
+  ez.wifi.add("interweb", "superspeed37");                                             //Maigre dev home
+  ez.wifi.add("riri_new", "B2az41opbn6397", "2.0.0.11", "255.0.0.0", "192.168.0.254"); //Riri dev home
 
   ///////////////////////////////////////////// MQTT ////////////////////////////////////////
   k32->init_mqtt();
