@@ -49,10 +49,11 @@ void setup()
 
   ez.wifi.add("kxkm24", "", "2.0.0.91", "255.0.0.0", "2.0.0.1");                       //KXKM
   ez.wifi.add("kxkm24lulu", "", "2.0.0.91", "255.0.0.0", "2.0.0.1");                   //KXKM lulu
-  ez.wifi.add("kxkm-wifi", "KOMPLEXKAPHARNAUM");                                       //KXKM
-  ez.wifi.add("mgr4g", "");                                                            //MGR
-  ez.wifi.add("interweb", "superspeed37");                                             //Maigre dev home
+  ez.wifi.add("kxkm-wifi", "KOMPLEXKAPHARNAUM", "0.0.0.0", "0.0.0.0", "0.0.0.0");      //KXKM
+  ez.wifi.add("mgr4g", "", "0.0.0.0", "0.0.0.0", "0.0.0.0");                           //MGR
+  ez.wifi.add("interweb", "superspeed37", "0.0.0.0", "0.0.0.0", "0.0.0.0");            //Maigre dev home
   ez.wifi.add("riri_new", "B2az41opbn6397", "2.0.0.11", "255.0.0.0", "192.168.0.254"); //Riri dev home
+  ez.wifi.add("riri_new", "B2az41opbn6397", "0.0.0.0", "0.0.0.0", "0.0.0.0");          //Riri dev home
 
   ///////////////////////////////////////////// MQTT ////////////////////////////////////////
   k32->init_mqtt();
