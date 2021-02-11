@@ -5,7 +5,6 @@ void powerOff();
 #include "lulu_menu.h"
 #include "audio_menu.h"
 #include "monitor_menu.h"
-#include "wifi_menu.h"
 
 void main_menu()
 {
@@ -14,8 +13,7 @@ void main_menu()
     main_menu.addItem("REMOTE LULU", remote_lulu);
     main_menu.addItem("REMOTE AUDIO", remote_audio);
     main_menu.addItem("MONITOR", monitor_menu);
-    main_menu.addItem("SET UP", ez.settings.menu);
-    main_menu.addItem("WIFI", wifi_menu);
+    main_menu.addItem("SETTINGS", ez.settings.menu);
     main_menu.addItem("POWER OFF", powerOff);
     main_menu.upOnFirst("last|up");
     main_menu.downOnLast("first|down");
