@@ -42,22 +42,10 @@ void setup()
 
   /////////////////////////////////////////////// WIFI //////////////////////////////////////
   k32->init_wifi("M5-Remote");
-  k32->wifi->staticIP("2.0.0.11", "2.0.0.1", "255.0.0.0");
+  k32->wifi->staticIP("2.0.0.12", "2.0.0.1", "255.0.0.0");
   // k32->wifi->connect("kxkm24", NULL); //KXKM
   // k32->wifi->connect("mgr4g", NULL); //MGR
   k32->wifi->connect("riri_new", "B2az41opbn6397"); //Riri dev home
-
-  // k32->wifi->add("kxkm24", NULL, "2.0.0.91", "255.0.0.0", "2.0.0.1");                     //KXKM
-  // k32->wifi->add("kxkm24lulu", NULL, "2.0.0.91", "255.0.0.0", "2.0.0.1");                 //KXKM lulu
-  // k32->wifi->add("kxkm-wifi", "KOMPLEXKAPHARNAUM");                                       //KXKM
-  // k32->wifi->add("mgr4g", NULL);                                                          //MGR
-  // k32->wifi->add("interweb", "superspeed37");                                             //Maigre dev home
-  // k32->wifi->add("riri_new", "B2az41opbn6397", "2.0.0.11", "255.0.0.0", "192.168.0.254"); //Riri dev home
-
-  // ez.wifi.add("kxkm24", "");                   //KXKM
-  // ez.wifi.add("kxkm-wifi", "KOMPLEXKAPHARNAUM"); //KXKM
-  // ez.wifi.add("mgr4g", "");                    //MGR
-  // ez.wifi.add("riri_new", "B2az41opbn6397");     //Riri dev home
 
   ez.wifi.add("kxkm24", "", "2.0.0.91", "255.0.0.0", "2.0.0.1");                       //KXKM
   ez.wifi.add("kxkm24lulu", "", "2.0.0.91", "255.0.0.0", "2.0.0.1");                   //KXKM lulu

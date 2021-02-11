@@ -1570,7 +1570,52 @@ void ezWifi::_manageConnect()
 
     while (manageconnect.runOnce())
     {
-        uint8_t zpic = manageconnect.pick();
+        uint8_t zpic = manageconnect.pick() - 1 ;
+
+        char ipToParse[25];
+        uint8_t ip[4];
+        strcpy (ipToParse, (networks[zpic].ip).c_str());
+        char * ipitem = strtok(ipToParse, ".");
+        uint8_t ipindex = 0;
+        while (ipitem != NULL)
+        {
+           if ((*ipitem >= '0') && (*ipitem <= '9'))
+            {
+             ip[ipindex++] = atoi(ipitem);
+            }
+           ipitem = strtok(NULL, ".=");
+        }
+
+        char gatewayToParse[25];
+        uint8_t gateway[4];
+        strcpy (gatewayToParse, (networks[zpic].gateway).c_str());
+        char * gatewayitem = strtok(gatewayToParse, ".");
+        uint8_t gatewayindex = 0;
+        while (gatewayitem != NULL)
+        {
+           if ((*gatewayitem >= '0') && (*gatewayitem <= '9'))
+            {
+             gateway[gatewayindex++] = atoi(gatewayitem);
+            }
+           gatewayitem = strtok(NULL, ".=");
+        }
+
+        char maskToParse[25];
+        uint8_t mask[4];
+        strcpy (maskToParse, (networks[zpic].mask).c_str());
+        char * maskitem = strtok(maskToParse, ".");
+        uint8_t maskindex = 0;
+        while (maskitem != NULL)
+        {
+           if ((*maskitem >= '0') && (*maskitem <= '9'))
+            {
+             mask[maskindex++] = atoi(maskitem);
+            }
+           maskitem = strtok(NULL, ".=");
+        }
+
+
+        WiFi.config(ip, gateway, mask);
         WiFi.begin((networks[zpic].SSID).c_str(), (networks[zpic].key).c_str());
         ez.msgBox("Connect to",(networks[zpic].SSID).c_str(), "OK");
         return;
