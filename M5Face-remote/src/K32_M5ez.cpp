@@ -1402,15 +1402,15 @@ void ezWifi::add(String ssid, String key)
     networks.push_back(new_net);
 }
 
-void ezWifi::add(String ssid, String key,String ip, String mask, String gateway)
+void ezWifi::add(String ssid, String key, String ip, String mask, String gateway)
 {
-  WifiNetwork_t new_net;
+    WifiNetwork_t new_net;
     new_net.SSID = ssid;
     new_net.key = key;
     new_net.ip = ip;
     new_net.mask = mask;
     new_net.gateway = gateway;
-    networks.push_back(new_net);  
+    networks.push_back(new_net);
 }
 
 bool ezWifi::remove(int8_t index)
@@ -1521,7 +1521,7 @@ void ezWifi::writeFlash()
             prefs.putString(idx.c_str(), networks[n].gateway);
 
 #ifdef M5EZ_WIFI_DEBUG
-            Serial.println("wifiWriteFlash: Wrote ssid:" + networks[n].SSID + " key:" + networks[n].key +" ip:" + networks[n].ip + " mask:" + networks[n].mask + " gateway:" + networks[n].gateway);
+            Serial.println("wifiWriteFlash: Wrote ssid:" + networks[n].SSID + " key:" + networks[n].key + " ip:" + networks[n].ip + " mask:" + networks[n].mask + " gateway:" + networks[n].gateway);
 #endif
         }
     }
@@ -1557,7 +1557,7 @@ bool ezWifi::_onOff(ezMenu *callingMenu)
 }
 void ezWifi::_manageConnect()
 {
-    ezMenu manageconnect("Managing autoconnects");
+    ezMenu manageconnect("Managing Connection");
     if (!networks.size())
     {
         ez.msgBox("No connects", "You have no saved connect networks.", "OK");
@@ -1568,61 +1568,61 @@ void ezWifi::_manageConnect()
         manageconnect.addItem(networks[n].SSID, NULL);
     }
 
+    manageconnect.txtBig();
+    manageconnect.buttons("up#Back#Connect##down#");
+
     while (manageconnect.runOnce())
     {
-        uint8_t zpic = manageconnect.pick() - 1 ;
+        uint8_t zpic = manageconnect.pick() - 1;
 
         char ipToParse[25];
         uint8_t ip[4];
-        strcpy (ipToParse, (networks[zpic].ip).c_str());
-        char * ipitem = strtok(ipToParse, ".");
+        strcpy(ipToParse, (networks[zpic].ip).c_str());
+        char *ipitem = strtok(ipToParse, ".");
         uint8_t ipindex = 0;
         while (ipitem != NULL)
         {
-           if ((*ipitem >= '0') && (*ipitem <= '9'))
+            if ((*ipitem >= '0') && (*ipitem <= '9'))
             {
-             ip[ipindex++] = atoi(ipitem);
+                ip[ipindex++] = atoi(ipitem);
             }
-           ipitem = strtok(NULL, ".=");
+            ipitem = strtok(NULL, ".=");
         }
 
         char gatewayToParse[25];
         uint8_t gateway[4];
-        strcpy (gatewayToParse, (networks[zpic].gateway).c_str());
-        char * gatewayitem = strtok(gatewayToParse, ".");
+        strcpy(gatewayToParse, (networks[zpic].gateway).c_str());
+        char *gatewayitem = strtok(gatewayToParse, ".");
         uint8_t gatewayindex = 0;
         while (gatewayitem != NULL)
         {
-           if ((*gatewayitem >= '0') && (*gatewayitem <= '9'))
+            if ((*gatewayitem >= '0') && (*gatewayitem <= '9'))
             {
-             gateway[gatewayindex++] = atoi(gatewayitem);
+                gateway[gatewayindex++] = atoi(gatewayitem);
             }
-           gatewayitem = strtok(NULL, ".=");
+            gatewayitem = strtok(NULL, ".=");
         }
 
         char maskToParse[25];
         uint8_t mask[4];
-        strcpy (maskToParse, (networks[zpic].mask).c_str());
-        char * maskitem = strtok(maskToParse, ".");
+        strcpy(maskToParse, (networks[zpic].mask).c_str());
+        char *maskitem = strtok(maskToParse, ".");
         uint8_t maskindex = 0;
         while (maskitem != NULL)
         {
-           if ((*maskitem >= '0') && (*maskitem <= '9'))
+            if ((*maskitem >= '0') && (*maskitem <= '9'))
             {
-             mask[maskindex++] = atoi(maskitem);
+                mask[maskindex++] = atoi(maskitem);
             }
-           maskitem = strtok(NULL, ".=");
+            maskitem = strtok(NULL, ".=");
         }
-
-
-        WiFi.config(ip, gateway, mask);
+            WiFi.config(ip, gateway, mask);
+        
         WiFi.begin((networks[zpic].SSID).c_str(), (networks[zpic].key).c_str());
-        ez.msgBox("Connect to",(networks[zpic].SSID).c_str(), "OK");
+        ez.msgBox("Connect to", (networks[zpic].SSID).c_str(), "OK");
         return;
     }
 
-    manageconnect.txtBig();
-    manageconnect.buttons("up#Back#Connect##down#");
     manageconnect.run();
 }
 
@@ -1639,7 +1639,7 @@ void ezWifi::_manageAutoconnects()
         autoconnect.addItem(networks[n].SSID, NULL, _autoconnectSelected);
     }
     autoconnect.txtBig();
-    autoconnect.buttons("up#Back#Forget##down#Connect");
+    autoconnect.buttons("up#Back#Forget##down#");
     autoconnect.run();
 }
 
