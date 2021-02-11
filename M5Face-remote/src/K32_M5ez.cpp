@@ -1902,7 +1902,7 @@ void ezWifi::_askAdd()
     }
     if (ez.msgBox("Wifi settings", "Save this network | to your autoconnects?", "no##yes") == "yes")
     {
-        ez.wifi.add(WiFi.SSID(), WiFi.psk());
+        ez.wifi.add(WiFi.SSID(), WiFi.psk(), "0.0.0.0", "0.0.0.0", "0.0.0.0");
         ez.wifi.writeFlash();
     }
 }
