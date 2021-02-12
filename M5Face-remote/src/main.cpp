@@ -31,7 +31,7 @@ void setup()
 
 #include <themes/dark.h>
   ezt::setDebug(INFO);
-  ez.begin();
+  ez.begin(k32);
 
   M5.Power.begin();
   M5.Speaker.mute();

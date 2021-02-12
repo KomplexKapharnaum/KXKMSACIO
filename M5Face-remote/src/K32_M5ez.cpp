@@ -2681,6 +2681,7 @@ constexpr ezButtons &M5ez::b;
 ezSettings M5ez::settings;
 ezMenu *M5ez::_currentMenu = nullptr;
 bool M5ez::_in_event = false;
+K32* M5ez::k32 = nullptr;
 #ifdef M5EZ_WIFI
 ezWifi M5ez::wifi;
 constexpr ezWifi &M5ez::w;
@@ -2707,8 +2708,9 @@ int16_t M5ez::_text_cursor_x, M5ez::_text_cursor_y, M5ez::_text_cursor_h, M5ez::
 bool M5ez::_text_cursor_state;
 long M5ez::_text_cursor_millis;
 
-void M5ez::begin()
+void M5ez::begin(K32* _k32)
 {
+    ez.k32 = _k32;
     m5.begin();
     ezTheme::begin();
     ez.screen.begin();

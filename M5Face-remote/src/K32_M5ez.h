@@ -648,6 +648,7 @@ class ezSettings {
 //   E Z
 //
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#include <K32.h>
 
 struct event_t {
 	uint16_t (*function)();
@@ -691,7 +692,7 @@ class M5ez {
 			static ezFACES faces;
 		#endif	
 		
-		static void begin();
+		static void begin(K32* _k32);
 
 		static void yield();
 		
@@ -743,6 +744,8 @@ class M5ez {
 		// ez.textBox
 		static void _wrapLines(String text, uint16_t width, std::vector<line_t>& lines);
 		static void _fitLines(String text, uint16_t max_width, uint16_t min_width, std::vector<line_t>& lines);
+
+		static K32* k32;
 	//
 };
 
