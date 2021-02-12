@@ -29,7 +29,7 @@ void setup()
   //////////////////////////////////////// K32_lib //////////////////////////////////////////
   k32 = new K32();
 
-#include <themes/dark.h>
+#include "themes/dark.h"
   ezt::setDebug(INFO);
   ez.begin(k32);
 
