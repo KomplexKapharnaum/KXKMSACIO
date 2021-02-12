@@ -912,7 +912,7 @@ void ezBacklight::menu()
     uint8_t start_brightness = _brightness;
     uint8_t start_inactivity = _inactivity;
     ezMenu blmenu("Backlight settings");
-    blmenu.txtSmall();
+    blmenu.txtBig();
     blmenu.buttons("up#Back#select##down#");
     blmenu.addItem("Backlight brightness");
     blmenu.addItem("Inactivity timeout");
@@ -1124,7 +1124,7 @@ void ezClock::menu()
     while (true)
     {
         ezMenu clockmenu("Clock settings");
-        clockmenu.txtSmall();
+        clockmenu.txtBig();
         clockmenu.buttons("up#Back#select##down#");
         clockmenu.addItem("on|Display clock\t" + (String)(_on ? "on" : "off"));
         if (_on)
@@ -1264,9 +1264,9 @@ void ezFACES::menu()
     while (true)
     {
         ezMenu facesmenu("FACES keyboard");
-        facesmenu.txtSmall();
+        facesmenu.txtBig();
         facesmenu.buttons("up#Back#select##down#");
-        facesmenu.addItem("on|FACES keyboard\t" + (String)(_on ? "attached" : "not attached"));
+        facesmenu.addItem("on|FACES \t" + (String)(_on ? "attached" : "not attached"));
         switch (facesmenu.runOnce())
         {
         case 1:
@@ -1555,11 +1555,11 @@ void ezWifi::menu()
 #endif
     ezMenu wifimain("Wifi settings");
     wifimain.txtBig();
-    wifimain.addItem("onoff | Autoconnect\t" + (String)(autoConnect ? "ON" : "OFF"), NULL, _onOff);
+    // wifimain.addItem("onoff | Autoconnect\t" + (String)(autoConnect ? "ON" : "OFF"), NULL, _onOff);
     wifimain.addItem("connection | " + (String)(WiFi.isConnected() ? "Connected: " + WiFi.SSID() : "Join a network"), NULL, _connection);
-    wifimain.addItem("Manage autoconnects", _manageAutoconnects);
-    wifimain.addItem("Manage Connection", _manageConnect);
-    wifimain.addItem("Add Connection", _addConnect);
+    wifimain.addItem("Manage   Connection", _manageAutoconnects);
+    wifimain.addItem("Select      Connection", _manageConnect);
+    wifimain.addItem("Add          Connection", _addConnect);
     wifimain.buttons("up#Back#select##down#");
     wifimain.run();
     _state = EZWIFI_IDLE;
@@ -1581,20 +1581,37 @@ void ezWifi::_addConnect()
     String SSID = "", key = "", ip = "", mask = "", gateway = "", broker = "";
     ezMenu addconnect("Add Connection");
     addconnect.txtBig();
-    // addconnect.buttons("#Back####");
+
     SSID = ez.textInput("Enter SSID");
     key = ez.textInput("Enter wifi password");
-    ip = ez.textInput("Enter IP");
-    mask = ez.textInput("Enter Mask");
-    gateway = ez.textInput("Enter Gateway");
-    broker = ez.textInput("Enter Broker IP");
+    ip = ez.textInput("IP x.x.x.x done 2.0.0.11");
+    mask = ez.textInput("Mask x.x.x.x done 255.0.0.0");
+    gateway = ez.textInput("Gateway x.x.x.x done 2.0.0.1");
+    broker = ez.textInput("Broker IP x.x.x.x done 2.0.0.1");
+
+    if (ip == "")
+    {
+        ip = "2.0.0.11";
+    }
+    if (mask == "")
+    {
+        mask = "255.0.0.0";
+    }
+    if (gateway == "")
+    {
+        gateway = "2.0.0.1";
+    }
+    if (broker == "")
+    {
+        broker = "2.0.0.1";
+    }
 
     for (uint8_t n = 0; n < networks.size(); n++)
     {
         if (networks[n].SSID == SSID)
             return;
     }
-    if (ez.msgBox("Wifi settings", "Save this network | to your autoconnects?", "no##yes") == "yes")
+    if (ez.msgBox("Wifi settings", "Save this network | to your connects?", "no##yes") == "yes")
     {
         ez.wifi.add(SSID, key, ip, mask, gateway, broker);
         ez.wifi.writeFlash();
@@ -2343,7 +2360,7 @@ void ezBLE::menu()
     while (true)
     {
         ezMenu blemenu("BLE Settings");
-        blemenu.txtSmall();
+        blemenu.txtBig();
         blemenu.addItem("on|Turn On\t" + (String)(_on ? "on" : "off"));
         if (_on)
         {
@@ -2398,7 +2415,7 @@ bool ezBLE::_scan(ezMenu *callingMenu)
     ez.msgBox("Bluetooth", "Scanning ...", "");
     BLEScanResults foundDevices = bleScan->start(5, false);
     ezMenu devicesmenu("Found " + String(foundDevices.getCount()) + " devices");
-    devicesmenu.txtSmall();
+    devicesmenu.txtBig();
     for (int i = 0; i < foundDevices.getCount(); i++)
     {
         const char *name = nullptr;
@@ -2566,7 +2583,7 @@ void ezBattery::menu()
     while (true)
     {
         ezMenu clockmenu("Battery settings");
-        clockmenu.txtSmall();
+        clockmenu.txtBig();
         clockmenu.buttons("up#Back#select##down#");
         clockmenu.addItem("on|Display battery\t" + (String)(_on ? "on" : "off"));
         switch (clockmenu.runOnce())
