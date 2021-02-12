@@ -535,6 +535,7 @@ class ezSettings {
 		String ip;
 		String mask;
 		String gateway;
+		String broker;
 	};
 
 	class ezWifi {
@@ -544,6 +545,7 @@ class ezSettings {
 			static void begin();
 			static void add(String ssid, String key);
 			static void add(String ssid, String key, String ip, String mask, String gateway);
+			static void add(String ssid, String key, String ip, String mask, String gateway, String broker);
 			static bool remove(int8_t index);
 			static bool remove(String ssid);
 			static int8_t indexForSSID(String ssid);

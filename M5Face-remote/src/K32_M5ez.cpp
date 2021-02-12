@@ -1413,6 +1413,18 @@ void ezWifi::add(String ssid, String key, String ip, String mask, String gateway
     networks.push_back(new_net);
 }
 
+void ezWifi::add(String ssid, String key, String ip, String mask, String gateway, String broker)
+{
+    WifiNetwork_t new_net;
+    new_net.SSID = ssid;
+    new_net.key = key;
+    new_net.ip = ip;
+    new_net.mask = mask;
+    new_net.gateway = gateway;
+    new_net.broker = broker;
+    networks.push_back(new_net);
+}
+
 bool ezWifi::remove(int8_t index)
 {
     if (index < 0 || index >= networks.size())
@@ -1457,6 +1469,8 @@ void ezWifi::readFlash()
         String mask = prefs.getString(idx.c_str(), "");
         idx = "gateway" + (String)index;
         String gateway = prefs.getString(idx.c_str(), "");
+        idx = "broker" + (String)index;
+        String broker = prefs.getString(idx.c_str(), "");
         if (ssid != "")
         {
             new_net.SSID = ssid;
@@ -1464,6 +1478,7 @@ void ezWifi::readFlash()
             new_net.ip = ip;
             new_net.mask = mask;
             new_net.gateway = gateway;
+            new_net.broker = broker;
             networks.push_back(new_net);
 #ifdef M5EZ_WIFI_DEBUG
             Serial.println("wifiReadFlash: Read ssid:" + ssid + " key:" + key);
@@ -1499,6 +1514,8 @@ void ezWifi::writeFlash()
         prefs.remove(idx.c_str());
         idx = "gateway" + (String)n;
         prefs.remove(idx.c_str());
+        idx = "broker" + (String)n;
+        prefs.remove(idx.c_str());
         n++;
     }
     prefs.putBool("autoconnect_on", autoConnect);
@@ -1519,6 +1536,8 @@ void ezWifi::writeFlash()
             prefs.putString(idx.c_str(), networks[n].mask);
             idx = "gateway" + (String)(n + 1);
             prefs.putString(idx.c_str(), networks[n].gateway);
+            idx = "broker" + (String)(n + 1);
+            prefs.putString(idx.c_str(), networks[n].broker);
 
 #ifdef M5EZ_WIFI_DEBUG
             Serial.println("wifiWriteFlash: Wrote ssid:" + networks[n].SSID + " key:" + networks[n].key + " ip:" + networks[n].ip + " mask:" + networks[n].mask + " gateway:" + networks[n].gateway);
@@ -1540,6 +1559,7 @@ void ezWifi::menu()
     wifimain.addItem("connection | " + (String)(WiFi.isConnected() ? "Connected: " + WiFi.SSID() : "Join a network"), NULL, _connection);
     wifimain.addItem("Manage autoconnects", _manageAutoconnects);
     wifimain.addItem("Manage Connection", _manageConnect);
+    // wifimain.addItem("Add Connection", _addConnect);
     wifimain.buttons("up#Back#select##down#");
     wifimain.run();
     _state = EZWIFI_IDLE;
@@ -1575,9 +1595,9 @@ void ezWifi::_manageConnect()
     {
         uint8_t zpic = manageconnect.pick() - 1;
 
-        ez.k32->mqtt->broker("2.0.0.10");
+        ez.k32->mqtt->broker((networks[zpic].broker).c_str());
         ez.k32->wifi->staticIP((networks[zpic].ip).c_str(), (networks[zpic].gateway).c_str(), (networks[zpic].mask).c_str());
-        ez.k32->wifi->connect((networks[zpic].SSID).c_str(), (networks[zpic].key).c_str()); 
+        ez.k32->wifi->connect((networks[zpic].SSID).c_str(), (networks[zpic].key).c_str());
         ez.msgBox("Connect to", (networks[zpic].SSID).c_str(), "OK");
         return;
     }
@@ -1660,7 +1680,7 @@ bool ezWifi::_connection(ezMenu *callingMenu)
             return true;
         if (pressed == "Disconnect")
         {
-            WiFi.disconnect();
+            ez.k32->wifi->disconnect();
             while (WiFi.isConnected())
             {
             }
@@ -1684,7 +1704,7 @@ bool ezWifi::_connection(ezMenu *callingMenu)
         if (joinmenu.pickName() == "Scan and join")
         {
             ez.msgBox("WiFi setup menu", "Scanning ...", "");
-            WiFi.disconnect();
+            ez.k32->wifi->disconnect();
             WiFi._setStatus(WL_IDLE_STATUS);
             delay(100);
             int16_t n = WiFi.scanNetworks();
@@ -1712,13 +1732,13 @@ bool ezWifi::_connection(ezMenu *callingMenu)
                     if (WiFi.encryptionType(networks.pick() - 1) == WIFI_AUTH_OPEN)
                     {
                         WiFi.mode(WIFI_MODE_STA);
-                        WiFi.begin(SSID.c_str());
+                        ez.k32->wifi->connect(SSID.c_str());
                     }
                     else
                     {
                         key = ez.textInput("Enter wifi password");
                         WiFi.mode(WIFI_MODE_STA);
-                        WiFi.begin(SSID.c_str(), key.c_str());
+                        ez.k32->wifi->connect(SSID.c_str(), key.c_str());
                     }
                     ez.msgBox("WiFi setup menu", "Connecting ...", "Abort", false);
                     String button;
@@ -1727,7 +1747,7 @@ bool ezWifi::_connection(ezMenu *callingMenu)
                     {
                         if (button == "Abort")
                         {
-                            WiFi.disconnect();
+                            ez.k32->wifi->disconnect();
                             break;
                         }
                         status = WiFi.status();
@@ -1936,7 +1956,7 @@ uint16_t ezWifi::loop()
                         Serial.println("EZWIFI: Match: " + WiFi.SSID(n) + ", connecting...");
 #endif
                         WiFi.mode(WIFI_MODE_STA);
-                        WiFi.begin(ssid.c_str(), key.c_str());
+                        ez.k32->wifi->connect(ssid.c_str(), key.c_str());
                         _state = EZWIFI_CONNECTING;
                         _wait_until = millis() + 7000;
                         return 250;
@@ -1960,7 +1980,7 @@ uint16_t ezWifi::loop()
 #ifdef M5EZ_WIFI_DEBUG
             Serial.println("EZWIFI: Connect timed out...");
 #endif
-            WiFi.disconnect();
+            ez.k32->wifi->disconnect();
             _current_from_scan++;
             _state = EZWIFI_SCANNING;
         }
@@ -2640,7 +2660,7 @@ constexpr ezButtons &M5ez::b;
 ezSettings M5ez::settings;
 ezMenu *M5ez::_currentMenu = nullptr;
 bool M5ez::_in_event = false;
-K32* M5ez::k32 = nullptr;
+K32 *M5ez::k32 = nullptr;
 #ifdef M5EZ_WIFI
 ezWifi M5ez::wifi;
 constexpr ezWifi &M5ez::w;
@@ -2667,7 +2687,7 @@ int16_t M5ez::_text_cursor_x, M5ez::_text_cursor_y, M5ez::_text_cursor_h, M5ez::
 bool M5ez::_text_cursor_state;
 long M5ez::_text_cursor_millis;
 
-void M5ez::begin(K32* _k32)
+void M5ez::begin(K32 *_k32)
 {
     ez.k32 = _k32;
     m5.begin();
