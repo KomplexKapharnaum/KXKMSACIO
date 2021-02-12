@@ -1559,7 +1559,7 @@ void ezWifi::menu()
     wifimain.addItem("connection | " + (String)(WiFi.isConnected() ? "Connected: " + WiFi.SSID() : "Join a network"), NULL, _connection);
     wifimain.addItem("Manage autoconnects", _manageAutoconnects);
     wifimain.addItem("Manage Connection", _manageConnect);
-    // wifimain.addItem("Add Connection", _addConnect);
+    wifimain.addItem("Add Connection", _addConnect);
     wifimain.buttons("up#Back#select##down#");
     wifimain.run();
     _state = EZWIFI_IDLE;
@@ -1575,6 +1575,32 @@ bool ezWifi::_onOff(ezMenu *callingMenu)
     ez.wifi.writeFlash();
     return true;
 }
+
+void ezWifi::_addConnect()
+{
+    String SSID = "", key = "", ip = "", mask = "", gateway = "", broker = "";
+    ezMenu addconnect("Add Connection");
+    addconnect.txtBig();
+    // addconnect.buttons("#Back####");
+    SSID = ez.textInput("Enter SSID");
+    key = ez.textInput("Enter wifi password");
+    ip = ez.textInput("Enter IP");
+    mask = ez.textInput("Enter Mask");
+    gateway = ez.textInput("Enter Gateway");
+    broker = ez.textInput("Enter Broker IP");
+
+    for (uint8_t n = 0; n < networks.size(); n++)
+    {
+        if (networks[n].SSID == SSID)
+            return;
+    }
+    if (ez.msgBox("Wifi settings", "Save this network | to your autoconnects?", "no##yes") == "yes")
+    {
+        ez.wifi.add(SSID, key, ip, mask, gateway, broker);
+        ez.wifi.writeFlash();
+    }
+}
+
 void ezWifi::_manageConnect()
 {
     ezMenu manageconnect("Managing Connection");
@@ -1714,7 +1740,7 @@ bool ezWifi::_connection(ezMenu *callingMenu)
             }
             else
             {
-                ezMenu networks("Select your netork");
+                ezMenu networks("Select your network");
                 networks.txtBig();
                 for (uint16_t i = 0; i < n; ++i)
                 {

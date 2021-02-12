@@ -562,6 +562,7 @@ class ezSettings {
 			static void _drawWidget(uint16_t x, uint16_t w);
 			static bool _onOff(ezMenu* callingMenu);
             static void _manageConnect();
+			static void _addConnect();
 			static void _manageAutoconnects();
 			static bool _autoconnectSelected(ezMenu* callingMenu);
 			static void _askAdd();
