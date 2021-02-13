@@ -1,13 +1,25 @@
+void check_page_mem();
+void check_fonction();
 void remote_audio();
 void audio_master_value();
+void page_mem_value();
+void fonction_value();
+
+uint8_t page_mem = 0;
+String page_me = "00-09";
+uint8_t id_call = 0;
+String id_cal = "all";
+uint8_t fonction = 0;
+String fonct = "Bank 0";
 
 // int16_t who_result;
 String id_calling = "";
+String volume = "127";
 
 uint8_t id_fonction = 0;
 String id_fonct = "ID";
 
-char AUDIO_MQTT_TOPIC[] = "k32/all/leds";
+char AUDIO_MQTT_TOPIC[] = "k32/all";
 String audio_mqtt_topic;
 String AUDIO_MQTT_ID = "all";
 String AUDIO_MQTT_K32 = "k32/";
@@ -28,6 +40,45 @@ String AUDIO_MQTT_TENMORE = "/volume/tenmore";
 String AUDIO_MQTT_FULL = "/volume/full";
 String AUDIO_MQTT_FADE_IN = "/volume/fadein";
 String AUDIO_MQTT_FADE_OUT = "/volume/fadeout";
+
+///////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////CHECK_FONCTION///////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+void check_fonction()
+{
+    fonction += 1;
+    if (fonction >= 17)
+    {
+        fonction = 0;
+    }
+    String val_fonc = String(fonction);
+    fonct = "Bank " + val_fonc;
+
+    ez.msgBox("M5 REMOTE AUDIO", fonct, id_cal + "# Menu #" + fonct + "# Val. #" + page_me + "# Val. ", false);
+}
+
+///////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////CHECK_PAGE_MEM///////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+void check_page_mem()
+{
+    page_mem += 1;
+    if (page_mem >= 13)
+    {
+        page_mem = 0;
+    }
+    String add_page = String(page_mem);
+    if (page_mem < 12)
+    {
+    page_me = add_page + "0-" + add_page + "9";
+    }
+    else if (page_mem == 12)
+    {
+    page_me = add_page + "0-" + add_page + "7";  
+    }
+
+    ez.msgBox("M5 REMOTE AUDIO", "Note " + page_me, id_cal + "# Menu #" + fonct + "# Val. #" + page_me + "# Val. ", false);
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////AUDIO_MASTER_VALUE///////////////////////////////////////
@@ -88,6 +139,7 @@ void audio_master_value()
 
                     if (res < 128)
                     {
+                        volume = (res_value).c_str();
                         audio_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(AUDIO_MQTT_VOLUME);
                         audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
                         k32->mqtt->publish(AUDIO_MQTT_TOPIC, (res_value).c_str(), 1);
@@ -133,19 +185,219 @@ void audio_master_value()
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////PAGE_MEM_VALUE///////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+void page_mem_value()
+{
+    bool equal = false;
+    bool bad = false;
+    String res_value = "";
+    String msg = "";
+    int res;
+
+    msg += " Enter value to Page | 0 -> 12 & = ";
+    msg += "| 0 = 0-9 .... 12 = 120-127 ";
+    ez.msgBox("M5 REMOTE AUDIO", msg, "#####", false);
+
+    while (equal != true)
+    {
+        M5.update();
+
+        // BTN A/B/C    || M5.BtnA.isPressed()
+        //
+        // if (m5.BtnC.pressedFor(ez.theme->longpress_time))
+        // {
+        //     remote_audio();
+        // };
+
+        res = atoi(res_value.c_str());
+        // FACE
+        //
+        if (digitalRead(KEYBOARD_INT) == LOW)
+        {
+            Wire.requestFrom(KEYBOARD_I2C_ADDR, 1); // request 1 byte from keyboard
+            while (Wire.available())
+            {
+                uint8_t key_val = Wire.read(); // receive a byte as character
+                String value((char)key_val);
+
+                switch ((char)key_val)
+                {
+                case '0':
+                case '1':
+                case '2':
+                case '3':
+                case '4':
+                case '5':
+                case '6':
+                case '7':
+                case '8':
+                case '9':
+                    if (bad == true)
+                        bad = false;
+                    res_value += value;
+                    break;
+
+                case '.':
+                    break;
+                case '=':
+
+                    if (res < 13)
+                    {
+                        page_mem = res - 1;
+                        equal = true;
+                    }
+                    else
+                    {
+                        bad = true;
+                        res_value = "";
+                        msg = "";
+                        msg += " Enter value to Page | 0 -> 12 & = ";
+                        msg += "| 0 = 0-9 .... 12 = 120-127 ";
+                        ez.msgBox("M5 REMOTE AUDIO", msg, "#####", false);
+                    }
+                    break;
+                case '-':
+
+                    break;
+                case '+':
+
+                    break;
+
+                case 'A':
+                    bad = true;
+                    res_value = "";
+                    msg = "";
+                    msg += " Enter value to Page | 0 -> 12 & = ";
+                    msg += "| 0 = 0-9 .... 12 = 120-127 ";
+                    ez.msgBox("M5 REMOTE AUDIO", msg, "#####", false);
+
+                    break;
+                case 'M':
+
+                    break;
+                case '%':
+
+                    break;
+                }
+                LOG(value);
+                if (bad != true)
+                    ez.msgBox("M5 REMOTE AUDIO", res_value, "#####", false);
+            }
+        }
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////FONCTION_VALUE///////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+void fonction_value()
+{
+    bool equal = false;
+    bool bad = false;
+    String res_value = "";
+    String msg = "";
+    int res;
+
+    msg += " Enter value to Bank | 0 -> 16 & = ";
+    ez.msgBox("M5 REMOTE AUDIO", msg, "#####", false);
+
+    while (equal != true)
+    {
+        M5.update();
+
+        // BTN A/B/C    || M5.BtnA.isPressed()
+        //
+        // if (m5.BtnC.pressedFor(ez.theme->longpress_time))
+        // {
+        //     remote_audio();
+        // };
+
+        res = atoi(res_value.c_str());
+        // FACE
+        //
+        if (digitalRead(KEYBOARD_INT) == LOW)
+        {
+            Wire.requestFrom(KEYBOARD_I2C_ADDR, 1); // request 1 byte from keyboard
+            while (Wire.available())
+            {
+                uint8_t key_val = Wire.read(); // receive a byte as character
+                String value((char)key_val);
+
+                switch ((char)key_val)
+                {
+                case '0':
+                case '1':
+                case '2':
+                case '3':
+                case '4':
+                case '5':
+                case '6':
+                case '7':
+                case '8':
+                case '9':
+                    if (bad == true)
+                        bad = false;
+                    res_value += value;
+                    break;
+
+                case '.':
+                    break;
+                case '=':
+
+                    if (res < 17)
+                    {
+                        fonction = res - 1;
+                        equal = true;
+                    }
+                    else
+                    {
+                        bad = true;
+                        res_value = "";
+                        msg = "";
+                        msg += " Enter value to Bank | 0 -> 16 & = ";
+                        ez.msgBox("M5 REMOTE AUDIO", msg, "#####", false);
+                    }
+                    break;
+                case '-':
+
+                    break;
+                case '+':
+
+                    break;
+
+                case 'A':
+                    bad = true;
+                    res_value = "";
+                    msg = "";
+                    msg += " Enter value to Bank | 0 -> 16 & = ";
+                    ez.msgBox("M5 REMOTE AUDIO", msg, "#####", false);
+
+                    break;
+                case 'M':
+
+                    break;
+                case '%':
+
+                    break;
+                }
+                LOG(value);
+                if (bad != true)
+                    ez.msgBox("M5 REMOTE AUDIO", res_value, "#####", false);
+            }
+        }
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////REMOTE_AUDIO/////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
 void remote_audio()
 {
     audio_mqtt_topic = String(AUDIO_MQTT_K32) + String(AUDIO_MQTT_ID) + String(AUDIO_MQTT_PLAY);
     audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
-    uint8_t id_call = 0;
-    String id_cal = "all";
-    uint8_t fonction = 0;
-    String fonct = "Volume";
-    uint8_t page_mem = 0;
-    String page_me = "0-9";
-    ez.msgBox("M5 REMOTE AUDIO", "Welcome", id_cal + "# Menu #" + fonct + "##" + page_me + "#", false);
+
+    ez.msgBox("M5 REMOTE AUDIO", "Welcome", id_cal + "# Menu #" + fonct + "# Val. #" + page_me + "# Val. ", false);
 
     while (true)
     {
@@ -170,7 +422,7 @@ void remote_audio()
             {
                 id_cal = "all";
                 AUDIO_MQTT_ID = "all";
-                ez.msgBox("M5 REMOTE AUDIO", id_cal, id_cal + "# Menu #" + fonct + "##" + page_me + "#", false);
+                ez.msgBox("M5 REMOTE AUDIO", id_cal, id_cal + "# Menu #" + fonct + "# Val. #" + page_me + "# Val. ", false);
             }
             else if (id_call == 1)
             {
@@ -183,55 +435,32 @@ void remote_audio()
                 {
                     id_cal = "ch" + id_calling;
                 }
-                ez.msgBox("M5 REMOTE AUDIO", id_cal, id_cal + "# Menu #" + fonct + "##" + page_me + "#", false);
+                ez.msgBox("M5 REMOTE AUDIO", id_cal, id_cal + "# Menu #" + fonct + "# Val. #" + page_me + "# Val. ", false);
             }
             audio_mqtt_topic = String(AUDIO_MQTT_K32) + String(AUDIO_MQTT_ID) + String(AUDIO_MQTT_PLAY);
             audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
         };
 
-        if (M5.BtnB.wasPressed())
+        if (m5.BtnB.pressedFor(ez.theme->longpress_time))
         {
-            fonction += 1;
-            if (fonction >= 3)
-            {
-                fonction = 0;
-            }
-            if (fonction == 0)
-            {
-                fonct = "Volume";
-            }
-            else if (fonction == 1)
-            {
-                fonct = "Loop";
-            }
-            else if (fonction == 2)
-            {
-                fonct = "Midi";
-            }
-
-            ez.msgBox("M5 REMOTE AUDIO", fonct, id_cal + "# Menu #" + fonct + "##" + page_me + "#", false);
+            fonction_value();
+            check_fonction();
         };
 
-        if (M5.BtnC.wasPressed())
+        if (M5.BtnB.wasReleased())
         {
-            page_mem += 1;
-            if (page_mem >= 3)
-            {
-                page_mem = 0;
-            }
-            if (page_mem == 0)
-            {
-                page_me = "0-9";
-            }
-            else if (page_mem == 1)
-            {
-                page_me = "10-19";
-            }
-            else if (page_mem == 2)
-            {
-                page_me = "20-29";
-            }
-            ez.msgBox("M5 REMOTE AUDIO", page_me, id_cal + "# Menu #" + fonct + "##" + page_me + "#", false);
+            check_fonction();
+        };
+
+        if (m5.BtnC.pressedFor(ez.theme->longpress_time))
+        {
+            page_mem_value();
+            check_page_mem();
+        };
+
+        if (M5.BtnC.wasReleased())
+        {
+            check_page_mem();
         };
 
         // FACE
@@ -256,46 +485,12 @@ void remote_audio()
                 case '7':
                 case '8':
                 case '9':
-                    if (fonction < 2)
-                    {
-                        audio_mqtt_topic = String(AUDIO_MQTT_K32) + String(AUDIO_MQTT_ID) + String(AUDIO_MQTT_PLAY);
-                        audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
-                        k32->mqtt->publish(AUDIO_MQTT_TOPIC, (page_mem + msg).c_str(), 1);
-                        msg += " " + audio_mqtt_topic + (page_mem + msg);
-                    }
-                    else if (fonction == 2)
-                    {
-                        if ((char)key_val == '0')
-                        {
-                        }
-                        else if ((char)key_val == '1')
-                        {
-                        }
-                        else if ((char)key_val == '2')
-                        {
-                        }
-                        else if ((char)key_val == '3')
-                        {
-                        }
-                        else if ((char)key_val == '4')
-                        {
-                        }
-                        else if ((char)key_val == '5')
-                        {
-                        }
-                        else if ((char)key_val == '6')
-                        {
-                        }
-                        else if ((char)key_val == '7')
-                        {
-                        }
-                        else if ((char)key_val == '8')
-                        {
-                        }
-                        else if ((char)key_val == '9')
-                        {
-                        }
-                    }
+
+                    audio_mqtt_topic = String(AUDIO_MQTT_K32) + String(AUDIO_MQTT_ID) + String(AUDIO_MQTT_PLAY);
+                    audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
+                    k32->mqtt->publish(AUDIO_MQTT_TOPIC, (page_mem + msg).c_str(), 1);
+                    msg += " " + audio_mqtt_topic + (page_mem + msg);
+
                     break;
 
                 case '.':
@@ -410,7 +605,7 @@ void remote_audio()
                     break;
                 }
                 LOG(msg);
-                ez.msgBox("M5 REMOTE AUDIO", msg, id_cal + "# Menu #" + fonct + "##" + page_me + "#", false);
+                ez.msgBox("M5 REMOTE AUDIO", msg, id_cal + "# Menu #" + fonct + "# Val. #" + page_me + "# Val. ", false);
             }
         }
     }
