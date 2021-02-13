@@ -11,6 +11,7 @@ uint8_t id_call = 0;
 String id_cal = "all";
 uint8_t fonction = 0;
 String fonct = "Bank 0";
+uint8_t volu = 127;
 
 // int16_t who_result;
 String id_calling = "";
@@ -20,7 +21,9 @@ uint8_t id_fonction = 0;
 String id_fonct = "ID";
 
 char AUDIO_MQTT_TOPIC[] = "k32/all";
+char AUDIO_MQTT_MESSAGE[] = "";
 String audio_mqtt_topic;
+String audio_mqtt_message;
 String AUDIO_MQTT_ID = "all";
 String AUDIO_MQTT_K32 = "k32/";
 String AUDIO_MQTT_PLAY = "/play";
@@ -33,11 +36,6 @@ String AUDIO_MQTT_UNLOOP = "/unloop";
 String AUDIO_MQTT_MIDI = "/midi";
 
 // TODO
-String AUDIO_MQTT_LESS = "/volume/less";
-String AUDIO_MQTT_TENLESS = "/volume/tenless";
-String AUDIO_MQTT_MORE = "/volume/more";
-String AUDIO_MQTT_TENMORE = "/volume/tenmore";
-String AUDIO_MQTT_FULL = "/volume/full";
 String AUDIO_MQTT_FADE_IN = "/volume/fadein";
 String AUDIO_MQTT_FADE_OUT = "/volume/fadeout";
 
@@ -70,11 +68,11 @@ void check_page_mem()
     String add_page = String(page_mem);
     if (page_mem < 12)
     {
-    page_me = add_page + "0-" + add_page + "9";
+        page_me = add_page + "0-" + add_page + "9";
     }
     else if (page_mem == 12)
     {
-    page_me = add_page + "0-" + add_page + "7";  
+        page_me = add_page + "0-" + add_page + "7";
     }
 
     ez.msgBox("M5 REMOTE AUDIO", "Note " + page_me, id_cal + "# Menu #" + fonct + "# Val. #" + page_me + "# Val. ", false);
@@ -139,6 +137,9 @@ void audio_master_value()
 
                     if (res < 128)
                     {
+                        volu = res_value.toInt();
+                        LOG("volu = ");
+                        LOG(volu);
                         volume = (res_value).c_str();
                         audio_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(AUDIO_MQTT_VOLUME);
                         audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
@@ -394,6 +395,7 @@ void fonction_value()
 ///////////////////////////////////////////////////////////////////////////////////////
 void remote_audio()
 {
+
     audio_mqtt_topic = String(AUDIO_MQTT_K32) + String(AUDIO_MQTT_ID) + String(AUDIO_MQTT_PLAY);
     audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
 
@@ -486,9 +488,11 @@ void remote_audio()
                 case '8':
                 case '9':
 
-                    audio_mqtt_topic = String(AUDIO_MQTT_K32) + String(AUDIO_MQTT_ID) + String(AUDIO_MQTT_PLAY);
+                    audio_mqtt_topic = String(AUDIO_MQTT_K32) + String(AUDIO_MQTT_ID) + String(AUDIO_MQTT_NOTEON);
                     audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
-                    k32->mqtt->publish(AUDIO_MQTT_TOPIC, (page_mem + msg).c_str(), 1);
+                    audio_mqtt_message = String(fonction) + "§" + String(page_mem + msg) + "§" + String(volu);
+                    audio_mqtt_message.toCharArray(AUDIO_MQTT_MESSAGE, audio_mqtt_message.length() + 1);
+                    k32->mqtt->publish(AUDIO_MQTT_TOPIC, AUDIO_MQTT_MESSAGE, 1);
                     msg += " " + audio_mqtt_topic + (page_mem + msg);
 
                     break;
@@ -500,108 +504,85 @@ void remote_audio()
                     msg += " " + audio_mqtt_topic;
                     break;
                 case '=':
-                    if (fonction == 0)
-                    {
-                        audio_master_value();
-                        msg = "Volume SEND";
-                    }
-                    else if (fonction == 1)
-                    {
-                    }
-                    else if (fonction == 2)
-                    {
-                    }
+                    audio_master_value();
+                    msg = "Volume " + volume + " SEND";
                     break;
                 case '-':
-                    if (fonction == 0)
+                    volu = volu - 2;
+                    if (volu < 0)
                     {
-                        audio_mqtt_topic = String(AUDIO_MQTT_K32) + String(AUDIO_MQTT_ID) + String(AUDIO_MQTT_LESS);
-                        audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
-                        k32->mqtt->publish(AUDIO_MQTT_TOPIC, nullptr, 1);
-                        msg += " " + audio_mqtt_topic;
+                        volu = 0;
                     }
-                    else if (fonction == 1)
-                    {
-                    }
+                    LOG("volu = ");
+                    LOG(volu);
+                    volume = String(volu);
+                    LOG("volume = ");
+                    LOG(volume);
+                    audio_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(AUDIO_MQTT_VOLUME);
+                    audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
+                    k32->mqtt->publish(AUDIO_MQTT_TOPIC, volume.c_str(), 1);
+                    msg += " " + audio_mqtt_topic;
                     break;
                 case '+':
-                    if (fonction == 0)
+                    volu = volu + 2;
+                    if (volu > 128)
                     {
-                        audio_mqtt_topic = String(AUDIO_MQTT_K32) + String(AUDIO_MQTT_ID) + String(AUDIO_MQTT_MORE);
-                        audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
-                        k32->mqtt->publish(AUDIO_MQTT_TOPIC, nullptr, 1);
-                        msg += " " + audio_mqtt_topic;
+                        volu = 127;
                     }
-                    else if (fonction == 1)
-                    {
-                    }
+                    LOG("volu = ");
+                    LOG(volu);
+                    volume = String(volu);
+                    LOG("volume = ");
+                    LOG(volume);
+                    audio_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(AUDIO_MQTT_VOLUME);
+                    audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
+                    k32->mqtt->publish(AUDIO_MQTT_TOPIC, volume.c_str(), 1);
+                    msg += " " + audio_mqtt_topic;
                     break;
 
                 case 'A':
-                    if (fonction == 0)
-                    {
-                        audio_mqtt_topic = String(AUDIO_MQTT_K32) + String(AUDIO_MQTT_ID) + String(AUDIO_MQTT_FULL);
-                        audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
-                        k32->mqtt->publish(AUDIO_MQTT_TOPIC, nullptr, 1);
-                        msg += " " + audio_mqtt_topic;
-                    }
-                    else if (fonction == 1)
-                    {
-                    }
+                    volu = 127;
+                    volume = String(volu);
+                    audio_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(AUDIO_MQTT_VOLUME);
+                    audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
+                    k32->mqtt->publish(AUDIO_MQTT_TOPIC, volume.c_str(), 1);
+                    msg += " " + audio_mqtt_topic;
                     break;
                 case 'M':
-                    if (fonction == 0)
-                    {
-                        audio_mqtt_topic = String(AUDIO_MQTT_K32) + String(AUDIO_MQTT_ID) + String(AUDIO_MQTT_FADE_IN);
-                        audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
-                        k32->mqtt->publish(AUDIO_MQTT_TOPIC, nullptr, 1);
-                        msg += " " + audio_mqtt_topic;
-                    }
-                    else if (fonction == 1)
-                    {
-                    }
+                    audio_mqtt_topic = String(AUDIO_MQTT_K32) + String(AUDIO_MQTT_ID) + String(AUDIO_MQTT_FADE_IN);
+                    audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
+                    k32->mqtt->publish(AUDIO_MQTT_TOPIC, nullptr, 1);
+                    msg += " " + audio_mqtt_topic;
                     break;
                 case '%':
-                    if (fonction == 0)
-                    {
-                        audio_mqtt_topic = String(AUDIO_MQTT_K32) + String(AUDIO_MQTT_ID) + String(AUDIO_MQTT_FADE_OUT);
-                        audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
-                        k32->mqtt->publish(AUDIO_MQTT_TOPIC, nullptr, 1);
-                        msg += " " + audio_mqtt_topic;
-                    }
-                    else if (fonction == 1)
-                    {
-                    }
+                    audio_mqtt_topic = String(AUDIO_MQTT_K32) + String(AUDIO_MQTT_ID) + String(AUDIO_MQTT_FADE_OUT);
+                    audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
+                    k32->mqtt->publish(AUDIO_MQTT_TOPIC, nullptr, 1);
+                    msg += " " + audio_mqtt_topic;
                     break;
                 case '/':
-                    if (fonction == 0)
+                    volu = volu - 10;
+                    if (volu < 0)
                     {
-                        audio_mqtt_topic = String(AUDIO_MQTT_K32) + String(AUDIO_MQTT_ID) + String(AUDIO_MQTT_TENLESS);
-                        audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
-                        k32->mqtt->publish(AUDIO_MQTT_TOPIC, nullptr, 1);
-                        msg += " " + audio_mqtt_topic;
+                        volu = 0;
                     }
-                    else if (fonction == 1)
-                    {
-                    }
-                    else if (fonction == 2)
-                    {
-                    }
+                    volume = String(volu);
+                    audio_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(AUDIO_MQTT_VOLUME);
+                    audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
+                    k32->mqtt->publish(AUDIO_MQTT_TOPIC, volume.c_str(), 1);
+                    msg += " " + audio_mqtt_topic;
                     break;
                 case '*':
-                    if (fonction == 0)
+                    volu = volu + 10;
+                    if (volu > 128)
                     {
-                        audio_mqtt_topic = String(AUDIO_MQTT_K32) + String(AUDIO_MQTT_ID) + String(AUDIO_MQTT_TENMORE);
-                        audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
-                        k32->mqtt->publish(AUDIO_MQTT_TOPIC, nullptr, 1);
-                        msg += " " + audio_mqtt_topic;
+                        volu = 127;
                     }
-                    else if (fonction == 1)
-                    {
-                    }
-                    else if (fonction == 2)
-                    {
-                    }
+                    volume = String(volu);
+                    audio_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(AUDIO_MQTT_VOLUME);
+                    audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
+                    k32->mqtt->publish(AUDIO_MQTT_TOPIC, volume.c_str(), 1);
+                    msg += " " + audio_mqtt_topic;
                     break;
                 }
                 LOG(msg);
