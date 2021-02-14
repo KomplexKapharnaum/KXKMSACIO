@@ -739,7 +739,7 @@ void remote_lulu()
                             white = 255;
                             msg += " FULL ALL ";
                         }
-                        light_mqtt_color = String(red) + "§ " + String(green) + "§ " + String(blue) + "§ " + String(white);
+                        light_mqtt_color = String(red) + "| " + String(green) + "| " + String(blue) + "| " + String(white);
                         light_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(LIGHT_MQTT_COLOR_ALL);
                         light_mqtt_topic.toCharArray(LIGHT_MQTT_TOPIC, light_mqtt_topic.length() + 1);
                         k32->mqtt->publish(LIGHT_MQTT_TOPIC, light_mqtt_color.c_str(), 1);
@@ -765,7 +765,7 @@ void remote_lulu()
                     else if (fonction == 2)
                     {
                         color_value();
-                        light_mqtt_color = String(red) + "§ " + String(green) + "§ " + String(blue) + "§ " + String(white);
+                        light_mqtt_color = String(red) + "| " + String(green) + "| " + String(blue) + "| " + String(white);
                         light_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(LIGHT_MQTT_COLOR_ALL);
                         light_mqtt_topic.toCharArray(LIGHT_MQTT_TOPIC, light_mqtt_topic.length() + 1);
                         k32->mqtt->publish(LIGHT_MQTT_TOPIC, light_mqtt_color.c_str(), 1);

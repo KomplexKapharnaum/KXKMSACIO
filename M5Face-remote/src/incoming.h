@@ -5,7 +5,7 @@ void update_tableau(char *payload, int num)
     int z = 0;
     char input[strlen(payload)];
     strcpy(input, payload);
-    char *ID_CHECK = strtok(input, "§");
+    char *ID_CHECK = strtok(input, "|");
     while (ID_CHECK != NULL)
     {
         z += 1;
@@ -41,7 +41,7 @@ void update_tableau(char *payload, int num)
         {
             T_RUN[num] = String(ID_CHECK);
         }
-        ID_CHECK = strtok(NULL, "§");
+        ID_CHECK = strtok(NULL, "|");
     }
 }
 
@@ -50,7 +50,7 @@ void store_tableau(char *payload, int num)
     int z = 0;
     char input[strlen(payload)];
     strcpy(input, payload);
-    char *ID_CHECK = strtok(input, "§");
+    char *ID_CHECK = strtok(input, "|");
     while (ID_CHECK != NULL)
     {
         z += 1;
@@ -86,7 +86,7 @@ void store_tableau(char *payload, int num)
         {
             T_RUN[num] = String(ID_CHECK);
         }
-        ID_CHECK = strtok(NULL, "§");
+        ID_CHECK = strtok(NULL, "|");
     }
 }
 
@@ -97,7 +97,7 @@ void incoming(char *payload, size_t length)
     char result[strlen(payload)];
     char input[strlen(payload)];
     strcpy(input, payload);
-    char *ID_CHECK = strtok(input, "§");
+    char *ID_CHECK = strtok(input, "|");
     strcpy(result, ID_CHECK);
 
     if (clients < max_clients)

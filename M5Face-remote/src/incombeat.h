@@ -5,7 +5,7 @@ void incombeat(char *payload, size_t length)
     int count;
     char input[strlen(payload)];
     strcpy(input, payload);
-    char *ID_CHECK = strtok(input, "§");
+    char *ID_CHECK = strtok(input, "|");
     int beatresult = atoi(ID_CHECK);
 
     for (int k = 0; k < max_clients; k++)

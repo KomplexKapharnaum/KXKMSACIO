@@ -487,7 +487,7 @@ void remote_audio()
 
                     audio_mqtt_topic = String(AUDIO_MQTT_K32) + String(AUDIO_MQTT_ID) + String(AUDIO_MQTT_NOTEON);
                     audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
-                    audio_mqtt_message = String(fonction) + "§" + String(page_mem + msg) + "§" + String(VoLu);
+                    audio_mqtt_message = String(fonction) + "|" + String(page_mem + msg) + "|" + String(VoLu);
                     audio_mqtt_message.toCharArray(AUDIO_MQTT_MESSAGE, audio_mqtt_message.length() + 1);
                     k32->mqtt->publish(AUDIO_MQTT_TOPIC, AUDIO_MQTT_MESSAGE, 1);
                     msg += " " + audio_mqtt_topic + (page_mem + msg);
