@@ -25,7 +25,7 @@ String id_fonct = "ID";
 bool mqtt_loop = false;
 
 char AUDIO_MQTT_TOPIC[] = "k32/all/volume";
-char AUDIO_MQTT_MESSAGE[] = "000§000§000§000";
+char AUDIO_MQTT_MESSAGE[] = "000|000|000|000";
 String audio_mqtt_topic;
 String audio_mqtt_message;
 String AUDIO_MQTT_ID = "all";
