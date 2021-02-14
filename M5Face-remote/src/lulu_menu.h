@@ -692,6 +692,10 @@ void remote_lulu()
                         light_mqtt_topic.toCharArray(LIGHT_MQTT_TOPIC, light_mqtt_topic.length() + 1);
                         k32->mqtt->publish(LIGHT_MQTT_TOPIC, (page_mem + msg).c_str(), 1);
                         msg += " " + light_mqtt_topic + (page_mem + msg);
+                        _Mast = String(Master);
+                        light_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(LIGHT_MQTT_MASTER);
+                        light_mqtt_topic.toCharArray(LIGHT_MQTT_TOPIC, light_mqtt_topic.length() + 1);
+                        k32->mqtt->publish(LIGHT_MQTT_TOPIC, _Mast.c_str(), 1);
                     }
                     else if (fonction == 2)
                     {
@@ -780,6 +784,10 @@ void remote_lulu()
                         light_mqtt_topic.toCharArray(LIGHT_MQTT_TOPIC, light_mqtt_topic.length() + 1);
                         k32->mqtt->publish(LIGHT_MQTT_TOPIC, light_mqtt_color.c_str(), 1);
                         msg += "|" + light_mqtt_topic + "|" + " " + light_mqtt_color;
+                        _Mast = String(Master);
+                        light_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(LIGHT_MQTT_MASTER);
+                        light_mqtt_topic.toCharArray(LIGHT_MQTT_TOPIC, light_mqtt_topic.length() + 1);
+                        k32->mqtt->publish(LIGHT_MQTT_TOPIC, _Mast.c_str(), 1);
                     }
                     break;
 
@@ -835,9 +843,9 @@ void remote_lulu()
                     if (fonction == 0)
                     {
                        Master += 2;
-                        if (Master < 0)
+                        if (Master > 255)
                         {
-                            Master = 0;
+                            Master = 255;
                         }
                         _Mast = String(Master);
                         light_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(LIGHT_MQTT_MASTER);
@@ -921,9 +929,9 @@ void remote_lulu()
                     if (fonction == 0)
                     {
                         Master += 10;
-                        if (Master < 0)
+                        if (Master > 255)
                         {
-                            Master = 0;
+                            Master = 255;
                         }
                         _Mast = String(Master);
                         light_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(LIGHT_MQTT_MASTER);
