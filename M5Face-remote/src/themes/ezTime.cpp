@@ -1,6 +1,6 @@
 #include <Arduino.h>
 
-#include <ezTime.h>
+#include "themes/ezTime.h"
 
 #ifdef EZTIME_NETWORK_ENABLE
 	#ifdef EZTIME_CACHE_NVS
