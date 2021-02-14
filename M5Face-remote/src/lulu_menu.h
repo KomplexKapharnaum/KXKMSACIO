@@ -4,6 +4,7 @@ void remote_lulu();
 void master_value();
 void id_value();
 void color_value();
+void draw_master();
 
 String MQTT_ID = "all";
 String MQTT_K32 = "k32/";
@@ -16,27 +17,42 @@ String light_id_fonct = "ID";
 
 uint8_t red, green, blue, white;
 String light_mqtt_color;
-char LIGHT_MQTT_COLOR[] = "0";
+// char LIGHT_MQTT_COLOR[] = "0";
 
-char LIGHT_MQTT_TOPIC[] = "k32/all/leds";
+int16_t Master = 255;
+String _Mast = String(Master);
+
+char LIGHT_MQTT_TOPIC[] = "k32/all/leds/master/tenless";
 String light_mqtt_topic;
 String LIGHT_MQTT_MEM = "/leds/mem";
 String LIGHT_MQTT_STOP = "/leds/stop";
-String LIGHT_MQTT_LESS = "/leds/master/less";
-String LIGHT_MQTT_TENLESS = "/leds/master/tenless";
+// String LIGHT_MQTT_LESS = "/leds/master/less";
+// String LIGHT_MQTT_TENLESS = "/leds/master/tenless";
 String LIGHT_MQTT_SLOWER = "/leds/mod/slower";
 String LIGHT_MQTT_SMALLER = "/leds/mod/smaller";
-String LIGHT_MQTT_MORE = "/leds/master/more";
-String LIGHT_MQTT_TENMORE = "/leds/master/tenmore";
+// String LIGHT_MQTT_MORE = "/leds/master/more";
+// String LIGHT_MQTT_TENMORE = "/leds/master/tenmore";
 String LIGHT_MQTT_FASTER = "/leds/mod/faster";
 String LIGHT_MQTT_BIGGER = "/leds/mod/bigger";
-String LIGHT_MQTT_FULL = "/leds/master/full";
+// String LIGHT_MQTT_FULL = "/leds/master/full";
 String LIGHT_MQTT_FADE_IN = "/leds/master/fadein";
 String LIGHT_MQTT_FADE_OUT = "/leds/master/fadeout";
 String LIGHT_MQTT_MASTER = "/leds/master";
 String LIGHT_MQTT_COLOR_ALL = "/leds/all";
 String LIGHT_MQTT_COLOR_STRIP = "/leds/strip";
 String LIGHT_MQTT_COLOR_PIXEL = "/leds/pixel";
+
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////DRAW MASTER/////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+void draw_master()
+{
+    m5.lcd.setTextColor(TFT_WHITE);
+    ez.setFont(ez.theme->menu_big_font);
+    m5.lcd.setTextDatum(TR_DATUM);
+    int16_t text_h = ez.fontHeight();
+    m5.lcd.drawString("Master:" + String(Master), 10, 10 + ez.theme->input_vmargin + text_h + 10);
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////COLOR_VALUE//////////////////////////////////////////////
@@ -54,6 +70,7 @@ void color_value()
 
     msg += " Enter RED value & =";
     ez.msgBox("M5 REMOTE LIGHT", msg, "##" + color_fonct + "###Back", false);
+    draw_master();
 
     while (equal != true)
     {
@@ -97,6 +114,7 @@ void color_value()
             }
 
             ez.msgBox("M5 REMOTE LIGHT", msg, "##" + color_fonct + "###Back", false);
+            draw_master();
         };
         res = atoi(res_value.c_str());
         // FACE
@@ -205,6 +223,7 @@ void color_value()
                             w = false;
                         }
                         ez.msgBox("M5 REMOTE LIGHT", msg, "##" + color_fonct + "###Back", false);
+                        draw_master();
                     }
                     if (r == true && g == true && b == true && w == true)
                     {
@@ -242,6 +261,7 @@ void color_value()
                             msg += " Enter WHITE value & =";
                         }
                         ez.msgBox("M5 REMOTE LIGHT", msg, "##" + color_fonct + "###Back", false);
+                        draw_master();
                     }
                     break;
                 case '-':
@@ -279,6 +299,7 @@ void color_value()
                     }
 
                     ez.msgBox("M5 REMOTE LIGHT", msg, "##" + color_fonct + "###Back", false);
+                    draw_master();
                     bad = true;
 
                     break;
@@ -291,6 +312,7 @@ void color_value()
                 }
                 if (bad != true)
                     ez.msgBox("M5 REMOTE LIGHT", res_value, "##" + color_fonct + "###Back", false);
+                draw_master();
             }
         }
     }
@@ -309,6 +331,7 @@ void id_value()
 
     msg += " Enter N° ID & =";
     ez.msgBox("M5 REMOTE LIGHT", msg, "##" + light_id_fonct + "###Back", false);
+    draw_master();
 
     while (equal != true)
     {
@@ -341,6 +364,7 @@ void id_value()
             }
 
             ez.msgBox("M5 REMOTE LIGHT", msg, "##" + light_id_fonct + "###Back", false);
+            draw_master();
         };
         // FACE
         //
@@ -406,6 +430,7 @@ void id_value()
                     }
 
                     ez.msgBox("M5 REMOTE LIGHT", msg, "##" + light_id_fonct + "###Back", false);
+                    draw_master();
                     bad = true;
 
                     break;
@@ -418,6 +443,7 @@ void id_value()
                 }
                 if (bad != true)
                     ez.msgBox("M5 REMOTE LIGHT", res_value, "##" + light_id_fonct + "###Back", false);
+                draw_master();
             }
         }
     }
@@ -436,6 +462,7 @@ void master_value()
 
     msg += " Enter value to master 0 -> 255 & =";
     ez.msgBox("M5 REMOTE LIGHT", msg, "#####Back", false);
+    draw_master();
 
     while (equal != true)
     {
@@ -482,6 +509,8 @@ void master_value()
 
                     if (res < 256)
                     {
+                        Master = res_value.toInt();
+                        _Mast = (res_value).c_str();
                         light_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(LIGHT_MQTT_MASTER);
                         light_mqtt_topic.toCharArray(LIGHT_MQTT_TOPIC, light_mqtt_topic.length() + 1);
                         k32->mqtt->publish(LIGHT_MQTT_TOPIC, (res_value).c_str(), 1);
@@ -494,6 +523,7 @@ void master_value()
                         msg = "";
                         msg += " Enter value to master 0 -> 255 & =";
                         ez.msgBox("M5 REMOTE LIGHT", msg, "#####Back", false);
+                        draw_master();
                     }
                     break;
                 case '-':
@@ -509,6 +539,7 @@ void master_value()
                     msg = "";
                     msg += " Enter value to master 0 -> 255 & =";
                     ez.msgBox("M5 REMOTE LIGHT", msg, "#####Back", false);
+                    draw_master();
 
                     break;
                 case 'M':
@@ -521,6 +552,7 @@ void master_value()
                 LOG(value);
                 if (bad != true)
                     ez.msgBox("M5 REMOTE LIGHT", res_value, "#####Back", false);
+                draw_master();
             }
         }
     }
@@ -540,6 +572,7 @@ void remote_lulu()
     uint8_t page_mem = 0;
     String page_me = "0-9";
     ez.msgBox("M5 REMOTE LIGHT", "Welcome", id_cal + "# Menu #" + fonct + "##" + page_me + "#", false);
+    draw_master();
 
     while (true)
     {
@@ -565,6 +598,7 @@ void remote_lulu()
                 id_cal = "all";
                 MQTT_ID = "all";
                 ez.msgBox("M5 REMOTE LIGHT", id_cal, id_cal + "# Menu #" + fonct + "##" + page_me + "#", false);
+                draw_master();
             }
             else if (id_call == 1)
             {
@@ -578,6 +612,7 @@ void remote_lulu()
                     id_cal = "ch" + light_id_calling;
                 }
                 ez.msgBox("M5 REMOTE LIGHT", id_cal, id_cal + "# Menu #" + fonct + "##" + page_me + "#", false);
+                draw_master();
             }
             light_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(LIGHT_MQTT_MEM);
             light_mqtt_topic.toCharArray(LIGHT_MQTT_TOPIC, light_mqtt_topic.length() + 1);
@@ -626,6 +661,7 @@ void remote_lulu()
                 page_me = "20-29";
             }
             ez.msgBox("M5 REMOTE LIGHT", page_me, id_cal + "# Menu #" + fonct + "##" + page_me + "#", false);
+            draw_master();
         };
 
         // FACE
@@ -757,7 +793,7 @@ void remote_lulu()
                     if (fonction == 0)
                     {
                         master_value();
-                        msg = "Master SEND";
+                        msg = "Master " + _Mast + " SEND";
                     }
                     else if (fonction == 1)
                     {
@@ -776,10 +812,16 @@ void remote_lulu()
                 case '-':
                     if (fonction == 0)
                     {
-                        light_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(LIGHT_MQTT_LESS);
+                        Master -= 2;
+                        if (Master < 0)
+                        {
+                            Master = 0;
+                        }
+                        _Mast = String(Master);
+                        light_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(LIGHT_MQTT_MASTER);
                         light_mqtt_topic.toCharArray(LIGHT_MQTT_TOPIC, light_mqtt_topic.length() + 1);
-                        k32->mqtt->publish(LIGHT_MQTT_TOPIC, nullptr, 1);
-                        msg += " " + light_mqtt_topic;
+                        k32->mqtt->publish(LIGHT_MQTT_TOPIC, _Mast.c_str(), 1);
+                        msg += "|" + light_mqtt_topic + "|" + _Mast.c_str();
                     }
                     else if (fonction == 1)
                     {
@@ -792,10 +834,16 @@ void remote_lulu()
                 case '+':
                     if (fonction == 0)
                     {
-                        light_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(LIGHT_MQTT_MORE);
+                       Master += 2;
+                        if (Master < 0)
+                        {
+                            Master = 0;
+                        }
+                        _Mast = String(Master);
+                        light_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(LIGHT_MQTT_MASTER);
                         light_mqtt_topic.toCharArray(LIGHT_MQTT_TOPIC, light_mqtt_topic.length() + 1);
-                        k32->mqtt->publish(LIGHT_MQTT_TOPIC, nullptr, 1);
-                        msg += " " + light_mqtt_topic;
+                        k32->mqtt->publish(LIGHT_MQTT_TOPIC, _Mast.c_str(), 1);
+                        msg += "|" + light_mqtt_topic + "|" + _Mast.c_str();
                     }
                     else if (fonction == 1)
                     {
@@ -809,10 +857,12 @@ void remote_lulu()
                 case 'A':
                     if (fonction == 0)
                     {
-                        light_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(LIGHT_MQTT_FULL);
+                        Master = 255;
+                        _Mast = String(Master);
+                        light_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(LIGHT_MQTT_MASTER);
                         light_mqtt_topic.toCharArray(LIGHT_MQTT_TOPIC, light_mqtt_topic.length() + 1);
-                        k32->mqtt->publish(LIGHT_MQTT_TOPIC, nullptr, 1);
-                        msg += " " + light_mqtt_topic;
+                        k32->mqtt->publish(LIGHT_MQTT_TOPIC, _Mast.c_str(), 1);
+                        msg += "|" + light_mqtt_topic + "|" + _Mast.c_str();
                     }
                     else if (fonction == 1)
                     {
@@ -845,10 +895,16 @@ void remote_lulu()
                 case '/':
                     if (fonction == 0)
                     {
-                        light_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(LIGHT_MQTT_TENLESS);
+                        Master -= 10;
+                        if (Master < 0)
+                        {
+                            Master = 0;
+                        }
+                        _Mast = String(Master);
+                        light_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(LIGHT_MQTT_MASTER);
                         light_mqtt_topic.toCharArray(LIGHT_MQTT_TOPIC, light_mqtt_topic.length() + 1);
-                        k32->mqtt->publish(LIGHT_MQTT_TOPIC, nullptr, 1);
-                        msg += " " + light_mqtt_topic;
+                        k32->mqtt->publish(LIGHT_MQTT_TOPIC, _Mast.c_str(), 1);
+                        msg += "|" + light_mqtt_topic + "|" + _Mast.c_str();
                     }
                     else if (fonction == 1)
                     {
@@ -864,10 +920,16 @@ void remote_lulu()
                 case '*':
                     if (fonction == 0)
                     {
-                        light_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(LIGHT_MQTT_TENMORE);
+                        Master += 10;
+                        if (Master < 0)
+                        {
+                            Master = 0;
+                        }
+                        _Mast = String(Master);
+                        light_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(LIGHT_MQTT_MASTER);
                         light_mqtt_topic.toCharArray(LIGHT_MQTT_TOPIC, light_mqtt_topic.length() + 1);
-                        k32->mqtt->publish(LIGHT_MQTT_TOPIC, nullptr, 1);
-                        msg += " " + light_mqtt_topic;
+                        k32->mqtt->publish(LIGHT_MQTT_TOPIC, _Mast.c_str(), 1);
+                        msg += "|" + light_mqtt_topic + "|" + _Mast.c_str();
                     }
                     else if (fonction == 1)
                     {
@@ -883,6 +945,7 @@ void remote_lulu()
                 }
                 LOG(msg);
                 ez.msgBox("M5 REMOTE LIGHT", msg, id_cal + "# Menu #" + fonct + "##" + page_me + "#", false);
+                draw_master();
             }
         }
     }
