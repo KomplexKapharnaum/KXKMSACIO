@@ -9,12 +9,11 @@ uint8_t page_mem = 0;
 String page_me = "00-09";
 uint8_t id_call = 0;
 String id_cal = "all";
+String id_calling = "";
 uint8_t fonction = 0;
 String fonct = "Bank 0";
-uint8_t volu = 127;
 
-// int16_t who_result;
-String id_calling = "";
+uint8_t volu = 127;
 String volume = "127";
 
 uint8_t id_fonction = 0;
