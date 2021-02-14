@@ -37,7 +37,7 @@
 #endif
 #include <M5Stack.h>		// GFXfont*
 #ifdef M5EZ_CLOCK
-	#include <ezTime.h>			// events, on-screen clock
+	#include "themes/ezTime.h"			// events, on-screen clock
 #endif
 // Special fake font pointers to access the older non FreeFonts in a unified way.
 // Only valid if passed to ez.setFont

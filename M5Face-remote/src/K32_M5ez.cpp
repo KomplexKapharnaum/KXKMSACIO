@@ -15,7 +15,7 @@ extern "C"
 #endif //M5EZ_WIFI
 
 #ifdef M5EZ_CLOCK
-#include <ezTime.h>
+#include "themes/ezTime.h"
 #endif
 
 #ifdef M5EZ_BLE
