@@ -13,13 +13,13 @@ String id_calling = "";
 uint8_t fonction = 0;
 String fonct = "Bank 0";
 
-uint8_t volu = 127;
-String volume = "127";
+int8_t VoLu = 80;
+String volume = String(VoLu);
 
 uint8_t id_fonction = 0;
 String id_fonct = "ID";
 
-char AUDIO_MQTT_TOPIC[] = "k32/all";
+char AUDIO_MQTT_TOPIC[] = "k32/all/volume";
 char AUDIO_MQTT_MESSAGE[] = "";
 String audio_mqtt_topic;
 String audio_mqtt_message;
@@ -136,9 +136,7 @@ void audio_master_value()
 
                     if (res < 128)
                     {
-                        volu = res_value.toInt();
-                        LOG("volu = ");
-                        LOG(volu);
+                        VoLu = res_value.toInt();
                         volume = (res_value).c_str();
                         audio_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(AUDIO_MQTT_VOLUME);
                         audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
@@ -395,8 +393,8 @@ void fonction_value()
 void remote_audio()
 {
 
-    audio_mqtt_topic = String(AUDIO_MQTT_K32) + String(AUDIO_MQTT_ID) + String(AUDIO_MQTT_PLAY);
-    audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
+    // audio_mqtt_topic = String(AUDIO_MQTT_K32) + String(AUDIO_MQTT_ID) + String(AUDIO_MQTT_PLAY);
+    // audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
 
     ez.msgBox("M5 REMOTE AUDIO", "Welcome", id_cal + "# Menu #" + fonct + "# Val. #" + page_me + "# Val. ", false);
 
@@ -410,7 +408,7 @@ void remote_audio()
         if (m5.BtnA.pressedFor(ez.theme->longpress_time))
         {
             break;
-        };
+        }
 
         if (m5.BtnA.wasReleased())
         {
@@ -438,31 +436,31 @@ void remote_audio()
                 }
                 ez.msgBox("M5 REMOTE AUDIO", id_cal, id_cal + "# Menu #" + fonct + "# Val. #" + page_me + "# Val. ", false);
             }
-            audio_mqtt_topic = String(AUDIO_MQTT_K32) + String(AUDIO_MQTT_ID) + String(AUDIO_MQTT_PLAY);
-            audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
-        };
+            // audio_mqtt_topic = String(AUDIO_MQTT_K32) + String(AUDIO_MQTT_ID) + String(AUDIO_MQTT_PLAY);
+            // audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
+        }
 
         if (m5.BtnB.pressedFor(ez.theme->longpress_time))
         {
             fonction_value();
             check_fonction();
-        };
+        }
 
         if (M5.BtnB.wasReleased())
         {
             check_fonction();
-        };
+        }
 
         if (m5.BtnC.pressedFor(ez.theme->longpress_time))
         {
             page_mem_value();
             check_page_mem();
-        };
+        }
 
         if (M5.BtnC.wasReleased())
         {
             check_page_mem();
-        };
+        }
 
         // FACE
         //
@@ -489,7 +487,7 @@ void remote_audio()
 
                     audio_mqtt_topic = String(AUDIO_MQTT_K32) + String(AUDIO_MQTT_ID) + String(AUDIO_MQTT_NOTEON);
                     audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
-                    audio_mqtt_message = String(fonction) + "§" + String(page_mem + msg) + "§" + String(volu);
+                    audio_mqtt_message = String(fonction) + "§" + String(page_mem + msg) + "§" + String(VoLu);
                     audio_mqtt_message.toCharArray(AUDIO_MQTT_MESSAGE, audio_mqtt_message.length() + 1);
                     k32->mqtt->publish(AUDIO_MQTT_TOPIC, AUDIO_MQTT_MESSAGE, 1);
                     msg += " " + audio_mqtt_topic + (page_mem + msg);
@@ -507,86 +505,91 @@ void remote_audio()
                     msg = "Volume " + volume + " SEND";
                     break;
                 case '-':
-                    volu = volu - 2;
-                    if (volu < 0)
+                    VoLu -= 2;
+                    if (VoLu < 0)
                     {
-                        volu = 0;
+                        VoLu = 0;
                     }
-                    LOG("volu = ");
-                    LOG(volu);
-                    volume = String(volu);
-                    LOG("volume = ");
-                    LOG(volume);
+                    volume = String(VoLu);
                     audio_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(AUDIO_MQTT_VOLUME);
                     audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
                     k32->mqtt->publish(AUDIO_MQTT_TOPIC, volume.c_str(), 1);
-                    msg += " " + audio_mqtt_topic;
+                    msg += " " + audio_mqtt_topic + "|" + volume.c_str();
                     break;
                 case '+':
-                    volu = volu + 2;
-                    if (volu > 128)
+                    VoLu += 2;
+                    if (VoLu > 127 || VoLu < 0)
                     {
-                        volu = 127;
+                        VoLu = 127;
                     }
-                    LOG("volu = ");
-                    LOG(volu);
-                    volume = String(volu);
-                    LOG("volume = ");
-                    LOG(volume);
+                    volume = String(VoLu);
                     audio_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(AUDIO_MQTT_VOLUME);
                     audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
                     k32->mqtt->publish(AUDIO_MQTT_TOPIC, volume.c_str(), 1);
-                    msg += " " + audio_mqtt_topic;
+                    msg += " " + audio_mqtt_topic + "|" + volume.c_str();
                     break;
 
                 case 'A':
-                    volu = 127;
-                    volume = String(volu);
+                    VoLu = 127;
+                    volume = String(VoLu);
                     audio_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(AUDIO_MQTT_VOLUME);
                     audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
                     k32->mqtt->publish(AUDIO_MQTT_TOPIC, volume.c_str(), 1);
-                    msg += " " + audio_mqtt_topic;
+                    msg += " " + audio_mqtt_topic + "|" + volume.c_str();
                     break;
+
                 case 'M':
                     audio_mqtt_topic = String(AUDIO_MQTT_K32) + String(AUDIO_MQTT_ID) + String(AUDIO_MQTT_FADE_IN);
                     audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
                     k32->mqtt->publish(AUDIO_MQTT_TOPIC, nullptr, 1);
                     msg += " " + audio_mqtt_topic;
                     break;
+
                 case '%':
                     audio_mqtt_topic = String(AUDIO_MQTT_K32) + String(AUDIO_MQTT_ID) + String(AUDIO_MQTT_FADE_OUT);
                     audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
                     k32->mqtt->publish(AUDIO_MQTT_TOPIC, nullptr, 1);
                     msg += " " + audio_mqtt_topic;
                     break;
+
                 case '/':
-                    volu = volu - 10;
-                    if (volu < 0)
+                    VoLu -= 10;
+                    if (VoLu < 0)
                     {
-                        volu = 0;
+                        VoLu = 0;
                     }
-                    volume = String(volu);
+                    volume = String(VoLu);
                     audio_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(AUDIO_MQTT_VOLUME);
                     audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
                     k32->mqtt->publish(AUDIO_MQTT_TOPIC, volume.c_str(), 1);
-                    msg += " " + audio_mqtt_topic;
+                    msg += " " + audio_mqtt_topic + "|" + volume.c_str();
                     break;
+
                 case '*':
-                    volu = volu + 10;
-                    if (volu > 128)
+                    VoLu += 10;
+                    if (VoLu > 127 || VoLu < 0)
                     {
-                        volu = 127;
+                        VoLu = 127;
                     }
-                    volume = String(volu);
+                    volume = String(VoLu);
                     audio_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(AUDIO_MQTT_VOLUME);
                     audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
                     k32->mqtt->publish(AUDIO_MQTT_TOPIC, volume.c_str(), 1);
-                    msg += " " + audio_mqtt_topic;
+                    msg += " " + audio_mqtt_topic + "|" + volume.c_str();
                     break;
-                }
+
+                case '`':
+                    LOG("LOOP ON OFF");
+                    break;
+
+                } //switch case
+
                 LOG(msg);
                 ez.msgBox("M5 REMOTE AUDIO", msg, id_cal + "# Menu #" + fonct + "# Val. #" + page_me + "# Val. ", false);
-            }
-        }
-    }
-}
+            } //while wire
+
+        } //digitale read
+
+    } //while true
+
+} //
