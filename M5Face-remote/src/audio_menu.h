@@ -4,6 +4,7 @@ void remote_audio();
 void audio_master_value();
 void page_mem_value();
 void fonction_value();
+void draw_loop();
 
 uint8_t page_mem = 0;
 String page_me = "00-09";
@@ -19,8 +20,10 @@ String volume = String(VoLu);
 uint8_t id_fonction = 0;
 String id_fonct = "ID";
 
+bool mqtt_loop = false;
+
 char AUDIO_MQTT_TOPIC[] = "k32/all/volume";
-char AUDIO_MQTT_MESSAGE[] = "";
+char AUDIO_MQTT_MESSAGE[] = "000§000§000§000";
 String audio_mqtt_topic;
 String audio_mqtt_message;
 String AUDIO_MQTT_ID = "all";
@@ -37,6 +40,22 @@ String AUDIO_MQTT_MIDI = "/midi";
 // TODO
 String AUDIO_MQTT_FADE_IN = "/volume/fadein";
 String AUDIO_MQTT_FADE_OUT = "/volume/fadeout";
+
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////DRAW LOOP///////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+void draw_loop()
+{
+    if (mqtt_loop)
+    {
+        m5.lcd.setTextColor(TFT_RED);
+        ez.setFont(ez.theme->menu_big_font);
+        m5.lcd.setTextDatum(TR_DATUM);
+        int16_t text_h = ez.fontHeight();
+        m5.lcd.fillRect(0, 10 + ez.theme->input_vmargin + 10 + text_h, TFT_W, text_h, ez.screen.background());
+        m5.lcd.drawString("loop", TFT_W - ez.theme->input_hmargin - 10, 10 + ez.theme->input_vmargin + text_h + 10);
+    }
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////CHECK_FONCTION///////////////////////////////////////
@@ -487,7 +506,7 @@ void remote_audio()
 
                     audio_mqtt_topic = String(AUDIO_MQTT_K32) + String(AUDIO_MQTT_ID) + String(AUDIO_MQTT_NOTEON);
                     audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
-                    audio_mqtt_message = String(fonction) + "§" + String(page_mem + msg) + "§" + String(VoLu);
+                    audio_mqtt_message = String(fonction) + "§" + String(page_mem + msg) + "§" + String(VoLu) + "§" + String(mqtt_loop);
                     audio_mqtt_message.toCharArray(AUDIO_MQTT_MESSAGE, audio_mqtt_message.length() + 1);
                     k32->mqtt->publish(AUDIO_MQTT_TOPIC, AUDIO_MQTT_MESSAGE, 1);
                     msg += " " + audio_mqtt_topic + (page_mem + msg);
@@ -579,13 +598,27 @@ void remote_audio()
                     break;
 
                 case '`':
-                    LOG("LOOP ON OFF");
+                    mqtt_loop = !mqtt_loop;
+                    draw_loop();
+                    if (mqtt_loop)
+                    {
+                        msg += " LOOP ON";
+                    }
+                    else
+                    {
+                        msg += " LOOP OFF";
+                    }
+
+                    LOG("LOOP ");
+                    LOG(mqtt_loop);
+
                     break;
 
                 } //switch case
 
                 LOG(msg);
                 ez.msgBox("M5 REMOTE AUDIO", msg, id_cal + "# Menu #" + fonct + "# Val. #" + page_me + "# Val. ", false);
+                draw_loop();
             } //while wire
 
         } //digitale read
