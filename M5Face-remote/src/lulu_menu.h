@@ -11,7 +11,6 @@ void send_master();
 String MQTT_ID = "all";
 String MQTT_K32 = "k32/";
 
-int16_t who_result;
 String light_id_calling = "";
 
 uint8_t light_id_fonction = 0;
@@ -19,7 +18,6 @@ String light_id_fonct = "ID";
 
 uint8_t red, green, blue, white;
 String light_mqtt_color;
-// char LIGHT_MQTT_COLOR[] = "0";
 
 int16_t Master = 255;
 String _Mast = String(Master);
@@ -28,21 +26,22 @@ char LIGHT_MQTT_TOPIC[] = "k32/all/leds/master/tenless";
 String light_mqtt_topic;
 String LIGHT_MQTT_MEM = "/leds/mem";
 String LIGHT_MQTT_STOP = "/leds/stop";
-// String LIGHT_MQTT_LESS = "/leds/master/less";
-// String LIGHT_MQTT_TENLESS = "/leds/master/tenless";
 String LIGHT_MQTT_SLOWER = "/leds/mod/slower";
 String LIGHT_MQTT_SMALLER = "/leds/mod/smaller";
-// String LIGHT_MQTT_MORE = "/leds/master/more";
-// String LIGHT_MQTT_TENMORE = "/leds/master/tenmore";
 String LIGHT_MQTT_FASTER = "/leds/mod/faster";
 String LIGHT_MQTT_BIGGER = "/leds/mod/bigger";
-// String LIGHT_MQTT_FULL = "/leds/master/full";
 String LIGHT_MQTT_FADE_IN = "/leds/master/fadein";
 String LIGHT_MQTT_FADE_OUT = "/leds/master/fadeout";
 String LIGHT_MQTT_MASTER = "/leds/master";
 String LIGHT_MQTT_COLOR_ALL = "/leds/all";
 String LIGHT_MQTT_COLOR_STRIP = "/leds/strip";
 String LIGHT_MQTT_COLOR_PIXEL = "/leds/pixel";
+
+// String LIGHT_MQTT_LESS = "/leds/master/less";
+// String LIGHT_MQTT_TENLESS = "/leds/master/tenless";
+// String LIGHT_MQTT_MORE = "/leds/master/more";
+// String LIGHT_MQTT_TENMORE = "/leds/master/tenmore";
+// String LIGHT_MQTT_FULL = "/leds/master/full";
 
 ///////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////SEND MASTER/////////////////////////////////////
