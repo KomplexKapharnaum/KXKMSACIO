@@ -7,6 +7,7 @@ void fonction_value();
 void draw_loop();
 void id_value_audio();
 void draw_volume();
+void send_volume();
 
 uint8_t page_mem = 0;
 String page_me = "00-09";
@@ -41,6 +42,17 @@ String AUDIO_MQTT_MIDI = "/midi";
 // TODO
 String AUDIO_MQTT_FADE_IN = "/volume/fadein";
 String AUDIO_MQTT_FADE_OUT = "/volume/fadeout";
+
+///////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////SEND_VOLUME////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+void send_volume()
+{
+    _Volu = String(Volume);
+    audio_mqtt_topic = String(MQTT_K32) + String(AUDIO_MQTT_ID) + String(AUDIO_MQTT_VOLUME);
+    audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
+    k32->mqtt->publish(AUDIO_MQTT_TOPIC, _Volu.c_str(), 1);
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////ID_VALUE_AUDIO////////////////////////////////////
@@ -311,10 +323,7 @@ void audio_master_value()
                     if (res < 128)
                     {
                         Volume = res_value.toInt();
-                        _Volu = (res_value).c_str();
-                        audio_mqtt_topic = String(MQTT_K32) + String(AUDIO_MQTT_ID) + String(AUDIO_MQTT_VOLUME);
-                        audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
-                        k32->mqtt->publish(AUDIO_MQTT_TOPIC, (res_value).c_str(), 1);
+                        send_volume();
                         equal = true;
                     }
                     else
@@ -717,10 +726,7 @@ void remote_audio()
                     {
                         Volume = 0;
                     }
-                    _Volu = String(Volume);
-                    audio_mqtt_topic = String(MQTT_K32) + String(AUDIO_MQTT_ID) + String(AUDIO_MQTT_VOLUME);
-                    audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
-                    k32->mqtt->publish(AUDIO_MQTT_TOPIC, _Volu.c_str(), 1);
+                    send_volume();
                     msg += "|" + audio_mqtt_topic + "|" + _Volu.c_str();
                     break;
                 case '+':
@@ -729,19 +735,13 @@ void remote_audio()
                     {
                         Volume = 127;
                     }
-                    _Volu = String(Volume);
-                    audio_mqtt_topic = String(MQTT_K32) + String(AUDIO_MQTT_ID) + String(AUDIO_MQTT_VOLUME);
-                    audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
-                    k32->mqtt->publish(AUDIO_MQTT_TOPIC, _Volu.c_str(), 1);
+                    send_volume();
                     msg += "|" + audio_mqtt_topic + "|" + _Volu.c_str();
                     break;
 
                 case 'A':
                     Volume = 127;
-                    _Volu = String(Volume);
-                    audio_mqtt_topic = String(MQTT_K32) + String(AUDIO_MQTT_ID) + String(AUDIO_MQTT_VOLUME);
-                    audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
-                    k32->mqtt->publish(AUDIO_MQTT_TOPIC, _Volu.c_str(), 1);
+                    send_volume();
                     msg += "|" + audio_mqtt_topic + "|" + _Volu.c_str();
                     break;
 
@@ -765,10 +765,7 @@ void remote_audio()
                     {
                         Volume = 0;
                     }
-                    _Volu = String(Volume);
-                    audio_mqtt_topic = String(MQTT_K32) + String(AUDIO_MQTT_ID) + String(AUDIO_MQTT_VOLUME);
-                    audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
-                    k32->mqtt->publish(AUDIO_MQTT_TOPIC, _Volu.c_str(), 1);
+                    send_volume();
                     msg += "|" + audio_mqtt_topic + "|" + _Volu.c_str();
                     break;
 
@@ -778,10 +775,7 @@ void remote_audio()
                     {
                         Volume = 127;
                     }
-                    _Volu = String(Volume);
-                    audio_mqtt_topic = String(MQTT_K32) + String(AUDIO_MQTT_ID) + String(AUDIO_MQTT_VOLUME);
-                    audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
-                    k32->mqtt->publish(AUDIO_MQTT_TOPIC, _Volu.c_str(), 1);
+                    send_volume();
                     msg += "|" + audio_mqtt_topic + "|" + _Volu.c_str();
                     break;
 
