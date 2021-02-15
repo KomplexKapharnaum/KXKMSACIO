@@ -2,6 +2,8 @@
 void menu_monitor();
 void mon_id_menu();
 
+int16_t who_result;
+
 void monitor_menu()
 {
     who_result = 0;
