@@ -16,11 +16,11 @@ String id_calling = "";
 uint8_t fonction = 0;
 String fonct = "Bank 0";
 
-int8_t VoLu = 80;
-String volume = String(VoLu);
+int8_t Volume = 80;
+String _Volu = String(Volume);
 
-uint8_t id_fonction = 0;
-String id_fonct = "ID";
+uint8_t audio_id_fonction = 0;
+String audio_id_fonct = "ID";
 
 bool mqtt_loop = false;
 
@@ -29,7 +29,6 @@ char AUDIO_MQTT_MESSAGE[] = "000|000|000|000";
 String audio_mqtt_topic;
 String audio_mqtt_message;
 String AUDIO_MQTT_ID = "all";
-// String AUDIO_MQTT_K32 = "k32/";
 String AUDIO_MQTT_PLAY = "/play";
 String AUDIO_MQTT_NOTEON = "/noteon";
 String AUDIO_MQTT_NOTEOFF = "/noteoff";
@@ -55,7 +54,7 @@ void id_value_audio()
     String msg = "";
 
     msg += " Enter N° ID & =";
-    ez.msgBox("M5 REMOTE AUDIO", msg, "##" + id_fonct + "###Back", false);
+    ez.msgBox("M5 REMOTE AUDIO", msg, "##" + audio_id_fonct + "###Back", false);
     draw_loop();
     draw_volume();
 
@@ -71,25 +70,25 @@ void id_value_audio()
 
         if (M5.BtnB.wasPressed())
         {
-            id_fonction += 1;
-            if (id_fonction >= 2)
+            audio_id_fonction += 1;
+            if (audio_id_fonction >= 2)
             {
-                id_fonction = 0;
+                audio_id_fonction = 0;
             }
-            if (id_fonction == 0)
+            if (audio_id_fonction == 0)
             {
-                id_fonct = "ID";
+                audio_id_fonct = "ID";
                 msg = "";
                 msg += " Enter N° ID & =";
             }
-            else if (id_fonction == 1)
+            else if (audio_id_fonction == 1)
             {
-                id_fonct = "CH";
+                audio_id_fonct = "CH";
                 msg = "";
                 msg += " Enter N° CH & =";
             }
 
-            ez.msgBox("M5 REMOTE AUDIO", msg, "##" + id_fonct + "###Back", false);
+            ez.msgBox("M5 REMOTE AUDIO", msg, "##" + audio_id_fonct + "###Back", false);
             draw_loop();
             draw_volume();
         };
@@ -123,11 +122,11 @@ void id_value_audio()
                 case '.':
                     break;
                 case '=':
-                    if (id_fonction == 0)
+                    if (audio_id_fonction == 0)
                     {
                         AUDIO_MQTT_ID = String('e') + String(res_value);
                     }
-                    else if (id_fonction == 1)
+                    else if (audio_id_fonction == 1)
                     {
                         AUDIO_MQTT_ID = String('c') + String(res_value);
                     }
@@ -143,20 +142,20 @@ void id_value_audio()
 
                 case 'A':
                     res_value = "";
-                    if (id_fonction == 0)
+                    if (audio_id_fonction == 0)
                     {
-                        id_fonct = "ID";
+                        audio_id_fonct = "ID";
                         msg = "";
                         msg += " Enter N° ID & =";
                     }
-                    else if (id_fonction == 1)
+                    else if (audio_id_fonction == 1)
                     {
-                        id_fonct = "CH";
+                        audio_id_fonct = "CH";
                         msg = "";
                         msg += " Enter N° CH & =";
                     }
 
-                    ez.msgBox("M5 REMOTE AUDIO", msg, "##" + id_fonct + "###Back", false);
+                    ez.msgBox("M5 REMOTE AUDIO", msg, "##" + audio_id_fonct + "###Back", false);
                     bad = true;
                     draw_loop();
                     draw_volume();
@@ -171,7 +170,7 @@ void id_value_audio()
                 }
                 if (bad != true)
                 {
-                    ez.msgBox("M5 REMOTE AUDIO", res_value, "##" + id_fonct + "###Back", false);
+                    ez.msgBox("M5 REMOTE AUDIO", res_value, "##" + audio_id_fonct + "###Back", false);
                     draw_loop();
                     draw_volume();
                 }
@@ -204,7 +203,7 @@ void draw_volume()
     ez.setFont(ez.theme->menu_big_font);
     m5.lcd.setTextDatum(TR_DATUM);
     int16_t text_h = ez.fontHeight();
-    m5.lcd.drawString("Volume:" + String(VoLu), 10, 10 + ez.theme->input_vmargin + text_h + 10);
+    m5.lcd.drawString("Volume:" + String(Volume), 10, 10 + ez.theme->input_vmargin + text_h + 10);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -311,8 +310,8 @@ void audio_master_value()
 
                     if (res < 128)
                     {
-                        VoLu = res_value.toInt();
-                        volume = (res_value).c_str();
+                        Volume = res_value.toInt();
+                        _Volu = (res_value).c_str();
                         audio_mqtt_topic = String(MQTT_K32) + String(AUDIO_MQTT_ID) + String(AUDIO_MQTT_VOLUME);
                         audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
                         k32->mqtt->publish(AUDIO_MQTT_TOPIC, (res_value).c_str(), 1);
@@ -632,11 +631,11 @@ void remote_audio()
             else if (id_call == 1)
             {
                 id_value_audio();
-                if (id_fonction == 0)
+                if (audio_id_fonction == 0)
                 {
                     id_cal = "id" + id_calling;
                 }
-                else if (id_fonction == 1)
+                else if (audio_id_fonction == 1)
                 {
                     id_cal = "ch" + id_calling;
                 }
@@ -695,7 +694,7 @@ void remote_audio()
 
                     audio_mqtt_topic = String(MQTT_K32) + String(AUDIO_MQTT_ID) + String(AUDIO_MQTT_NOTEON);
                     audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
-                    audio_mqtt_message = String(fonction) + "|" + String(page_mem + msg) + "|" + String(VoLu) + "|" + String(mqtt_loop);
+                    audio_mqtt_message = String(fonction) + "|" + String(page_mem + msg) + "|" + String(Volume) + "|" + String(mqtt_loop);
                     audio_mqtt_message.toCharArray(AUDIO_MQTT_MESSAGE, audio_mqtt_message.length() + 1);
                     k32->mqtt->publish(AUDIO_MQTT_TOPIC, AUDIO_MQTT_MESSAGE, 1);
                     msg += "|" + audio_mqtt_topic + "|" + (page_mem + msg);
@@ -710,40 +709,40 @@ void remote_audio()
                     break;
                 case '=':
                     audio_master_value();
-                    msg = "Volume " + volume + " SEND";
+                    msg = "Volume " + _Volu + " SEND";
                     break;
                 case '-':
-                    VoLu -= 2;
-                    if (VoLu < 0)
+                    Volume -= 2;
+                    if (Volume < 0)
                     {
-                        VoLu = 0;
+                        Volume = 0;
                     }
-                    volume = String(VoLu);
+                    _Volu = String(Volume);
                     audio_mqtt_topic = String(MQTT_K32) + String(AUDIO_MQTT_ID) + String(AUDIO_MQTT_VOLUME);
                     audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
-                    k32->mqtt->publish(AUDIO_MQTT_TOPIC, volume.c_str(), 1);
-                    msg += "|" + audio_mqtt_topic + "|" + volume.c_str();
+                    k32->mqtt->publish(AUDIO_MQTT_TOPIC, _Volu.c_str(), 1);
+                    msg += "|" + audio_mqtt_topic + "|" + _Volu.c_str();
                     break;
                 case '+':
-                    VoLu += 2;
-                    if (VoLu > 127 || VoLu < 0)
+                    Volume += 2;
+                    if (Volume > 127 || Volume < 0)
                     {
-                        VoLu = 127;
+                        Volume = 127;
                     }
-                    volume = String(VoLu);
+                    _Volu = String(Volume);
                     audio_mqtt_topic = String(MQTT_K32) + String(AUDIO_MQTT_ID) + String(AUDIO_MQTT_VOLUME);
                     audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
-                    k32->mqtt->publish(AUDIO_MQTT_TOPIC, volume.c_str(), 1);
-                    msg += "|" + audio_mqtt_topic + "|" + volume.c_str();
+                    k32->mqtt->publish(AUDIO_MQTT_TOPIC, _Volu.c_str(), 1);
+                    msg += "|" + audio_mqtt_topic + "|" + _Volu.c_str();
                     break;
 
                 case 'A':
-                    VoLu = 127;
-                    volume = String(VoLu);
+                    Volume = 127;
+                    _Volu = String(Volume);
                     audio_mqtt_topic = String(MQTT_K32) + String(AUDIO_MQTT_ID) + String(AUDIO_MQTT_VOLUME);
                     audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
-                    k32->mqtt->publish(AUDIO_MQTT_TOPIC, volume.c_str(), 1);
-                    msg += "|" + audio_mqtt_topic + "|" + volume.c_str();
+                    k32->mqtt->publish(AUDIO_MQTT_TOPIC, _Volu.c_str(), 1);
+                    msg += "|" + audio_mqtt_topic + "|" + _Volu.c_str();
                     break;
 
                 case 'M':
@@ -761,29 +760,29 @@ void remote_audio()
                     break;
 
                 case '/':
-                    VoLu -= 10;
-                    if (VoLu < 0)
+                    Volume -= 10;
+                    if (Volume < 0)
                     {
-                        VoLu = 0;
+                        Volume = 0;
                     }
-                    volume = String(VoLu);
+                    _Volu = String(Volume);
                     audio_mqtt_topic = String(MQTT_K32) + String(AUDIO_MQTT_ID) + String(AUDIO_MQTT_VOLUME);
                     audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
-                    k32->mqtt->publish(AUDIO_MQTT_TOPIC, volume.c_str(), 1);
-                    msg += "|" + audio_mqtt_topic + "|" + volume.c_str();
+                    k32->mqtt->publish(AUDIO_MQTT_TOPIC, _Volu.c_str(), 1);
+                    msg += "|" + audio_mqtt_topic + "|" + _Volu.c_str();
                     break;
 
                 case '*':
-                    VoLu += 10;
-                    if (VoLu > 127 || VoLu < 0)
+                    Volume += 10;
+                    if (Volume > 127 || Volume < 0)
                     {
-                        VoLu = 127;
+                        Volume = 127;
                     }
-                    volume = String(VoLu);
+                    _Volu = String(Volume);
                     audio_mqtt_topic = String(MQTT_K32) + String(AUDIO_MQTT_ID) + String(AUDIO_MQTT_VOLUME);
                     audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
-                    k32->mqtt->publish(AUDIO_MQTT_TOPIC, volume.c_str(), 1);
-                    msg += "|" + audio_mqtt_topic + "|" + volume.c_str();
+                    k32->mqtt->publish(AUDIO_MQTT_TOPIC, _Volu.c_str(), 1);
+                    msg += "|" + audio_mqtt_topic + "|" + _Volu.c_str();
                     break;
 
                 case '`':
