@@ -27,6 +27,8 @@ extern "C"
 
 #include <algorithm>
 
+bool active_faces = false;
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -1584,10 +1586,13 @@ void ezWifi::_addConnect()
 
     SSID = ez.textInput("Enter SSID");
     key = ez.textInput("Enter wifi password");
+    LOG("YO");
+    active_faces = true;
     ip = ez.textInput("IP x.x.x.x done 2.0.0.11");
     mask = ez.textInput("Mask x.x.x.x done 255.0.0.0");
     gateway = ez.textInput("Gateway x.x.x.x done 2.0.0.1");
     broker = ez.textInput("Broker IP x.x.x.x done 2.0.0.1");
+    active_faces = false;
 
     if (ip == "")
     {
@@ -2874,6 +2879,11 @@ String M5ez::textInput(String header /* = "" */, String defaultText /* = "" */)
         ez.faces.poll(); // flush key buffer in FACES
     }
 #endif
+    if (active_faces)
+    {
+        current_kb = locked_kb = prev_kb = ez.theme->input_faces_btns;
+        ez.faces.poll(); // flush key buffer in FACES
+    }
     String tmpstr;
     String text = defaultText;
     ez.screen.clear();
@@ -2890,6 +2900,10 @@ String M5ez::textInput(String header /* = "" */, String defaultText /* = "" */)
         if (ez.faces.on() && key == "")
             key = ez.faces.poll();
 #endif
+        if (active_faces && key == "")
+        {
+            key = ez.faces.poll();
+        }
         if (key == "Done" || key == (String) char(13))
             return text;
         if (key.substring(0, 2) == "KB")
