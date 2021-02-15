@@ -5,6 +5,7 @@ void master_value();
 void id_value();
 void color_value();
 void draw_master();
+void send_master();
 
 String MQTT_ID = "all";
 String MQTT_K32 = "k32/";
@@ -41,6 +42,17 @@ String LIGHT_MQTT_MASTER = "/leds/master";
 String LIGHT_MQTT_COLOR_ALL = "/leds/all";
 String LIGHT_MQTT_COLOR_STRIP = "/leds/strip";
 String LIGHT_MQTT_COLOR_PIXEL = "/leds/pixel";
+
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////DRAW MASTER/////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+void send_master()
+{
+    _Mast = String(Master);
+    light_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(LIGHT_MQTT_MASTER);
+    light_mqtt_topic.toCharArray(LIGHT_MQTT_TOPIC, light_mqtt_topic.length() + 1);
+    k32->mqtt->publish(LIGHT_MQTT_TOPIC, _Mast.c_str(), 1);
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////DRAW MASTER/////////////////////////////////////
@@ -692,10 +704,8 @@ void remote_lulu()
                         light_mqtt_topic.toCharArray(LIGHT_MQTT_TOPIC, light_mqtt_topic.length() + 1);
                         k32->mqtt->publish(LIGHT_MQTT_TOPIC, (page_mem + msg).c_str(), 1);
                         msg += " " + light_mqtt_topic + (page_mem + msg);
-                        _Mast = String(Master);
-                        light_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(LIGHT_MQTT_MASTER);
-                        light_mqtt_topic.toCharArray(LIGHT_MQTT_TOPIC, light_mqtt_topic.length() + 1);
-                        k32->mqtt->publish(LIGHT_MQTT_TOPIC, _Mast.c_str(), 1);
+
+                        send_master();
                     }
                     else if (fonction == 2)
                     {
@@ -784,10 +794,8 @@ void remote_lulu()
                         light_mqtt_topic.toCharArray(LIGHT_MQTT_TOPIC, light_mqtt_topic.length() + 1);
                         k32->mqtt->publish(LIGHT_MQTT_TOPIC, light_mqtt_color.c_str(), 1);
                         msg += "|" + light_mqtt_topic + "|" + " " + light_mqtt_color;
-                        _Mast = String(Master);
-                        light_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(LIGHT_MQTT_MASTER);
-                        light_mqtt_topic.toCharArray(LIGHT_MQTT_TOPIC, light_mqtt_topic.length() + 1);
-                        k32->mqtt->publish(LIGHT_MQTT_TOPIC, _Mast.c_str(), 1);
+                        
+                        send_master();
                     }
                     break;
 
@@ -825,10 +833,7 @@ void remote_lulu()
                         {
                             Master = 0;
                         }
-                        _Mast = String(Master);
-                        light_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(LIGHT_MQTT_MASTER);
-                        light_mqtt_topic.toCharArray(LIGHT_MQTT_TOPIC, light_mqtt_topic.length() + 1);
-                        k32->mqtt->publish(LIGHT_MQTT_TOPIC, _Mast.c_str(), 1);
+                        send_master();
                         msg += "|" + light_mqtt_topic + "|" + _Mast.c_str();
                     }
                     else if (fonction == 1)
@@ -842,15 +847,12 @@ void remote_lulu()
                 case '+':
                     if (fonction == 0)
                     {
-                       Master += 2;
+                        Master += 2;
                         if (Master > 255)
                         {
                             Master = 255;
                         }
-                        _Mast = String(Master);
-                        light_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(LIGHT_MQTT_MASTER);
-                        light_mqtt_topic.toCharArray(LIGHT_MQTT_TOPIC, light_mqtt_topic.length() + 1);
-                        k32->mqtt->publish(LIGHT_MQTT_TOPIC, _Mast.c_str(), 1);
+                        send_master();
                         msg += "|" + light_mqtt_topic + "|" + _Mast.c_str();
                     }
                     else if (fonction == 1)
@@ -866,10 +868,7 @@ void remote_lulu()
                     if (fonction == 0)
                     {
                         Master = 255;
-                        _Mast = String(Master);
-                        light_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(LIGHT_MQTT_MASTER);
-                        light_mqtt_topic.toCharArray(LIGHT_MQTT_TOPIC, light_mqtt_topic.length() + 1);
-                        k32->mqtt->publish(LIGHT_MQTT_TOPIC, _Mast.c_str(), 1);
+                        send_master();
                         msg += "|" + light_mqtt_topic + "|" + _Mast.c_str();
                     }
                     else if (fonction == 1)
@@ -908,10 +907,7 @@ void remote_lulu()
                         {
                             Master = 0;
                         }
-                        _Mast = String(Master);
-                        light_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(LIGHT_MQTT_MASTER);
-                        light_mqtt_topic.toCharArray(LIGHT_MQTT_TOPIC, light_mqtt_topic.length() + 1);
-                        k32->mqtt->publish(LIGHT_MQTT_TOPIC, _Mast.c_str(), 1);
+                       send_master();
                         msg += "|" + light_mqtt_topic + "|" + _Mast.c_str();
                     }
                     else if (fonction == 1)
@@ -933,10 +929,7 @@ void remote_lulu()
                         {
                             Master = 255;
                         }
-                        _Mast = String(Master);
-                        light_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(LIGHT_MQTT_MASTER);
-                        light_mqtt_topic.toCharArray(LIGHT_MQTT_TOPIC, light_mqtt_topic.length() + 1);
-                        k32->mqtt->publish(LIGHT_MQTT_TOPIC, _Mast.c_str(), 1);
+                        send_master();
                         msg += "|" + light_mqtt_topic + "|" + _Mast.c_str();
                     }
                     else if (fonction == 1)
