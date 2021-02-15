@@ -3039,6 +3039,10 @@ String M5ez::textBox(String header /*= ""*/, String text /*= "" */, bool readonl
         readonly = true;
     }
 #endif
+    if (active_faces)
+    {
+        ez.faces.poll(); // flush key buffer in FACES
+    }
     std::vector<line_t> lines;
     ez.screen.clear();
     uint16_t cursor_pos = text.length();
@@ -3145,6 +3149,10 @@ String M5ez::textBox(String header /*= ""*/, String text /*= "" */, bool readonl
         if (ez.faces.on() && key == "")
             key = ez.faces.poll();
 #endif
+        if (active_faces && key == "")
+        {
+            key = ez.faces.poll();
+        }
         if (key == "down")
         {
             offset += lines_per_screen;
