@@ -1586,7 +1586,6 @@ void ezWifi::_addConnect()
 
     SSID = ez.textInput("Enter SSID");
     key = ez.textInput("Enter wifi password");
-    LOG("YO");
     active_faces = true;
     ip = ez.textInput("IP x.x.x.x done 2.0.0.11");
     mask = ez.textInput("Mask x.x.x.x done 255.0.0.0");
