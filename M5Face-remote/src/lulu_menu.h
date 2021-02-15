@@ -44,7 +44,7 @@ String LIGHT_MQTT_COLOR_STRIP = "/leds/strip";
 String LIGHT_MQTT_COLOR_PIXEL = "/leds/pixel";
 
 ///////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////DRAW MASTER/////////////////////////////////////
+///////////////////////////////////////SEND MASTER/////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
 void send_master()
 {
@@ -522,10 +522,7 @@ void master_value()
                     if (res < 256)
                     {
                         Master = res_value.toInt();
-                        _Mast = (res_value).c_str();
-                        light_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(LIGHT_MQTT_MASTER);
-                        light_mqtt_topic.toCharArray(LIGHT_MQTT_TOPIC, light_mqtt_topic.length() + 1);
-                        k32->mqtt->publish(LIGHT_MQTT_TOPIC, (res_value).c_str(), 1);
+                       send_master();
                         equal = true;
                     }
                     else
