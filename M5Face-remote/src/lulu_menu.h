@@ -1,3 +1,4 @@
+#include "mem_color.h"
 
 void remote_lulu();
 
@@ -522,7 +523,7 @@ void master_value()
                     if (res < 256)
                     {
                         Master = res_value.toInt();
-                       send_master();
+                        send_master();
                         equal = true;
                     }
                     else
@@ -648,6 +649,7 @@ void remote_lulu()
             }
 
             ez.msgBox("M5 REMOTE LIGHT", fonct, id_cal + "# Menu #" + fonct + "##" + page_me + "#", false);
+            draw_master();
         };
 
         if (M5.BtnC.wasPressed())
@@ -706,92 +708,21 @@ void remote_lulu()
                     }
                     else if (fonction == 2)
                     {
-                        if ((char)key_val == '0')
-                        {
-                            red = 23;
-                            green = 23;
-                            blue = 23;
-                            white = 23;
-                            msg += " DIA ALL ";
-                        }
-                        else if ((char)key_val == '1')
-                        {
-                            red = 255;
-                            green = 0;
-                            blue = 0;
-                            white = 0;
-                            msg += " RED ";
-                        }
-                        else if ((char)key_val == '2')
-                        {
-                            green = 255;
-                            red = 0;
-                            blue = 0;
-                            white = 0;
-                            msg += " GREEN ";
-                        }
-                        else if ((char)key_val == '3')
-                        {
-                            blue = 255;
-                            red = 0;
-                            green = 0;
-                            white = 0;
-                            msg += " BLUE ";
-                        }
-                        else if ((char)key_val == '4')
-                        {
-                            white = 255;
-                            red = 0;
-                            green = 0;
-                            blue = 0;
-                            msg += " WHITE ";
-                        }
-                        else if ((char)key_val == '5')
-                        {
-                            red = 255;
-                            green = 127;
-                            blue = 0;
-                            white = 0;
-                            msg += " ORANGE ";
-                        }
-                        else if ((char)key_val == '6')
-                        {
-                            red = 255;
-                            green = 255;
-                            blue = 0;
-                            white = 0;
-                            msg += " YELLOW ";
-                        }
-                        else if ((char)key_val == '7')
-                        {
-                            green = 255;
-                            blue = 255;
-                            red = 0;
-                            white = 0;
-                            msg += " CYAN ";
-                        }
-                        else if ((char)key_val == '8')
-                        {
-                            red = 255;
-                            blue = 255;
-                            green = 0;
-                            white = 0;
-                            msg += " MAGENTA ";
-                        }
-                        else if ((char)key_val == '9')
-                        {
-                            red = 255;
-                            green = 255;
-                            blue = 255;
-                            white = 255;
-                            msg += " FULL ALL ";
-                        }
+                        red = MEM_COLOR[key_val - 48][0];
+                        green = MEM_COLOR[key_val - 48][1];
+                        blue = MEM_COLOR[key_val - 48][2];
+                        white = MEM_COLOR[key_val - 48][3];
+
+                        msg += " " + NAME_MEM_COLOR[key_val - 48];
+
                         light_mqtt_color = String(red) + "| " + String(green) + "| " + String(blue) + "| " + String(white);
                         light_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(LIGHT_MQTT_COLOR_ALL);
                         light_mqtt_topic.toCharArray(LIGHT_MQTT_TOPIC, light_mqtt_topic.length() + 1);
                         k32->mqtt->publish(LIGHT_MQTT_TOPIC, light_mqtt_color.c_str(), 1);
-                        msg += "|" + light_mqtt_topic + "|" + " " + light_mqtt_color;
-                        
+                        msg += "|" + light_mqtt_topic + "|";
+                        msg += "R " + String(red) + " G " + String(green);
+                        msg += " B " + String(blue) + " W " + String(white);
+
                         send_master();
                     }
                     break;
@@ -819,11 +750,13 @@ void remote_lulu()
                         light_mqtt_topic.toCharArray(LIGHT_MQTT_TOPIC, light_mqtt_topic.length() + 1);
                         k32->mqtt->publish(LIGHT_MQTT_TOPIC, light_mqtt_color.c_str(), 1);
                         msg = "Color SEND";
-                        msg += "|" + light_mqtt_topic + "|" + " " + light_mqtt_color;
+                        msg += "|" + light_mqtt_topic + "|";
+                        msg += "R " + String(red) + " G " + String(green);
+                        msg += " B " + String(blue) + " W " + String(white);
                     }
                     break;
                 case '-':
-                    if (fonction == 0)
+                    if (fonction == 0 || fonction == 2)
                     {
                         Master -= 2;
                         if (Master < 0)
@@ -842,7 +775,7 @@ void remote_lulu()
                     }
                     break;
                 case '+':
-                    if (fonction == 0)
+                    if (fonction == 0 || fonction == 2)
                     {
                         Master += 2;
                         if (Master > 255)
@@ -862,7 +795,7 @@ void remote_lulu()
                     break;
 
                 case 'A':
-                    if (fonction == 0)
+                    if (fonction == 0 || fonction == 2)
                     {
                         Master = 255;
                         send_master();
@@ -873,7 +806,7 @@ void remote_lulu()
                     }
                     break;
                 case 'M':
-                    if (fonction == 0)
+                    if (fonction == 0 || fonction == 2)
                     {
                         light_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(LIGHT_MQTT_FADE_IN);
                         light_mqtt_topic.toCharArray(LIGHT_MQTT_TOPIC, light_mqtt_topic.length() + 1);
@@ -885,7 +818,7 @@ void remote_lulu()
                     }
                     break;
                 case '%':
-                    if (fonction == 0)
+                    if (fonction == 0 || fonction == 2)
                     {
                         light_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(LIGHT_MQTT_FADE_OUT);
                         light_mqtt_topic.toCharArray(LIGHT_MQTT_TOPIC, light_mqtt_topic.length() + 1);
@@ -897,14 +830,14 @@ void remote_lulu()
                     }
                     break;
                 case '/':
-                    if (fonction == 0)
+                    if (fonction == 0 || fonction == 2)
                     {
                         Master -= 10;
                         if (Master < 0)
                         {
                             Master = 0;
                         }
-                       send_master();
+                        send_master();
                         msg += "|" + light_mqtt_topic + "|" + _Mast.c_str();
                     }
                     else if (fonction == 1)
@@ -919,7 +852,7 @@ void remote_lulu()
                     }
                     break;
                 case '*':
-                    if (fonction == 0)
+                    if (fonction == 0 || fonction == 2)
                     {
                         Master += 10;
                         if (Master > 255)
