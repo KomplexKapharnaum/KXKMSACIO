@@ -1,3 +1,6 @@
+#ifndef tableau_h
+#define tableau_h
+
 #define max_clients 10
 int clients = -1;
 
@@ -17,3 +20,5 @@ unsigned long T_inlife[max_clients][3]; // 0 id_beat 1 last_time 2 bool inlife
 
 unsigned long currentTime = 0;
 unsigned long previousTime = 0;
+
+#endif
