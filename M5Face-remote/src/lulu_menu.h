@@ -585,12 +585,15 @@ void remote_lulu()
 
     while (true)
     {
-
         M5.update();
 
         // BTN A/B/C    || M5.BtnA.isPressed()
         //
         if (m5.BtnA.pressedFor(ez.theme->longpress_time))
+        {
+            ez.msgBox("M5 REMOTE LIGHT", "Release for Back Menu", id_cal + "# Menu #" + fonct + "##" + page_me + "#", false);
+        };
+        if (m5.BtnA.wasReleasefor(ez.theme->longpress_time))
         {
             break;
         };

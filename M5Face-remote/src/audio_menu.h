@@ -619,6 +619,10 @@ void remote_audio()
         //
         if (m5.BtnA.pressedFor(ez.theme->longpress_time))
         {
+            ez.msgBox("M5 REMOTE AUDIO", "Release for Back Menu", id_cal + "# Menu #" + fonct + "# Val. #" + page_me + "# Val. ", false);
+        }
+        if (m5.BtnA.wasReleasefor(ez.theme->longpress_time))
+        {
             break;
         }
 
