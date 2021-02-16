@@ -1,6 +1,5 @@
 #ifndef mem_color_h
 #define mem_color_h
-#endif
 
 #ifndef number_mem
 #define number_mem 10
@@ -32,3 +31,5 @@ String NAME_MEM_COLOR[number_mem] = {
     " MAGENTA ",  // 8
     " FULL ALL ", // 9
 };
+
+#endif
