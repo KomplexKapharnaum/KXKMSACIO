@@ -572,6 +572,7 @@ void master_value()
 ///////////////////////////////////////////////////////////////////////////////////////
 void remote_lulu()
 {
+    bool _a_b = true;
     light_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(LIGHT_MQTT_MEM);
     light_mqtt_topic.toCharArray(LIGHT_MQTT_TOPIC, light_mqtt_topic.length() + 1);
     uint8_t id_call = 0;
@@ -591,7 +592,11 @@ void remote_lulu()
         //
         if (m5.BtnA.pressedFor(ez.theme->longpress_time))
         {
-            ez.msgBox("M5 REMOTE LIGHT", "Release for Back Menu", id_cal + "# Menu #" + fonct + "##" + page_me + "#", false);
+            if (_a_b)
+            {
+                ez.msgBox("M5 REMOTE LIGHT", "Release for Back Menu", id_cal + "# Menu #" + fonct + "##" + page_me + "#", false);
+                _a_b = false;
+            }
         };
         if (m5.BtnA.wasReleasefor(ez.theme->longpress_time))
         {
