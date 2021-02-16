@@ -603,7 +603,7 @@ void fonction_value()
 ///////////////////////////////////////////////////////////////////////////////////////
 void remote_audio()
 {
-
+    bool _a_b = true;
     audio_mqtt_topic = String(MQTT_K32) + String(AUDIO_MQTT_ID) + String(AUDIO_MQTT_NOTEON);
     audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
 
@@ -619,7 +619,11 @@ void remote_audio()
         //
         if (m5.BtnA.pressedFor(ez.theme->longpress_time))
         {
-            ez.msgBox("M5 REMOTE AUDIO", "Release for Back Menu", id_cal + "# Menu #" + fonct + "# Val. #" + page_me + "# Val. ", false);
+            if (_a_b)
+            {
+                ez.msgBox("M5 REMOTE AUDIO", "Release for Back Menu", id_cal + "# Menu #" + fonct + "# Val. #" + page_me + "# Val. ", false);
+                _a_b = false;
+            }
         }
         if (m5.BtnA.wasReleasefor(ez.theme->longpress_time))
         {
