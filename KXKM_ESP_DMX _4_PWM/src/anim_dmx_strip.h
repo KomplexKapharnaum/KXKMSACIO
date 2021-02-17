@@ -467,7 +467,11 @@ class Anim_dmx_strip : public K32_anim {
       int mirrorAlternate = 1 + btw(mirrorMode, 1, 3); 
 
       // Zoom offset
-      int zoomOffset = (size() - zoomedSize)/2;      
+      int zoomOffset = (size() - zoomedSize)/2;  
+
+      #ifdef ELP_Start
+      int out_r_g_b[zoomedSize * 3];
+      #endif    
 
       // Copy pixels into strip
       for(int i=0; i<zoomedSize; i++) 
@@ -479,7 +483,19 @@ class Anim_dmx_strip : public K32_anim {
           pix = segmentSize - pix - 1;    
 
         this->pixel(i+zoomOffset, segment[pix]);  // draw on strip
-      }      
+
+        #ifdef ELP_Start
+        int dmx_channel = (i+zoomOffset+1) * 3 -3; // draw r g b on dmx trame
+        out_r_g_b[dmx_channel] = segment[pix].r;
+        out_r_g_b[dmx_channel + 1] = segment[pix].g;
+        out_r_g_b[dmx_channel + 2] = segment[pix].b;
+        #endif
+      }
+      #ifdef ELP_Start
+
+      k32->dmx->setMultiple(out_r_g_b, ELP_Start);
+
+      #endif      
 
     }
 
