@@ -37,11 +37,11 @@ String LIGHT_MQTT_BIGGER = "/leds/modall/bigger";
 String LIGHT_MQTT_FADE_IN = "/leds/master/fadein";
 String LIGHT_MQTT_FADE_OUT = "/leds/master/fadeout";
 String LIGHT_MQTT_MASTER = "/leds/master";
-// String LIGHT_MQTT_COLOR_ALL = "/leds/all";
-String LIGHT_MQTT_COLOR_ALL = "/leds/frame";
-String LIGHT_MQTT_COLOR_STRIP = "/leds/strip";
-String LIGHT_MQTT_COLOR_PIXEL = "/leds/pixel";
+String LIGHT_MQTT_FRAME = "/leds/frame";
 
+// String LIGHT_MQTT_COLOR_ALL = "/leds/all";
+// String LIGHT_MQTT_COLOR_STRIP = "/leds/strip";
+// String LIGHT_MQTT_COLOR_PIXEL = "/leds/pixel";
 // String LIGHT_MQTT_LESS = "/leds/master/less";
 // String LIGHT_MQTT_TENLESS = "/leds/master/tenless";
 // String LIGHT_MQTT_MORE = "/leds/master/more";
@@ -83,7 +83,7 @@ void send_color()
         light_mqtt_color = "-1|";
     }
     light_mqtt_color += String(red) + "|" + String(green) + "|" + String(blue) + "|" + String(white);
-    light_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(LIGHT_MQTT_COLOR_ALL);
+    light_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(LIGHT_MQTT_FRAME);
     light_mqtt_topic.toCharArray(LIGHT_MQTT_TOPIC, light_mqtt_topic.length() + 1);
     k32->mqtt->publish(LIGHT_MQTT_TOPIC, light_mqtt_color.c_str(), 1);
 }
