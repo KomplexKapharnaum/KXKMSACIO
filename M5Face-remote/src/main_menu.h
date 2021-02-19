@@ -2,7 +2,7 @@
 void main_menu();
 void powerOff();
 
-#include "lulu_menu.h"
+#include "light_menu.h"
 #include "audio_menu.h"
 #include "monitor_menu.h"
 
@@ -10,7 +10,7 @@ void main_menu()
 {
     ezMenu main_menu("Welcome to M5");
     main_menu.txtBig();
-    main_menu.addItem("REMOTE LULU", remote_lulu);
+    main_menu.addItem("REMOTE LULU", remote_light);
     main_menu.addItem("REMOTE AUDIO", remote_audio);
     main_menu.addItem("MONITOR", monitor_menu);
     main_menu.addItem("SETTINGS", ez.settings.menu);

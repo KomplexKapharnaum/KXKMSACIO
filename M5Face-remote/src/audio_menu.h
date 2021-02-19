@@ -77,7 +77,7 @@ void id_value_audio()
         // BTN A/B/C
         if (m5.BtnC.pressedFor(ez.theme->longpress_time))
         {
-            remote_lulu();
+            remote_light();
         };
 
         if (M5.BtnB.wasPressed())

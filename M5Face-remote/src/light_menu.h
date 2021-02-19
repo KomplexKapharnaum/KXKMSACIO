@@ -1,6 +1,6 @@
-#include "mem_color.h"
+#include "preset_light.h"
 
-void remote_lulu();
+void remote_light();
 
 void master_value();
 void id_value();
@@ -140,7 +140,7 @@ void color_value()
         // BTN A/B/C
         if (m5.BtnC.pressedFor(ez.theme->longpress_time))
         {
-            remote_lulu();
+            remote_light();
         };
         if (M5.BtnB.wasPressed())
         {
@@ -401,7 +401,7 @@ void id_value()
         // BTN A/B/C
         if (m5.BtnC.pressedFor(ez.theme->longpress_time))
         {
-            remote_lulu();
+            remote_light();
         };
 
         if (M5.BtnB.wasPressed())
@@ -533,7 +533,7 @@ void master_value()
         //
         if (m5.BtnC.pressedFor(ez.theme->longpress_time))
         {
-            remote_lulu();
+            remote_light();
         };
 
         res = atoi(res_value.c_str());
@@ -619,7 +619,7 @@ void master_value()
 ///////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////REMOTE_LULU//////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
-void remote_lulu()
+void remote_light()
 {
     bool _a_b = true;
     light_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(LIGHT_MQTT_MEM);
@@ -763,12 +763,12 @@ void remote_lulu()
                     }
                     else if (light_fonction == 2)
                     {
-                        red = MEM_COLOR[key_val - 48][0];
-                        green = MEM_COLOR[key_val - 48][1];
-                        blue = MEM_COLOR[key_val - 48][2];
-                        white = MEM_COLOR[key_val - 48][3];
+                        red = PRESET_COLOR[key_val - 48][0];
+                        green = PRESET_COLOR[key_val - 48][1];
+                        blue = PRESET_COLOR[key_val - 48][2];
+                        white = PRESET_COLOR[key_val - 48][3];
 
-                        msg += " " + NAME_MEM_COLOR[key_val - 48];
+                        msg += " " + NAME_PRESET_COLOR[key_val - 48];
 
                         send_color();
                         msg += "|" + light_mqtt_topic + "|";
