@@ -204,8 +204,14 @@ class Anim_dmx_strip : public K32_anim {
       // LOG("");
 
       // animMaster @0 = nothing to draw
-      if (data[0] == 0)
-        return this->clear();
+      if (data[0] == 0) {
+        this->clear();
+        #ifdef ELP_Start
+          int out_r_g_b[size() * 3] = {0};
+          k32->dmx->setMultiple(out_r_g_b, size()*3, ELP_Start);
+        #endif    
+        return;
+      }
       
       // Mirror & Zoom -> Segment size
       int mirrorMode  = simplifyDmxRange(data[14]);
@@ -470,7 +476,7 @@ class Anim_dmx_strip : public K32_anim {
       int zoomOffset = (size() - zoomedSize)/2;  
 
       #ifdef ELP_Start
-      int out_r_g_b[zoomedSize * 3];
+      int out_r_g_b[size() * 3];
       #endif    
 
       // Copy pixels into strip
@@ -486,14 +492,14 @@ class Anim_dmx_strip : public K32_anim {
 
         #ifdef ELP_Start
         int dmx_channel = (i+zoomOffset+1) * 3 -3; // draw r g b on dmx trame
-        out_r_g_b[dmx_channel] = segment[pix].r;
-        out_r_g_b[dmx_channel + 1] = segment[pix].g;
-        out_r_g_b[dmx_channel + 2] = segment[pix].b;
+        CRGBW dmxPix = segment[pix] % this->master();
+        out_r_g_b[dmx_channel] = dmxPix.r;
+        out_r_g_b[dmx_channel + 1] = dmxPix.g;
+        out_r_g_b[dmx_channel + 2] = dmxPix.b;
         #endif
       }
       #ifdef ELP_Start
-
-      k32->dmx->setMultiple(out_r_g_b, ELP_Start);
+      k32->dmx->setMultiple(out_r_g_b, size()*3, ELP_Start);
 
       #endif      
 
