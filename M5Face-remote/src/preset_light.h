@@ -53,10 +53,35 @@ String NAME_PRESET_STR[number_mem] = {
     " RND 32 ",   //04
     " RND 64 ",   //05
     " *BLINK* ",  //06
-    " O RND 1",   //07
+    " O RND 1 ",   //07
     " O RND 32 ", //08
     " O RND 64 ", //09
-   
+};
+
+uint8_t PRESET_MOD[number_mem] = {
+    15, // 00 2 Colors
+    25, // 01 01:02
+    35, // 02 >
+    45, // 03 <
+    55, // 04 <>
+    95, // 05 P>
+    105, // 06 P<
+    115, // 07 P<>
+    235, // 08 TRI
+    245, // 09 QUADRI
+};
+
+String NAME_PRESET_MOD[number_mem] = {
+    " 2 Colors ", //00
+    " 01:02 ",    //01
+    " > ",        //02
+    " < ",        //03
+    " <> ",       //04
+    " P< ",       //05
+    " P> ",       //06
+    " P<> ",      //07
+    " TRI ",      //08
+    " QUADRI ",   //09 
 };
 
 #endif

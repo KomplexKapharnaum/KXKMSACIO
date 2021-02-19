@@ -11,7 +11,10 @@ void send_color();
 void draw_coloe();
 void send_str();
 void draw_str();
+void send_mod();
+void draw_mod();
 
+bool _mod_coarse = false;
 bool color_front_back = false;
 uint8_t light_fonction = 0;
 
@@ -23,8 +26,11 @@ String light_id_calling = "";
 uint8_t light_id_fonction = 0;
 String light_id_fonct = "ID";
 
-uint8_t red, green, blue, white, str;
+uint8_t red, green, blue, white, str, mod;
 int16_t str_speed = 127;
+int16_t pix_long = 127;
+int16_t pix_pos = 127;
+
 String light_mqtt_frame;
 
 int16_t Master = 255;
@@ -51,6 +57,44 @@ String LIGHT_MQTT_FRAME = "/leds/frame";
 // String LIGHT_MQTT_MORE = "/leds/master/more";
 // String LIGHT_MQTT_TENMORE = "/leds/master/tenmore";
 // String LIGHT_MQTT_FULL = "/leds/master/full";
+
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////DRAW MOD////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+void draw_mod()
+{
+
+    m5.lcd.setTextColor(TFT_ORANGE);
+    ez.setFont(ez.theme->menu_big_font);
+    m5.lcd.setTextDatum(TR_DATUM);
+    int16_t text_h = ez.fontHeight();
+    m5.lcd.drawString("Longeur : " + String(pix_long), TFT_W - ez.theme->input_hmargin - 10, text_h);
+    m5.lcd.setTextColor(TFT_PURPLE);
+    m5.lcd.drawString("Position : " + String(pix_pos), TFT_W - ez.theme->input_hmargin - 10, 10 + ez.theme->input_vmargin + text_h + 10);
+    m5.lcd.setTextColor(TFT_GREEN);
+    if (_mod_coarse)
+    {
+        m5.lcd.drawString("Fine", TFT_W - ez.theme->input_hmargin - 10, 150 + ez.theme->input_vmargin + text_h + 10);
+    }
+    else
+    {
+        m5.lcd.drawString("Coarse", TFT_W - ez.theme->input_hmargin - 10, 150 + ez.theme->input_vmargin + text_h + 10);
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////SEND MOD////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+//{master , r  , g  , b  , w  ,pix mod , pix long , pix_pos , str_mod , str_speed , r_fond , g_fond , b_fond , w_fond , mirror_mod , zoom }
+void send_mod()
+{
+    light_mqtt_frame = "-1|-1|-1|-1|-1|";
+
+    light_mqtt_frame += String(mod) + "|" + String(pix_long) + "|" + String(pix_pos);
+    light_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(LIGHT_MQTT_FRAME);
+    light_mqtt_topic.toCharArray(LIGHT_MQTT_TOPIC, light_mqtt_topic.length() + 1);
+    k32->mqtt->publish(LIGHT_MQTT_TOPIC, light_mqtt_frame.c_str(), 1);
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////DRAW STR////////////////////////////////////////
@@ -148,6 +192,10 @@ void draw_master()
     else if (light_fonction == 3)
     {
         draw_str();
+    }
+    else if (light_fonction == 4)
+    {
+        draw_mod();
     }
 }
 
@@ -657,6 +705,7 @@ void master_value()
 ///////////////////////////////////////////////////////////////////////////////////////
 void remote_light()
 {
+    uint8_t inc_value;
     bool _a_b = true;
     light_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(LIGHT_MQTT_MEM);
     light_mqtt_topic.toCharArray(LIGHT_MQTT_TOPIC, light_mqtt_topic.length() + 1);
@@ -722,7 +771,7 @@ void remote_light()
         if (M5.BtnB.wasPressed())
         {
             light_fonction += 1;
-            if (light_fonction >= 4)
+            if (light_fonction >= 5)
             {
                 light_fonction = 0;
             }
@@ -741,6 +790,10 @@ void remote_light()
             else if (light_fonction == 3)
             {
                 fonct = "Strobe";
+            }
+            else if (light_fonction == 4)
+            {
+                fonct = "Pixel Mode";
             }
 
             ez.msgBox("M5 REMOTE LIGHT", fonct, id_cal + "# Menu #" + fonct + "##" + page_me + "#", false);
@@ -825,6 +878,14 @@ void remote_light()
 
                         send_str();
                     }
+                    else if (light_fonction == 4)
+                    {
+                        mod = PRESET_MOD[key_val - 48];
+
+                        msg += " " + NAME_PRESET_MOD[key_val - 48];
+
+                        send_mod();
+                    }
                     break;
 
                 case '.':
@@ -834,7 +895,7 @@ void remote_light()
                     msg += " " + light_mqtt_topic;
                     break;
                 case '=':
-                    if (light_fonction == 0)
+                    if (light_fonction == 0 || light_fonction == 3)
                     {
                         master_value();
                         msg = "Master " + _Mast + " SEND";
@@ -842,7 +903,7 @@ void remote_light()
                     else if (light_fonction == 1)
                     {
                     }
-                    else if (light_fonction == 2)
+                    else if (light_fonction == 2 || light_fonction == 4)
                     {
                         color_value();
                         send_color();
@@ -879,6 +940,15 @@ void remote_light()
                         }
                         send_str();
                     }
+                    else if (light_fonction == 4)
+                    {
+                        pix_pos -= inc_value;
+                        if (pix_pos < 0)
+                        {
+                            pix_pos = 0;
+                        }
+                        send_mod();
+                    }
                     break;
                 case '+':
                     if (light_fonction == 0 || light_fonction == 2)
@@ -907,6 +977,15 @@ void remote_light()
                         }
                         send_str();
                     }
+                    else if (light_fonction == 4)
+                    {
+                        pix_pos += inc_value;
+                        if (pix_pos > 255)
+                        {
+                            pix_pos = 255;
+                        }
+                        send_mod();
+                    }
                     break;
 
                 case 'A':
@@ -916,8 +995,11 @@ void remote_light()
                         send_master();
                         msg += "|" + light_mqtt_topic + "|" + _Mast.c_str();
                     }
-                    else if (light_fonction == 1)
+                    else if (light_fonction == 4)
                     {
+                        pix_pos = 127;
+                        pix_long = 127;
+                        msg += "Reset Pixel value";
                     }
                     break;
                 case 'M':
@@ -974,6 +1056,15 @@ void remote_light()
                         }
                         send_str();
                     }
+                    else if (light_fonction == 4)
+                    {
+                        pix_long -= inc_value;
+                        if (pix_long < 0)
+                        {
+                            pix_long = 0;
+                        }
+                        send_mod();
+                    }
                     break;
                 case '*':
                     if (light_fonction == 0 || light_fonction == 2)
@@ -1005,6 +1096,15 @@ void remote_light()
                         }
                         send_str();
                     }
+                    else if (light_fonction == 4)
+                    {
+                        pix_long += inc_value;
+                        if (pix_long > 255)
+                        {
+                            pix_long = 255;
+                        }
+                        send_mod();
+                    }
                     break;
                 case '`':
                     if (light_fonction == 2)
@@ -1017,6 +1117,20 @@ void remote_light()
                         else
                         {
                             msg += "| COLOR FRONT";
+                        }
+                    }
+                    else if (light_fonction == 4)
+                    {
+                        _mod_coarse = !_mod_coarse;
+                        if (_mod_coarse)
+                        {
+                            msg += "| Fine +- 2";
+                            inc_value = 2;
+                        }
+                        else
+                        {
+                            msg += "| Coarse +- 10";
+                            inc_value = 10;
                         }
                     }
 
