@@ -705,7 +705,7 @@ void master_value()
 ///////////////////////////////////////////////////////////////////////////////////////
 void remote_light()
 {
-    uint8_t inc_value;
+    uint8_t inc_value = 10;
     bool _a_b = true;
     light_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(LIGHT_MQTT_MEM);
     light_mqtt_topic.toCharArray(LIGHT_MQTT_TOPIC, light_mqtt_topic.length() + 1);
