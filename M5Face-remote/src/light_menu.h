@@ -74,11 +74,11 @@ void draw_mod()
     m5.lcd.setTextColor(TFT_GREEN);
     if (_mod_coarse)
     {
-        m5.lcd.drawString("Fine", TFT_W - ez.theme->input_hmargin - 10, 150 + ez.theme->input_vmargin + text_h + 10);
+        m5.lcd.drawString("Fine", TFT_W - ez.theme->input_hmargin, 150 + ez.theme->input_vmargin + text_h + 10);
     }
     else
     {
-        m5.lcd.drawString("Coarse", TFT_W - ez.theme->input_hmargin - 10, 150 + ez.theme->input_vmargin + text_h + 10);
+        m5.lcd.drawString("Coarse", TFT_W - ez.theme->input_hmargin, 150 + ez.theme->input_vmargin + text_h + 10);
     }
 }
 
@@ -107,7 +107,7 @@ void draw_str()
     m5.lcd.setTextDatum(TR_DATUM);
     int16_t text_h = ez.fontHeight();
 
-    m5.lcd.drawString("Str speed: " + String(str_speed), TFT_W - ez.theme->input_hmargin - 10, 10 + ez.theme->input_vmargin + text_h + 10);
+    m5.lcd.drawString("Str speed: " + String(str_speed), TFT_W - ez.theme->input_hmargin, 10 + ez.theme->input_vmargin + text_h + 10);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -136,11 +136,11 @@ void draw_color()
     int16_t text_h = ez.fontHeight();
     if (color_front_back)
     {
-        m5.lcd.drawString("Back", TFT_W - ez.theme->input_hmargin - 10, 10 + ez.theme->input_vmargin + text_h + 10);
+        m5.lcd.drawString("Back", TFT_W - ez.theme->input_hmargin, 10 + ez.theme->input_vmargin + text_h + 10);
     }
     else
     {
-        m5.lcd.drawString("Front", TFT_W - ez.theme->input_hmargin - 10, 10 + ez.theme->input_vmargin + text_h + 10);
+        m5.lcd.drawString("Front", TFT_W - ez.theme->input_hmargin , 10 + ez.theme->input_vmargin + text_h + 10);
     }
 }
 
