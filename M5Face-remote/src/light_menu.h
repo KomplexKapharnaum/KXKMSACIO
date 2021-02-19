@@ -8,6 +8,9 @@ void color_value();
 void draw_master();
 void send_master();
 void send_color();
+void draw_coloe();
+void send_str();
+void draw_str();
 
 bool color_front_back = false;
 uint8_t light_fonction = 0;
@@ -20,7 +23,8 @@ String light_id_calling = "";
 uint8_t light_id_fonction = 0;
 String light_id_fonct = "ID";
 
-uint8_t red, green, blue, white;
+uint8_t red, green, blue, white, str;
+int16_t str_speed = 127;
 String light_mqtt_frame;
 
 int16_t Master = 255;
@@ -47,6 +51,34 @@ String LIGHT_MQTT_FRAME = "/leds/frame";
 // String LIGHT_MQTT_MORE = "/leds/master/more";
 // String LIGHT_MQTT_TENMORE = "/leds/master/tenmore";
 // String LIGHT_MQTT_FULL = "/leds/master/full";
+
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////DRAW STR////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+void draw_str()
+{
+
+    m5.lcd.setTextColor(TFT_RED);
+    ez.setFont(ez.theme->menu_big_font);
+    m5.lcd.setTextDatum(TR_DATUM);
+    int16_t text_h = ez.fontHeight();
+
+    m5.lcd.drawString("Str speed: " + String(str_speed), TFT_W - ez.theme->input_hmargin - 10, 10 + ez.theme->input_vmargin + text_h + 10);
+}
+
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////SEND STR////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+//{master , r  , g  , b  , w  ,pix mod , pix long , pix_pos , str_mod , str_speed , r_fond , g_fond , b_fond , w_fond , mirror_mod , zoom }
+void send_str()
+{
+    light_mqtt_frame = "-1|-1|-1|-1|-1|-1|-1|-1|";
+
+    light_mqtt_frame += String(str) + "|" + String(str_speed);
+    light_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(LIGHT_MQTT_FRAME);
+    light_mqtt_topic.toCharArray(LIGHT_MQTT_TOPIC, light_mqtt_topic.length() + 1);
+    k32->mqtt->publish(LIGHT_MQTT_TOPIC, light_mqtt_frame.c_str(), 1);
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////DRAW COLOR//////////////////////////////////////
@@ -112,6 +144,10 @@ void draw_master()
     if (light_fonction == 2)
     {
         draw_color();
+    }
+    else if (light_fonction == 3)
+    {
+        draw_str();
     }
 }
 
@@ -686,7 +722,7 @@ void remote_light()
         if (M5.BtnB.wasPressed())
         {
             light_fonction += 1;
-            if (light_fonction >= 3)
+            if (light_fonction >= 4)
             {
                 light_fonction = 0;
             }
@@ -701,6 +737,10 @@ void remote_light()
             else if (light_fonction == 2)
             {
                 fonct = "Color";
+            }
+            else if (light_fonction == 3)
+            {
+                fonct = "Strobe";
             }
 
             ez.msgBox("M5 REMOTE LIGHT", fonct, id_cal + "# Menu #" + fonct + "##" + page_me + "#", false);
@@ -777,6 +817,14 @@ void remote_light()
 
                         send_master();
                     }
+                    else if (light_fonction == 3)
+                    {
+                        str = PRESET_STR[key_val - 48];
+
+                        msg += " " + NAME_PRESET_STR[key_val - 48];
+
+                        send_str();
+                    }
                     break;
 
                 case '.':
@@ -822,6 +870,15 @@ void remote_light()
                         k32->mqtt->publish(LIGHT_MQTT_TOPIC, nullptr, 1);
                         msg += " " + light_mqtt_topic;
                     }
+                    else if (light_fonction == 3)
+                    {
+                        str_speed -= 2;
+                        if (str_speed < 0)
+                        {
+                            str_speed = 0;
+                        }
+                        send_str();
+                    }
                     break;
                 case '+':
                     if (light_fonction == 0 || light_fonction == 2)
@@ -840,6 +897,15 @@ void remote_light()
                         light_mqtt_topic.toCharArray(LIGHT_MQTT_TOPIC, light_mqtt_topic.length() + 1);
                         k32->mqtt->publish(LIGHT_MQTT_TOPIC, nullptr, 1);
                         msg += " " + light_mqtt_topic;
+                    }
+                    else if (light_fonction == 3)
+                    {
+                        str_speed += 2;
+                        if (str_speed > 255)
+                        {
+                            str_speed = 255;
+                        }
+                        send_str();
                     }
                     break;
 
@@ -899,6 +965,15 @@ void remote_light()
                     else if (light_fonction == 2)
                     {
                     }
+                    else if (light_fonction == 3)
+                    {
+                        str_speed -= 10;
+                        if (str_speed < 0)
+                        {
+                            str_speed = 0;
+                        }
+                        send_str();
+                    }
                     break;
                 case '*':
                     if (light_fonction == 0 || light_fonction == 2)
@@ -920,6 +995,15 @@ void remote_light()
                     }
                     else if (light_fonction == 2)
                     {
+                    }
+                    else if (light_fonction == 3)
+                    {
+                        str_speed += 10;
+                        if (str_speed > 255)
+                        {
+                            str_speed = 255;
+                        }
+                        send_str();
                     }
                     break;
                 case '`':

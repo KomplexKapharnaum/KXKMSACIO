@@ -36,13 +36,13 @@ uint8_t PRESET_STR[number_mem] = {
     5,   // 00 OPEN
     15,  // 01 STR
     25,  // 02 SMOOTH
-    31,  // 03 RND 1
+    35,  // 03 RND 1
     71,  // 04 RND 32
-    110, // 05 RND 64
+    90,  // 05 RND 64
     115, // 06 *BLINK
-    201, // 07 0 RND 1
+    205, // 07 0 RND 1
     228, // 08 0 RND 32
-    255, // 09 O RND 64
+    250, // 09 O RND 64
 };
 
 String NAME_PRESET_STR[number_mem] = {
@@ -50,7 +50,7 @@ String NAME_PRESET_STR[number_mem] = {
     " STR ",      //01
     " SMOOTH ",   //02
     " RND 1 ",    //03
-    "RND 32 ",    //04
+    " RND 32 ",   //04
     " RND 64 ",   //05
     " *BLINK* ",  //06
     " O RND 1",   //07
