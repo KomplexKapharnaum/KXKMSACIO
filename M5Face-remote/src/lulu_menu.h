@@ -21,7 +21,7 @@ uint8_t light_id_fonction = 0;
 String light_id_fonct = "ID";
 
 uint8_t red, green, blue, white;
-String light_mqtt_color;
+String light_mqtt_frame;
 
 int16_t Master = 255;
 String _Mast = String(Master);
@@ -76,16 +76,16 @@ void send_color()
 {
     if (color_front_back)
     {
-        light_mqtt_color = "-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|";
+        light_mqtt_frame = "-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|";
     }
     else
     {
-        light_mqtt_color = "-1|";
+        light_mqtt_frame = "-1|";
     }
-    light_mqtt_color += String(red) + "|" + String(green) + "|" + String(blue) + "|" + String(white);
+    light_mqtt_frame += String(red) + "|" + String(green) + "|" + String(blue) + "|" + String(white);
     light_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(LIGHT_MQTT_FRAME);
     light_mqtt_topic.toCharArray(LIGHT_MQTT_TOPIC, light_mqtt_topic.length() + 1);
-    k32->mqtt->publish(LIGHT_MQTT_TOPIC, light_mqtt_color.c_str(), 1);
+    k32->mqtt->publish(LIGHT_MQTT_TOPIC, light_mqtt_frame.c_str(), 1);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
