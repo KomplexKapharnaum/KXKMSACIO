@@ -14,7 +14,7 @@ String page_me = "00-09";
 uint8_t id_call = 0;
 String id_cal = "all";
 String id_calling = "";
-uint8_t fonction = 0;
+uint8_t audio_fonction = 0;
 String fonct = "Bank 0";
 
 int8_t Volume = 80;
@@ -223,12 +223,12 @@ void draw_volume()
 ///////////////////////////////////////////////////////////////////////////////////////
 void check_fonction()
 {
-    fonction += 1;
-    if (fonction >= 17)
+    audio_fonction += 1;
+    if (audio_fonction >= 17)
     {
-        fonction = 0;
+        audio_fonction = 0;
     }
-    String val_fonc = String(fonction);
+    String val_fonc = String(audio_fonction);
     fonct = "Bank " + val_fonc;
 
     ez.msgBox("M5 REMOTE AUDIO", fonct, id_cal + "# Menu #" + fonct + "# Val. #" + page_me + "# Val. ", false);
@@ -548,7 +548,7 @@ void fonction_value()
 
                     if (res < 17)
                     {
-                        fonction = res - 1;
+                        audio_fonction = res - 1;
                         equal = true;
                     }
                     else
@@ -711,7 +711,7 @@ void remote_audio()
 
                     audio_mqtt_topic = String(MQTT_K32) + String(AUDIO_MQTT_ID) + String(AUDIO_MQTT_NOTEON);
                     audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
-                    audio_mqtt_message = String(fonction) + "|" + String(page_mem + msg) + "|" + String(Volume) + "|" + String(mqtt_loop);
+                    audio_mqtt_message = String(audio_fonction) + "|" + String(page_mem + msg) + "|" + String(Volume) + "|" + String(mqtt_loop);
                     audio_mqtt_message.toCharArray(AUDIO_MQTT_MESSAGE, audio_mqtt_message.length() + 1);
                     k32->mqtt->publish(AUDIO_MQTT_TOPIC, AUDIO_MQTT_MESSAGE, 1);
                     msg += "|" + audio_mqtt_topic + "|" + (page_mem + msg);
