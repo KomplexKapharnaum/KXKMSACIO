@@ -68,9 +68,9 @@ void draw_mod()
     ez.setFont(ez.theme->menu_big_font);
     m5.lcd.setTextDatum(TR_DATUM);
     int16_t text_h = ez.fontHeight();
-    m5.lcd.drawString("Longeur : " + String(pix_long), TFT_W - ez.theme->input_hmargin - 10, text_h);
+    m5.lcd.drawString("Longeur : " + String(pix_long), TFT_W - ez.theme->input_hmargin, text_h);
     m5.lcd.setTextColor(TFT_PURPLE);
-    m5.lcd.drawString("Position : " + String(pix_pos), TFT_W - ez.theme->input_hmargin - 10, 10 + ez.theme->input_vmargin + text_h + 10);
+    m5.lcd.drawString("Position : " + String(pix_pos), TFT_W - ez.theme->input_hmargin, 10 + ez.theme->input_vmargin + text_h + 10);
     m5.lcd.setTextColor(TFT_GREEN);
     if (_mod_coarse)
     {
