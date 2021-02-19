@@ -202,7 +202,7 @@ void draw_loop()
         ez.setFont(ez.theme->menu_big_font);
         m5.lcd.setTextDatum(TR_DATUM);
         int16_t text_h = ez.fontHeight();
-        m5.lcd.drawString("loop", TFT_W - ez.theme->input_hmargin - 10, 10 + ez.theme->input_vmargin + text_h + 10);
+        m5.lcd.drawString("loop", TFT_W - ez.theme->input_hmargin, 10 + ez.theme->input_vmargin + text_h + 10);
     }
 }
 
