@@ -13,6 +13,8 @@ void send_str();
 void draw_str();
 void send_mod();
 void draw_mod();
+void send_mirror();
+void draw_mirror();
 
 bool _mod_coarse = false;
 bool color_front_back = false;
@@ -26,10 +28,11 @@ String light_id_calling = "";
 uint8_t light_id_fonction = 0;
 String light_id_fonct = "ID";
 
-uint8_t red, green, blue, white, str, mod;
+uint8_t red, green, blue, white, str, mod, mirror;
 int16_t str_speed = 127;
 int16_t pix_long = 127;
 int16_t pix_pos = 127;
+int16_t zoom = 255;
 
 String light_mqtt_frame;
 
@@ -57,6 +60,33 @@ String LIGHT_MQTT_FRAME = "/leds/frame";
 // String LIGHT_MQTT_MORE = "/leds/master/more";
 // String LIGHT_MQTT_TENMORE = "/leds/master/tenmore";
 // String LIGHT_MQTT_FULL = "/leds/master/full";
+
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////DRAW MIRROR/////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+void draw_mirror()
+{
+
+    m5.lcd.setTextColor(TFT_ORANGE);
+    ez.setFont(ez.theme->menu_big_font);
+    m5.lcd.setTextDatum(TR_DATUM);
+    int16_t text_h = ez.fontHeight();
+    m5.lcd.drawString("Zoom : " + String(zoom), TFT_W - ez.theme->input_hmargin, 10 + ez.theme->input_vmargin + text_h + 10);
+}
+
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////SEND MIRROR/////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+//{master , r  , g  , b  , w  ,pix mod , pix long , pix_pos , str_mod , str_speed , r_fond , g_fond , b_fond , w_fond , mirror_mod , zoom }
+void send_mirror()
+{
+    light_mqtt_frame = "-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|-1|";
+
+    light_mqtt_frame += String(mod) + "|" + String(mirror) + "|" + String(zoom);
+    light_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(LIGHT_MQTT_FRAME);
+    light_mqtt_topic.toCharArray(LIGHT_MQTT_TOPIC, light_mqtt_topic.length() + 1);
+    k32->mqtt->publish(LIGHT_MQTT_TOPIC, light_mqtt_frame.c_str(), 1);
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////DRAW MOD////////////////////////////////////////
@@ -196,6 +226,10 @@ void draw_master()
     else if (light_fonction == 4)
     {
         draw_mod();
+    }
+    else if (light_fonction == 5)
+    {
+        draw_mirror();
     }
 }
 
@@ -771,7 +805,7 @@ void remote_light()
         if (M5.BtnB.wasPressed())
         {
             light_fonction += 1;
-            if (light_fonction >= 5)
+            if (light_fonction >= 6)
             {
                 light_fonction = 0;
             }
@@ -794,6 +828,10 @@ void remote_light()
             else if (light_fonction == 4)
             {
                 fonct = "Pixel Mode";
+            }
+            else if (light_fonction == 5)
+            {
+                fonct = "Mirror";
             }
 
             ez.msgBox("M5 REMOTE LIGHT", fonct, id_cal + "# Menu #" + fonct + "##" + page_me + "#", false);
@@ -886,6 +924,14 @@ void remote_light()
 
                         send_mod();
                     }
+                    else if (light_fonction == 5)
+                    {
+                        mod = PRESET_MIRROR[key_val - 48];
+
+                        msg += " " + NAME_PRESET_MIRROR[key_val - 48];
+
+                        send_mirror();
+                    }
                     break;
 
                 case '.':
@@ -895,7 +941,7 @@ void remote_light()
                     msg += " " + light_mqtt_topic;
                     break;
                 case '=':
-                    if (light_fonction == 0 || light_fonction == 3)
+                    if (light_fonction == 0 || light_fonction == 3 || light_fonction == 5)
                     {
                         master_value();
                         msg = "Master " + _Mast + " SEND";
@@ -949,6 +995,15 @@ void remote_light()
                         }
                         send_mod();
                     }
+                    else if (light_fonction == 5)
+                    {
+                        zoom -= 2;
+                        if (zoom < 0)
+                        {
+                            zoom = 0;
+                        }
+                        send_mirror();
+                    }
                     break;
                 case '+':
                     if (light_fonction == 0 || light_fonction == 2)
@@ -986,6 +1041,15 @@ void remote_light()
                         }
                         send_mod();
                     }
+                    else if (light_fonction == 5)
+                    {
+                        zoom += 2;
+                        if (zoom > 255)
+                        {
+                            zoom = 255;
+                        }
+                        send_mirror();
+                    }
                     break;
 
                 case 'A':
@@ -1001,6 +1065,13 @@ void remote_light()
                         pix_long = 127;
                         msg += "Reset Pixel value";
                         send_mod();
+                    }
+
+                    else if (light_fonction == 5)
+                    {
+                        zoom = 255;
+                        msg += "Reset Zoom value";
+                        send_mirror();
                     }
                     break;
                 case 'M':
@@ -1066,6 +1137,15 @@ void remote_light()
                         }
                         send_mod();
                     }
+                    else if (light_fonction == 5)
+                    {
+                        zoom -= 10;
+                        if (zoom < 0)
+                        {
+                            zoom = 0;
+                        }
+                        send_mirror();
+                    }
                     break;
                 case '*':
                     if (light_fonction == 0 || light_fonction == 2)
@@ -1105,6 +1185,15 @@ void remote_light()
                             pix_long = 255;
                         }
                         send_mod();
+                    }
+                    else if (light_fonction == 5)
+                    {
+                        zoom += 10;
+                        if (zoom > 255)
+                        {
+                            zoom = 255;
+                        }
+                        send_mirror();
                     }
                     break;
                 case '`':

@@ -84,4 +84,30 @@ String NAME_PRESET_MOD[number_mem] = {
     " QUADRI ",   //09 
 };
 
+uint8_t PRESET_MIRROR[number_mem] = {
+    00,  // 00 No Mirr
+    15,  // 01 *2 <>
+    25,  // 02 *3 <><
+    35,  // 03 *4 <><>
+    45,  // 04 *2 <<
+    55,  // 05 *3 <<<
+    65,  // 06 *4 <<<<
+    00,  // 07 
+    00,  // 08 
+    255, // 09 Force Artnet
+};
+
+String NAME_PRESET_MIRROR[number_mem] = {
+    " No Mirr ",        //00
+    " *2 <> ",          //01
+    " *3 <>< ",         //02
+    " *4 <><> ",        //03
+    " *2 << ",          //04
+    " *3 <<< ",         //05
+    " *4 <<<< ",        //06
+    " No Mirr ",        //07
+    " No Mirr ",        //08
+    " Force Artnet ",   //09 
+};
+
 #endif
