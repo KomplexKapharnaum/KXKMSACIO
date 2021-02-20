@@ -1000,6 +1000,7 @@ void remote_light()
                         pix_pos = 127;
                         pix_long = 127;
                         msg += "Reset Pixel value";
+                        send_mod();
                     }
                     break;
                 case 'M':
