@@ -17,7 +17,7 @@ enum color_mode {
 CRGBW colorPreset[25] = {
   {CRGBW::Black},         // 0
   {CRGBW::Red},           // 1
-  {CRGBW::Lime},         // 2
+  {CRGBW::Lime},          // 2
   {CRGBW::Blue},          // 3
   {CRGBW::White},         // 4
   {CRGBW::Yellow},        // 5
