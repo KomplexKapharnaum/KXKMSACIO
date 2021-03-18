@@ -1,6 +1,6 @@
 
 ///////////////////////////////////////////// ID ////////////////////////////////////////////
-#define K32_SET_NODEID 9001 // board unique id  9xxx for M5
+#define K32_SET_NODEID 9003 // board unique id  9xxx for M5
 
 //////////////////////////////////////////// K32 ////////////////////////////////////////////
 #include <K32.h> // https://github.com/KomplexKapharnaum/K32-lib
@@ -42,18 +42,18 @@ void setup()
 
   /////////////////////////////////////////////// WIFI //////////////////////////////////////
   k32->init_wifi("M5-Remote");
-  k32->wifi->staticIP("2.0.0.12", "2.0.0.1", "255.0.0.0");
-  // k32->wifi->connect("kxkm24", NULL); //KXKM
+  k32->wifi->staticIP("2.0.0.93", "2.0.0.1", "255.0.0.0");
+  k32->wifi->connect("kxkm24", NULL); //KXKM
   // k32->wifi->connect("mgr4g", NULL); //MGR
-  k32->wifi->connect("riri_new", "B2az41opbn6397"); //Riri dev home
+  // k32->wifi->connect("riri_new", "B2az41opbn6397"); //Riri dev home
 
   // ez.wifi.add("SSID", "KEY", "IP", "MASK", "GATEWAY","BROKER");
-  ez.wifi.add("kxkm24", "", "2.0.0.91", "255.0.0.0", "2.0.0.1", "2.0.0.1");                        //KXKM
-  ez.wifi.add("kxkm24lulu", "", "2.0.0.91", "255.0.0.0", "2.0.0.1", "2.0.0.1");                    //KXKM lulu
+  ez.wifi.add("kxkm24", "", "2.0.0.93", "255.0.0.0", "2.0.0.1", "2.0.0.1");                        //KXKM
+  ez.wifi.add("kxkm24lulu", "", "2.0.0.93", "255.0.0.0", "2.0.0.1", "2.0.0.1");                    //KXKM lulu
   ez.wifi.add("kxkm-wifi", "KOMPLEXKAPHARNAUM", "0.0.0.0", "0.0.0.0", "0.0.0.0");                  //KXKM
   ez.wifi.add("mgr4g", "", "0.0.0.0", "0.0.0.0", "0.0.0.0", "0.0.0.0");                            //MGR
   ez.wifi.add("interweb", "superspeed37", "0.0.0.0", "0.0.0.0", "0.0.0.0", "0.0.0.0");             //Maigre dev home
-  ez.wifi.add("riri_new", "B2az41opbn6397", "2.0.0.11", "255.0.0.0", "192.168.0.254", "2.0.0.10"); //Riri dev home
+  ez.wifi.add("riri_new", "B2az41opbn6397", "2.0.0.13", "255.0.0.0", "192.168.0.254", "2.0.0.10"); //Riri dev home
   ez.wifi.add("riri_new", "B2az41opbn6397", "0.0.0.0", "0.0.0.0", "0.0.0.0", "0.0.0.0");           //Riri dev home
 
   ///////////////////////////////////////////// MQTT ////////////////////////////////////////
