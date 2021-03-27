@@ -1,3 +1,4 @@
+// platformio run --target uploadfs
 
 ///////////////////////////////////////////// ID ////////////////////////////////////////////
 #define K32_SET_NODEID 9003 // board unique id  9xxx for M5
@@ -8,6 +9,8 @@ K32 *k32;
 
 //////////////////////////////////////////// M5 /////////////////////////////////////////////
 
+#include "FS.h"
+#include "SPIFFS.h"
 #include <M5Stack.h>
 #include "K32_M5ez.h"
 
@@ -36,6 +39,14 @@ void setup()
   M5.Power.begin();
   M5.Speaker.mute();
 
+  if(!SPIFFS.begin(true)){
+        Serial.println("SPIFFS Mount Failed");
+        return;
+    }
+    M5.Lcd.drawJpgFile(SPIFFS, "/KXKM_logo.jpg", 0, 0);
+    M5.update();
+    delay(2000);
+
   //////////////////////////////////////// M5 Face Keyboard /////////////////////////////////
   Wire.begin();
   pinMode(KEYBOARD_INT, INPUT_PULLUP);
@@ -43,9 +54,9 @@ void setup()
   /////////////////////////////////////////////// WIFI //////////////////////////////////////
   k32->init_wifi("M5-Remote");
   k32->wifi->staticIP("2.0.0.93", "2.0.0.1", "255.0.0.0");
-  k32->wifi->connect("kxkm24", NULL); //KXKM
+  // k32->wifi->connect("kxkm24", NULL); //KXKM
   // k32->wifi->connect("mgr4g", NULL); //MGR
-  // k32->wifi->connect("riri_new", "B2az41opbn6397"); //Riri dev home
+  k32->wifi->connect("riri_new", "B2az41opbn6397"); //Riri dev home
 
   // ez.wifi.add("SSID", "KEY", "IP", "MASK", "GATEWAY","BROKER");
   ez.wifi.add("kxkm24", "", "2.0.0.93", "255.0.0.0", "2.0.0.1", "2.0.0.1");                        //KXKM
