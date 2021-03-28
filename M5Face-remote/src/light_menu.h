@@ -170,7 +170,7 @@ void draw_color()
     }
     else
     {
-        m5.lcd.drawString("Front", TFT_W - ez.theme->input_hmargin , 10 + ez.theme->input_vmargin + text_h + 10);
+        m5.lcd.drawString("Front", TFT_W - ez.theme->input_hmargin, 10 + ez.theme->input_vmargin + text_h + 10);
     }
 }
 
