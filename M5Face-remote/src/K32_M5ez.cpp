@@ -874,21 +874,21 @@ void ezSettings::menu()
 
 void ezSettings::defaults()
 {
-    #ifdef M5EZ_CODE
+#ifdef M5EZ_CODE
     if (ez.code.code())
     {
-      #endif
-      if (ez.msgBox("Reset to defaults?", "Are you sure you want to reset all settings to factory defaults?", "yes##no") == "yes")
-      {
-          Preferences prefs;
-          prefs.begin("M5ez");
-          prefs.clear();
-          prefs.end();
-          ESP.restart();
-      }
-     #ifdef M5EZ_CODE
+#endif
+        if (ez.msgBox("Reset to defaults?", "Are you sure you want to reset all settings to factory defaults?", "yes##no") == "yes")
+        {
+            Preferences prefs;
+            prefs.begin("M5ez");
+            prefs.clear();
+            prefs.end();
+            ESP.restart();
+        }
+#ifdef M5EZ_CODE
     }
-    #endif
+#endif
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1082,18 +1082,17 @@ bool ezClock::_starting = true;
 
 void ezClock::begin()
 {
-    
-      Preferences prefs;
-      prefs.begin("M5ez", true); // read-only
-      _on = prefs.getBool("clock_on", true);
-      _timezone = prefs.getString("timezone", "GeoIP");
-      _clock12 = prefs.getBool("clock12", false);
-      _am_pm = prefs.getBool("ampm", false);
-      prefs.end();
-      ez.settings.menuObj.addItem("Clock settings", ez.clock.menu);
-      ez.addEvent(ez.clock.loop);
-      ez.clock.restart();
-    
+
+    Preferences prefs;
+    prefs.begin("M5ez", true); // read-only
+    _on = prefs.getBool("clock_on", true);
+    _timezone = prefs.getString("timezone", "GeoIP");
+    _clock12 = prefs.getBool("clock12", false);
+    _am_pm = prefs.getBool("ampm", false);
+    prefs.end();
+    ez.settings.menuObj.addItem("Clock settings", ez.clock.menu);
+    ez.addEvent(ez.clock.loop);
+    ez.clock.restart();
 }
 
 void ezClock::restart()
@@ -1132,60 +1131,60 @@ void ezClock::menu()
     bool clock12_orig = _clock12;
     bool am_pm_orig = _am_pm;
     String tz_orig = _timezone;
-    
-    #ifdef M5EZ_CODE
+
+#ifdef M5EZ_CODE
     if (ez.code.code())
     {
-     #endif
+#endif
 
-    while (true)
-    {
-        ezMenu clockmenu("Clock settings");
-        clockmenu.txtBig();
-        clockmenu.buttons("up#Back#select##down#");
-        clockmenu.addItem("on|Display clock\t" + (String)(_on ? "on" : "off"));
-        if (_on)
+        while (true)
         {
-            clockmenu.addItem("tz|Timezone\t" + _timezone);
-            clockmenu.addItem("1224|12/24 hour\t" + (String)(_clock12 ? "12" : "24"));
-            if (_clock12)
+            ezMenu clockmenu("Clock settings");
+            clockmenu.txtBig();
+            clockmenu.buttons("up#Back#select##down#");
+            clockmenu.addItem("on|Display clock\t" + (String)(_on ? "on" : "off"));
+            if (_on)
             {
-                clockmenu.addItem("ampm|am/pm indicator\t" + (String)(_am_pm ? "on" : "off"));
+                clockmenu.addItem("tz|Timezone\t" + _timezone);
+                clockmenu.addItem("1224|12/24 hour\t" + (String)(_clock12 ? "12" : "24"));
+                if (_clock12)
+                {
+                    clockmenu.addItem("ampm|am/pm indicator\t" + (String)(_am_pm ? "on" : "off"));
+                }
+            }
+            switch (clockmenu.runOnce())
+            {
+            case 1:
+                _on = !_on;
+                ez.clock.restart();
+                break;
+            case 2:
+                _timezone = ez.textInput("Enter timezone");
+                if (_timezone == "")
+                    _timezone = "GeoIP";
+                if (tz.setLocation(_timezone))
+                    _timezone = tz.getOlsen();
+                break;
+            case 3:
+                _clock12 = !_clock12;
+                ez.clock.restart();
+                break;
+            case 4:
+                _am_pm = !_am_pm;
+                ez.clock.restart();
+                break;
+            case 0:
+                if (_am_pm != am_pm_orig || _clock12 != clock12_orig || _on != on_orig || _timezone != tz_orig)
+                {
+                    _writePrefs();
+                }
+                return;
+                //
             }
         }
-        switch (clockmenu.runOnce())
-        {
-        case 1:
-            _on = !_on;
-            ez.clock.restart();
-            break;
-        case 2:
-            _timezone = ez.textInput("Enter timezone");
-            if (_timezone == "")
-                _timezone = "GeoIP";
-            if (tz.setLocation(_timezone))
-                _timezone = tz.getOlsen();
-            break;
-        case 3:
-            _clock12 = !_clock12;
-            ez.clock.restart();
-            break;
-        case 4:
-            _am_pm = !_am_pm;
-            ez.clock.restart();
-            break;
-        case 0:
-            if (_am_pm != am_pm_orig || _clock12 != clock12_orig || _on != on_orig || _timezone != tz_orig)
-            {
-                _writePrefs();
-            }
-            return;
-            //
-        }
+#ifdef M5EZ_CODE
     }
-    #ifdef M5EZ_CODE
-    }
-    #endif
+#endif
 }
 
 uint16_t ezClock::loop()
@@ -1282,43 +1281,43 @@ void ezFACES::menu()
 {
     bool start_state = _on;
 
-    #ifdef M5EZ_CODE
+#ifdef M5EZ_CODE
     if (ez.code.code())
     {
-      #endif
+#endif
 
-      while (true)
+        while (true)
         {
-          ezMenu facesmenu("FACES keyboard");
-          facesmenu.txtBig();
-          facesmenu.buttons("up#Back#select##down#");
-          facesmenu.addItem("on|FACES \t" + (String)(_on ? "attached" : "not attached"));
-          switch (facesmenu.runOnce())
-          {
-          case 1:
-              _on = !_on;
-              if (_on)
-              {
-                  pinMode(5, INPUT);
-                  digitalWrite(5, HIGH);
-                  Wire.flush();
-              }
-              break;
-          case 0:
-              if (_on != start_state)
-              {
-                  Preferences prefs;
-                  prefs.begin("M5ez");
-                  prefs.putBool("faces_on", _on);
-                  prefs.end();
-              }
-              return;
-              //
+            ezMenu facesmenu("FACES keyboard");
+            facesmenu.txtBig();
+            facesmenu.buttons("up#Back#select##down#");
+            facesmenu.addItem("on|FACES \t" + (String)(_on ? "attached" : "not attached"));
+            switch (facesmenu.runOnce())
+            {
+            case 1:
+                _on = !_on;
+                if (_on)
+                {
+                    pinMode(5, INPUT);
+                    digitalWrite(5, HIGH);
+                    Wire.flush();
+                }
+                break;
+            case 0:
+                if (_on != start_state)
+                {
+                    Preferences prefs;
+                    prefs.begin("M5ez");
+                    prefs.putBool("faces_on", _on);
+                    prefs.end();
+                }
+                return;
+                //
             }
         }
-     #ifdef M5EZ_CODE
+#ifdef M5EZ_CODE
     }
-    #endif
+#endif
 
     return;
 }
@@ -1365,12 +1364,12 @@ bool ezCODE::code()
     active_faces = true;
     Code_input = ez.textInput("Enter Admin Pass");
     active_faces = false;
-    
+
     if (Code_input == "0000")
     {
         return true;
     }
-    else 
+    else
     {
         return false;
     }
@@ -2614,14 +2613,13 @@ bool ezBattery::_on = false;
 
 void ezBattery::begin()
 {
-       Wire.begin();
-       ez.battery.readFlash();
-       ez.settings.menuObj.addItem("Battery settings", ez.battery.menu);
-       if (_on)
-      {
-           _refresh();
-       }
-   
+    Wire.begin();
+    ez.battery.readFlash();
+    ez.settings.menuObj.addItem("Battery settings", ez.battery.menu);
+    if (_on)
+    {
+        _refresh();
+    }
 }
 
 void ezBattery::readFlash()
@@ -2642,35 +2640,35 @@ void ezBattery::writeFlash()
 
 void ezBattery::menu()
 {
-    #ifdef M5EZ_CODE
+#ifdef M5EZ_CODE
     if (ez.code.code())
     {
-      #endif
+#endif
 
-    bool on_orig = _on;
-    while (true)
-    {
-        ezMenu clockmenu("Battery settings");
-        clockmenu.txtBig();
-        clockmenu.buttons("up#Back#select##down#");
-        clockmenu.addItem("on|Display battery\t" + (String)(_on ? "on" : "off"));
-        switch (clockmenu.runOnce())
+        bool on_orig = _on;
+        while (true)
         {
-        case 1:
-            _on = !_on;
-            _refresh();
-            break;
-        case 0:
-            if (_on != on_orig)
+            ezMenu clockmenu("Battery settings");
+            clockmenu.txtBig();
+            clockmenu.buttons("up#Back#select##down#");
+            clockmenu.addItem("on|Display battery\t" + (String)(_on ? "on" : "off"));
+            switch (clockmenu.runOnce())
             {
-                writeFlash();
+            case 1:
+                _on = !_on;
+                _refresh();
+                break;
+            case 0:
+                if (_on != on_orig)
+                {
+                    writeFlash();
+                }
+                return;
             }
-            return;
         }
+#ifdef M5EZ_CODE
     }
-    #ifdef M5EZ_CODE
-    }
-    #endif
+#endif
 }
 
 uint16_t ezBattery::loop()
