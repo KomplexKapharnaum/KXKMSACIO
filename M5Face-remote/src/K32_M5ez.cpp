@@ -874,14 +874,21 @@ void ezSettings::menu()
 
 void ezSettings::defaults()
 {
-    if (ez.msgBox("Reset to defaults?", "Are you sure you want to reset all settings to factory defaults?", "yes##no") == "yes")
+    #ifdef M5EZ_CODE
+    if (ez.code.code())
     {
-        Preferences prefs;
-        prefs.begin("M5ez");
-        prefs.clear();
-        prefs.end();
-        ESP.restart();
+      #endif
+      if (ez.msgBox("Reset to defaults?", "Are you sure you want to reset all settings to factory defaults?", "yes##no") == "yes")
+      {
+          Preferences prefs;
+          prefs.begin("M5ez");
+          prefs.clear();
+          prefs.end();
+          ESP.restart();
+      }
+     #ifdef M5EZ_CODE
     }
+    #endif
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1075,16 +1082,18 @@ bool ezClock::_starting = true;
 
 void ezClock::begin()
 {
-    Preferences prefs;
-    prefs.begin("M5ez", true); // read-only
-    _on = prefs.getBool("clock_on", true);
-    _timezone = prefs.getString("timezone", "GeoIP");
-    _clock12 = prefs.getBool("clock12", false);
-    _am_pm = prefs.getBool("ampm", false);
-    prefs.end();
-    ez.settings.menuObj.addItem("Clock settings", ez.clock.menu);
-    ez.addEvent(ez.clock.loop);
-    ez.clock.restart();
+    
+      Preferences prefs;
+      prefs.begin("M5ez", true); // read-only
+      _on = prefs.getBool("clock_on", true);
+      _timezone = prefs.getString("timezone", "GeoIP");
+      _clock12 = prefs.getBool("clock12", false);
+      _am_pm = prefs.getBool("ampm", false);
+      prefs.end();
+      ez.settings.menuObj.addItem("Clock settings", ez.clock.menu);
+      ez.addEvent(ez.clock.loop);
+      ez.clock.restart();
+    
 }
 
 void ezClock::restart()
@@ -1123,6 +1132,12 @@ void ezClock::menu()
     bool clock12_orig = _clock12;
     bool am_pm_orig = _am_pm;
     String tz_orig = _timezone;
+    
+    #ifdef M5EZ_CODE
+    if (ez.code.code())
+    {
+     #endif
+
     while (true)
     {
         ezMenu clockmenu("Clock settings");
@@ -1168,6 +1183,9 @@ void ezClock::menu()
             //
         }
     }
+    #ifdef M5EZ_CODE
+    }
+    #endif
 }
 
 uint16_t ezClock::loop()
@@ -1263,35 +1281,46 @@ void ezFACES::begin()
 void ezFACES::menu()
 {
     bool start_state = _on;
-    while (true)
+
+    #ifdef M5EZ_CODE
+    if (ez.code.code())
     {
-        ezMenu facesmenu("FACES keyboard");
-        facesmenu.txtBig();
-        facesmenu.buttons("up#Back#select##down#");
-        facesmenu.addItem("on|FACES \t" + (String)(_on ? "attached" : "not attached"));
-        switch (facesmenu.runOnce())
+      #endif
+
+      while (true)
         {
-        case 1:
-            _on = !_on;
-            if (_on)
-            {
-                pinMode(5, INPUT);
-                digitalWrite(5, HIGH);
-                Wire.flush();
+          ezMenu facesmenu("FACES keyboard");
+          facesmenu.txtBig();
+          facesmenu.buttons("up#Back#select##down#");
+          facesmenu.addItem("on|FACES \t" + (String)(_on ? "attached" : "not attached"));
+          switch (facesmenu.runOnce())
+          {
+          case 1:
+              _on = !_on;
+              if (_on)
+              {
+                  pinMode(5, INPUT);
+                  digitalWrite(5, HIGH);
+                  Wire.flush();
+              }
+              break;
+          case 0:
+              if (_on != start_state)
+              {
+                  Preferences prefs;
+                  prefs.begin("M5ez");
+                  prefs.putBool("faces_on", _on);
+                  prefs.end();
+              }
+              return;
+              //
             }
-            break;
-        case 0:
-            if (_on != start_state)
-            {
-                Preferences prefs;
-                prefs.begin("M5ez");
-                prefs.putBool("faces_on", _on);
-                prefs.end();
-            }
-            return;
-            //
         }
+     #ifdef M5EZ_CODE
     }
+    #endif
+
+    return;
 }
 
 String ezFACES::poll()
@@ -1317,6 +1346,35 @@ bool ezFACES::on()
     return _on;
 }
 
+#endif
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+//   C O D E
+//
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#ifdef M5EZ_CODE
+
+bool ezCODE::code()
+{
+    String Code_input;
+    ezMenu codemenu("Admin Code");
+    codemenu.txtBig();
+    active_faces = true;
+    Code_input = ez.textInput("Enter Admin Pass");
+    active_faces = false;
+    
+    if (Code_input == "0000")
+    {
+        return true;
+    }
+    else 
+    {
+        return false;
+    }
+}
 #endif
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2556,13 +2614,14 @@ bool ezBattery::_on = false;
 
 void ezBattery::begin()
 {
-    Wire.begin();
-    ez.battery.readFlash();
-    ez.settings.menuObj.addItem("Battery settings", ez.battery.menu);
-    if (_on)
-    {
-        _refresh();
-    }
+       Wire.begin();
+       ez.battery.readFlash();
+       ez.settings.menuObj.addItem("Battery settings", ez.battery.menu);
+       if (_on)
+      {
+           _refresh();
+       }
+   
 }
 
 void ezBattery::readFlash()
@@ -2583,6 +2642,11 @@ void ezBattery::writeFlash()
 
 void ezBattery::menu()
 {
+    #ifdef M5EZ_CODE
+    if (ez.code.code())
+    {
+      #endif
+
     bool on_orig = _on;
     while (true)
     {
@@ -2604,6 +2668,9 @@ void ezBattery::menu()
             return;
         }
     }
+    #ifdef M5EZ_CODE
+    }
+    #endif
 }
 
 uint16_t ezBattery::loop()
@@ -2727,6 +2794,10 @@ ezClock M5ez::clock;
 #ifdef M5EZ_FACES
 ezFACES M5ez::faces;
 #endif
+#ifdef M5EZ_CODE
+ezCODE M5ez::code;
+#endif
+
 std::vector<event_t> M5ez::_events;
 
 // ez.textInput
