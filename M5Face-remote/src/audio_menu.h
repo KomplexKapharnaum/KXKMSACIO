@@ -603,6 +603,7 @@ void fonction_value()
 ///////////////////////////////////////////////////////////////////////////////////////
 void remote_audio()
 {
+    uint32_t _widget_time = millis();
     bool _a_b = true;
     audio_mqtt_topic = String(MQTT_K32) + String(AUDIO_MQTT_ID) + String(AUDIO_MQTT_NOTEON);
     audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
@@ -612,8 +613,13 @@ void remote_audio()
     draw_volume();
     while (true)
     {
-
         M5.update();
+        if (millis() > _widget_time + ez.theme->signal_interval)
+        {
+            ez.header.draw("battery");
+            ez.header.draw("wifi");
+            _widget_time = millis();
+        }
 
         // BTN A/B/C    || M5.BtnA.isPressed()
         //

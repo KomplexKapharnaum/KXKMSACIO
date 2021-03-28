@@ -739,6 +739,7 @@ void master_value()
 ///////////////////////////////////////////////////////////////////////////////////////
 void remote_light()
 {
+    uint32_t _widget_time = millis();
     uint8_t inc_value = 10;
     bool _a_b = true;
     light_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(LIGHT_MQTT_MEM);
@@ -754,6 +755,12 @@ void remote_light()
     while (true)
     {
         M5.update();
+        if (millis() > _widget_time + ez.theme->signal_interval)
+        {
+            ez.header.draw("battery");
+            ez.header.draw("wifi");
+            _widget_time = millis();
+        }
 
         // BTN A/B/C    || M5.BtnA.isPressed()
         //
