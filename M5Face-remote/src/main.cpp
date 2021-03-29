@@ -1,3 +1,4 @@
+// platformio run --target uploadfs
 
 ///////////////////////////////////////////// ID ////////////////////////////////////////////
 #define K32_SET_NODEID 9003 // board unique id  9xxx for M5
@@ -8,6 +9,8 @@ K32 *k32;
 
 //////////////////////////////////////////// M5 /////////////////////////////////////////////
 
+#include "FS.h"
+#include "SPIFFS.h"
 #include <M5Stack.h>
 #include "K32_M5ez.h"
 
@@ -35,6 +38,14 @@ void setup()
 
   M5.Power.begin();
   M5.Speaker.mute();
+
+  if(!SPIFFS.begin(true)){
+        Serial.println("SPIFFS Mount Failed");
+        return;
+    }
+    M5.Lcd.drawJpgFile(SPIFFS, "/KXKM_logo.jpg", 0, 0);
+    M5.update();
+    delay(2000);
 
   //////////////////////////////////////// M5 Face Keyboard /////////////////////////////////
   Wire.begin();
@@ -72,8 +83,8 @@ void setup()
                         }});
 
   k32->mqtt->start({
-      // .broker = "2.0.0.1",// Komplex
-      .broker = "2.0.0.10", // Riri dev home
+      .broker = "2.0.0.1",// Komplex
+      // .broker = "2.0.0.10", // Riri dev home
       // .broker = "192.168.43.100",//MGR
       .beatInterval = 0,  // heartbeat interval milliseconds (0 = disable)
       .beaconInterval = 0 // full beacon interval milliseconds (0 = disable)

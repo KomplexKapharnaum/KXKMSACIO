@@ -476,7 +476,7 @@ class Anim_dmx_strip : public K32_anim {
       int zoomOffset = (size() - zoomedSize)/2;  
 
       #ifdef ELP_Start
-      int out_r_g_b[size() * 3];
+      int out_r_g_b[size() * 3] = {0};
       #endif    
 
       // Copy pixels into strip
