@@ -759,6 +759,8 @@ void remote_light()
         {
             ez.header.draw("battery");
             ez.header.draw("wifi");
+            ez.mqtt.mqtt_on = k32->mqtt->isConnected();
+            ez.mqtt.mqtt();
             _widget_time = millis();
         }
 
