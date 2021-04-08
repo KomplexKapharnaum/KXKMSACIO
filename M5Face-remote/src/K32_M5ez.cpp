@@ -2779,7 +2779,7 @@ void ezMqtt::_refresh()
 {
     if (mqtt_on)
     {
-        ez.header.insert(RIGHTMOST, "mqtt",  4 * ez.theme->header_hmargin, ez.mqtt._drawWidget);
+        ez.header.insert(RIGHTMOST, "mqtt", 4 * ez.theme->header_hmargin, ez.mqtt._drawWidget);
         ez.addEvent(ez.mqtt.loop);
     }
     else
@@ -3738,7 +3738,7 @@ void ezMenu::rightOnLast(String nameAndCaption)
 void ezMenu::run()
 {
     while (runOnce())
-    { 
+    {
     }
 }
 
