@@ -262,7 +262,7 @@ void Spiffs_init()
     MDNS.addService("http", "tcp", 80);
 }
 
-void handleClient( void * pvParameters)
+void handleClient(void *pvParameters)
 {
     server.handleClient();
 }
