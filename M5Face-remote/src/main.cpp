@@ -16,9 +16,9 @@ K32 *k32;
 #include <M5Stack.h>
 #include "K32_M5ez.h"
 
-// #include <WebServer.h>
-// #include <ESPmDNS.h>
-// WebServer server(80);
+#include <WebServer.h>
+#include <ESPmDNS.h>
+WebServer server(80);
 
 #define KEYBOARD_I2C_ADDR 0X08
 #define KEYBOARD_INT 5
@@ -29,7 +29,7 @@ K32 *k32;
 #include "incombeat.h"
 #include "incoming.h"
 #include "main_menu.h"
-// #include "Spiffs_edit.h"
+#include "Spiffs_edit.h"
 
 ////\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//
 //\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\ SETUP //\\//\\//\\//\\//\\//\\//\\//\\//\\//\\/
@@ -62,9 +62,9 @@ void setup()
   /////////////////////////////////////////////// WIFI //////////////////////////////////////
   k32->init_wifi("M5-Remote");
   k32->wifi->staticIP("2.0.0.93", "2.0.0.1", "255.0.0.0");
-  k32->wifi->connect("kxkm24", NULL); //KXKM
+  // k32->wifi->connect("kxkm24", NULL); //KXKM
   // k32->wifi->connect("mgr4g", NULL); //MGR
-  // k32->wifi->connect("riri_new", "B2az41opbn6397"); //Riri dev home
+  k32->wifi->connect("riri_new", "B2az41opbn6397"); //Riri dev home
 
   // ez.wifi.add("SSID", "KEY", "IP", "MASK", "GATEWAY","BROKER");
   ez.wifi.add("kxkm24", "", "2.0.0.93", "255.0.0.0", "2.0.0.1", "2.0.0.1");                        //KXKM
@@ -91,15 +91,21 @@ void setup()
                         }});
 
   k32->mqtt->start({
-      .broker = "2.0.0.1",// Komplex
-      // .broker = "2.0.0.10", // Riri dev home
+      // .broker = "2.0.0.1",// Komplex
+      .broker = "2.0.0.10", // Riri dev home
       // .broker = "192.168.43.100",//MGR
       .beatInterval = 0,  // heartbeat interval milliseconds (0 = disable)
       .beaconInterval = 0 // full beacon interval milliseconds (0 = disable)
   });
 
-  // Spiffs_init();
+  ///////////////////////////////////////////// SPIFFS EDIT ////////////////////////////////////////
+  Spiffs_init();
 
+  ///////////////////////////////////////////////// CORE //////////////////////////////////////
+  //  create a task that will be executed in the Map1code() function, with priority 1 and executed on core 0
+  xTaskCreatePinnedToCore(handleClient, "handleClient", 4096, NULL, 1, NULL, 0); // core 0 = wifi
+
+  ///////////////////////////////////////////// MENU LOOP ////////////////////////////////////////
   main_menu();
 }
 

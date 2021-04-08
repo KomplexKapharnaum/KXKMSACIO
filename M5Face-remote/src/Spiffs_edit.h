@@ -1,4 +1,3 @@
-
 //////////////////////////////////////////spiffs///////////////////////////////////////////////
 File fsUploadFile;
 
@@ -253,7 +252,6 @@ void Spiffs_init()
         }
     }); //server.onNotFound
 
-
     if (MDNS.begin("edit"))
     {
         Serial.println("MDNS responder started");
@@ -262,5 +260,9 @@ void Spiffs_init()
     server.serveStatic("/", SPIFFS, "/edit.html");
     server.begin();
     MDNS.addService("http", "tcp", 80);
-    
+}
+
+void handleClient( void * pvParameters)
+{
+    server.handleClient();
 }
