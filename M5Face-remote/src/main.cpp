@@ -1,5 +1,7 @@
 // platformio run --target uploadfs
 
+#define DEBUGi
+
 ///////////////////////////////////////////// ID ////////////////////////////////////////////
 #define K32_SET_NODEID 9003 // board unique id  9xxx for M5
 
@@ -14,6 +16,10 @@ K32 *k32;
 #include <M5Stack.h>
 #include "K32_M5ez.h"
 
+// #include <WebServer.h>
+// #include <ESPmDNS.h>
+// WebServer server(80);
+
 #define KEYBOARD_I2C_ADDR 0X08
 #define KEYBOARD_INT 5
 
@@ -23,6 +29,7 @@ K32 *k32;
 #include "incombeat.h"
 #include "incoming.h"
 #include "main_menu.h"
+// #include "Spiffs_edit.h"
 
 ////\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//
 //\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\ SETUP //\\//\\//\\//\\//\\//\\//\\//\\//\\//\\/
@@ -39,13 +46,14 @@ void setup()
   M5.Power.begin();
   M5.Speaker.mute();
 
-  if(!SPIFFS.begin(true)){
-        Serial.println("SPIFFS Mount Failed");
-        return;
-    }
-    M5.Lcd.drawJpgFile(SPIFFS, "/KXKM_logo.jpg", 0, 0);
-    M5.update();
-    delay(2000);
+  if (!SPIFFS.begin(true))
+  {
+    Serial.println("SPIFFS Mount Failed");
+    return;
+  }
+  M5.Lcd.drawJpgFile(SPIFFS, "/KXKM_logo.jpg", 0, 0);
+  M5.update();
+  delay(2000);
 
   //////////////////////////////////////// M5 Face Keyboard /////////////////////////////////
   Wire.begin();
@@ -90,6 +98,8 @@ void setup()
       .beaconInterval = 0 // full beacon interval milliseconds (0 = disable)
   });
 
+  // Spiffs_init();
+
   main_menu();
 }
 
@@ -97,6 +107,6 @@ void setup()
 void loop()
 {
   // if(k32->mqtt->isConnected()) {
-  
+
   // }
 }
