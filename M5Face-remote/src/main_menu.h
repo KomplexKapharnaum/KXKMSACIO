@@ -1,4 +1,4 @@
-
+bool main_origine;
 void main_menu();
 void powerOff();
 
@@ -8,6 +8,7 @@ void powerOff();
 
 void main_menu()
 {
+    main_origine = true;
     ezMenu main_menu("Welcome to M5");
     main_menu.txtBig();
     main_menu.addItem("REMOTE LULU", remote_light);

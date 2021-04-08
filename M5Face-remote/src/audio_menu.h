@@ -77,7 +77,13 @@ void id_value_audio()
         // BTN A/B/C
         if (m5.BtnC.pressedFor(ez.theme->longpress_time))
         {
-            remote_light();
+            msg = "Release for Back Menu";
+            ez.msgBox("M5 REMOTE AUDIO", msg, "##" + audio_id_fonct + "###Back", false);
+        }
+        if (m5.BtnC.wasReleasefor(ez.theme->longpress_time))
+        {
+            main_origine = false;
+            remote_audio();
         };
 
         if (M5.BtnB.wasPressed())
@@ -285,6 +291,12 @@ void audio_master_value()
         //
         if (m5.BtnC.pressedFor(ez.theme->longpress_time))
         {
+            msg = "Release for Back Menu";
+            ez.msgBox("M5 REMOTE AUDIO", msg, "#####Back", false);
+        }
+        if (m5.BtnC.wasReleasefor(ez.theme->longpress_time))
+        {
+            main_origine = false;
             remote_audio();
         };
 
@@ -396,8 +408,9 @@ void page_mem_value()
 
         // BTN A/B/C    || M5.BtnA.isPressed()
         //
-        // if (m5.BtnC.pressedFor(ez.theme->longpress_time))
+        // if (m5.BtnC.wasReleasefor(ez.theme->longpress_time))
         // {
+        // main_origine = false;
         //     remote_audio();
         // };
 
@@ -509,8 +522,9 @@ void fonction_value()
 
         // BTN A/B/C    || M5.BtnA.isPressed()
         //
-        // if (m5.BtnC.pressedFor(ez.theme->longpress_time))
+        // if (m5.BtnC.wasReleasefor(ez.theme->longpress_time))
         // {
+        // main_origine = false;
         //     remote_audio();
         // };
 
@@ -635,7 +649,14 @@ void remote_audio()
         }
         if (m5.BtnA.wasReleasefor(ez.theme->longpress_time))
         {
-            break;
+            if (main_origine)
+            {
+                break;
+            }
+            else
+            {
+                main_menu();
+            }
         }
 
         if (m5.BtnA.wasReleased())

@@ -258,6 +258,7 @@ void color_value()
         // BTN A/B/C
         if (m5.BtnC.pressedFor(ez.theme->longpress_time))
         {
+            main_origine = false;
             remote_light();
         };
         if (M5.BtnB.wasPressed())
@@ -519,6 +520,7 @@ void id_value()
         // BTN A/B/C
         if (m5.BtnC.pressedFor(ez.theme->longpress_time))
         {
+            main_origine = false;
             remote_light();
         };
 
@@ -651,6 +653,7 @@ void master_value()
         //
         if (m5.BtnC.pressedFor(ez.theme->longpress_time))
         {
+            main_origine = false;
             remote_light();
         };
 
@@ -776,7 +779,14 @@ void remote_light()
         };
         if (m5.BtnA.wasReleasefor(ez.theme->longpress_time))
         {
-            break;
+            if (main_origine)
+            {
+                break;
+            }
+            else
+            {
+                main_menu();
+            }
         };
 
         if (m5.BtnA.wasReleased())
