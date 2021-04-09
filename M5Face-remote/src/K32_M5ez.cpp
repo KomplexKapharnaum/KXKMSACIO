@@ -2767,28 +2767,21 @@ bool ezMqtt::mqtt_on = true;
 void ezMqtt::begin()
 {
     _refresh();
-}
+} 
 
 uint16_t ezMqtt::loop()
 {
     ez.mqtt.mqtt_on = ez.k32->mqtt->isConnected();
     Serial.printf("MQTT refresh : %d\n", ez.mqtt.mqtt_on);
+
     if (mqtt_on) ez.header.draw("mqtt");
     return 5000;
 }
 
 void ezMqtt::_refresh()
 {
-    if (mqtt_on)
-    {
-        ez.header.insert(RIGHTMOST, "mqtt", 4 * ez.theme->header_hmargin, ez.mqtt._drawWidget);
-        ez.addEvent(ez.mqtt.loop);
-    }
-    else
-    {
-        ez.header.remove("mqtt");
-        ez.removeEvent(ez.mqtt.loop);
-    }
+    ez.header.insert(RIGHTMOST, "mqtt", 4 * ez.theme->header_hmargin, ez.mqtt._drawWidget);
+    ez.addEvent(ez.mqtt.loop);
 }
 
 void ezMqtt::_drawWidget(uint16_t x, uint16_t w)
