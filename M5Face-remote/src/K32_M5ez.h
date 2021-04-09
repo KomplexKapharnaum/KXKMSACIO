@@ -695,7 +695,7 @@ private:
 class ezMqtt
 {
 public:
-	static void mqtt();
+	static void begin();
 	static uint16_t loop();
 	static bool mqtt_on;
 

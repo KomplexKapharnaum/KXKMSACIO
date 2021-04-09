@@ -843,6 +843,7 @@ void ezSettings::begin()
 {
     menuObj.txtBig();
     menuObj.buttons("up#Back#select##down#");
+    ez.mqtt.begin();
 #ifdef M5EZ_WIFI
     ez.wifi.begin();
 #endif
@@ -2763,7 +2764,7 @@ void ezBattery::_drawWidget(uint16_t x, uint16_t w)
 #ifdef M5EZ_MQTT
 bool ezMqtt::mqtt_on = true;
 
-void ezMqtt::mqtt()
+void ezMqtt::begin()
 {
     _refresh();
 }
@@ -2772,6 +2773,7 @@ uint16_t ezMqtt::loop()
 {
     if (!mqtt_on)
         return 0;
+        ez.mqtt.mqtt_on = ez.k32->mqtt->isConnected();
     ez.header.draw("mqtt");
     return 5000;
 }
