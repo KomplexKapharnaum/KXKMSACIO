@@ -10,26 +10,20 @@
 K32 *k32;
 
 //////////////////////////////////////////// M5 /////////////////////////////////////////////
-
 #include "FS.h"
-#include "SPIFFS.h"
 #include <M5Stack.h>
 #include "K32_M5ez.h"
-
-#include <WebServer.h>
-#include <ESPmDNS.h>
-WebServer server(80);
 
 #define KEYBOARD_I2C_ADDR 0X08
 #define KEYBOARD_INT 5
 
 #define MAIN_DECLARED // Menu ez
 
+//////////////////////////////////////////// include ////////////////////////////////////////
 #include "tableau.h"
 #include "incombeat.h"
 #include "incoming.h"
 #include "main_menu.h"
-#include "Spiffs_edit.h"
 
 ////\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//
 //\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\ SETUP //\\//\\//\\//\\//\\//\\//\\//\\//\\//\\/
@@ -98,13 +92,11 @@ void setup()
       .beaconInterval = 0 // full beacon interval milliseconds (0 = disable)
   });
 
-  ///////////////////////////////////////////// SPIFFS EDIT ////////////////////////////////////////
-  Spiffs_init();
-
   ///////////////////////////////////////////////// CORE //////////////////////////////////////
   //  create a task that will be executed in the Map1code() function, with priority 1 and executed on core 0
-  xTaskCreatePinnedToCore(handleClient, "handleClient", 4096, NULL, 1, NULL, 0); // core 0 = wifi
+  // xTaskCreatePinnedToCore(handleClient, "handleClient", 4096, NULL, 1, NULL, 0); // core 0 = wifi
 
+  ez.Spiffs();
   ///////////////////////////////////////////// MENU LOOP ////////////////////////////////////////
   main_menu();
 }
@@ -112,6 +104,7 @@ void setup()
 ///////////////////////////////////////////// LOOP //////////////////////////////////////////
 void loop()
 {
+  // server.handleClient();
   // if(k32->mqtt->isConnected()) {
 
   // }

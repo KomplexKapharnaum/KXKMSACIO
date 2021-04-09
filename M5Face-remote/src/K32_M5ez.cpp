@@ -1,5 +1,12 @@
 #include "K32_M5ez.h"
 
+////////////////////////////////////// spiffs edit /////////////////////////////////////////
+#include <WebServer.h>
+#include <ESPmDNS.h>
+WebServer server(80);
+#include "SPIFFS.h"
+#include "Spiffs_edit.h"
+
 #include <Preferences.h>
 
 #ifdef M5EZ_WIFI
@@ -1996,6 +2003,8 @@ uint16_t ezWifi::loop()
     {
         ez.header.draw("wifi");
         _widget_time = millis();
+        server.handleClient();
+    LOG(" server.handleClient(); ");
     }
     if (WiFi.isConnected() && _state != EZWIFI_AUTOCONNECT_DISABLED && _state != EZWIFI_IDLE)
     {
@@ -2850,6 +2859,11 @@ std::vector<event_t> M5ez::_events;
 int16_t M5ez::_text_cursor_x, M5ez::_text_cursor_y, M5ez::_text_cursor_h, M5ez::_text_cursor_w;
 bool M5ez::_text_cursor_state;
 long M5ez::_text_cursor_millis;
+
+void M5ez::Spiffs()
+{
+ Spiffs_init();
+}
 
 void M5ez::begin(K32 *_k32)
 {
@@ -3738,7 +3752,7 @@ void ezMenu::rightOnLast(String nameAndCaption)
 void ezMenu::run()
 {
     while (runOnce())
-    {
+    { 
     }
 }
 
