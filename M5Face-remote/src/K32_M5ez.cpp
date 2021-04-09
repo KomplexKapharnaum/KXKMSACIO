@@ -2772,8 +2772,6 @@ void ezMqtt::begin()
 uint16_t ezMqtt::loop()
 {
     ez.mqtt.mqtt_on = ez.k32->mqtt->isConnected();
-    Serial.printf("MQTT refresh : %d\n", ez.mqtt.mqtt_on);
-
     ez.header.draw("mqtt");
     return 5000;
 }
