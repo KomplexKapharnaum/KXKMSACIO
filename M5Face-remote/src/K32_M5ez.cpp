@@ -2774,7 +2774,7 @@ uint16_t ezMqtt::loop()
     ez.mqtt.mqtt_on = ez.k32->mqtt->isConnected();
     Serial.printf("MQTT refresh : %d\n", ez.mqtt.mqtt_on);
 
-    if (mqtt_on) ez.header.draw("mqtt");
+    ez.header.draw("mqtt");
     return 5000;
 }
 
@@ -2790,7 +2790,9 @@ void ezMqtt::_drawWidget(uint16_t x, uint16_t w)
     ez.setFont(ez.theme->clock_font);
     m5.lcd.setTextColor(TFT_YELLOW);
     m5.lcd.setTextDatum(TL_DATUM);
-    m5.lcd.drawString("Q", x + ez.theme->header_hmargin, ez.theme->header_tmargin + 2);
+    
+    if (mqtt_on) m5.lcd.drawString("Q", x + ez.theme->header_hmargin, ez.theme->header_tmargin + 2);
+    else m5.lcd.drawString("-", x + ez.theme->header_hmargin, ez.theme->header_tmargin + 2);
 }
 
 #endif
