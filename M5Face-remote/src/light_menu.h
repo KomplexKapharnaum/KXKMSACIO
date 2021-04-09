@@ -760,7 +760,6 @@ void remote_light()
         M5.update();
         if (millis() > _widget_time + ez.theme->signal_interval)
         {
-            M5ez.ezWifi.loop();
             ez.header.draw("battery");
             ez.header.draw("wifi");
             ez.mqtt.mqtt_on = k32->mqtt->isConnected();

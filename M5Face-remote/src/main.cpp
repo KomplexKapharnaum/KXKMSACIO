@@ -19,6 +19,13 @@ K32 *k32;
 
 #define MAIN_DECLARED // Menu ez
 
+////////////////////////////////////// spiffs edit /////////////////////////////////////////
+#include <WebServer.h>
+#include <ESPmDNS.h>
+WebServer server(80);
+#include "SPIFFS.h"
+#include "Spiffs_edit.h"
+
 //////////////////////////////////////////// include ////////////////////////////////////////
 #include "tableau.h"
 #include "incombeat.h"
@@ -96,7 +103,7 @@ void setup()
   //  create a task that will be executed in the Map1code() function, with priority 1 and executed on core 0
   // xTaskCreatePinnedToCore(handleClient, "handleClient", 4096, NULL, 1, NULL, 0); // core 0 = wifi
 
-  ez.Spiffs();
+  Spiffs_init();
   ///////////////////////////////////////////// MENU LOOP ////////////////////////////////////////
   main_menu();
 }

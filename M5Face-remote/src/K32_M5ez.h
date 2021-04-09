@@ -766,8 +766,6 @@ public:
 
 	static K32 *k32;
 
-	static void Spiffs();
-
 	static void begin(K32 *_k32);
 
 	static void yield();
