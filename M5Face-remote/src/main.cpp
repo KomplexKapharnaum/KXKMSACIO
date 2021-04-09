@@ -19,6 +19,13 @@ K32 *k32;
 
 #define MAIN_DECLARED // Menu ez
 
+////////////////////////////////////// spiffs edit /////////////////////////////////////////
+#include <WebServer.h>
+#include <ESPmDNS.h>
+WebServer server(80);
+#include "SPIFFS.h"
+#include "Spiffs_edit.h"
+
 //////////////////////////////////////////// include ////////////////////////////////////////
 #include "tableau.h"
 #include "incombeat.h"
