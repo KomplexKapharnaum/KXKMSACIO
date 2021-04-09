@@ -1,8 +1,10 @@
 //////////////////////////////////////////spiffs///////////////////////////////////////////////
+#include <WebServer.h>
 File fsUploadFile;
+WebServer spiffServer(80);
 
 //format bytes
-String formatBytes(size_t bytes)
+String spiffs_formatBytes(size_t bytes)
 {
     if (bytes < 1024)
     {
@@ -20,11 +22,11 @@ String formatBytes(size_t bytes)
     {
         return String(bytes / 1024.0 / 1024.0 / 1024.0) + "GB";
     }
-} //formatBytes(size_t bytes)
+} //spiffs_formatBytes(size_t bytes)
 
-String getContentType(String filename)
+String spiffs_getContentType(String filename)
 {
-    if (server.hasArg("download"))
+    if (spiffServer.hasArg("download"))
         return "application/octet-stream";
     else if (filename.endsWith(".htm"))
         return "text/html";
@@ -51,41 +53,41 @@ String getContentType(String filename)
     else if (filename.endsWith(".gz"))
         return "application/x-gzip";
     return "text/plain";
-} //getContentType(String filename)
+} //spiffs_getContentType(String filename)
 
-bool handleFileRead(String path)
+bool spiffs_handleFileRead(String path)
 {
 #ifdef DEBUGi
-    Serial.println("handleFileRead: " + path);
+    Serial.println("spiffs_handleFileRead: " + path);
 #endif
     if (path.endsWith("/"))
         path += "index.htm";
-    String contentType = getContentType(path);
+    String contentType = spiffs_getContentType(path);
     String pathWithGz = path + ".gz";
     if (SPIFFS.exists(pathWithGz) || SPIFFS.exists(path))
     {
         if (SPIFFS.exists(pathWithGz))
             path += ".gz";
         File file = SPIFFS.open(path, "r");
-        size_t sent = server.streamFile(file, contentType);
+        size_t sent = spiffServer.streamFile(file, contentType);
         file.close();
         return true;
     }
     return false;
-} //handleFileRead(String path)
+} //spiffs_handleFileRead(String path)
 
-void handleFileUpload()
+void spiffs_handleFileUpload()
 {
-    if (server.uri() != "/edit")
+    if (spiffServer.uri() != "/edit")
         return;
-    HTTPUpload &upload = server.upload();
+    HTTPUpload &upload = spiffServer.upload();
     if (upload.status == UPLOAD_FILE_START)
     {
         String filename = upload.filename;
         if (!filename.startsWith("/"))
             filename = "/" + filename;
 #ifdef DEBUGi
-        Serial.print("handleFileUpload Name: ");
+        Serial.print("spiffs_handleFileUpload Name: ");
         Serial.println(filename);
 #endif
         fsUploadFile = SPIFFS.open(filename, "w");
@@ -93,7 +95,7 @@ void handleFileUpload()
     }
     else if (upload.status == UPLOAD_FILE_WRITE)
     {
-        //DBG_OUTPUT_PORT.print("handleFileUpload Data: "); DBG_OUTPUT_PORT.println(upload.currentSize);
+        //DBG_OUTPUT_PORT.print("spiffs_handleFileUpload Data: "); DBG_OUTPUT_PORT.println(upload.currentSize);
         if (fsUploadFile)
             fsUploadFile.write(upload.buf, upload.currentSize);
     }
@@ -102,62 +104,61 @@ void handleFileUpload()
         if (fsUploadFile)
             fsUploadFile.close();
 #ifdef DEBUGi
-        Serial.print("handleFileUpload Size: ");
+        Serial.print("spiffs_handleFileUpload Size: ");
         Serial.println(upload.totalSize);
 #endif
     }
-} //handleFileUpload()
+} //spiffs_handleFileUpload()
 
-void handleFileDelete()
-{
-    if (server.args() == 0)
-        return server.send(500, "text/plain", "BAD ARGS");
-    String path = server.arg(0);
+void spiffs_handleFileDelete()spiffS
+    if (spiffServer.args() == 0)
+        return spiffServer.send(500, "text/plain", "BAD ARGS");
+    String path = spiffServer.arg(0);
 #ifdef DEBUGi
-    Serial.println("handleFileDelete: " + path);
+    Serial.println("spiffs_handleFileDelete: " + path);
 #endif
     if (path == "/")
-        return server.send(500, "text/plain", "BAD PATH");
+        return spiffServer.send(500, "text/plain", "BAD PATH");
     if (!SPIFFS.exists(path))
-        return server.send(404, "text/plain", "FileNotFound");
+        return spiffServer.send(404, "text/plain", "FileNotFound");
     SPIFFS.remove(path);
-    server.send(200, "text/plain", "");
+    spiffServer.send(200, "text/plain", "");
     path = String();
-} //handleFileDelete()
+} //spiffs_handleFileDelete()
 
-void handleFileCreate()
+void spiffs_handleFileCreate()
 {
-    if (server.args() == 0)
-        return server.send(500, "text/plain", "BAD ARGS");
-    String path = server.arg(0);
+    if (spiffServer.args() == 0)
+        return spiffServer.send(500, "text/plain", "BAD ARGS");
+    String path = spiffServer.arg(0);
 #ifdef DEBUGi
-    Serial.println("handleFileCreate: " + path);
+    Serial.println("spiffs_handleFileCreate: " + path);
 #endif
     if (path == "/")
-        return server.send(500, "text/plain", "BAD PATH");
+        return spiffServer.send(500, "text/plain", "BAD PATH");
     if (SPIFFS.exists(path))
-        return server.send(500, "text/plain", "FILE EXISTS");
+        return spiffServer.send(500, "text/plain", "FILE EXISTS");
     File file = SPIFFS.open(path, "w");
     if (file)
         file.close();
     else
-        return server.send(500, "text/plain", "CREATE FAILED");
-    server.send(200, "text/plain", "");
+        return spiffServer.send(500, "text/plain", "CREATE FAILED");
+    spiffServer.send(200, "text/plain", "");
     path = String();
-} //handleFileCreate()
+} //spiffs_handleFileCreate()
 
-void handleFileList()
+void spiffs_handleFileList()
 {
-    if (!server.hasArg("dir"))
+    if (!spiffServer.hasArg("dir"))
     {
-        LOG("!server.hasArg");
-        server.send(500, "text/plain", "BAD ARGS");
+        LOG("!spiffServer.hasArg");
+        spiffServer.send(500, "text/plain", "BAD ARGS");
         return;
     }
 
-    String path = server.arg("dir");
+    String path = spiffServer.arg("dir");
 #ifdef DEBUGi
-    Serial.println("handleFileList: " + path);
+    Serial.println("spiffs_handleFileList: " + path);
 #endif
     File dir = SPIFFS.open(path);
     path = String();
@@ -166,7 +167,7 @@ void handleFileList()
     {
         dir.close();
         LOG("NOT DIR");
-        server.send(500, "text/plain", "NOT DIR");
+        spiffServer.send(500, "text/plain", "NOT DIR");
         return;
     }
     dir.rewindDirectory();
@@ -192,10 +193,10 @@ void handleFileList()
 
     output += "]";
     LOG(output);
-    server.send(200, "text/json", output);
-} //handleFileList()
+    spiffServer.send(200, "text/json", output);
+} //spiffs_handleFileList()
 
-void listDir(fs::FS &fs, const char *dirname, uint8_t levels)
+void spiffs_listDir(fs::FS &fs, const char *dirname, uint8_t levels)
 {
     Serial.printf("Listing directory: %s\n", dirname);
 
@@ -212,61 +213,66 @@ void listDir(fs::FS &fs, const char *dirname, uint8_t levels)
     }
 }
 
-void Spiffs_init()
+void spiffs_handleClient(void *pvParameters)
+{
+    while(true) {
+        spiffServer.handleClient();
+        delay(1);
+    }
+    vTaskDelete(NULL);
+}
+
+
+void spiffs_init()
 {
     LOG("SPIFFS_INIT");
     //////////////////////////////////////////////////// SPIFFS
     SPIFFS.begin();
-    listDir(SPIFFS, "/", 0);
+    spiffs_listDir(SPIFFS, "/", 0);
 
     //////////////////////////////////////////////////// SERVER INIT
     //list directory
-    server.on("/list", HTTP_GET, handleFileList);
+    spiffServer.on("/list", HTTP_GET, spiffs_handleFileList);
     //load editor
-    server.on("/edit", HTTP_GET, []() {
-        if (!handleFileRead("/edit.html"))
+    spiffServer.on("/edit", HTTP_GET, []() {
+        if (!spiffs_handleFileRead("/edit.html"))
         {
-            Serial.println("!handleFileRead( / edit.html )");
-            server.send(404, "text/plain", "FileNotFound");
+            Serial.println("!spiffs_handleFileRead( / edit.html )");
+            spiffServer.send(404, "text/plain", "FileNotFound");
         }
     });
     //create file
-    server.on("/edit", HTTP_PUT, handleFileCreate);
+    spiffServer.on("/edit", HTTP_PUT, spiffs_handleFileCreate);
     //delete file
-    server.on("/edit", HTTP_DELETE, handleFileDelete);
+    spiffServer.on("/edit", HTTP_DELETE, spiffs_handleFileDelete);
     //first callback is called after the request has ended with all parsed arguments
     //second callback handles file uploads at that location
-    server.on(
+    spiffServer.on(
         "/edit", HTTP_POST, []() {
-            server.send(200, "text/plain", "");
+            spiffServer.send(200, "text/plain", "");
         },
-        handleFileUpload);
+        spiffs_handleFileUpload);
 
     //called when the url is not defined here
     //use it to load content from SPIFFS
-    server.onNotFound([]() {
-        if (!handleFileRead(server.uri()))
+    spiffServer.onNotFound([]() {
+        if (!spiffs_handleFileRead(spiffServer.uri()))
         {
             Serial.println(" FileNotFound ");
-            server.send(404, "text/plain", "FileNotFound");
+            spiffServer.send(404, "text/plain", "FileNotFound");
         }
-    }); //server.onNotFound
+    }); //spiffServer.onNotFound
 
     if (MDNS.begin("edit"))
     {
         Serial.println("MDNS responder started");
     }
 
-    server.serveStatic("/", SPIFFS, "/edit.html");
-    server.begin();
+    spiffServer.serveStatic("/", SPIFFS, "/edit.html");
+    spiffServer.begin();
     MDNS.addService("http", "tcp", 80);
+
+    // TASK 
+    xTaskCreatePinnedToCore(spiffs_handleClient, "spiffs_handleClient", 4096, NULL, 1, NULL, 0); // core 0 = wifi
 }
 
-void handleClient(void *pvParameters)
-{
-    while(true) {
-        server.handleClient();
-        delay(1);
-    }
-    vTaskDelete(NULL);
-}

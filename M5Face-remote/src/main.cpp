@@ -24,6 +24,7 @@ K32 *k32;
 #include "incombeat.h"
 #include "incoming.h"
 #include "main_menu.h"
+#include "Spiffs_edit.h"
 
 ////\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//
 //\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\ SETUP //\\//\\//\\//\\//\\//\\//\\//\\//\\//\\/
@@ -92,11 +93,8 @@ void setup()
       .beaconInterval = 0 // full beacon interval milliseconds (0 = disable)
   });
 
-  ///////////////////////////////////////////////// CORE //////////////////////////////////////
-  //  create a task that will be executed in the Map1code() function, with priority 1 and executed on core 0
-  // xTaskCreatePinnedToCore(handleClient, "handleClient", 4096, NULL, 1, NULL, 0); // core 0 = wifi
+  spiffs_init();
 
-  ez.Spiffs();
   ///////////////////////////////////////////// MENU LOOP ////////////////////////////////////////
   main_menu();
 }
