@@ -627,7 +627,6 @@ void remote_audio()
     draw_volume();
     while (true)
     {
-        M5.update();
         ez.yield();
         // if (millis() > _widget_time + ez.theme->signal_interval)
         // {

@@ -757,7 +757,6 @@ void remote_light()
 
     while (true)
     {
-        M5.update();
         ez.yield();
         // if (millis() > _widget_time + ez.theme->signal_interval)
         // {
