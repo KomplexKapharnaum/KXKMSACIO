@@ -110,7 +110,7 @@ void spiffs_handleFileUpload()
     }
 } //spiffs_handleFileUpload()
 
-void spiffs_handleFileDelete()spiffS
+void spiffs_handleFileDelete(){
     if (spiffServer.args() == 0)
         return spiffServer.send(500, "text/plain", "BAD ARGS");
     String path = spiffServer.arg(0);
