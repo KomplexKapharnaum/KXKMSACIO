@@ -264,5 +264,9 @@ void Spiffs_init()
 
 void handleClient(void *pvParameters)
 {
-    server.handleClient();
+    while(true) {
+        server.handleClient();
+        delay(1);
+    }
+    vTaskDelete(NULL);
 }
