@@ -58,7 +58,7 @@ String spiffs_getContentType(String filename)
 bool spiffs_handleFileRead(String path)
 {
 #ifdef DEBUGi
-    Serial.println("spiffs_handleFileRead: " + path);
+    LOG("spiffs_handleFileRead: " + path);
 #endif
     if (path.endsWith("/"))
         path += "index.htm";
@@ -88,7 +88,7 @@ void spiffs_handleFileUpload()
             filename = "/" + filename;
 #ifdef DEBUGi
         Serial.print("spiffs_handleFileUpload Name: ");
-        Serial.println(filename);
+        LOG(filename);
 #endif
         fsUploadFile = SPIFFS.open(filename, "w");
         filename = String();
@@ -105,7 +105,7 @@ void spiffs_handleFileUpload()
             fsUploadFile.close();
 #ifdef DEBUGi
         Serial.print("spiffs_handleFileUpload Size: ");
-        Serial.println(upload.totalSize);
+        LOG(upload.totalSize);
 #endif
     }
 } //spiffs_handleFileUpload()
@@ -115,7 +115,7 @@ void spiffs_handleFileDelete(){
         return spiffServer.send(500, "text/plain", "BAD ARGS");
     String path = spiffServer.arg(0);
 #ifdef DEBUGi
-    Serial.println("spiffs_handleFileDelete: " + path);
+    LOG("spiffs_handleFileDelete: " + path);
 #endif
     if (path == "/")
         return spiffServer.send(500, "text/plain", "BAD PATH");
@@ -132,7 +132,7 @@ void spiffs_handleFileCreate()
         return spiffServer.send(500, "text/plain", "BAD ARGS");
     String path = spiffServer.arg(0);
 #ifdef DEBUGi
-    Serial.println("spiffs_handleFileCreate: " + path);
+    LOG("spiffs_handleFileCreate: " + path);
 #endif
     if (path == "/")
         return spiffServer.send(500, "text/plain", "BAD PATH");
@@ -158,7 +158,7 @@ void spiffs_handleFileList()
 
     String path = spiffServer.arg("dir");
 #ifdef DEBUGi
-    Serial.println("spiffs_handleFileList: " + path);
+    LOG("spiffs_handleFileList: " + path);
 #endif
     File dir = SPIFFS.open(path);
     path = String();
@@ -203,12 +203,12 @@ void spiffs_listDir(fs::FS &fs, const char *dirname, uint8_t levels)
     File root = fs.open(dirname);
     if (!root)
     {
-        Serial.println("Failed to open directory");
+        LOG("Failed to open directory");
         return;
     }
     if (!root.isDirectory())
     {
-        Serial.println("Not a directory");
+        LOG("Not a directory");
         return;
     }
 }
@@ -237,7 +237,7 @@ void spiffs_init()
     spiffServer.on("/edit", HTTP_GET, []() {
         if (!spiffs_handleFileRead("/edit.html"))
         {
-            Serial.println("!spiffs_handleFileRead( / edit.html )");
+            LOG("!spiffs_handleFileRead( / edit.html )");
             spiffServer.send(404, "text/plain", "FileNotFound");
         }
     });
@@ -258,14 +258,14 @@ void spiffs_init()
     spiffServer.onNotFound([]() {
         if (!spiffs_handleFileRead(spiffServer.uri()))
         {
-            Serial.println(" FileNotFound ");
+            LOG(" FileNotFound ");
             spiffServer.send(404, "text/plain", "FileNotFound");
         }
     }); //spiffServer.onNotFound
 
     if (MDNS.begin("edit"))
     {
-        Serial.println("MDNS responder started");
+        LOG("MDNS responder started");
     }
 
     spiffServer.serveStatic("/", SPIFFS, "/edit.html");

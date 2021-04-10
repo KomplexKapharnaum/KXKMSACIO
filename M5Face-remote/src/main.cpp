@@ -49,7 +49,7 @@ void setup()
 
   if (!SPIFFS.begin(true))
   {
-    Serial.println("SPIFFS Mount Failed");
+    LOG("SPIFFS Mount Failed");
     return;
   }
   M5.Lcd.drawJpgFile(SPIFFS, "/KXKM_logo.jpg", 0, 0);
@@ -99,18 +99,14 @@ void setup()
       .beaconInterval = 0 // full beacon interval milliseconds (0 = disable)
   });
 
+  ////////////////////////////////////////// SPIFFS EDIT /////////////////////////////////////
   spiffs_init();
 
-  ///////////////////////////////////////////// MENU LOOP ////////////////////////////////////////
+  ////////////////////////////////////////// MENU LOOP ///////////////////////////////////////
   main_menu();
 }
 
 ///////////////////////////////////////////// LOOP //////////////////////////////////////////
 void loop()
 {
-  // server.handleClient();
-  // if(k32->mqtt->isConnected()) {
-
-  // }
-
 }
