@@ -758,15 +758,7 @@ void remote_light()
     while (true)
     {
         ez.yield();
-        // if (millis() > _widget_time + ez.theme->signal_interval)
-        // {
-        //     ez.header.draw("battery");
-        //     ez.header.draw("wifi");
-        //     ez.mqtt.mqtt_on = k32->mqtt->isConnected();
-        //     ez.mqtt.mqtt();
-        //     _widget_time = millis();
-        // }
-
+       
         // BTN A/B/C    || M5.BtnA.isPressed()
         //
         if (m5.BtnA.pressedFor(ez.theme->longpress_time))
