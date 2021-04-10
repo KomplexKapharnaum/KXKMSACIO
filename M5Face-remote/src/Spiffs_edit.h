@@ -1,3 +1,6 @@
+#ifndef SPIFFS_EDIT_H
+#define SPIFFS_EDIT_H
+
 //////////////////////////////////////////spiffs///////////////////////////////////////////////
 #include <WebServer.h>
 File fsUploadFile;
@@ -276,3 +279,4 @@ void spiffs_init()
     xTaskCreatePinnedToCore(spiffs_handleClient, "spiffs_handleClient", 4096, NULL, 1, NULL, 0); // core 0 = wifi
 }//spiffs_init()
 
+#endif

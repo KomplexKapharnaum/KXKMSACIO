@@ -1,3 +1,6 @@
+#ifndef AUDIO_MENU_H
+#define AUDIO_MENU_H
+
 void check_page_mem();
 void check_fonction();
 void remote_audio();
@@ -836,3 +839,5 @@ void remote_audio()
     } //while true
 
 } //
+
+#endif

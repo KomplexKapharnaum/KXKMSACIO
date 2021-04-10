@@ -1,3 +1,6 @@
+#ifndef LIGHT_MENU_H
+#define LIGHT_MENU_H
+
 #include "preset_light.h"
 
 void remote_light();
@@ -1244,3 +1247,5 @@ void remote_light()
         }
     }
 }
+
+#endif

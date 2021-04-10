@@ -1,4 +1,5 @@
-
+#ifndef INCOMING_H
+#define INCOMING_H
 
 void update_tableau(char *payload, int num)
 {
@@ -134,3 +135,5 @@ void incoming(char *payload, size_t length)
         check = false;
     }
 }
+
+#endif

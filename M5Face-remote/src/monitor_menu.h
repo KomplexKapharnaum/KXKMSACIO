@@ -1,3 +1,5 @@
+#ifndef MONITOR_MENU_H
+#define MONITOR_MENU_H
 
 void menu_monitor();
 void mon_id_menu();
@@ -72,3 +74,5 @@ void mon_id_menu()
 
     mon_id_menu.run();
 }
+
+#endif
