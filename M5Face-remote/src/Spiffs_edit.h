@@ -3,7 +3,7 @@
 File fsUploadFile;
 WebServer spiffServer(80);
 
-//format bytes
+////////////////////////////////////////// format bytes //////////////////////////////////////
 String spiffs_formatBytes(size_t bytes)
 {
     if (bytes < 1024)
@@ -211,7 +211,7 @@ void spiffs_listDir(fs::FS &fs, const char *dirname, uint8_t levels)
         LOG("Not a directory");
         return;
     }
-}
+} //spiffs_listDir(fs::FS &fs, const char *dirname, uint8_t levels)
 
 void spiffs_handleClient(void *pvParameters)
 {
@@ -220,7 +220,7 @@ void spiffs_handleClient(void *pvParameters)
         delay(1);
     }
     vTaskDelete(NULL);
-}
+} //spiffs_handleClient(void *pvParameters)
 
 
 void spiffs_init()
@@ -272,7 +272,7 @@ void spiffs_init()
     spiffServer.begin();
     MDNS.addService("http", "tcp", 80);
 
-    // TASK 
+    ////////////////////////////////////////// TASK //////////////////////////////////////////
     xTaskCreatePinnedToCore(spiffs_handleClient, "spiffs_handleClient", 4096, NULL, 1, NULL, 0); // core 0 = wifi
-}
+}//spiffs_init()
 
