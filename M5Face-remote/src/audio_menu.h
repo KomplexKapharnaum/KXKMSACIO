@@ -79,7 +79,7 @@ void id_value_audio()
 
     while (equal != true)
     {
-        M5.update();
+        ez.yield();
 
         // BTN A/B/C
         if (m5.BtnC.pressedFor(ez.theme->longpress_time))
@@ -305,7 +305,7 @@ void audio_master_value()
 
     while (equal != true)
     {
-        M5.update();
+        ez.yield();
 
         // BTN A/B/C    || M5.BtnA.isPressed()
         //
@@ -427,7 +427,7 @@ void page_mem_value()
 
     while (equal != true)
     {
-        M5.update();
+        ez.yield();
 
         res = atoi(res_value.c_str());
         // FACE
@@ -533,7 +533,7 @@ void fonction_value()
 
     while (equal != true)
     {
-        M5.update();
+        ez.yield();
 
         res = atoi(res_value.c_str());
         // FACE

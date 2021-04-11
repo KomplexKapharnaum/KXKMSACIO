@@ -260,7 +260,7 @@ void color_value()
 
     while (equal != true)
     {
-        M5.update();
+        ez.yield();
 
         // BTN A/B/C
         if (m5.BtnC.pressedFor(ez.theme->longpress_time))
@@ -524,7 +524,7 @@ void id_value()
 
     while (equal != true)
     {
-        M5.update();
+        ez.yield();
 
         // BTN A/B/C
         if (m5.BtnC.pressedFor(ez.theme->longpress_time))
@@ -665,7 +665,7 @@ void master_value()
 
     while (equal != true)
     {
-        M5.update();
+        ez.yield();
 
         // BTN A/B/C    || M5.BtnA.isPressed()
         //
