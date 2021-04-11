@@ -22,6 +22,8 @@ void draw_mirror();
 bool _mod_coarse = false;
 bool color_front_back = false;
 uint8_t light_fonction = 0;
+bool light = true;
+bool esc_light = true;
 
 String MQTT_ID = "all";
 String MQTT_K32 = "k32/";
@@ -30,6 +32,7 @@ String light_id_calling = "";
 
 uint8_t light_id_fonction = 0;
 String light_id_fonct = "ID";
+String id_cal_light = "all";
 
 uint8_t red, green, blue, white, str, mod, mirror;
 int16_t str_speed = 127;
@@ -249,6 +252,7 @@ void color_value()
     uint8_t color_fonction = 0;
     String color_fonct = "RED";
     int res;
+    esc_light = true;
 
     msg += " Enter RED value & =";
     ez.msgBox("M5 REMOTE LIGHT", msg, "##" + color_fonct + "###Back", false);
@@ -261,8 +265,8 @@ void color_value()
         // BTN A/B/C
         if (m5.BtnC.pressedFor(ez.theme->longpress_time))
         {
-            main_origine = false;
-            remote_light();
+            esc_light = false;
+            equal = true;
         };
         if (M5.BtnB.wasPressed())
         {
@@ -511,8 +515,10 @@ void id_value()
     bool bad = false;
     String res_value = "";
     String msg = "";
+    esc_light = true;
 
     msg += " Enter N° ID & =";
+    msg += "|0 = all";
     ez.msgBox("M5 REMOTE LIGHT", msg, "##" + light_id_fonct + "###Back", false);
     draw_master();
 
@@ -523,8 +529,8 @@ void id_value()
         // BTN A/B/C
         if (m5.BtnC.pressedFor(ez.theme->longpress_time))
         {
-            main_origine = false;
-            remote_light();
+            esc_light = false;
+            equal = true;
         };
 
         if (M5.BtnB.wasPressed())
@@ -539,12 +545,14 @@ void id_value()
                 light_id_fonct = "ID";
                 msg = "";
                 msg += " Enter N° ID & =";
+                msg += "|0 = all";
             }
             else if (light_id_fonction == 1)
             {
                 light_id_fonct = "CH";
                 msg = "";
                 msg += " Enter N° CH & =";
+                msg += "|0 = all";
             }
 
             ez.msgBox("M5 REMOTE LIGHT", msg, "##" + light_id_fonct + "###Back", false);
@@ -580,6 +588,10 @@ void id_value()
                 case '.':
                     break;
                 case '=':
+                    if (res_value == "")
+                    {
+                        res_value = "0";
+                    }
                     if (light_id_fonction == 0)
                     {
                         MQTT_ID = String('e') + String(res_value);
@@ -605,12 +617,14 @@ void id_value()
                         light_id_fonct = "ID";
                         msg = "";
                         msg += " Enter N° ID & =";
+                        msg += "|0 = all";
                     }
                     else if (light_id_fonction == 1)
                     {
                         light_id_fonct = "CH";
                         msg = "";
                         msg += " Enter N° CH & =";
+                        msg += "|0 = all";
                     }
 
                     ez.msgBox("M5 REMOTE LIGHT", msg, "##" + light_id_fonct + "###Back", false);
@@ -643,6 +657,7 @@ void master_value()
     String res_value = "";
     String msg = "";
     int res;
+    esc_light = true;
 
     msg += " Enter value to master 0 -> 255 & =";
     ez.msgBox("M5 REMOTE LIGHT", msg, "#####Back", false);
@@ -656,8 +671,8 @@ void master_value()
         //
         if (m5.BtnC.pressedFor(ez.theme->longpress_time))
         {
-            main_origine = false;
-            remote_light();
+            esc_light = false;
+            equal = true;
         };
 
         res = atoi(res_value.c_str());
@@ -748,72 +763,63 @@ void remote_light()
     uint32_t _widget_time = millis();
     uint8_t inc_value = 10;
     bool _a_b = true;
+    light = true;
     light_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(LIGHT_MQTT_MEM);
     light_mqtt_topic.toCharArray(LIGHT_MQTT_TOPIC, light_mqtt_topic.length() + 1);
-    uint8_t id_call = 0;
-    String id_cal = "all";
     String fonct = "Master";
     uint8_t page_mem = 0;
     String page_me = "0-9";
-    ez.msgBox("M5 REMOTE LIGHT", "Welcome", id_cal + "# Menu #" + fonct + "##" + page_me + "#", false);
+    ez.msgBox("M5 REMOTE LIGHT", "Welcome", id_cal_light + "# Menu #" + fonct + "##" + page_me + "#", false);
     draw_master();
 
-    while (true)
+    while (light)
     {
         ez.yield();
-       
+
         // BTN A/B/C    || M5.BtnA.isPressed()
         //
         if (m5.BtnA.pressedFor(ez.theme->longpress_time))
         {
             if (_a_b)
             {
-                ez.msgBox("M5 REMOTE LIGHT", "Release for Back Menu", id_cal + "# Menu #" + fonct + "##" + page_me + "#", false);
+                ez.msgBox("M5 REMOTE LIGHT", "Release for Back Menu", id_cal_light + "# Menu #" + fonct + "##" + page_me + "#", false);
                 _a_b = false;
             }
         };
         if (m5.BtnA.wasReleasefor(ez.theme->longpress_time))
         {
-            if (main_origine)
-            {
-                break;
-            }
-            else
-            {
-                main_menu();
-            }
+            light = false;
         };
 
         if (m5.BtnA.wasReleased())
         {
-            id_call += 1;
-            if (id_call >= 2)
+            id_value();
+            if (esc_light)
             {
-                id_call = 0;
-            }
-            if (id_call == 0)
-            {
-                id_cal = "all";
-                MQTT_ID = "all";
-                ez.msgBox("M5 REMOTE LIGHT", id_cal, id_cal + "# Menu #" + fonct + "##" + page_me + "#", false);
-                draw_master();
-            }
-            else if (id_call == 1)
-            {
-                id_value();
-                if (light_id_fonction == 0)
+                if (light_id_calling == "0")
                 {
-                    id_cal = "id" + light_id_calling;
+                    id_cal_light = "all";
+                    MQTT_ID = "all";
+                }
+                else if (light_id_fonction == 0)
+                {
+                    id_cal_light = "id" + light_id_calling;
                 }
                 else if (light_id_fonction == 1)
                 {
-                    id_cal = "ch" + light_id_calling;
+                    id_cal_light = "ch" + light_id_calling;
                 }
-                ez.msgBox("M5 REMOTE LIGHT", id_cal, id_cal + "# Menu #" + fonct + "##" + page_me + "#", false);
+                ez.msgBox("M5 REMOTE LIGHT", id_cal_light, id_cal_light + "# Menu #" + fonct + "##" + page_me + "#", false);
+                draw_master();
+
+                light_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(LIGHT_MQTT_MEM);
+                light_mqtt_topic.toCharArray(LIGHT_MQTT_TOPIC, light_mqtt_topic.length() + 1);
+            }
+            else
+            {
+                ez.msgBox("M5 REMOTE LIGHT", id_cal_light, id_cal_light + "# Menu #" + fonct + "##" + page_me + "#", false);
                 draw_master();
             }
-            light_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(LIGHT_MQTT_MEM);
-            light_mqtt_topic.toCharArray(LIGHT_MQTT_TOPIC, light_mqtt_topic.length() + 1);
         };
 
         if (M5.BtnB.wasPressed())
@@ -848,7 +854,7 @@ void remote_light()
                 fonct = "Mirror";
             }
 
-            ez.msgBox("M5 REMOTE LIGHT", fonct, id_cal + "# Menu #" + fonct + "##" + page_me + "#", false);
+            ez.msgBox("M5 REMOTE LIGHT", fonct, id_cal_light + "# Menu #" + fonct + "##" + page_me + "#", false);
             draw_master();
         };
 
@@ -871,7 +877,7 @@ void remote_light()
             {
                 page_me = "20-29";
             }
-            ez.msgBox("M5 REMOTE LIGHT", page_me, id_cal + "# Menu #" + fonct + "##" + page_me + "#", false);
+            ez.msgBox("M5 REMOTE LIGHT", page_me, id_cal_light + "# Menu #" + fonct + "##" + page_me + "#", false);
             draw_master();
         };
 
@@ -1241,7 +1247,7 @@ void remote_light()
                     break;
                 }
                 LOG(msg);
-                ez.msgBox("M5 REMOTE LIGHT", msg, id_cal + "# Menu #" + fonct + "##" + page_me + "#", false);
+                ez.msgBox("M5 REMOTE LIGHT", msg, id_cal_light + "# Menu #" + fonct + "##" + page_me + "#", false);
                 draw_master();
             }
         }
