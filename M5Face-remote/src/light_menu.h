@@ -946,7 +946,7 @@ void remote_light()
                     }
                     else if (light_fonction == 5)
                     {
-                        mod = PRESET_MIRROR[key_val - 48];
+                        mirror = PRESET_MIRROR[key_val - 48];
 
                         msg += " " + NAME_PRESET_MIRROR[key_val - 48];
 
