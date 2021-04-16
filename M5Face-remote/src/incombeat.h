@@ -1,3 +1,6 @@
+#ifndef INCOMBEAT_H
+#define INCOMBEAT_H
+
 void incombeat(char *payload, size_t length)
 {
     currentTime = millis();
@@ -35,3 +38,5 @@ void incombeat(char *payload, size_t length)
         }
     }
 }
+
+#endif

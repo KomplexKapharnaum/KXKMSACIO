@@ -1,3 +1,5 @@
+#ifndef MONITOR_MENU_H
+#define MONITOR_MENU_H
 
 void menu_monitor();
 void mon_id_menu();
@@ -6,6 +8,8 @@ int16_t who_result;
 
 void monitor_menu()
 {
+    ez.mqtt.mqtt_on = k32->mqtt->isConnected();
+
     who_result = 0;
     String on_off_line;
 
@@ -70,3 +74,5 @@ void mon_id_menu()
 
     mon_id_menu.run();
 }
+
+#endif

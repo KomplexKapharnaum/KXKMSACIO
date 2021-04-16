@@ -450,7 +450,7 @@ uint16_t ezCanvas::loop()
                 clean_copy.push_back(_printed[n]);
         }
         _printed = clean_copy;
-        Serial.println(ESP.getFreeHeap());
+        LOG(ESP.getFreeHeap());
     }
     return 10;
 }
@@ -842,6 +842,7 @@ void ezSettings::begin()
 {
     menuObj.txtBig();
     menuObj.buttons("up#Back#select##down#");
+    ez.mqtt.begin();
 #ifdef M5EZ_WIFI
     ez.wifi.begin();
 #endif
@@ -1282,7 +1283,7 @@ void ezFACES::menu()
     bool start_state = _on;
 
 #ifdef M5EZ_CODE
-    if (ez.code.code())
+    if (ez.code.code() || !_on)
     {
 #endif
 
@@ -1402,7 +1403,7 @@ bool ezWifi::_WPS_new_event;
 void ezWifi::begin()
 {
 #ifdef M5EZ_WIFI_DEBUG
-    Serial.println("EZWIFI: Initialising");
+    LOG("EZWIFI: Initialising");
 #endif
     // WiFi.mode(WIFI_MODE_STA);
     WiFi.setAutoConnect(false);   // We have our own multi-AP version of this
@@ -1418,7 +1419,7 @@ void ezWifi::begin()
         if (WIFI_REASON_ASSOC_FAIL == info.disconnected.reason)
         {
 #ifdef M5EZ_WIFI_DEBUG
-            Serial.println("EZWIFI: Special case: Disconnect w/ ASSOC_FAIL. Setting _state to EZWIFI_SCANNING;");
+            LOG("EZWIFI: Special case: Disconnect w/ ASSOC_FAIL. Setting _state to EZWIFI_SCANNING;");
 #endif
             _state = EZWIFI_SCANNING;
         }
@@ -1511,7 +1512,7 @@ void ezWifi::readFlash()
     prefs.begin("M5ez", true); // true: read-only
     autoConnect = prefs.getBool("autoconnect_on", true);
 #ifdef M5EZ_WIFI_DEBUG
-    Serial.println("wifiReadFlash: Autoconnect is " + (String)(autoConnect ? "ON" : "OFF"));
+    LOG("wifiReadFlash: Autoconnect is " + (String)(autoConnect ? "ON" : "OFF"));
 #endif
     WifiNetwork_t new_net;
     String idx;
@@ -1540,7 +1541,7 @@ void ezWifi::readFlash()
             new_net.broker = broker;
             networks.push_back(new_net);
 #ifdef M5EZ_WIFI_DEBUG
-            Serial.println("wifiReadFlash: Read ssid:" + ssid + " key:" + key);
+            LOG("wifiReadFlash: Read ssid:" + ssid + " key:" + key);
 #endif
             index++;
         }
@@ -1579,7 +1580,7 @@ void ezWifi::writeFlash()
     }
     prefs.putBool("autoconnect_on", autoConnect);
 #ifdef M5EZ_WIFI_DEBUG
-    Serial.println("wifiWriteFlash: Autoconnect is " + (String)(autoConnect ? "ON" : "OFF"));
+    LOG("wifiWriteFlash: Autoconnect is " + (String)(autoConnect ? "ON" : "OFF"));
 #endif
     for (n = 0; n < networks.size(); n++)
     {
@@ -1599,7 +1600,7 @@ void ezWifi::writeFlash()
             prefs.putString(idx.c_str(), networks[n].broker);
 
 #ifdef M5EZ_WIFI_DEBUG
-            Serial.println("wifiWriteFlash: Wrote ssid:" + networks[n].SSID + " key:" + networks[n].key + " ip:" + networks[n].ip + " mask:" + networks[n].mask + " gateway:" + networks[n].gateway);
+            LOG("wifiWriteFlash: Wrote ssid:" + networks[n].SSID + " key:" + networks[n].key + " ip:" + networks[n].ip + " mask:" + networks[n].mask + " gateway:" + networks[n].gateway);
 #endif
         }
     }
@@ -1610,7 +1611,7 @@ void ezWifi::menu()
 {
     _state = EZWIFI_AUTOCONNECT_DISABLED;
 #ifdef M5EZ_WIFI_DEBUG
-    Serial.println("EZWIFI: Disabling autoconnect while in Wifi menu.");
+    LOG("EZWIFI: Disabling autoconnect while in Wifi menu.");
 #endif
     ezMenu wifimain("Wifi settings");
     wifimain.txtBig();
@@ -1623,7 +1624,7 @@ void ezWifi::menu()
     wifimain.run();
     _state = EZWIFI_IDLE;
 #ifdef M5EZ_WIFI_DEBUG
-    Serial.println("EZWIFI: Enabling autoconnect exiting Wifi menu.");
+    LOG("EZWIFI: Enabling autoconnect exiting Wifi menu.");
 #endif
 }
 
@@ -2001,7 +2002,7 @@ uint16_t ezWifi::loop()
     {
         _state = EZWIFI_IDLE;
 #ifdef M5EZ_WIFI_DEBUG
-        Serial.println("EZWIFI: Connected, returning to IDLE state");
+        LOG("EZWIFI: Connected, returning to IDLE state");
 #endif
     }
     if (!autoConnect || WiFi.isConnected() || networks.size() == 0)
@@ -2011,15 +2012,15 @@ uint16_t ezWifi::loop()
     {
     case EZWIFI_WAITING:
 #ifdef M5EZ_WIFI_DEBUG
-        Serial.println("EZWIFI: State Machine: _state = EZWIFI_WAITING");
+        LOG("EZWIFI: State Machine: _state = EZWIFI_WAITING");
 #endif
         if (millis() < _wait_until)
             return 250;
         // intentional fall-through
     case EZWIFI_IDLE:
 #ifdef M5EZ_WIFI_DEBUG
-        Serial.println("EZWIFI: State Machine: _state = EZWIFI_IDLE");
-        Serial.println("EZWIFI: Starting scan");
+        LOG("EZWIFI: State Machine: _state = EZWIFI_IDLE");
+        LOG("EZWIFI: Starting scan");
 #endif
         WiFi.mode(WIFI_MODE_STA);
         WiFi.scanNetworks(true);
@@ -2029,7 +2030,7 @@ uint16_t ezWifi::loop()
         break;
     case EZWIFI_SCANNING:
 #ifdef M5EZ_WIFI_DEBUG
-        Serial.println("EZWIFI: State Machine: _state = EZWIFI_SCANNING");
+        LOG("EZWIFI: State Machine: _state = EZWIFI_SCANNING");
 #endif
         scanresult = WiFi.scanComplete();
         switch (scanresult)
@@ -2038,7 +2039,7 @@ uint16_t ezWifi::loop()
             break;
         case WIFI_SCAN_FAILED:
 #ifdef M5EZ_WIFI_DEBUG
-            Serial.println("EZWIFI: Scan failed");
+            LOG("EZWIFI: Scan failed");
 #endif
             _state = EZWIFI_WAITING;
             _wait_until = millis() + 60000;
@@ -2046,7 +2047,7 @@ uint16_t ezWifi::loop()
             return 250;
         default:
 #ifdef M5EZ_WIFI_DEBUG
-            Serial.println("EZWIFI: Scan got " + (String)scanresult + " networks");
+            LOG("EZWIFI: Scan got " + (String)scanresult + " networks");
 #endif
             for (uint8_t n = _current_from_scan; n < scanresult; n++)
             {
@@ -2057,7 +2058,7 @@ uint16_t ezWifi::loop()
                     if (ssid == WiFi.SSID(n))
                     {
 #ifdef M5EZ_WIFI_DEBUG
-                        Serial.println("EZWIFI: Match: " + WiFi.SSID(n) + ", connecting...");
+                        LOG("EZWIFI: Match: " + WiFi.SSID(n) + ", connecting...");
 #endif
                         WiFi.mode(WIFI_MODE_STA);
                         ez.k32->wifi->connect(ssid.c_str(), key.c_str());
@@ -2068,7 +2069,7 @@ uint16_t ezWifi::loop()
                 }
             }
 #ifdef M5EZ_WIFI_DEBUG
-            Serial.println("EZWIFI: No (further) matches, waiting...");
+            LOG("EZWIFI: No (further) matches, waiting...");
 #endif
             _state = EZWIFI_WAITING;
             _wait_until = millis() + 60000;
@@ -2077,12 +2078,12 @@ uint16_t ezWifi::loop()
         }
     case EZWIFI_CONNECTING:
 #ifdef M5EZ_WIFI_DEBUG
-        Serial.println("EZWIFI: State Machine: _state = EZWIFI_CONNECTING");
+        LOG("EZWIFI: State Machine: _state = EZWIFI_CONNECTING");
 #endif
         if (millis() > _wait_until)
         {
 #ifdef M5EZ_WIFI_DEBUG
-            Serial.println("EZWIFI: Connect timed out...");
+            LOG("EZWIFI: Connect timed out...");
 #endif
             ez.k32->wifi->disconnect();
             _current_from_scan++;
@@ -2091,12 +2092,12 @@ uint16_t ezWifi::loop()
         break;
     case EZWIFI_AUTOCONNECT_DISABLED:
 #ifdef M5EZ_WIFI_DEBUG
-        Serial.println("EZWIFI: State Machine: _state = EZWIFI_AUTOCONNECT_DISABLED");
+        LOG("EZWIFI: State Machine: _state = EZWIFI_AUTOCONNECT_DISABLED");
 #endif
         break;
     default:
 #ifdef M5EZ_WIFI_DEBUG
-        Serial.println("EZWIFI: State Machine: default case! _state = " + String(_state));
+        LOG("EZWIFI: State Machine: default case! _state = " + String(_state));
 #endif
         break;
     }
@@ -2748,6 +2749,47 @@ void ezBattery::_drawWidget(uint16_t x, uint16_t w)
         m5.lcd.fillRect(left_offset + n * (bar_width + ez.theme->battery_bar_gap), top + ez.theme->battery_bar_gap,
                         bar_width, bar_height, getBatteryBarColor(currentBatteryLevel));
     }
+}
+
+#endif
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+//   M Q T T
+//
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#ifdef M5EZ_MQTT
+bool ezMqtt::mqtt_on = false;
+
+void ezMqtt::begin()
+{
+    _refresh();
+} 
+
+uint16_t ezMqtt::loop()
+{
+    ez.mqtt.mqtt_on = ez.k32->mqtt->isConnected();
+    ez.header.draw("mqtt");
+    return 5000;
+}
+
+void ezMqtt::_refresh()
+{
+    ez.header.insert(RIGHTMOST, "mqtt", 4 * ez.theme->header_hmargin, ez.mqtt._drawWidget);
+    ez.addEvent(ez.mqtt.loop);
+}
+
+void ezMqtt::_drawWidget(uint16_t x, uint16_t w)
+{
+    m5.lcd.fillRect(x, 0, w, ez.theme->header_height, ez.theme->header_bgcolor);
+    ez.setFont(ez.theme->clock_font);
+    m5.lcd.setTextColor(TFT_YELLOW);
+    m5.lcd.setTextDatum(TL_DATUM);
+    
+    if (mqtt_on) m5.lcd.drawString("Q", x + ez.theme->header_hmargin, ez.theme->header_tmargin + 2);
+    else m5.lcd.drawString("-", x + ez.theme->header_hmargin, ez.theme->header_tmargin + 2);
 }
 
 #endif
@@ -3690,7 +3732,7 @@ void ezMenu::rightOnLast(String nameAndCaption)
 void ezMenu::run()
 {
     while (runOnce())
-    {
+    { 
     }
 }
 
