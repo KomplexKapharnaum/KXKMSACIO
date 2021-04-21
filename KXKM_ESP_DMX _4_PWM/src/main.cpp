@@ -10,8 +10,8 @@
 
 /////////////////////////////////////////ID/////////////////////////////////////////
 
-#define K32_SET_NODEID 146  // board unique id
-#define LULU_ID 1         // permet de calculer l'adresse DMX
+//#define K32_SET_NODEID 112  // board unique id
+//#define LULU_ID 1         // permet de calculer l'adresse DMX
 
 /////////////////////////////////////////Debug///////////////////////////////////////
 
@@ -174,6 +174,7 @@ void setup()
     /////////////////////////////////////////////// WIFI //////////////////////////////////////
     LOG("INIT WIFI");
     k32->init_wifi(nodeName);
+    //k32->wifi->ota(false);
     k32->wifi->staticIP("2.0.0." + String(k32->system->id() + 100), "2.0.0.1", "255.0.0.0");
     k32->wifi->connect("kxkm24", NULL); //KXKM
     // k32->wifi->connect("kxkm24lulu", NULL); //KXKM
@@ -221,14 +222,14 @@ void setup()
     });
 
     /////////////////////////////////////// MQTT //////////////////////////////////////
-    k32->init_mqtt();
+    // k32->init_mqtt();
 
-    k32->mqtt->start({
-        .broker = "2.0.0.1",// Komplex
-        // .broker = "2.0.0.10", // Riri dev home
-        .beatInterval = 2000,  // heartbeat interval milliseconds (0 = disable)
-        .beaconInterval = 000 // full beacon interval milliseconds (0 = disable)
-    });
+    // k32->mqtt->start({
+    //     .broker = "2.0.0.1",// Komplex
+    //     // .broker = "2.0.0.10", // Riri dev home
+    //     .beatInterval = 2000,  // heartbeat interval milliseconds (0 = disable)
+    //     .beaconInterval = 000 // full beacon interval milliseconds (0 = disable)
+    // });
 
     /////////////////////////////////////////////// OSC //////////////////////////////////////
     // k32->init_osc({

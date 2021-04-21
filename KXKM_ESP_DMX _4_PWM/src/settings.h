@@ -277,7 +277,7 @@
 #define L_TYPE "elp_DMX"
 #define RUBAN_SIZE 50
 #define LULU_PATCHSIZE 20 // 20 = sk 16 _pw 4 / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx
-#define LULU_UNI 0        // Univers DMX   0=SAC 1=Barre 2=Chariot 3=Dmx 4=Cube_strobe 5=Cube_parled 6=Sucette 7=minikolor
+#define LULU_UNI 5       // Univers DMX   0=SAC 1=Barre 2=Chariot 3=Dmx 4=Cube_strobe 5=Cube_parled 6=Sucette 7=minikolor
 #define FAKE_CURRENT 0
 
 #define ON_NO_WIFI 0
