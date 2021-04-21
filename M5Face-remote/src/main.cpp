@@ -61,9 +61,9 @@ void setup()
   /////////////////////////////////////////////// WIFI //////////////////////////////////////
   k32->init_wifi("M5-Remote");
   k32->wifi->staticIP("2.0.0.93", "2.0.0.1", "255.0.0.0");
-  // k32->wifi->connect("kxkm24", NULL); //KXKM
+  k32->wifi->connect("kxkm24", NULL); //KXKM
   // k32->wifi->connect("mgr4g", NULL); //MGR
-  k32->wifi->connect("riri_new", "B2az41opbn6397"); //Riri dev home
+  // k32->wifi->connect("riri_new", "B2az41opbn6397"); //Riri dev home
 
   // ez.wifi.add("SSID", "KEY", "IP", "MASK", "GATEWAY","BROKER");
   ez.wifi.add("kxkm24", "", "2.0.0.93", "255.0.0.0", "2.0.0.1", "2.0.0.1");                        //KXKM
@@ -90,8 +90,8 @@ void setup()
                         }});
 
   k32->mqtt->start({
-      // .broker = "2.0.0.1",// Komplex
-      .broker = "2.0.0.10", // Riri dev home
+      .broker = "2.0.0.1",// Komplex
+      // .broker = "2.0.0.10", // Riri dev home
       // .broker = "192.168.43.100",//MGR
       .beatInterval = 0,  // heartbeat interval milliseconds (0 = disable)
       .beaconInterval = 0 // full beacon interval milliseconds (0 = disable)
