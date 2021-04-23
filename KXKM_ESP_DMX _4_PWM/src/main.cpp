@@ -1,18 +1,26 @@
 #include <Arduino.h>
 
-#define LULU_VER 71
+#define LULU_VER 73
 #define LULU_TYPE 50 // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot" \
                     // 10="power" 11="DMX_strobe" 12="DMX_Par_led"                                          \
                     // 20="Cube_str" 21="Cube_par"  22="Cube_MiniKOLOR" 23="Cube_Elp"                       \
                     // 30="Sucette_parled" 31="Sucette_Strobe" 32="Sucette_MiniKolor" 33="sucette_Elp"      \
-                    // 40="New_Fluo"
-                    // 50="strip to elp dmx"
+                    // 40="New_Fluo" \
+                     // 50="strip to elp dmx"
 
 /////////////////////////////////////////ID/////////////////////////////////////////
 
-//#define K32_SET_NODEID 112  // board unique id
-//#define LULU_ID 1         // permet de calculer l'adresse DMX
-
+// #define K32_SET_NODEID 69 // board unique id
+// #define LULU_ID 10        // permet de calculer l'adresse DMX
+// #define LULU_UNI 1        // univers artnet
+//                        // defo LULU_UNI 0 => LULU-TYPE 6 & 7 & 8 & 10 & 20  
+//                        // defo LULU_UNI 1 => LULU-TYPE 1 & 2 & 5 
+//                        // defo LULU_UNI 2 => LULU-TYPE 9
+//                        // defo LULU_UNI 3 => LULU-TYPE 50 
+//                        // defo LULU_UNI 4 => LULU-TYPE 11 
+//                        // defo LULU_UNI 5 => LULU-TYPE 12 & 21 & 22 
+//                        // defo LULU_UNI 6 => LULU-TYPE 4 & 30 & 31 & 32 & 33 & 40 
+//                        // defo LULU_UNI 7 => LULU-TYPE 3 & 23
 /////////////////////////////////////////Debug///////////////////////////////////////
 
 // #define DEBUG_dmx 1              // !!! IMPLEMENT
@@ -222,14 +230,14 @@ void setup()
     });
 
     /////////////////////////////////////// MQTT //////////////////////////////////////
-    // k32->init_mqtt();
+    k32->init_mqtt();
 
-    // k32->mqtt->start({
-    //     .broker = "2.0.0.1",// Komplex
-    //     // .broker = "2.0.0.10", // Riri dev home
-    //     .beatInterval = 2000,  // heartbeat interval milliseconds (0 = disable)
-    //     .beaconInterval = 000 // full beacon interval milliseconds (0 = disable)
-    // });
+    k32->mqtt->start({
+        .broker = "2.0.0.1",// Komplex
+        // .broker = "2.0.0.10", // Riri dev home
+        .beatInterval = 2000,  // heartbeat interval milliseconds (0 = disable)
+        .beaconInterval = 000 // full beacon interval milliseconds (0 = disable)
+    });
 
     /////////////////////////////////////////////// OSC //////////////////////////////////////
     // k32->init_osc({

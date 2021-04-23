@@ -7,7 +7,6 @@
 #define L_TYPE "Sac"
 #define RUBAN_SIZE 120
 #define LULU_PATCHSIZE 20 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
-#define LULU_UNI 0        // Univers DMX   0=SAC 1=Barre 2=Chariot 3=Dmx 4=Cube_strobe 5=Cube_parled 6=Sucette 7=minikolor
 #define FAKE_CURRENT 12500
 // #include "macro/Type/SK/mem.h"
 
@@ -20,7 +19,6 @@
 #define L_TYPE "Barre"
 #define RUBAN_SIZE 120
 #define LULU_PATCHSIZE 20 // 20 = sk 16 _pw 4 / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx
-#define LULU_UNI 1        // Univers DMX   0=SAC 1=Barre 2=Chariot 3=Dmx 4=Cube_strobe 5=Cube_parled 6=Sucette 7=minikolor
 #define FAKE_CURRENT 0
 // #include "macro/Type/SK/mem.h" // mem global sk & pwm
 
@@ -35,7 +33,6 @@
 #define L_TYPE "Pince"
 #define RUBAN_SIZE 17
 #define LULU_PATCHSIZE 20 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
-#define LULU_UNI 7        // Univers DMX   0=SAC 1=Barre 2=Chariot 3=Dmx 4=Cube_strobe 5=Cube_parled 6=Sucette 7=minikolor
 #define FAKE_CURRENT 0
 // #include "macro/Type/SK/mem.h" // mem global sk & pwm
 
@@ -48,7 +45,6 @@
 #define L_TYPE "Fluo"
 #define RUBAN_SIZE 73
 #define LULU_PATCHSIZE 20 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
-#define LULU_UNI 6        // Univers DMX   0=SAC 1=Barre 2=Chariot 3=Dmx 4=Cube_strobe 5=Cube_parled 6=Sucette 7=minikolor
 #define FAKE_CURRENT 0
 // #include "macro/Type/SK/mem.h" // mem global sk & pwm
 
@@ -61,7 +57,6 @@
 #define L_TYPE "Flex"
 #define RUBAN_SIZE 186
 #define LULU_PATCHSIZE 20 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
-#define LULU_UNI 1        // Univers DMX   0=SAC 1=Barre 2=Chariot 3=Dmx 4=Cube_strobe 5=Cube_parled 6=Sucette 7=minikolor
 #define FAKE_CURRENT 0
 // #include "macro/Type/SK/mem.h" // mem global sk & pwm
 
@@ -74,7 +69,6 @@
 #define L_TYPE "Barrette"
 #define RUBAN_SIZE 60
 #define LULU_PATCHSIZE 20 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
-#define LULU_UNI 0        // Univers DMX   0=SAC 1=Barre 2=Chariot 3=Dmx 4=Cube_strobe 5=Cube_parled 6=Sucette 7=minikolor
 #define FAKE_CURRENT 0
 // #include "macro/Type/SK/mem.h" // mem global sk & pwm
 
@@ -88,7 +82,6 @@
 #define L_TYPE "Phone"
 #define RUBAN_SIZE 35
 #define LULU_PATCHSIZE 20 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
-#define LULU_UNI 1        // Univers DMX   0=SAC 1=Barre 2=Chariot 3=Dmx 4=Cube_strobe 5=Cube_parled 6=Sucette 7=minikolor
 #define FAKE_CURRENT 0
 // #include "macro/Type/SK/mem.h" // mem global sk & pwm
 
@@ -101,7 +94,6 @@
 #define L_TYPE "Atom"
 #define RUBAN_SIZE 25     // 5 pour tester avec les jauges de monitoring
 #define LULU_PATCHSIZE 20 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
-#define LULU_UNI 1        // Univers DMX   0=SAC 1=Barre 2=Chariot 3=Dmx 4=Cube_strobe 5=Cube_parled 6=Sucette 7=minikolor
 #define FAKE_CURRENT 0
 // #include "macro/Type/SK/mem.h" // mem global sk & pwm
 
@@ -114,7 +106,6 @@
 #define L_TYPE "Chariot"
 #define RUBAN_SIZE 120
 #define LULU_PATCHSIZE 20 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
-#define LULU_UNI 2        // Univers DMX   0=SAC 1=Barre 2=Chariot 3=Dmx 4=Cube_strobe 5=Cube_parled 6=Sucette 7=minikolor
 #define FAKE_CURRENT 0
 // #include "macro/Show/H&S/mem_h&s.h" // mem global sk & pwm
 
@@ -129,7 +120,6 @@
 #define L_TYPE "Power"
 #define RUBAN_SIZE 120
 #define LULU_PATCHSIZE 20 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
-#define LULU_UNI 0        // Univers DMX   0=SAC 1=Barre 2=Chariot 3=Dmx 4=Cube_strobe 5=Cube_parled 6=Sucette 7=minikolor
 #define FAKE_CURRENT 0
 #include "macro/Type/SK/mem.h"
 
@@ -137,7 +127,6 @@
 #define L_TYPE "Dmx_strobe"
 #define RUBAN_SIZE 0
 #define LULU_PATCHSIZE 16 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
-#define LULU_UNI 4        // Univers DMX   0=SAC 1=Barre 2=Chariot 3=Dmx 4=Cube_strobe 5=Cube_parled 6=Sucette 7=minikolor
 #define FAKE_CURRENT 0
 #include "macro/Type/strobe/mem_strobe_dmx.h"
 
@@ -145,7 +134,6 @@
 #define RUBAN_SIZE 0
 #define L_TYPE "Dmx_par"
 #define LULU_PATCHSIZE 5 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
-#define LULU_UNI 5       // Univers DMX   0=SAC 1=Barre 2=Chariot 3=Dmx 4=Cube_strobe 5=Cube_parled 6=Sucette 7=minikolor
 #define FAKE_CURRENT 0
 #include "macro/Type/parled/mem_parled_dmx.h"
 
@@ -153,7 +141,6 @@
 #define RUBAN_SIZE 60
 #define L_TYPE "Cube_str"
 #define LULU_PATCHSIZE 20 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
-#define LULU_UNI 0        // Univers DMX   0=SAC 1=Barre 2=Chariot 3=Dmx 4=Cube_strobe 5=Cube_parled 6=Sucette 7=minikolor
 #define FAKE_CURRENT 0
 #define ON_NO_WIFI 255
 #include "macro/Type/strobe/mem_strobe.h"
@@ -164,7 +151,6 @@
 #define RUBAN_SIZE 60
 #define L_TYPE "Cube_par"
 #define LULU_PATCHSIZE 9 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
-#define LULU_UNI 5       // Univers DMX   0=SAC 1=Barre 2=Chariot 3=Dmx 4=Cube_strobe 5=Cube_parled 6=Sucette 7=minikolor
 #define FAKE_CURRENT 0
 #define ON_NO_WIFI 255
 // #include "macro/Type/parled/mem_parled.h"
@@ -184,7 +170,6 @@
 #define RUBAN_SIZE 60
 #define L_TYPE "Cube_minikolor"
 #define LULU_PATCHSIZE 13 //  20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
-#define LULU_UNI 5        // Univers DMX   0=SAC 1=Barre 2=Chariot 3=Dmx 4=Cube_strobe 5=Cube_parled 6=Sucette 7=minikolor
 #define FAKE_CURRENT 0
 #define ON_NO_WIFI 255
 #include "macro/Type/4pwm/mem_4pwm.h"           //
@@ -195,7 +180,6 @@
 #define RUBAN_SIZE 60
 #define L_TYPE "Cube_elp"
 #define LULU_PATCHSIZE 7 //  20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor / = elp
-#define LULU_UNI 7       // Univers DMX   0=SAC 1=Barre 2=Chariot 3=Dmx 4=Cube_strobe 5=Cube_parled 6=Sucette 7=minikolor 8=elp
 #define FAKE_CURRENT 0
 #define ON_NO_WIFI 255
 #include "macro/Type/4pwm/mem_4pwm.h" //
@@ -206,7 +190,6 @@
 #define RUBAN_SIZE 60
 #define L_TYPE "Sucette_parled"
 #define LULU_PATCHSIZE 9 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
-#define LULU_UNI 6       // Univers DMX   0=SAC 1=Barre 2=Chariot 3=Dmx 4=Cube_strobe 5=Cube_parled 6=Sucette 7=minikolor
 #define FAKE_CURRENT 0
 #define ON_NO_WIFI 255 // 82 niveau pour les statics baronnie
 #include "macro/Type/parled/mem_parled.h"
@@ -229,7 +212,6 @@
 #define RUBAN_SIZE 60
 #define L_TYPE "Sucette_strobe"
 #define LULU_PATCHSIZE 9 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
-#define LULU_UNI 6       // Univers DMX   0=SAC 1=Barre 2=Chariot 3=Dmx 4=Cube_strobe 5=Cube_parled 6=Sucette 7=minikolor
 #define FAKE_CURRENT 0
 #define ON_NO_WIFI 255 //
 #include "macro/Type/strobe/mem_strobe.h"
@@ -241,7 +223,6 @@
 #define RUBAN_SIZE 60
 #define L_TYPE "Sucette_MiniKolor"
 #define LULU_PATCHSIZE 9 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
-#define LULU_UNI 6       // Univers DMX   0=SAC 1=Barre 2=Chariot 3=Dmx 4=Cube_strobe 5=Cube_parled 6=Sucette 7=minikolor
 #define FAKE_CURRENT 0
 #define ON_NO_WIFI 255 //
 #include "macro/Type/minikolor/mem_minikolor.h"
@@ -253,7 +234,6 @@
 #define RUBAN_SIZE 60
 #define L_TYPE "Sucette_Elp"
 #define LULU_PATCHSIZE 9 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
-#define LULU_UNI 6       // Univers DMX   0=SAC 1=Barre 2=Chariot 3=Dmx 4=Cube_strobe 5=Cube_parled 6=Sucette 7=minikolor
 #define FAKE_CURRENT 0
 #define ON_NO_WIFI 255 //
 #include "macro/Type/elp/mem_elp.h"
@@ -265,7 +245,6 @@
 #define L_TYPE "New_Fluo"
 #define RUBAN_SIZE 73
 #define LULU_PATCHSIZE 20 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor / 20 = newfluo
-#define LULU_UNI 6        // Univers DMX   0=SAC 1=Barre 2=Chariot 3=Dmx 4=Cube_strobe 5=Cube_parled 6=Sucette 7=minikolor
 #define FAKE_CURRENT 0
 #define ON_NO_WIFI 255                //
 #include "macro/Type/4pwm/mem_4pwm.h" // defo
@@ -277,7 +256,6 @@
 #define L_TYPE "elp_DMX"
 #define RUBAN_SIZE 50
 #define LULU_PATCHSIZE 20 // 20 = sk 16 _pw 4 / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx
-#define LULU_UNI 5       // Univers DMX   0=SAC 1=Barre 2=Chariot 3=Dmx 4=Cube_strobe 5=Cube_parled 6=Sucette 7=minikolor
 #define FAKE_CURRENT 0
 
 #define ON_NO_WIFI 0
