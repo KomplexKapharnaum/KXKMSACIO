@@ -1,6 +1,6 @@
 #include <Arduino.h>
 
-#define LULU_VER 73
+#define LULU_VER 74
 #define LULU_TYPE 50 // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot" \
                     // 10="power" 11="DMX_strobe" 12="DMX_Par_led"                                          \
                     // 20="Cube_str" 21="Cube_par"  22="Cube_MiniKOLOR" 23="Cube_Elp"                       \
@@ -69,6 +69,7 @@ K32 *k32;
 ///////////////////////////////////////////////// include ////////////////////////////////////////
 
 #include "anim_monitoring.h"
+#include "anim_dmx_test.h"
 #include "anim_dmx_strip.h"
 #include "anim_dmx_out.h"
 #include "boutons.h"

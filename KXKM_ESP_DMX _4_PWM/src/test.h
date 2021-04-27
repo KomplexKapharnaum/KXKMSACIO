@@ -6,9 +6,12 @@ void light_tests() {
 
   int timeStep = 300;
   
-  // INIT TEST
+  // INIT TEST STRIPS
     k32->light->anim( 0, "test0",   new K32_anim_test )->push(timeStep)->master(MASTER_PREV)->play();
     k32->light->anim( 1, "test1",   new K32_anim_test )->push(timeStep)->master(MASTER_PREV)->play();
+
+  // DMX TEST
+    k32->light->anim( 0, "testDMX",   new Anim_dmx_test )->push(timeStep)->master(MASTER_PREV)->play();
 
   // PWM TEST
     k32->pwm->set(0, 255);
