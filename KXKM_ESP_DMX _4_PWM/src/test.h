@@ -36,6 +36,8 @@ void light_tests() {
 
   // WAIT END
     k32->light->anim("test0")->wait();
+    k32->light->anim("test1")->wait();
+    k32->light->anim("testDMX")->wait();
   
   // COLOR TEST
     // k32->light->anim(0, "colorA", new K32_anim_color, 10, 0)->push(50, 255, 200, 0, 0)->play(1000)->wait();
