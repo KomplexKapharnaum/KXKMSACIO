@@ -1,5 +1,5 @@
-#include <light/K32_light.h>
-#include <light/K32_dmx.h>
+#include <K32_light.h>
+#include <K32_dmx.h>
 
 class Anim_dmx_test : public K32_anim
 {
@@ -24,7 +24,7 @@ public:
         if (i%3 == 0) out_r_g_b[i] = master();
         else out_r_g_b[i] = 0;
 
-      k32->dmx->setMultiple(out_r_g_b, 512, 1);
+      dmx->setMultiple(out_r_g_b, 512, 1);
 
       this->pause(stepMS);
 
@@ -35,7 +35,7 @@ public:
         if (i%3 == 1) out_r_g_b[i] = master();
         else out_r_g_b[i] = 0;
         
-      k32->dmx->setMultiple(out_r_g_b, 512, 1);
+      dmx->setMultiple(out_r_g_b, 512, 1);
 
       this->pause(stepMS);
 
@@ -45,7 +45,7 @@ public:
         if (i%3 == 2) out_r_g_b[i] = master();
         else out_r_g_b[i] = 0;
         
-      k32->dmx->setMultiple(out_r_g_b, 512, 1);
+      dmx->setMultiple(out_r_g_b, 512, 1);
 
       this->pause(stepMS);
 
@@ -54,7 +54,7 @@ public:
       for (int i=0; i< size() * 3; i++) 
         out_r_g_b[i] = master();
         
-      k32->dmx->setMultiple(out_r_g_b, 512, 1);
+      dmx->setMultiple(out_r_g_b, 512, 1);
 
       this->pause(stepMS);
 
@@ -63,7 +63,7 @@ public:
       for (int i=0; i< size() * 3; i++) 
         out_r_g_b[i] = 0;
         
-      k32->dmx->setMultiple(out_r_g_b, 512, 1);
+      dmx->setMultiple(out_r_g_b, 512, 1);
     }
 };
 

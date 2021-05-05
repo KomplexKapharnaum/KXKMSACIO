@@ -1,4 +1,4 @@
-#include <light/K32_light.h>
+#include <K32_light.h>
 
 
 // OUTILS
@@ -188,12 +188,12 @@ class Anim_dmx_strip : public K32_anim {
       //
 
       //PWM
-      if (k32->pwm)
+      if (light->pwm)
       {
-        k32->pwm->set(0, data[16]*this->master()/255 );
-        k32->pwm->set(1, data[17]*this->master()/255 );
-        k32->pwm->set(2, data[18]*this->master()/255 );
-        k32->pwm->set(3, data[19]*this->master()/255 );
+        light->pwm->set(0, data[16]*this->master()/255 );
+        light->pwm->set(1, data[17]*this->master()/255 );
+        light->pwm->set(2, data[18]*this->master()/255 );
+        light->pwm->set(3, data[19]*this->master()/255 );
         // LOGF5("ANIM: -> Red %d PWM %d %d %d %d \n", data[3], data[16], data[17], data[18], data[19]);
       }
 
@@ -208,7 +208,7 @@ class Anim_dmx_strip : public K32_anim {
         this->clear();
         #ifdef ELP_Start
           int out_r_g_b[size() * 3] = {0};
-          k32->dmx->setMultiple(out_r_g_b, size()*3, ELP_Start);
+          if (light->dmx) light->dmx->setMultiple(out_r_g_b, size()*3, ELP_Start);
         #endif    
         return;
       }
@@ -221,6 +221,7 @@ class Anim_dmx_strip : public K32_anim {
       if (mirrorMode == 1 || mirrorMode == 4)       segmentSize /= 2;
       else if (mirrorMode == 2 || mirrorMode == 5)  segmentSize /= 3;
       else if (mirrorMode == 3 || mirrorMode == 6)  segmentSize /= 4;
+      if (segmentSize<1) segmentSize = 1;
 
       // Modes
       int pixMode     = simplifyDmxRange(data[5]);
@@ -499,8 +500,7 @@ class Anim_dmx_strip : public K32_anim {
         #endif
       }
       #ifdef ELP_Start
-      k32->dmx->setMultiple(out_r_g_b, size()*3, ELP_Start);
-
+      if (light->dmx) light->dmx->setMultiple(out_r_g_b, size()*3, ELP_Start);
       #endif      
 
     }

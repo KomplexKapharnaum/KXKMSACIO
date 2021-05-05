@@ -1,6 +1,6 @@
 
-#include <light/K32_light.h>
-#include <xtension/K32_remote.h>
+#include <K32_light.h>
+#include <hardware/K32_remote.h>
 #include "mem.h"
 
 // ANIM RSSI
