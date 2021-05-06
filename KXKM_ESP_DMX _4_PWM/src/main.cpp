@@ -125,12 +125,13 @@ void setup()
   {
     wifi->setHostname(k32->system->name() + (nodeName != "")?"-"+nodeName:"");
 
-    wifi->staticIP("2.0.0." + String(k32->system->id() + 100), "2.0.0.1", "255.0.0.0");
-    // wifi->connect("kxkm24", NULL); //KXKM
+    wifi->staticIP("2.0.0." + String(k32->system->id() + 100), "2.0.0.1", "255.255.255.0");
+    wifi->connect("kxkm24", NULL); //KXKM
     // wifi->connect("kxkm24lulu", NULL); //KXKM
     // wifi->connect("mgr4g", NULL); //Maigre dev
     // wifi->connect("interweb", "superspeed37"); //Maigre dev home
     // wifi->connect("riri_new", "B2az41opbn6397"); //Riri dev home
+    // TODO: if wifi->connect ommited = crash on mqtt/artnet/osc
 
     ////////////////// ARTNET
     artnet = new K32_artnet(k32, {   
@@ -140,20 +141,22 @@ void setup()
     });
 
     // EVENT: full frame
-    artnet->onFullDmx([](const uint8_t *data, int length) {
-      // Force Auto
-      if (length > 511 && data[511] > 250) // data 512 = end dmx trame
-      {
-        remote->setState(REMOTE_AUTO);
-        remote->lock();
-      }
-      // LOGF2("ARTNET: %d %d \n", data[511], length);
-    });
+    if (artnet)
+      artnet->onFullDmx([](const uint8_t *data, int length) {
+        // Force Auto
+        if (length > 511 && data[511] > 250) // data 512 = end dmx trame
+        {
+          remote->setState(REMOTE_AUTO);
+          remote->lock();
+        }
+        // LOGF2("ARTNET: %d %d \n", data[511], length);
+      });
 
     // EVENT: new artnet frame received
-    artnet->onDmx([](const uint8_t *data, int length) {
-      light->anim("artnet")->push(data, length);
-    });
+    if (artnet)
+      artnet->onDmx([](const uint8_t *data, int length) {
+        light->anim("artnet")->push(data, length);
+      });
 
     // EVENT: wifi lost
     wifi->onDisconnect([&]() {
@@ -167,21 +170,23 @@ void setup()
     });
 
     ////////////////// MQTT
-    mqtt->start({
-        .broker = "2.0.0.1",         // Komplex
-        // .broker = "2.0.0.10",     // Riri dev home
-        // .broker = "192.168.43.131",  // MGR dev home
-        .beatInterval = 5000,     // heartbeat interval milliseconds (0 = disable)
-        .statusInterval = 15000   // full beacon interval milliseconds (0 = disable)
-    });
+    if (mqtt)
+      mqtt->start({
+          // .broker = "2.0.0.1",         // Komplex
+          // .broker = "2.0.0.10",     // Riri dev home
+          .broker = "192.168.43.132",  // MGR dev home
+          .beatInterval = 5000,     // heartbeat interval milliseconds (0 = disable)
+          .statusInterval = 15000   // full beacon interval milliseconds (0 = disable)
+      });
 
     ////////////////// OSC
-    osc->start({
-        .port_in = 1818,          // osc port input (0 = disable)  // 1818
-        .port_out = 1819,         // osc port output (0 = disable) // 1819
-        .beatInterval = 5000,     // heartbeat interval milliseconds (0 = disable)
-        .statusInterval = 15000   // full beacon interval milliseconds (0 = disable)
-    });
+    if (osc)
+      osc->start({
+          .port_in = 1818,          // osc port input (0 = disable)  // 1818
+          .port_out = 1819,         // osc port output (0 = disable) // 1819
+          .beatInterval = 5000,     // heartbeat interval milliseconds (0 = disable)
+          .statusInterval = 15000   // full beacon interval milliseconds (0 = disable)
+      });
     
   }
 

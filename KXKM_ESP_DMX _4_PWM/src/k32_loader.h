@@ -34,9 +34,6 @@ K32_artnet* artnet = nullptr;
 #include <K32_light.h>
 K32_light* light = nullptr;
 
-#include <K32_dmx.h>
-K32_dmx* dmx = nullptr;
-
 
 // CHECK MCP SWITCH to select Wifi or BT
 //
