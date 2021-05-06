@@ -10,7 +10,7 @@
 
 /////////////////////////////////////////ID/////////////////////////////////////////
 
-#define K32_SET_NODEID 37 // board unique id
+#define K32_SET_NODEID 56 // board unique id
 #define LULU_ID 1         // permet de calculer l'adresse DMX
 #define LULU_UNI 1        // univers artnet
 //                        // defo LULU_UNI 0 => LULU-TYPE 6 & 7 & 8 & 10 & 20  
@@ -125,10 +125,10 @@ void setup()
   {
     wifi->setHostname(k32->system->name() + (nodeName != "")?"-"+nodeName:"");
 
-    // wifi->staticIP("2.0.0." + String(k32->system->id() + 100), "2.0.0.1", "255.0.0.0");
+    wifi->staticIP("2.0.0." + String(k32->system->id() + 100), "2.0.0.1", "255.0.0.0");
     // wifi->connect("kxkm24", NULL); //KXKM
     // wifi->connect("kxkm24lulu", NULL); //KXKM
-    wifi->connect("mgr4g", NULL); //Maigre dev
+    // wifi->connect("mgr4g", NULL); //Maigre dev
     // wifi->connect("interweb", "superspeed37"); //Maigre dev home
     // wifi->connect("riri_new", "B2az41opbn6397"); //Riri dev home
 
@@ -168,9 +168,9 @@ void setup()
 
     ////////////////// MQTT
     mqtt->start({
-        // .broker = "2.0.0.1",         // Komplex
+        .broker = "2.0.0.1",         // Komplex
         // .broker = "2.0.0.10",     // Riri dev home
-        .broker = "192.168.43.131",  // MGR dev home
+        // .broker = "192.168.43.131",  // MGR dev home
         .beatInterval = 5000,     // heartbeat interval milliseconds (0 = disable)
         .statusInterval = 15000   // full beacon interval milliseconds (0 = disable)
     });
