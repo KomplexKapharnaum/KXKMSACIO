@@ -20,11 +20,15 @@ void init_mem()
            MEM[n][i] = MEM_PARLED[n][i];
            MEM_NO_WIFI[i] = MEM_PARLED_NO_WIFI[i];
       }
-      for (int i = LULU_PATCHSIZE -4 ; i < LULU_PATCHSIZE  ; i++) 
+      for (int i = LULU_PATCHSIZE-4 ; i < LULU_PATCHSIZE  ; i++) 
       {
-           MEM[n][i]=MEM_PWM[n][i - LULU_PATCHSIZE - 4];
-           MEM_NO_WIFI[i] = MEM_PWM_NO_WIFI[i -4];
+           MEM[n][i]=MEM_PWM[n][i - (LULU_PATCHSIZE - 4)];
+           MEM_NO_WIFI[i] = MEM_PWM_NO_WIFI[i-4];
       }
+    
+    // LOGF("MEM: %d / ", n);
+    // for (int i=0; i<LULU_PATCHSIZE; i++) LOGF("%d ",MEM[n][i]);
+    // LOG("");
    }
 }
 

@@ -190,11 +190,11 @@ class Anim_dmx_strip : public K32_anim {
       //PWM
       if (light->pwm)
       {
-        light->pwm->set(0, data[16]*this->master()/255 );
-        light->pwm->set(1, data[17]*this->master()/255 );
-        light->pwm->set(2, data[18]*this->master()/255 );
-        light->pwm->set(3, data[19]*this->master()/255 );
-        // LOGF5("ANIM: -> Red %d PWM %d %d %d %d \n", data[3], data[16], data[17], data[18], data[19]);
+        light->pwm->set(0, data[LULU_PATCHSIZE-4]*this->master()/255 );
+        light->pwm->set(1, data[LULU_PATCHSIZE-3]*this->master()/255 );
+        light->pwm->set(2, data[LULU_PATCHSIZE-2]*this->master()/255 );
+        light->pwm->set(3, data[LULU_PATCHSIZE-1]*this->master()/255 );
+        // LOGF5("ANIM: -> Red %d PWM %d %d %d %d \n", data[3], data[LULU_PATCHSIZE-4], data[LULU_PATCHSIZE-3], data[LULU_PATCHSIZE-2], data[LULU_PATCHSIZE-1]);
       }
 
       // LOGF("ANIM: %s frame ", name());
