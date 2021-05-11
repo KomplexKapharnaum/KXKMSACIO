@@ -18,9 +18,9 @@ public:
             // LOGF5("ANIM: -> Red %d PWM %d %d %d %d \n", data[3], data[16], data[17], data[18], data[19]);
         }
 
-#ifndef ELP_Start
-        if (light->dmx)
-            light->dmx->setMultiple(data, LULU_PATCHSIZE - 4);
+#ifndef DMXOUT_addr
+        if (light->dmxOut())
+            light->dmxOut()->setMultiple(data, LULU_PATCHSIZE - 4);
 #endif
     }
 };

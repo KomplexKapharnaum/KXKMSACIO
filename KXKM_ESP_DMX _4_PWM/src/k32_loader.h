@@ -31,6 +31,12 @@ K32_mqtt* mqtt = nullptr;
 #include <K32_artnet.h>
 K32_artnet* artnet = nullptr;
 
+#include <fixtures/K32_ledstrip.h>
+K32_ledstrip* strip[LED_N_STRIPS] = {nullptr};
+
+#include <fixtures/K32_dmxout.h>
+K32_dmxout* dmxout = nullptr;
+
 #include <K32_light.h>
 K32_light* light = nullptr;
 
@@ -76,11 +82,16 @@ void k32_setup() {
     light = new K32_light(k32);
 
     for(int k=0; k<LED_N_STRIPS; k++)
-        if(LEDS_PIN[k32->system->hw()][k] > 0)  // TODO: allow -1 pin but disable output
-            light->addStrip(LEDS_PIN[k32->system->hw()][k], (led_types)RUBAN_type, RUBAN_size + 30);
+        if(LEDS_PIN[k32->system->hw()][k] > 0) {  // TODO: allow -1 pin but disable output
+            strip[k] = new K32_ledstrip(k, LEDS_PIN[k32->system->hw()][k], (led_types)RUBAN_type, RUBAN_size + 30);
+            light->addFixture( strip[k] );
+        }
 
     // DMX
-    light->addDMX(DMX_PIN[k32->system->hw()], DMX_OUT); // TODO: replace system->hw()
+    #ifdef DMXOUT_addr
+        dmxout = new K32_dmxout(DMX_PIN[k32->system->hw()], DMXOUT_addr, RUBAN_size);
+        light->addFixture( dmxout ); // TODO: replace system->hw()
+    #endif
 
     // PWM
     for (int k = 0; k < PWM_N_CHAN; k++)

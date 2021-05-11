@@ -68,6 +68,7 @@ void load_mem(K32_anim *anim, int macro) {
 
     // push new data
     //
+    // LOGF4("anim pushed: %d %d %d %d\n", MEM[macro][0], MEM[macro][1], MEM[macro][2], MEM[macro][3]);
     anim->push(MEM[macro], LULU_PATCHSIZE);
 
     // add modulators

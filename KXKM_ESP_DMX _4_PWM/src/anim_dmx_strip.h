@@ -206,10 +206,10 @@ class Anim_dmx_strip : public K32_anim {
       // animMaster @0 = nothing to draw
       if (data[0] == 0) {
         this->clear();
-        #ifdef ELP_Start
-          int out_r_g_b[size() * 3] = {0};
-          if (light->dmx) light->dmx->setMultiple(out_r_g_b, size()*3, ELP_Start);
-        #endif    
+        // #ifdef DMXOUT_addr
+        //   int out_r_g_b[size() * 3] = {0};
+        //   if (light->dmxOut()) light->dmxOut()->setMultiple(out_r_g_b, size()*3, DMXOUT_addr);
+        // #endif    
         return;
       }
       
@@ -476,9 +476,9 @@ class Anim_dmx_strip : public K32_anim {
       // Zoom offset
       int zoomOffset = (size() - zoomedSize)/2;  
 
-      #ifdef ELP_Start
-      int out_r_g_b[size() * 3] = {0};
-      #endif    
+      // #ifdef DMXOUT_addr
+      // int out_r_g_b[size() * 3] = {0};
+      // #endif    
 
       // Copy pixels into strip
       for(int i=0; i<zoomedSize; i++) 
@@ -490,18 +490,18 @@ class Anim_dmx_strip : public K32_anim {
           pix = segmentSize - pix - 1;    
 
         this->pixel(i+zoomOffset, segment[pix]);  // draw on strip
-
-        #ifdef ELP_Start
-        int dmx_channel = (i+zoomOffset+1) * 3 -3; // draw r g b on dmx trame
-        CRGBW dmxPix = segment[pix] % this->master();
-        out_r_g_b[dmx_channel] = dmxPix.r;
-        out_r_g_b[dmx_channel + 1] = dmxPix.g;
-        out_r_g_b[dmx_channel + 2] = dmxPix.b;
-        #endif
+        
+        // #ifdef DMXOUT_addr
+        // int dmx_channel = (i+zoomOffset+1) * 3 -3; // draw r g b on dmx trame
+        // CRGBW dmxPix = segment[pix] % this->master();
+        // out_r_g_b[dmx_channel] = dmxPix.r;
+        // out_r_g_b[dmx_channel + 1] = dmxPix.g;
+        // out_r_g_b[dmx_channel + 2] = dmxPix.b;
+        // #endif
       }
-      #ifdef ELP_Start
-      if (light->dmx) light->dmx->setMultiple(out_r_g_b, size()*3, ELP_Start);
-      #endif      
+      // #ifdef DMXOUT_addr
+      // if (light->dmxOut()) light->dmxOut()->setMultiple(out_r_g_b, size()*3, DMXOUT_addr);
+      // #endif      
 
     }
 

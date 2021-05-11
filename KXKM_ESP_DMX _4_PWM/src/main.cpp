@@ -1,7 +1,7 @@
 #include <Arduino.h>
 
 #define LULU_VER 75
-#define LULU_TYPE 30 // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot" \
+#define LULU_TYPE 50 // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot" \
                     // 10="power" 11="DMX_strobe" 12="DMX_Par_led"                                          \
                     // 20="Cube_str" 21="Cube_par"  22="Cube_MiniKOLOR" 23="Cube_Elp"                       \
                     // 30="Sucette_parled" 31="Sucette_Strobe" 32="Sucette_MiniKolor" 33="sucette_Elp"      \
@@ -10,7 +10,7 @@
 
 /////////////////////////////////////////ID/////////////////////////////////////////
 
-#define K32_SET_NODEID 28 // board unique id
+#define K32_SET_NODEID 95 // board unique id
 #define LULU_ID 1         // permet de calculer l'adresse DMX
 #define LULU_UNI 0        // univers artnet
 //                        // defo LULU_UNI 0 => LULU-TYPE 6 & 7 & 8 & 10 & 20  
@@ -29,7 +29,7 @@
 // #define DEBUG_calibre_btn 1
 #define DEBUG_btn 1
 
-// #define ELP_Start 20
+#define DMXOUT_addr 20    // Replace ELP_Start
 
 #define LULU_PREVPIX 40
     // Nombre de pixel pour la prévisu
@@ -69,7 +69,7 @@ void setup()
   
   k32_setup();
   settings();
-  boutons_init(); // TODO: re-enable boutons.h
+  boutons_init();
 
   LOG("NAME:   " + nodeName + "\n");
 
@@ -78,13 +78,18 @@ void setup()
   init_mem();
 
   // CLONE STRIP
-  //struct copyStrip({ srcStrip, srcStart, srcStop, destStrip, destPos};
-  if (LULU_type == 9)
-    light->copyStrip({0, 0, RUBAN_size, 1, 0}); // chariot clone
-  else if (LULU_type == 40)
-    light->copyStrip({0, 0, RUBAN_size, 1, 0}); // fluo clone
-  else
-    light->copyStrip({0, RUBAN_size, RUBAN_size + 18, 1, 0}); // jauge sortie 2
+  //struct copyFixture({ srcFixture, srcStart, srcStop, destFixture, destPos};
+  // if (LULU_type == 9)
+  //   light->copyFixture({strip[0], 0, RUBAN_size, strip[1], 0}); // chariot clone
+  // else if (LULU_type == 40)
+  //   light->copyFixture({strip[0], 0, RUBAN_size, strip[1], 0}); // fluo clone
+  // else
+  //   light->copyFixture({strip[0], RUBAN_size, RUBAN_size + 18, strip[1], 0}); // jauge sortie 2
+
+  // COPY Strip-0 to DMX
+  #ifdef DMXOUT_addr
+    light->copyFixture( {strip[0], 0, RUBAN_size, dmxout, 0} );
+  #endif
 
   // TEST Sequence
   light_tests();
@@ -93,12 +98,12 @@ void setup()
   // ADD NEW ANIMS (strip, name, anim, size, offset=0)
 
   // ANIM artnet
-  // light->anim(1, "artnet", new Anim_dmx_out, 1)->play();  // dmx
-  light->anim(0, "artnet", new Anim_dmx_strip, RUBAN_size)->play(); // sk
+  // light->anim(1, "artnet", new Anim_dmx_out, 1)->play();  // dmx         // TODO: anim straight to dmx
+  light->anim(strip[0], "artnet", new Anim_dmx_strip, RUBAN_size)->play(); // sk  // TODO: attach multiple fixture to anim
 
   // ANIM manuframe
-  // light->anim(1, "manu", new Anim_dmx_out, 1);// dmx
-  light->anim(0, "manu", new Anim_dmx_strip, RUBAN_size); // sk
+  // light->anim(1, "manu", new Anim_dmx_out, 1);// dmx                   // TODO: anim straight to dmx
+  light->anim(strip[0], "manu", new Anim_dmx_strip, RUBAN_size); // sk
 
   // MEM NO WIFI
   #if (LULU_TYPE >= 20 || LULU_TYPE == 2 || LULU_TYPE == 6)
@@ -107,10 +112,10 @@ void setup()
   #endif
 
   // ANIM monitoring
-  light->anim(0, "battery", new Anim_battery, 4, RUBAN_size + 1)->master(MASTER_PREV)->play();
-  light->anim(0, "remote", new Anim_remote, LULU_PREVPIX + 4, RUBAN_size + 6)->master(MASTER_PREV)->play();
-  light->anim(0, "preview", new Anim_preview, LULU_PREVPIX, RUBAN_size + 8)->master(MASTER_PREV)->play();
-  light->anim(0, "rssi", new Anim_rssi, 1, RUBAN_size + 17)->master(MASTER_PREV * 1.5)->play();
+  light->anim(strip[0], "battery", new Anim_battery, 4, RUBAN_size + 1)->master(MASTER_PREV)->play();
+  light->anim(strip[0], "remote", new Anim_remote, LULU_PREVPIX + 4, RUBAN_size + 6)->master(MASTER_PREV)->play();
+  light->anim(strip[0], "preview", new Anim_preview, LULU_PREVPIX, RUBAN_size + 8)->master(MASTER_PREV)->play();
+  light->anim(strip[0], "rssi", new Anim_rssi, 1, RUBAN_size + 17)->master(MASTER_PREV * 1.5)->play();
 
   // sampler jpeg sd
   // k32->init_samplerjpeg();
@@ -173,9 +178,9 @@ void setup()
     ////////////////// MQTT
     if (mqtt)
       mqtt->start({
-          // .broker = "2.0.0.1",         // Komplex
+          .broker = "2.0.0.1",         // Komplex
           // .broker = "2.0.0.10",     // Riri dev home
-          .broker = "192.168.43.132",  // MGR dev home
+          // .broker = "192.168.43.132",  // MGR dev home
           .beatInterval = 5000,     // heartbeat interval milliseconds (0 = disable)
           .statusInterval = 15000   // full beacon interval milliseconds (0 = disable)
       });
@@ -222,17 +227,17 @@ void setup()
   });
 
   // Remote status refresh
-  k32->timer->every(50, []() {
+  k32->timer->every(100, []() {
     light->anim("remote")->push(remote->getState(), remote->isLocked());
   });
 
   // Heap Memory log
-  // k32->timer->every(1000, []() {
-  //   static int lastheap = 0;
-  //   int heap = ESP.getFreeHeap();
-  //   LOGF2("Free memory: %d / %d\n", heap, heap-lastheap);
-  //   lastheap = heap;
-  // });
+  k32->timer->every(1000, []() {
+    static int lastheap = 0;
+    int heap = ESP.getFreeHeap();
+    LOGF2("Free memory: %d / %d\n", heap, heap-lastheap);
+    lastheap = heap;
+  });
 
 
 } // setup
