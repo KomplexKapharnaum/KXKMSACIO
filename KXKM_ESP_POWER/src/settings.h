@@ -61,6 +61,20 @@ void settings()
   LULU_type = k32->system->preferences.getUInt("LULU_type", 5);
 #endif
 
+#ifdef RUBAN_TYPE
+  k32->system->preferences.putUInt("LULU_ruban", RUBAN_TYPE);
+  RUBAN_type = RUBAN_TYPE;
+#else
+  if (LULU_type == 8)
+  {
+    RUBAN_type = k32->system->preferences.getUInt("LULU_ruban", LED_WS2812_V1);
+  }
+  else
+  {
+    RUBAN_type = k32->system->preferences.getUInt("LULU_ruban", LED_SK6812W_V1);
+  }
+#endif
+
   // NAME
   nodeName = "Power";
 
