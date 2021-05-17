@@ -1,7 +1,7 @@
 #include <Arduino.h>
 
-#define LULU_VER 75
-#define LULU_TYPE 50 // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot" \
+#define LULU_VER 76
+#define LULU_TYPE 34 // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot" \
                     // 10="power" 11="DMX_strobe" 12="DMX_Par_led"                                          \
                     // 20="Cube_str" 21="Cube_par"  22="Cube_MiniKOLOR" 23="Cube_Elp"                       \
                     // 30="Sucette_parled" 31="Sucette_Strobe" 32="Sucette_MiniKolor" 33="sucette_Elp"      \
@@ -10,7 +10,7 @@
 
 /////////////////////////////////////////ID/////////////////////////////////////////
 
-#define K32_SET_NODEID 95 // board unique id
+#define K32_SET_NODEID 28 // board unique id
 #define LULU_ID 1         // permet de calculer l'adresse DMX
 #define LULU_UNI 0        // univers artnet
 //                        // defo LULU_UNI 0 => LULU-TYPE 6 & 7 & 8 & 10 & 20  
