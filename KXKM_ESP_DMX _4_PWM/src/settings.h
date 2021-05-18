@@ -288,65 +288,70 @@
 #endif
 #endif
 
+#include <Preferences.h>
+Preferences prefs;
+
 void settings()
 {
 
+  prefs.begin("k32-settings", false);
+
 // Save to EEPROM if DEFINE
 #ifdef LULU_ID
-  k32->system->preferences.putUInt("LULU_id", LULU_ID);
+  prefs.putUInt("LULU_id", LULU_ID);
   LULU_id = LULU_ID;
 #else
-  LULU_id = k32->system->preferences.getUInt("LULU_id", 1);
+  LULU_id = prefs.getUInt("LULU_id", 1);
 #endif
 
 #ifdef LULU_TYPE
-  k32->system->preferences.putUInt("LULU_type", LULU_TYPE);
+  prefs.putUInt("LULU_type", LULU_TYPE);
   LULU_type = LULU_TYPE;
 #else
-  LULU_type = k32->system->preferences.getUInt("LULU_type", 5);
+  LULU_type = prefs.getUInt("LULU_type", 5);
 #endif
 
 #ifdef LULU_UNI
-  k32->system->preferences.putUInt("LULU_uni", LULU_UNI);
+  prefs.putUInt("LULU_uni", LULU_UNI);
   LULU_uni = LULU_UNI;
 #else
-  LULU_uni = k32->system->preferences.getUInt("LULU_uni", 0);
+  LULU_uni = prefs.getUInt("LULU_uni", 0);
 #endif
 
 #ifdef RUBAN_TYPE
-  k32->system->preferences.putUInt("LULU_ruban", RUBAN_TYPE);
+  prefs.putUInt("LULU_ruban", RUBAN_TYPE);
   RUBAN_type = RUBAN_TYPE;
 #else
   if (LULU_type == 8)
   {
-    RUBAN_type = k32->system->preferences.getUInt("LULU_ruban", LED_WS2812_V1);
+    RUBAN_type = prefs.getUInt("LULU_ruban", LED_WS2812_V1);
   }
   else
   {
-    RUBAN_type = k32->system->preferences.getUInt("LULU_ruban", LED_SK6812W_V1);
+    RUBAN_type = prefs.getUInt("LULU_ruban", LED_SK6812W_V1);
   }
 #endif
 
   String L_type;
 #ifdef L_TYPE
-  k32->system->preferences.putString("L_type", L_TYPE);
+  prefs.putString("L_type", L_TYPE);
   L_type = L_TYPE;
 #else
-  L_type = k32->system->preferences.getString("L_type", "Flex");
+  L_type = prefs.getString("L_type", "Flex");
 #endif
 
 #ifdef RUBAN_SIZE
-  k32->system->preferences.putUInt("RUBAN_size", RUBAN_SIZE);
+  prefs.putUInt("RUBAN_size", RUBAN_SIZE);
   RUBAN_size = RUBAN_SIZE;
 #else
-  RUBAN_size = k32->system->preferences.getUInt("RUBAN_size", 300);
+  RUBAN_size = prefs.getUInt("RUBAN_size", 300);
 #endif
 
 #ifdef FAKE_CURRENT
-  k32->system->preferences.putUInt("FAKE_current", FAKE_CURRENT);
+  prefs.putUInt("FAKE_current", FAKE_CURRENT);
   FAKE_current = FAKE_CURRENT;
 #else
-  FAKE_current = k32->system->preferences.getUInt("FAKE_current", 0);
+  FAKE_current = prefs.getUInt("FAKE_current", 0);
 #endif
 
   // Calculate adr // channels
@@ -361,5 +366,7 @@ void settings()
   else
     nodeName += "-WS";
   nodeName += "-" + String(LULU_id) + "-v" + String(LULU_VER);
+
+  prefs.end();
 
 } //k32_settings()

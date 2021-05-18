@@ -1,7 +1,7 @@
 #include <Arduino.h>
 
 #define LULU_VER 76
-#define LULU_TYPE 34 // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot" \
+#define LULU_TYPE 50 // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot" \
                     // 10="power" 11="DMX_strobe" 12="DMX_Par_led"                                          \
                     // 20="Cube_str" 21="Cube_par"  22="Cube_MiniKOLOR" 23="Cube_Elp"                       \
                     // 30="Sucette_parled" 31="Sucette_Strobe" 32="Sucette_MiniKolor" 33="sucette_Elp"  34="Banc"     \
@@ -10,9 +10,9 @@
 
 /////////////////////////////////////////ID/////////////////////////////////////////
 
-#define K32_SET_NODEID 3 // board unique id
-#define LULU_ID 7         // permet de calculer l'adresse DMX
-#define LULU_UNI 0        // univers artnet
+#define K32_SET_NODEID 56 // board unique id
+#define LULU_ID 1         // permet de calculer l'adresse DMX
+#define LULU_UNI 4        // univers artnet
 //                        // defo LULU_UNI 0 => LULU-TYPE 6 & 7 & 8 & 10 & 20  
 //                        // defo LULU_UNI 1 => LULU-TYPE 1 & 2 & 5 
 //                        // defo LULU_UNI 2 => LULU-TYPE 9
@@ -67,8 +67,8 @@ int FAKE_current;
 void setup()
 {
   
-  k32_setup();
   settings();
+  k32_setup();
   boutons_init();
 
   LOG("NAME:   " + nodeName + "\n");
@@ -131,7 +131,7 @@ void setup()
   {
     wifi->setHostname(k32->system->name() + (nodeName != "")?"-"+nodeName:"");
 
-    wifi->staticIP("2.0.0." + String(k32->system->id() + 100), "2.0.0.1", "255.255.255.0");
+    wifi->staticIP("2.0.0." + String(k32->system->id() + 100), "2.0.0.1", "255.255.252.0"); // WARNING: netmask !!
     wifi->connect("kxkm24", NULL); //KXKM
     // wifi->connect("kxkm24lulu", NULL); //KXKM
     // wifi->connect("mgr4g", NULL); //Maigre dev
@@ -147,22 +147,21 @@ void setup()
     });
 
     // EVENT: full frame
-    if (artnet)
-      artnet->onFullDmx([](const uint8_t *data, int length) {
-        // Force Auto
-        if (length > 511 && data[511] > 250) // data 512 = end dmx trame
-        {
-          remote->setState(REMOTE_AUTO);
-          remote->lock();
-        }
-        // LOGF2("ARTNET: %d %d \n", data[511], length);
-      });
+    artnet->onFullDmx([](const uint8_t *data, int length) {
+      // Force Auto
+      if (length > 511 && data[511] > 250) // data 512 = end dmx trame
+      {
+        remote->setState(REMOTE_AUTO);
+        remote->lock();
+      }
+      // LOGF2("ARTNET: %d %d \n", data[511], length);
+    });
 
     // EVENT: new artnet frame received
-    if (artnet)
-      artnet->onDmx([](const uint8_t *data, int length) {
-        light->anim("artnet")->push(data, length);
-      });
+    artnet->onDmx([](const uint8_t *data, int length) {
+      light->anim("artnet")->push(data, length);
+      // LOGF2("ARTFRAME: %d %d \n", data[0], length);
+    });
 
     // EVENT: wifi lost
     wifi->onDisconnect([&]() {
