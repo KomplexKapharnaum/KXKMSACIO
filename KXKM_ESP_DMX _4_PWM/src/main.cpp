@@ -131,7 +131,7 @@ void setup()
   {
     wifi->setHostname(k32->system->name() + (nodeName != "")?"-"+nodeName:"");
 
-    wifi->staticIP("2.0.0." + String(k32->system->id() + 100), "2.0.0.1", "255.255.252.0"); // WARNING: netmask !!
+    wifi->staticIP("2.0.0." + String(k32->system->id() + 100), "2.0.0.1", "255.0.0.0"); // WARNING: netmask !!
     wifi->connect("kxkm24", NULL); //KXKM
     // wifi->connect("kxkm24lulu", NULL); //KXKM
     // wifi->connect("mgr4g", NULL); //Maigre dev
