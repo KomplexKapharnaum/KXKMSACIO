@@ -6,7 +6,7 @@
 #if LULU_TYPE == 1
 #define L_TYPE "Sac"
 #define RUBAN_SIZE 120
-#define LULU_PATCHSIZE 20 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
+#define OUT_PATCHSIZE 20 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
 #define FAKE_CURRENT 12500
 // #include "macro/Type/SK/mem.h"
 
@@ -18,7 +18,7 @@
 #elif LULU_TYPE == 2
 #define L_TYPE "Barre"
 #define RUBAN_SIZE 120
-#define LULU_PATCHSIZE 20 // 20 = sk 16 _pw 4 / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx
+#define OUT_PATCHSIZE 20 // 20 = sk 16 _pw 4 / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx
 #define FAKE_CURRENT 0
 // #include "macro/Type/SK/mem.h" // mem global sk & pwm
 
@@ -32,7 +32,7 @@
 #elif LULU_TYPE == 3
 #define L_TYPE "Pince"
 #define RUBAN_SIZE 17
-#define LULU_PATCHSIZE 20 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
+#define OUT_PATCHSIZE 20 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
 #define FAKE_CURRENT 0
 // #include "macro/Type/SK/mem.h" // mem global sk & pwm
 
@@ -44,7 +44,7 @@
 #elif LULU_TYPE == 4
 #define L_TYPE "Fluo"
 #define RUBAN_SIZE 73
-#define LULU_PATCHSIZE 20 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
+#define OUT_PATCHSIZE 20 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
 #define FAKE_CURRENT 0
 // #include "macro/Type/SK/mem.h" // mem global sk & pwm
 
@@ -56,7 +56,7 @@
 #elif LULU_TYPE == 5
 #define L_TYPE "Flex"
 #define RUBAN_SIZE 186
-#define LULU_PATCHSIZE 20 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
+#define OUT_PATCHSIZE 20 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
 #define FAKE_CURRENT 0
 // #include "macro/Type/SK/mem.h" // mem global sk & pwm
 
@@ -68,7 +68,7 @@
 #elif LULU_TYPE == 6
 #define L_TYPE "Barrette"
 #define RUBAN_SIZE 60
-#define LULU_PATCHSIZE 20 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
+#define OUT_PATCHSIZE 20 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
 #define FAKE_CURRENT 0
 // #include "macro/Type/SK/mem.h" // mem global sk & pwm
 
@@ -81,7 +81,7 @@
 #elif LULU_TYPE == 7
 #define L_TYPE "Phone"
 #define RUBAN_SIZE 35
-#define LULU_PATCHSIZE 20 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
+#define OUT_PATCHSIZE 20 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
 #define FAKE_CURRENT 0
 // #include "macro/Type/SK/mem.h" // mem global sk & pwm
 
@@ -93,7 +93,7 @@
 #elif LULU_TYPE == 8
 #define L_TYPE "Atom"
 #define RUBAN_SIZE 25     // 5 pour tester avec les jauges de monitoring
-#define LULU_PATCHSIZE 20 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
+#define OUT_PATCHSIZE 20 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
 #define FAKE_CURRENT 0
 // #include "macro/Type/SK/mem.h" // mem global sk & pwm
 
@@ -105,7 +105,7 @@
 #elif LULU_TYPE == 9
 #define L_TYPE "Chariot"
 #define RUBAN_SIZE 120
-#define LULU_PATCHSIZE 20 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
+#define OUT_PATCHSIZE 20 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
 #define FAKE_CURRENT 0
 // #include "macro/Show/H&S/mem_h&s.h" // mem global sk & pwm
 
@@ -119,28 +119,28 @@
 #elif LULU_TYPE == 10
 #define L_TYPE "Power"
 #define RUBAN_SIZE 120
-#define LULU_PATCHSIZE 20 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
+#define OUT_PATCHSIZE 20 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
 #define FAKE_CURRENT 0
 #include "macro/Type/SK/mem.h"
 
 #elif LULU_TYPE == 11
 #define L_TYPE "Dmx_strobe"
 #define RUBAN_SIZE 0
-#define LULU_PATCHSIZE 16 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
+#define OUT_PATCHSIZE 16 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
 #define FAKE_CURRENT 0
 #include "macro/Type/strobe/mem_strobe_dmx.h"
 
 #elif LULU_TYPE == 12
 #define RUBAN_SIZE 0
 #define L_TYPE "Dmx_par"
-#define LULU_PATCHSIZE 5 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
+#define OUT_PATCHSIZE 5 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
 #define FAKE_CURRENT 0
 #include "macro/Type/parled/mem_parled_dmx.h"
 
 #elif LULU_TYPE == 20
 #define RUBAN_SIZE 60
 #define L_TYPE "Cube_str"
-#define LULU_PATCHSIZE 20 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
+#define OUT_PATCHSIZE 20 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
 #define FAKE_CURRENT 0
 #define ON_NO_WIFI 255
 #include "macro/Type/strobe/mem_strobe.h"
@@ -150,7 +150,7 @@
 #elif LULU_TYPE == 21
 #define RUBAN_SIZE 60
 #define L_TYPE "Cube_par"
-#define LULU_PATCHSIZE 9 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
+#define OUT_PATCHSIZE 9 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
 #define FAKE_CURRENT 0
 #define ON_NO_WIFI 255
 // #include "macro/Type/parled/mem_parled.h"
@@ -169,7 +169,7 @@
 #elif LULU_TYPE == 22
 #define RUBAN_SIZE 60
 #define L_TYPE "Cube_minikolor"
-#define LULU_PATCHSIZE 13 //  20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
+#define OUT_PATCHSIZE 13 //  20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
 #define FAKE_CURRENT 0
 #define ON_NO_WIFI 255
 #include "macro/Type/4pwm/mem_4pwm.h"           //
@@ -179,7 +179,7 @@
 #elif LULU_TYPE == 23
 #define RUBAN_SIZE 60
 #define L_TYPE "Cube_elp"
-#define LULU_PATCHSIZE 7 //  20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor / = elp
+#define OUT_PATCHSIZE 7 //  20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor / = elp
 #define FAKE_CURRENT 0
 #define ON_NO_WIFI 255
 #include "macro/Type/4pwm/mem_4pwm.h" //
@@ -189,7 +189,7 @@
 #elif LULU_TYPE == 30
 #define RUBAN_SIZE 60
 #define L_TYPE "Sucette_parled"
-#define LULU_PATCHSIZE 9 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
+#define OUT_PATCHSIZE 9 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
 #define FAKE_CURRENT 0
 #define ON_NO_WIFI 255 // 82 niveau pour les statics baronnie
 #include "macro/Type/parled/mem_parled.h"
@@ -211,7 +211,7 @@
 #elif LULU_TYPE == 31
 #define RUBAN_SIZE 60
 #define L_TYPE "Sucette_strobe"
-#define LULU_PATCHSIZE 9 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
+#define OUT_PATCHSIZE 9 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
 #define FAKE_CURRENT 0
 #define ON_NO_WIFI 255 //
 #include "macro/Type/strobe/mem_strobe.h"
@@ -222,7 +222,7 @@
 #elif LULU_TYPE == 32
 #define RUBAN_SIZE 60
 #define L_TYPE "Sucette_MiniKolor"
-#define LULU_PATCHSIZE 9 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
+#define OUT_PATCHSIZE 9 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
 #define FAKE_CURRENT 0
 #define ON_NO_WIFI 255 //
 #include "macro/Type/minikolor/mem_minikolor.h"
@@ -233,7 +233,7 @@
 #elif LULU_TYPE == 33
 #define RUBAN_SIZE 60
 #define L_TYPE "Sucette_Elp"
-#define LULU_PATCHSIZE 9 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
+#define OUT_PATCHSIZE 9 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
 #define FAKE_CURRENT 0
 #define ON_NO_WIFI 255 //
 #include "macro/Type/elp/mem_elp.h"
@@ -244,7 +244,7 @@
 #elif LULU_TYPE == 34
 #define RUBAN_SIZE 60
 #define L_TYPE "Banc_parled"
-#define LULU_PATCHSIZE 9 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
+#define OUT_PATCHSIZE 20 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
 #define FAKE_CURRENT 0
 #define ON_NO_WIFI 255 // 82 niveau pour les statics baronnie
 #include "macro/Type/parled/mem_parled.h"
@@ -266,7 +266,7 @@
 #elif LULU_TYPE == 40
 #define L_TYPE "New_Fluo"
 #define RUBAN_SIZE 73
-#define LULU_PATCHSIZE 20 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor / 20 = newfluo
+#define OUT_PATCHSIZE 20 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor / 20 = newfluo
 #define FAKE_CURRENT 0
 #define ON_NO_WIFI 255                //
 #include "macro/Type/4pwm/mem_4pwm.h" // defo
@@ -277,7 +277,7 @@
 #elif LULU_TYPE == 50
 #define L_TYPE "elp_DMX"
 #define RUBAN_SIZE 50
-#define LULU_PATCHSIZE 20 // 20 = sk 16 _pw 4 / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx
+#define OUT_PATCHSIZE 20 // 20 = sk 16 _pw 4 / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx
 #define FAKE_CURRENT 0
 
 #define ON_NO_WIFI 0
