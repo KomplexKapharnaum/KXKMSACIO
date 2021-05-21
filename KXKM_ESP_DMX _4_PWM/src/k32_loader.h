@@ -107,7 +107,7 @@ void k32_setup() {
         ////////////////// WIFI
         LOG("NETWORK: wifi");
         wifi = new K32_wifi(k32);
-        mqtt = new K32_mqtt(k32, wifi);
+        mqtt = new K32_mqtt(k32, wifi, stm32);
         osc = new K32_osc(k32, wifi);
     }
     
