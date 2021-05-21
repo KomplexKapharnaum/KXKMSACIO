@@ -23,7 +23,7 @@ void init_mem()
       for (int i = LULU_PATCHSIZE -4 ; i < LULU_PATCHSIZE  ; i++) 
       {
            MEM[n][i]=MEM_PWM[n][i - LULU_PATCHSIZE -4];
-           MEM_NO_WIFI[i] = MEM_PWM_NO_WIFI[i -4];
+           MEM_NO_WIFI[i] = MEM_PWM_NO_WIFI[i - (LULU_PATCHSIZE-4)];
       }
    }
 }
