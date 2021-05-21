@@ -35,11 +35,11 @@ void monitor_menu()
                 {
                     currentTime = millis();
                     previousTime = T_inlife[j][1];
-                    if ((currentTime - previousTime) < 5000)
+                    if ((currentTime - previousTime) < 15000)
                     {
                         on_off_line = " ON Line";
                     }
-                    else if ((currentTime - previousTime) > 5000)
+                    else if ((currentTime - previousTime) > 15000)
                     {
                         on_off_line = " ... .. .";
                         T_inlife[j][2] = 0;
