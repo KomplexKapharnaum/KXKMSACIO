@@ -4,18 +4,17 @@
 void check_page_mem();
 void check_fonction();
 void remote_audio();
-void audio_master_value();
-void page_mem_value();
+bool audio_master_value();
+bool page_mem_value();
 void fonction_value();
 void draw_loop();
-void id_value_audio();
+bool id_value_audio();
 void draw_volume();
 void send_volume();
 
 uint8_t page_mem = 0;
 String page_me = "00-09";
 String id_cal = "all";
-String id_calling = "";
 uint8_t audio_fonction = 0;
 String fonct = "Bank 0";
 
@@ -26,8 +25,6 @@ uint8_t audio_id_fonction = 0;
 String audio_id_fonct = "ID";
 
 bool mqtt_loop = false;
-bool audio = true;
-bool esc_audio = true;
 
 char AUDIO_MQTT_TOPIC[] = "k32/all/volume";
 char AUDIO_MQTT_MESSAGE[] = "000|000|000|000";
@@ -62,41 +59,28 @@ void send_volume()
 /////////////////////////////////////ID_VALUE_AUDIO////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
 
-void id_value_audio()
+bool id_value_audio()
 {
-    bool equal = false;
     bool bad = false;
     bool _a_b = true;
+    String action = "";
     String res_value = "";
     String msg = "";
-    esc_audio = true;
 
     msg += " Enter N° ID & =";
     msg += "|0 = all";
-    ez.msgBox("M5 REMOTE AUDIO", msg, "##" + audio_id_fonct + "###Back", false);
+    ez.msgBox("M5 REMOTE AUDIO", msg, "## func|"+audio_id_fonct + "### Back", false);
     draw_loop();
     draw_volume();
 
-    while (equal != true)
+    while (true)
     {
-        ez.yield();
+        // Check Buttons
+        action = ez.buttons.poll();
 
-        // BTN A/B/C
-        if (m5.BtnC.pressedFor(ez.theme->longpress_time))
-        {
-            if (_a_b)
-            {
-                ez.msgBox("M5 REMOTE AUDIO", "Release for Back Menu", "##" + audio_id_fonct + "###Back", false);
-                _a_b = false;
-            }
-        }
-        if (m5.BtnC.wasReleasefor(ez.theme->longpress_time))
-        {
-            esc_audio = false;
-            equal = true;
-        };
+        if (action == "Back") return false;
 
-        if (M5.BtnB.wasPressed())
+        if (action == "func")
         {
             audio_id_fonction += 1;
             if (audio_id_fonction >= 2)
@@ -118,7 +102,7 @@ void id_value_audio()
                 msg += "|0 = all";
             }
 
-            ez.msgBox("M5 REMOTE AUDIO", msg, "##" + audio_id_fonct + "###Back", false);
+            ez.msgBox("M5 REMOTE AUDIO", msg, "## func|"+audio_id_fonct + "###Back", false);
             draw_loop();
             draw_volume();
         };
@@ -152,20 +136,24 @@ void id_value_audio()
                 case '.':
                     break;
                 case '=':
-                    if (res_value == "")
+                    if (res_value == "") res_value = "0";
+                    
+                    if (res_value == "0")
                     {
-                        res_value = "0";
+                        AUDIO_MQTT_ID = "all";
+                        id_cal = "all";
                     }
-                    if (audio_id_fonction == 0)
+                    else if (audio_id_fonction == 0)
                     {
-                        AUDIO_MQTT_ID = String('e') + String(res_value);
+                        AUDIO_MQTT_ID = "e" + res_value;
+                        id_cal = "id" + res_value;
                     }
                     else if (audio_id_fonction == 1)
                     {
-                        AUDIO_MQTT_ID = String('c') + String(res_value);
+                        AUDIO_MQTT_ID = "c" + res_value;
+                        id_cal = "ch" + res_value;
                     }
-                    id_calling = String(res_value);
-                    equal = true;
+                    return true;
                     break;
                 case '-':
 
@@ -191,7 +179,7 @@ void id_value_audio()
                         msg += "|0 = all";
                     }
 
-                    ez.msgBox("M5 REMOTE AUDIO", msg, "##" + audio_id_fonct + "###Back", false);
+                    ez.msgBox("M5 REMOTE AUDIO", msg, "## func|"+audio_id_fonct + "###Back", false);
                     draw_loop();
                     draw_volume();
                     bad = true;
@@ -206,7 +194,7 @@ void id_value_audio()
                 }
                 if (bad != true)
                 {
-                    ez.msgBox("M5 REMOTE AUDIO", res_value, "##" + audio_id_fonct + "###Back", false);
+                    ez.msgBox("M5 REMOTE AUDIO", res_value, "## func|"+audio_id_fonct + "###Back", false);
                     draw_loop();
                     draw_volume();
                 }
@@ -255,7 +243,7 @@ void check_fonction()
     String val_fonc = String(audio_fonction);
     fonct = "Bank " + val_fonc;
 
-    ez.msgBox("M5 REMOTE AUDIO", fonct, id_cal + "# Menu #" + fonct + "# Val. #" + page_me + "# Val. ", false);
+    ez.msgBox("M5 REMOTE AUDIO", fonct, "id|"+id_cal + "# Menu #" + "bank|"+fonct + "# bankval|Val #" + "page|"+page_me + "# pageval|Val ", false);
     draw_loop();
     draw_volume();
 }
@@ -280,7 +268,7 @@ void check_page_mem()
         page_me = add_page + "0-" + add_page + "7";
     }
 
-    ez.msgBox("M5 REMOTE AUDIO", "Note " + page_me, id_cal + "# Menu #" + fonct + "# Val. #" + page_me + "# Val. ", false);
+    ez.msgBox("M5 REMOTE AUDIO", "Note " + page_me, "id|"+id_cal + "# Menu #" + "bank|"+fonct + "# bankval|Val #" + "page|"+page_me + "# pageval|Val ", false);
     draw_loop();
     draw_volume();
 }
@@ -288,40 +276,26 @@ void check_page_mem()
 ///////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////AUDIO_MASTER_VALUE///////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
-void audio_master_value()
+bool audio_master_value()
 {
-    bool equal = false;
     bool bad = false;
     bool _a_b = true;
+    String action = "";
     String res_value = "";
     String msg = "";
     int res;
-    esc_audio = true;
 
     msg += " Enter value to master 0 -> 127 & =";
     ez.msgBox("M5 REMOTE AUDIO", msg, "#####Back", false);
     draw_loop();
     draw_volume();
 
-    while (equal != true)
+    while (true)
     {
-        ez.yield();
+        // Check Buttons
+        action = ez.buttons.poll();
 
-        // BTN A/B/C    || M5.BtnA.isPressed()
-        //
-        if (m5.BtnC.pressedFor(ez.theme->longpress_time))
-        {
-            if (_a_b)
-            {
-                ez.msgBox("M5 REMOTE AUDIO", "Release for Back Menu", "#####Back", false);
-                _a_b = false;
-            }
-        }
-        if (m5.BtnC.wasReleasefor(ez.theme->longpress_time))
-        {
-            esc_audio = false;
-            equal = true;
-        };
+        if (action == "Back") return false;
 
         res = atoi(res_value.c_str());
         // FACE
@@ -359,7 +333,7 @@ void audio_master_value()
                     {
                         Volume = res_value.toInt();
                         send_volume();
-                        equal = true;
+                        return true;
                     }
                     else
                     {
@@ -411,9 +385,8 @@ void audio_master_value()
 ///////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////PAGE_MEM_VALUE///////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
-void page_mem_value()
+bool page_mem_value()
 {
-    bool equal = false;
     bool bad = false;
     String res_value = "";
     String msg = "";
@@ -425,7 +398,7 @@ void page_mem_value()
     draw_loop();
     draw_volume();
 
-    while (equal != true)
+    while (true)
     {
         ez.yield();
 
@@ -464,7 +437,7 @@ void page_mem_value()
                     if (res < 13)
                     {
                         page_mem = res - 1;
-                        equal = true;
+                        return true;
                     }
                     else
                     {
@@ -625,85 +598,49 @@ void fonction_value()
 void remote_audio()
 {
     uint32_t _widget_time = millis();
+    String action = "";
     bool _a_b = true;
-    audio = true;
     audio_mqtt_topic = String(MQTT_K32) + String(AUDIO_MQTT_ID) + String(AUDIO_MQTT_NOTEON);
     audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
 
-    ez.msgBox("M5 REMOTE AUDIO", "Welcome", id_cal + "# Menu #" + fonct + "# Val. #" + page_me + "# Val. ", false);
+    ez.msgBox("M5 REMOTE AUDIO", "Welcome", "id|"+id_cal + "# Menu #" + "bank|"+fonct + "# bankval|Val #" + "page|"+page_me + "# pageval|Val ", false);
     draw_loop();
     draw_volume();
 
-    while (audio)
+    while (true)
     {
-        ez.yield();
+        // Check Buttons
+        action = ez.buttons.poll();
 
-        // BTN A/B/C    || M5.BtnA.isPressed()
-        //
-        if (m5.BtnA.pressedFor(ez.theme->longpress_time))
-        {
-            if (_a_b)
-            {
-                ez.msgBox("M5 REMOTE AUDIO", "Release for Back Menu", id_cal + "# Menu #" + fonct + "# Val. #" + page_me + "# Val. ", false);
-                _a_b = false;
-            }
-        }
-        if (m5.BtnA.wasReleasefor(ez.theme->longpress_time))
-        {
-            audio = false;
-        }
+        if (action == "Menu") break;
 
-        if (m5.BtnA.wasReleased())
+        if (action == "id")
         {
             id_value_audio();
-            if (esc_audio)
-            {
-                if (id_calling == "0")
-                {
-                    id_cal = "all";
-                    MQTT_ID = "all";
-                }
-                else if (audio_id_fonction == 0)
-                {
-                    id_cal = "id" + id_calling;
-                }
-                else if (audio_id_fonction == 1)
-                {
-                    id_cal = "ch" + id_calling;
-                }
-                ez.msgBox("M5 REMOTE AUDIO", id_cal, id_cal + "# Menu #" + fonct + "# Val. #" + page_me + "# Val. ", false);
-                draw_loop();
-                draw_volume();
 
-                audio_mqtt_topic = String(MQTT_K32) + String(AUDIO_MQTT_ID) + String(AUDIO_MQTT_NOTEON);
-                audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
-            }
-            else
-            {
-                ez.msgBox("M5 REMOTE AUDIO", id_cal, id_cal + "# Menu #" + fonct + "# Val. #" + page_me + "# Val. ", false);
-                draw_loop();
-                draw_volume();
-            }
+            ez.msgBox("M5 REMOTE AUDIO", id_cal, "id|"+id_cal + "# Menu #" + "bank|"+fonct + "# bankval|Val #" + "page|"+page_me + "# pageval|Val ", false);
+            draw_loop();
+            draw_volume();
         }
 
-        if (m5.BtnB.pressedFor(ez.theme->longpress_time))
+        if (action == "bankval")
         {
             fonction_value();
             check_fonction();
         }
 
-        if (M5.BtnB.wasReleased())
+        if (action == "bank")
         {
             check_fonction();
         }
 
-        if (m5.BtnC.pressedFor(ez.theme->longpress_time))
+        if (action == "pageval")
         {
             page_mem_value();
             check_page_mem();
         }
 
-        if (M5.BtnC.wasReleased())
+        if (action == "page")
         {
             check_page_mem();
         }
@@ -827,7 +764,7 @@ void remote_audio()
                 } //switch case
 
                 LOG(msg);
-                ez.msgBox("M5 REMOTE AUDIO", msg, id_cal + "# Menu #" + fonct + "# Val. #" + page_me + "# Val. ", false);
+                ez.msgBox("M5 REMOTE AUDIO", msg, "id|"+id_cal + "# Menu #" + "bank|"+fonct + "# bankval|Val #" + "page|"+page_me + "# pageval|Val ", false);
                 draw_loop();
                 draw_volume();
             } //while wire

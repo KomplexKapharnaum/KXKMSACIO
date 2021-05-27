@@ -545,7 +545,6 @@ String ezButtons::_btn_b_s, ezButtons::_btn_b_l;
 String ezButtons::_btn_c_s, ezButtons::_btn_c_l;
 String ezButtons::_btn_ab, ezButtons::_btn_bc, ezButtons::_btn_ac;
 bool ezButtons::_key_release_wait;
-bool ezButtons::_key_shortrelease_wait;
 bool ezButtons::_lower_button_row, ezButtons::_upper_button_row;
 
 void ezButtons::begin() { clear(false); }
@@ -763,59 +762,55 @@ String ezButtons::poll()
             keystr = ez.leftOf(_btn_ab, "|", true);
             _key_release_wait = true;
         }
-        if (_btn_bc != "" && m5.BtnB.isPressed() && m5.BtnC.isPressed())
+        else if (_btn_bc != "" && m5.BtnB.isPressed() && m5.BtnC.isPressed())
         {
             keystr = ez.leftOf(_btn_bc, "|", true);
             _key_release_wait = true;
         }
-        if (_btn_ac != "" && m5.BtnA.isPressed() && m5.BtnC.isPressed())
+        else if (_btn_ac != "" && m5.BtnA.isPressed() && m5.BtnC.isPressed())
         {
             keystr = ez.leftOf(_btn_ac, "|", true);
             _key_release_wait = true;
         }
 
         // LONG PRESS
-        if (_btn_a_l != "" && m5.BtnA.pressedFor(ez.theme->longpress_time))
+        else if (_btn_a_l != "" && m5.BtnA.wasReleasefor(ez.theme->longpress_time))
         {
             keystr = ez.leftOf(_btn_a_l, "|", true);
-            _key_release_wait = true;
+            m5.BtnA.read();
         }
-        if (_btn_b_l != "" && m5.BtnB.pressedFor(ez.theme->longpress_time))
+        else if (_btn_b_l != "" && m5.BtnB.wasReleasefor(ez.theme->longpress_time))
         {
             keystr = ez.leftOf(_btn_b_l, "|", true);
-            _key_release_wait = true;
+            m5.BtnB.read();
         }
-        if (_btn_c_l != "" && m5.BtnC.pressedFor(ez.theme->longpress_time))
+        else if (_btn_c_l != "" && m5.BtnC.wasReleasefor(ez.theme->longpress_time))
         {
             keystr = ez.leftOf(_btn_c_l, "|", true);
-            _key_release_wait = true;
+            m5.BtnC.read();
         }
 
         // SHORT PRESS
-        if (!_key_shortrelease_wait) 
+        else if (_btn_a_s != "" && m5.BtnA.wasReleasefor(ez.theme->shortpress_time))
         {
-            if (_btn_a_s != "" && m5.BtnA.pressedFor(ez.theme->shortpress_time))
-            {
-                keystr = ez.leftOf(_btn_a_s, "|", true);
-                _key_shortrelease_wait = true;
-            }
-            if (_btn_b_s != "" && m5.BtnB.pressedFor(ez.theme->shortpress_time))
-            {
-                keystr = ez.leftOf(_btn_b_s, "|", true);
-                _key_shortrelease_wait = true;
-            }
-            if (_btn_c_s != "" && m5.BtnC.pressedFor(ez.theme->shortpress_time))
-            {
-                keystr = ez.leftOf(_btn_c_s, "|", true);
-                _key_shortrelease_wait = true;
-            }
+            keystr = ez.leftOf(_btn_a_s, "|", true);
+            m5.BtnA.read();
+        }
+        else if (_btn_b_s != "" && m5.BtnB.wasReleasefor(ez.theme->shortpress_time))
+        {
+            keystr = ez.leftOf(_btn_b_s, "|", true);
+            m5.BtnB.read();
+        }
+        else if (_btn_c_s != "" && m5.BtnC.wasReleasefor(ez.theme->shortpress_time))
+        {
+            keystr = ez.leftOf(_btn_c_s, "|", true);
+            m5.BtnC.read();
         }
     }
 
     if (m5.BtnA.isReleased() && m5.BtnB.isReleased() && m5.BtnC.isReleased())
     {
         _key_release_wait = false;
-        _key_shortrelease_wait = false;
     }
 
     if (keystr == "~")
@@ -824,6 +819,7 @@ String ezButtons::poll()
     if (keystr != "")
         ez.backlight.activity();
 #endif
+    if (keystr != "") Serial.println(keystr);
     return keystr;
 }
 
