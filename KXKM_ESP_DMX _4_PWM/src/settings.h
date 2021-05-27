@@ -271,7 +271,7 @@
 
 #elif LULU_TYPE == 60
   #define L_NAME "lyre_DMX"
-  #define RUBAN_SIZE 30
+  #define RUBAN_SIZE 28
   #define OUT_PATCHSIZE 16
   #define DMXOUT_ADDR 1
 
