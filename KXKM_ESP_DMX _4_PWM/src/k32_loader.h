@@ -34,8 +34,11 @@ K32_artnet* artnet = nullptr;
 #include <fixtures/K32_ledstrip.h>
 K32_ledstrip* strip[LED_N_STRIPS] = {nullptr};
 
-#include <fixtures/K32_dmxout.h>
-K32_dmxout* dmxout = nullptr;
+#include <fixtures/K32_elp.h>
+K32_elp* elp = nullptr;
+
+#include <fixtures/K32_lyreaudio.h>
+K32_lyreaudio* lyreaudio = nullptr;
 
 #include <K32_light.h>
 K32_light* light = nullptr;
@@ -87,10 +90,17 @@ void k32_setup() {
             light->addFixture( strip[k] );
         }
 
-    // DMX
-    #ifdef DMXOUT_addr
-        dmxout = new K32_dmxout(DMX_PIN[k32->system->hw()], DMXOUT_addr, RUBAN_size);
-        light->addFixture( dmxout ); // TODO: replace system->hw()
+    // ELP
+    #if LULU_TYPE == 50
+        elp = new K32_elp(DMX_PIN[k32->system->hw()], DMXOUT_addr, RUBAN_size);
+        light->addFixture( elp ); // TODO: replace system->hw()
+        light->copyFixture({strip[0], 0, RUBAN_size, elp, 0});
+    #endif
+
+    // LYRE
+    #if LULU_TYPE == 60
+        lyreaudio = new K32_lyreaudio(DMX_PIN[k32->system->hw()], DMXOUT_addr);
+        light->addFixture( lyreaudio ); // TODO: replace system->hw()
     #endif
 
     // PWM

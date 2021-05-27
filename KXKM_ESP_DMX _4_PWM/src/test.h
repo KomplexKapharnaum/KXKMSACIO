@@ -11,7 +11,7 @@ void light_tests() {
     light->anim( strip[1], "test1",   new K32_anim_test )->push(timeStep)->master(MASTER_PREV)->play();
 
   // DMX TEST
-    light->anim( strip[0], "testDMX",   new Anim_dmx_test )->push(timeStep)->master(MASTER_PREV)->play();
+    // light->anim( strip[0], "testDMX",   new Anim_dmx_test )->push(timeStep)->master(MASTER_PREV)->play();
 
   // PWM TEST
     light->pwm->set(0, 255);
@@ -37,7 +37,7 @@ void light_tests() {
   // WAIT END
     light->anim("test0")->wait();
     light->anim("test1")->wait();
-    light->anim("testDMX")->wait();
+    // light->anim("testDMX")->wait();
   
   // COLOR TEST
     // light->anim(0, "colorA", new K32_anim_color, 10, 0)->push(50, 255, 200, 0, 0)->play(1000)->wait();
