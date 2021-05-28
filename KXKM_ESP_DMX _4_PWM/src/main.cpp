@@ -13,6 +13,7 @@
 /////////////////////////////////////////ID/////////////////////////////////////////
 
 #define K32_SET_NODEID 6 // board unique id
+// #define K32_SET_CHANNEL 1 // board channel
 #define LULU_ID 2  // permet de calculer l'adresse DMX
 #define LULU_UNI 17 // univers artnet
 //                        // defo LULU_UNI 0  => LULU-TYPE 6 & 7 & 8 & 10 & 20
@@ -66,6 +67,7 @@ void setup()
   boutons_init();
 
   LOG("NAME:   " + nodeName + "\n");
+  LOGF("CHANNEL: %d\n", k32->system->channel());
 
   /////////////////////////////////////////////// LIGHT //////////////////////////////////////
   init_mem();
