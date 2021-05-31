@@ -99,7 +99,7 @@ void k32_setup() {
 
     // LYRE
     #if LULU_TYPE == 60
-        lyreaudio = new K32_lyreaudio(DMX_PIN[k32->system->hw()], DMXOUT_addr);
+        lyreaudio = new K32_lyreaudio(DMX_PIN[k32->system->hw()], LULU_adr);
         light->addFixture( lyreaudio ); // TODO: replace system->hw()
     #endif
 

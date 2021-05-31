@@ -13,9 +13,9 @@
 /////////////////////////////////////////ID/////////////////////////////////////////
 
 #define K32_SET_NODEID 6 // board unique id
-// #define K32_SET_CHANNEL 1 // board channel
+#define K32_SET_CHANNEL 1 // board channel
 #define LULU_ID 2  // permet de calculer l'adresse DMX
-#define LULU_UNI 17 // univers artnet
+#define LULU_UNI 16 // univers artnet
 //                        // defo LULU_UNI 0  => LULU-TYPE 6 & 7 & 8 & 10 & 20
 //                        // defo LULU_UNI 1  => LULU-TYPE 1 & 2 & 5
 //                        // defo LULU_UNI 2  => LULU-TYPE 9
@@ -24,7 +24,7 @@
 //                        // defo LULU_UNI 5  => LULU-TYPE 12 & 21 & 22
 //                        // defo LULU_UNI 6  => LULU-TYPE 4 & 30 & 31 & 32 & 33 & 40
 //                        // defo LULU_UNI 7  => LULU-TYPE 3 & 23
-//                        // defo LULU_UNI 17 => LULU-TYPE 60 (Lyres)
+//                        // defo LULU_UNI 16 => LULU-TYPE 60 (Lyres)
 
 
 /////////////////////////////////////////Adresse/////////////////////////////////////
@@ -130,10 +130,8 @@ void setup()
     ////////////////// ARTNET
     #if LULU_TYPE == 60
       FRAME_size = LYRE_PATCHSIZE + 9;      // 9: MEM R G B W PWM1 PWM2 PWM3 PWM4
-      LULU_adr = (1 + (LULU_id - 1) * 32);  // DMX Offset = 32
     #else
       FRAME_size = LULU_PATCHSIZE;
-      LULU_adr = (1 + (LULU_id - 1) * LULU_PATCHSIZE);
     #endif
     
     artnet = new K32_artnet(k32, {.universe = LULU_uni,
@@ -149,7 +147,7 @@ void setup()
         remote->setState(REMOTE_AUTO);
         remote->lock();
       }
-      // LOGF2("ARTNET: %d %d \n", data[0], length);
+      // LOGF("ARTNET fullframe: %d \n", length);
     });
 
 
@@ -157,10 +155,11 @@ void setup()
     //
     artnet->onDmx([](const uint8_t *data, int length) 
     {
+      if (length <= 0) return;
       
       // LYRE + STRIP
       #if LULU_TYPE == 60   
-        light->anim("lyre")->push(data, min(length, LYRE_PATCHSIZE) );
+        light->anim("lyre")->push(data, min(length, LYRE_PATCHSIZE) );  // DMX out
 
         if (length >= LYRE_PATCHSIZE+9) {
           const uint8_t *dataStrip = &data[LYRE_PATCHSIZE];         
@@ -180,6 +179,7 @@ void setup()
       #endif
       
       // LOGINL("ARTFRAME: ");
+      // LOGF("length=%d ", length);
       // for (int k=0; k<length; k++) LOGF("%d ", data[k]);
       // LOG();
     });

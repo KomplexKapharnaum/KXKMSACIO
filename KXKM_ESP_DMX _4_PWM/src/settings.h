@@ -298,6 +298,12 @@ void settings()
   LULU_id = prefs.getUInt("LULU_id", 1);
 #endif
 
+#if LULU_TYPE == 60
+  LULU_adr = (1 + (LULU_id - 1) * 32);  // DMX Offset = 32
+#else
+  LULU_adr = (1 + (LULU_id - 1) * LULU_PATCHSIZE);
+#endif
+
 #ifdef LULU_TYPE
   prefs.putUInt("LULU_type", LULU_TYPE);
   LULU_type = LULU_TYPE;
