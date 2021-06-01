@@ -130,10 +130,8 @@ void setup()
     ////////////////// ARTNET
     #if LULU_TYPE == 60
       FRAME_size = LYRE_PATCHSIZE + 9;      // 9: MEM R G B W PWM1 PWM2 PWM3 PWM4
-      LULU_adr = (1 + (LULU_id - 1) * 32);  // DMX Offset = 32
     #else
       FRAME_size = LULU_PATCHSIZE;
-      LULU_adr = (1 + (LULU_id - 1) * LULU_PATCHSIZE);
     #endif
     
     artnet = new K32_artnet(k32, {.universe = LULU_uni,
@@ -151,7 +149,7 @@ void setup()
         remote->setState(REMOTE_AUTO);
         remote->lock();
       }
-      LOGF2("ARTNET: %d %d \n", data[0], length);
+      // LOGF("ARTNET fullframe: %d \n", length);
     });
 
 
@@ -159,10 +157,11 @@ void setup()
     //
     artnet->onDmx([](const uint8_t *data, int length) 
     {
+      if (length <= 0) return;
       
       // LYRE + STRIP
       #if LULU_TYPE == 60   
-        light->anim("lyre")->push(data, min(length, LYRE_PATCHSIZE) );
+        light->anim("lyre")->push(data, min(length, LYRE_PATCHSIZE) );  // DMX out
 
         if (length >= LYRE_PATCHSIZE+9) {
           const uint8_t *dataStrip = &data[LYRE_PATCHSIZE];         
@@ -181,9 +180,10 @@ void setup()
         light->anim("artnet")->push(data, min(length, LULU_PATCHSIZE) );
       #endif
       
-      LOGINL("ARTFRAME: ");
-      for (int k=0; k<length; k++) LOGF("%d ", data[k]);
-      LOG();
+      // LOGINL("ARTFRAME: ");
+      // LOGF("length=%d ", length);
+      // for (int k=0; k<length; k++) LOGF("%d ", data[k]);
+      // LOG();
     });
 
     // EVENT: wifi lost
@@ -256,12 +256,12 @@ void setup()
   });
 
   // Heap Memory log
-  k32->timer->every(1000, []() {
-    static int lastheap = 0;
-    int heap = ESP.getFreeHeap();
-    LOGF2("Free memory: %d / %d\n", heap, heap - lastheap);
-    lastheap = heap;
-  });
+  // k32->timer->every(1000, []() {
+  //   static int lastheap = 0;
+  //   int heap = ESP.getFreeHeap();
+  //   LOGF2("Free memory: %d / %d\n", heap, heap - lastheap);
+  //   lastheap = heap;
+  // });
 
 } // setup
 
