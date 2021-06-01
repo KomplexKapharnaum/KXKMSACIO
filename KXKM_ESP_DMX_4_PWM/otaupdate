@@ -89,7 +89,7 @@ class ServiceListener(object):
                 cli['version'] = 0
 
             cli['upgradeVersion'] = (not version_filter or cli['version'] != version_filter)
-            cli['upgradeType'] = (not type_filter or type_filter in cli['shortname'].lower())
+            cli['upgradeType'] = (not type_filter or type_filter.lower() in cli['shortname'].lower())
             cli['upgrade'] = cli['upgradeVersion'] and cli['upgradeType']
 
             if new and cli['upgradeType']:
@@ -133,7 +133,7 @@ class Upgrader(Thread):
         if (p.wait() == 0):
             stri = "Updated " +self.info['shortname']+"  "+str(self.info['ip'])
         else:
-            stri = "Failed " +self.info['shortname']+"  "+str(self.info['ip'])
+            stri = "Failed " +self.info['shortname']+"  "+str(self.info['ip']+" \n\t"+cmd)
         print(stri)
 
  
