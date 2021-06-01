@@ -15,7 +15,7 @@
 // #define K32_SET_NODEID 3 // board unique id
 #define K32_SET_CHANNEL 10 // board channel mqtt
 // #define LULU_ID 1  // permet de calculer l'adresse DMX
-#define LULU_UNI 16 // univers artnet 
+#define LULU_UNI 0 // univers artnet 
 //                        // defo LULU_UNI 0  => LULU-TYPE 6 & 7 & 8 & 10 & 20
 //                        // defo LULU_UNI 1  => LULU-TYPE 1 & 2 & 5
 //                        // defo LULU_UNI 2  => LULU-TYPE 9
@@ -108,7 +108,7 @@ void setup()
 
   // MEM NO WIFI
   #if (LULU_TYPE >= 20 || LULU_TYPE == 2 || LULU_TYPE == 6)
-    light->anim("artnet")->push(MEM_NO_WIFI, LULU_PATCHSIZE);
+    // light->anim("artnet")->push(MEM_NO_WIFI, LULU_PATCHSIZE);
     // light->anim("artnet")->mod(new K32_mod_sinus)->at(2)->period(8500)->phase(0)->mini(-255)->maxi(255); // modulo
   #endif
 

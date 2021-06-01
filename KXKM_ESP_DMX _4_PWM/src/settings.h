@@ -233,7 +233,7 @@
 #elif LULU_TYPE == 34
   #define RUBAN_SIZE 60
   #define L_NAME "Banc_parled"
-  #define ON_NO_WIFI 255 // 82 niveau pour les statics baronnie
+  #define ON_NO_WIFI 127 // 82 niveau pour les statics baronnie
   #include "macro/Type/parled/mem_parled.h"
 
   // #include "macro/Type/4pwm/mem_4pwm.h"            // defo
