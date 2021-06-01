@@ -12,10 +12,10 @@
 
 /////////////////////////////////////////ID/////////////////////////////////////////
 
-#define K32_SET_NODEID 6 // board unique id
-// #define K32_SET_CHANNEL 1 // board channel
-#define LULU_ID 2  // permet de calculer l'adresse DMX
-#define LULU_UNI 17 // univers artnet
+#define K32_SET_NODEID 3 // board unique id
+#define K32_SET_CHANNEL 1 // board channel
+#define LULU_ID 1  // permet de calculer l'adresse DMX
+#define LULU_UNI 15 // univers artnet
 //                        // defo LULU_UNI 0  => LULU-TYPE 6 & 7 & 8 & 10 & 20
 //                        // defo LULU_UNI 1  => LULU-TYPE 1 & 2 & 5
 //                        // defo LULU_UNI 2  => LULU-TYPE 9
@@ -24,7 +24,7 @@
 //                        // defo LULU_UNI 5  => LULU-TYPE 12 & 21 & 22
 //                        // defo LULU_UNI 6  => LULU-TYPE 4 & 30 & 31 & 32 & 33 & 40
 //                        // defo LULU_UNI 7  => LULU-TYPE 3 & 23
-//                        // defo LULU_UNI 17 => LULU-TYPE 60 (Lyres)
+//                        // defo LULU_UNI 16 => LULU-TYPE 60 (Lyres)
 
 
 /////////////////////////////////////////Adresse/////////////////////////////////////
@@ -138,7 +138,9 @@ void setup()
     
     artnet = new K32_artnet(k32, {.universe = LULU_uni,
                                   .address = LULU_adr,
-                                  .framesize = FRAME_size});
+                                  .framesize = FRAME_size,
+                                  .shortName = nodeName,
+                                  .longName = nodeName});
 
     // EVENT: full frame
     //
@@ -149,7 +151,7 @@ void setup()
         remote->setState(REMOTE_AUTO);
         remote->lock();
       }
-      // LOGF2("ARTNET: %d %d \n", data[0], length);
+      LOGF2("ARTNET: %d %d \n", data[0], length);
     });
 
 
@@ -179,9 +181,9 @@ void setup()
         light->anim("artnet")->push(data, min(length, LULU_PATCHSIZE) );
       #endif
       
-      // LOGINL("ARTFRAME: ");
-      // for (int k=0; k<length; k++) LOGF("%d ", data[k]);
-      // LOG();
+      LOGINL("ARTFRAME: ");
+      for (int k=0; k<length; k++) LOGF("%d ", data[k]);
+      LOG();
     });
 
     // EVENT: wifi lost
