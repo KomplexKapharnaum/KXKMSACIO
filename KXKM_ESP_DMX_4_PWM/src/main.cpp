@@ -1,7 +1,7 @@
 #include <Arduino.h>
 
 #define LULU_VER 79
-#define LULU_TYPE 34 
+#define LULU_TYPE 60 
                     // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot" \
                     // 10="power" 11="DMX_strobe" 12="DMX_Par_led"                                          \
                     // 20="Cube_str" 21="Cube_par"  22="Cube_MiniKOLOR" 23="Cube_Elp"                       \
@@ -13,9 +13,9 @@
 /////////////////////////////////////////ID/////////////////////////////////////////
 
 // #define K32_SET_NODEID 3 // board unique id
-#define K32_SET_CHANNEL 10 // board channel mqtt
+#define K32_SET_CHANNEL 6 // board channel mqtt
 // #define LULU_ID 1  // permet de calculer l'adresse DMX
-#define LULU_UNI 0 // univers artnet 
+#define LULU_UNI 16 // univers artnet 
 //                        // defo LULU_UNI 0  => LULU-TYPE 6 & 7 & 8 & 10 & 20
 //                        // defo LULU_UNI 1  => LULU-TYPE 1 & 2 & 5
 //                        // defo LULU_UNI 2  => LULU-TYPE 9
