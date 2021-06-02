@@ -127,7 +127,8 @@ class Upgrader(Thread):
 
         stri = "Uploading to "+self.info['shortname']+"  "+str(self.info['ip'])+" using "+sender
         print(stri)
-        cmd = 'python3 ~/.platformio/packages/tool-espotapy/espota.py -i '+self.info['ip']+' -I '+sender+' -p '+self.info['port']+' -P '+str(self.port)+' -f '+firmware
+        # cmd = 'python3 ~/.platformio/packages/tool-espotapy/espota.py -i '+self.info['ip']+' -I '+sender+' -p '+self.info['port']+' -P '+str(self.port)+' -f '+firmware
+        cmd = 'py C:\\Users\\ririf\\.platformio\\packages\\framework-arduinoespressif32\\tools\\espota.py -i '+self.info['ip']+' -I '+sender+' -p '+self.info['port']+' -P '+str(self.port)+' -f '+firmware
         # print(cmd)
         p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         if (p.wait() == 0):
