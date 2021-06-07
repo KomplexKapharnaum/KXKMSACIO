@@ -183,22 +183,22 @@
   #define RUBAN_SIZE 60
   #define L_NAME "Sucette_parled"
   #define OUT_PATCHSIZE 9 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
-  #define ON_NO_WIFI 255 // 82 niveau pour les statics baronnie
+  #define ON_NO_WIFI 82 // 82 niveau pour les statics baronnie
   #include "macro/Type/parled/mem_parled.h"
 
   // #include "macro/Type/4pwm/mem_4pwm.h"            // defo
   // #include "macro/mem_sucette_parled.h"
 
   //////////////////////////////// Baronie
-  // #include "macro/Show/Baro/mem_pwm_baro_131.h"     // vincent
-  // #include "macro/Show/Baro/mem_sucette_baro_131.h"
+  #include "macro/Show/Baro/mem_pwm_baro_131.h"     // vincent
+  #include "macro/Show/Baro/mem_sucette_baro_131.h"
 
   // #include "macro/Show/Baro/mem_pwm_baro_132.h"     // jerome
   // #include "macro/Show/Baro/mem_sucette_baro_132.h"
 
   //////////////////////////////// Esch
-  #include "macro/Show/esch/mem_pwm_esch.h"
-  #include "macro/Show/esch/mem_sucette_esch.h"
+  // #include "macro/Show/esch/mem_pwm_esch.h"
+  // #include "macro/Show/esch/mem_sucette_esch.h"
 
 #elif LULU_TYPE == 31
   #define RUBAN_SIZE 60

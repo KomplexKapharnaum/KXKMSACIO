@@ -56,7 +56,7 @@ uint8_t MEM_PREV[NUMBER_OF_MEM][LULU_PREVPIX*4] = {
 // APPLY MACRO WITH CUSTOM MODULATORS INTO anim
 //
 //{master , r  , g  , b  , str , pwm1, pwm2, pwm3, pwm4}
-//{0      , 1  , 2  , 3  ,  4  ,  5  ,  6  ,  7  , 8   } adr + -1
+//{0      , 1  , 2  , 3  ,  4  ,  16  ,  17  ,  18  , 19   } adr + -1
 void load_mem(K32_anim *anim, int macro) {
 
     // remove disposable modulators
@@ -71,15 +71,15 @@ void load_mem(K32_anim *anim, int macro) {
     //
     if (macro == 4)
     {
-        anim->mod(new K32_mod_sinus)->at(1)->at(5)->at(8)->at(3)->at(7)->at(2)->at(6)->period(8500)->phase(0)->mini(-50)->maxi(255);
+        anim->mod(new K32_mod_sinus)->at(1)->at(16)->at(19)->at(3)->at(18)->at(2)->at(17)->period(8500)->phase(0)->mini(-50)->maxi(255);
     }
     else if (macro == 5)
     {
-        anim->mod(new K32_mod_sinus)->at(1)->at(5)->at(8)->at(3)->at(7)->at(2)->at(6)->period(8500)->phase(0)->mini(-50)->maxi(255);
+        anim->mod(new K32_mod_sinus)->at(1)->at(16)->at(19)->at(3)->at(18)->at(2)->at(17)->period(8500)->phase(0)->mini(-50)->maxi(255);
     }
     else if (macro == 6)
     {
-        anim->mod(new K32_mod_pulse)->at(1)->at(2)->at(3)->at(7)->at(8)->at(6)->at(5)->param(1, 10)->period(500);
+        anim->mod(new K32_mod_pulse)->at(1)->at(2)->at(3)->at(18)->at(19)->at(17)->at(16)->param(1, 10)->period(500);
     }
     else if (macro == 9)
     {
