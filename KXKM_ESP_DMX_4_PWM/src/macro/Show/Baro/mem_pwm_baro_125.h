@@ -2,7 +2,7 @@
 #define mem_pwm_baro_125_h
 
 #ifndef NUMBER_OF_MEM
-#define NUMBER_OF_MEM 16 // stm leave in last mem
+#define NUMBER_OF_MEM 17 // stm leave in last mem
 #endif
 
 // 
@@ -19,12 +19,13 @@ uint8_t MEM_PWM[NUMBER_OF_MEM][4] = {
     {  0,    0,    0,    0}, // 07 301 on 302 off
     {255,  255,  255,  255}, // 08 301 off 302 on
     {255,  255,  255,  255}, // 09  on solo
-    {  0,  255,  170,  126}, // 10  
-    {255,  170,  126,   82}, // 11 
-    {170,  126,   82,    0}, // 12 
-    {126,   82,    0,  255}, // 13 
-    { 82,    0,  255,  170}, // 14 
-    {  0,    0,    0,    0}, // 15 BLACK stm leave lset mem
+    {255,  255,  255,  255}, // 10  all cube
+    {  0,    0,    0,    0}, // 11  cube imp
+    {255,  255,  255,  255}, // 12  cube pair
+    {  0,    0,    0,    0}, // 13  all table
+    {  0,    0,    0,    0}, // 14  table pair
+    {  0,    0,    0,    0}, // 15  table imp
+    {  0,    0,    0,    0}, // 16 BLACK stm leave lset mem
 };
 // pwm1, pwm2, pwm3, pwm4}
 //{  5  ,  6  ,  7  , 8   } adr + -1

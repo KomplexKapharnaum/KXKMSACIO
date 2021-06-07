@@ -2,7 +2,7 @@
 #define mem_pwm_baro_131_h
 
 #ifndef NUMBER_OF_MEM
-#define NUMBER_OF_MEM 16 // stm leave in last mem
+#define NUMBER_OF_MEM 17 // stm leave in last mem
 #endif
 
 // 
@@ -14,17 +14,18 @@ uint8_t MEM_PWM[NUMBER_OF_MEM][4] = {
     {126,  126,  126,  126}, // 02 Blue grad +
     { 82,   82,   82,   82}, // 03 White grad ++
     {255,  255,  255,  255}, // 04 fade  **5 6 7 8**
-    {  0,    0,    0,    0}, // 05  off
+    {255,  255,  255,  255}, // 05  on fade
     {255,  255,  255,  255}, // 06 str all 
     {255,  255,  255,  255}, // 07 301 on 302 off
     {  0,    0,    0,    0}, // 08 301 off 302 on
     {  0,    0,    0,    0}, // 09  off
-    {  0,  255,  170,  126}, // 10  
-    {255,  170,  126,   82}, // 11 
-    {170,  126,   82,    0}, // 12 
-    {126,   82,    0,  255}, // 13 
-    { 82,    0,  255,  170}, // 14 
-    {  0,    0,    0,    0}, // 15 BLACK stm leave lset mem
+    {  0,    0,    0,    0}, // 10  all cube
+    {  0,    0,    0,    0}, // 11  cube imp
+    {  0,    0,    0,    0}, // 12  cube pair
+    {255,  255,  255,  255}, // 13  all table
+    {  0,    0,    0,    0}, // 15  table pair
+    {255,  255,  255,  255}, // 14  table impair
+    {  0,    0,    0,    0}, // 16 BLACK stm leave lset mem
 };
 //{master , r  , g  , b  , str , pwm1, pwm2, pwm3, pwm4}
 //{0      , 1  , 2  , 3  ,  4  ,  16  ,  17  ,  18  , 19   } adr + -1

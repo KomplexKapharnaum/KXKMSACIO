@@ -2,7 +2,7 @@
 #define mem_cube_baro_125_h
 
 #ifndef NUMBER_OF_MEM
-#define NUMBER_OF_MEM 16 // stm leave in last mem
+#define NUMBER_OF_MEM 17 // stm leave in last mem
 #endif
 
 // 
@@ -84,34 +84,17 @@ void load_mem(K32_anim *anim, int macro) {
     //
     if (macro == 4)
     {
-        anim->mod(new K32_mod_sinus)->at(1)->at(16)->at(19)->at(3)->at(18)->at(2)->at(17)->period(8500)->phase(0)->mini(-50)->maxi(255);
+        anim->mod(new K32_mod_sinus)->at(16)->at(19)->at(18)->at(17)->period(8500)->phase(0)->mini(-50)->maxi(255);
     }
     else if (macro == 6)
     {
-        anim->mod(new K32_mod_pulse)->at(1)->at(2)->at(3)->at(18)->at(19)->at(17)->at(16)->param(1, 10)->period(500);
+        anim->mod(new K32_mod_pulse)->at(18)->at(19)->at(17)->at(16)->param(1, 10)->period(500);
     }
-    else if (macro == 9)
+    else if (macro == 8)
     {
-        anim->mod(new K32_mod_sinus)->at(0)->mini(100)->maxi(255)->period(2000);
+        anim->mod(new K32_mod_sinus)->at(16)->at(19)->at(18)->at(17)->period(8500)->phase(0)->mini(-50)->maxi(255);
     }
-    else if (macro == 10)
-    {
-        anim->mod(new K32_mod_sinus)->at(1)->at(2)->period(8500)->phase(0)->mini(0)->maxi(255);
-    }
-    else if (macro == 11)
-    {
-        anim->mod(new K32_mod_pulse)->at(2)->at(3)->param(1, 100)->period(7000);
-    }
-    else if (macro == 12)
-    {
-        anim->mod(new K32_mod_sinus)->at(1)->period(8500)->phase(0)->mini(0)->maxi(255);
-        anim->mod(new K32_mod_sinus)->at(2)->period(8500)->phase(120)->mini(0)->maxi(255);
-        anim->mod(new K32_mod_sinus)->at(3)->period(8500)->phase(240)->mini(0)->maxi(255);
-    }
-    else if (macro == 14)
-    {
-        anim->mod(new K32_mod_sinus)->at(0)->period(8500)->mini(38)->maxi(217);
-    }
+    
 }
 
 

@@ -2,7 +2,7 @@
 #define mem_parled_h
 
 #ifndef NUMBER_OF_MEM
-#define NUMBER_OF_MEM 16 // stm leave in last mem
+#define NUMBER_OF_MEM 17 // stm leave in last mem
 #endif
 
 // 

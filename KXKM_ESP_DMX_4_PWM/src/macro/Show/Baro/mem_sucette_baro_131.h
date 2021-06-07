@@ -2,7 +2,7 @@
 #define mem_sucette_baro_131_h
 
 #ifndef NUMBER_OF_MEM
-#define NUMBER_OF_MEM 16 // stm leave in last mem
+#define NUMBER_OF_MEM 17 // stm leave in last mem
 #endif
 
 // 
@@ -74,9 +74,13 @@ void load_mem(K32_anim *anim, int macro) {
     {
         anim->mod(new K32_mod_sinus)->at(16)->at(19)->at(18)->at(17)->period(8500)->phase(0)->mini(-50)->maxi(255);
     }
+    else if (macro == 5)
+    {
+        anim->mod(new K32_mod_sinus)->at(16)->at(19)->at(18)->at(17)->period(8500)->phase(0)->mini(-50)->maxi(255);
+    }
     else if (macro == 6)
     {
-        anim->mod(new K32_mod_pulse)->at(18)->at(19)->at(17)->at(16)->param(1, 10)->period(500);
+        anim->mod(new K32_mod_pulse)->at(18)->at(19)->at(17)->at(16)->param(1, 10)->period(2000);
     }
     
 }
