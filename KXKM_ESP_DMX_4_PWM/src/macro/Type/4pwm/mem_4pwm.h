@@ -2,7 +2,7 @@
 #define mem_4pwm_h
 
 #ifndef NUMBER_OF_MEM
-#define NUMBER_OF_MEM 16 // stm leave in last mem
+#define NUMBER_OF_MEM 24 // stm leave in last mem
 #endif
 
 // 
@@ -24,7 +24,15 @@ uint8_t MEM_PWM[NUMBER_OF_MEM][4] = {
     {  255,  170,  126,   82}, // 11 
     {  126,   82,    0,  255}, // 13 
     {   82,    0,  255,  170}, // 14 
-    {    0,    0,    0,    0}, // 15 BLACK stm leave lset mem
+    {    0,    0,    0,    0}, // 15 BLACK
+    {    0,    0,    0,    0}, // 16 BLACK
+    {    0,    0,    0,    0}, // 17 BLACK
+    {    0,    0,    0,    0}, // 18 BLACK
+    {    0,    0,    0,    0}, // 19 BLACK
+    {    0,    0,    0,    0}, // 20 BLACK
+    {    0,    0,    0,    0}, // 21 BLACK
+    {    0,    0,    0,    0}, // 22 BLACK
+    {    0,    0,    0,    0}, // 23 BLACK stm leave lset mem
 };
 //  { pwm1, pwm2, pwm3, pwm4}
 //{  5  ,  6  ,  7  , 8   } adr + -1
