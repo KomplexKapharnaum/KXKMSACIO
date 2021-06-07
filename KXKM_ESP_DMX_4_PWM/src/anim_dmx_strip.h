@@ -194,7 +194,7 @@ class Anim_dmx_strip : public K32_anim {
         light->pwm->set(1, data[LULU_PATCHSIZE-3]*this->master()/255 );
         light->pwm->set(2, data[LULU_PATCHSIZE-2]*this->master()/255 );
         light->pwm->set(3, data[LULU_PATCHSIZE-1]*this->master()/255 );
-        // LOGF5("ANIM: -> Red %d PWM %d %d %d %d \n", data[3], data[LULU_PATCHSIZE-4], data[LULU_PATCHSIZE-3], data[LULU_PATCHSIZE-2], data[LULU_PATCHSIZE-1]);
+        // LOGF5("ANIM: -> Master %d PWM %d %d %d %d \n", this->master(), data[LULU_PATCHSIZE-4], data[LULU_PATCHSIZE-3], data[LULU_PATCHSIZE-2], data[LULU_PATCHSIZE-1]);
       }
 
       // LOGF("ANIM: %s frame ", name());
