@@ -1,7 +1,7 @@
 #include <Arduino.h>
 
-#define LULU_VER 79
-#define LULU_TYPE 60 
+#define LULU_VER 80
+#define LULU_TYPE 30 
                     // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot" \
                     // 10="power" 11="DMX_strobe" 12="DMX_Par_led"                                          \
                     // 20="Cube_str" 21="Cube_par"  22="Cube_MiniKOLOR" 23="Cube_Elp"                       \
@@ -12,12 +12,12 @@
 
 /////////////////////////////////////////ID/////////////////////////////////////////
 
-// #define K32_SET_NODEID 3 // board unique id
-#define K32_SET_CHANNEL 6 // board channel mqtt
-// #define LULU_ID 1  // permet de calculer l'adresse DMX
-#define LULU_UNI 16 // univers artnet 
-//                        // defo LULU_UNI 0  => LULU-TYPE 6 & 7 & 8 & 10 & 20
-//                        // defo LULU_UNI 1  => LULU-TYPE 1 & 2 & 5
+// #define K32_SET_NODEID 131 // board unique id
+#define K32_SET_CHANNEL 1 // board channel mqtt
+#define LULU_ID 1  // permet de calculer l'adresse DMX
+#define LULU_UNI 6 // univers artnet 
+//                        // defo LULU_UNI 0  => LULU-TYPE 6 & 7 & 8 & 10 & 20 & 34
+//                        // defo LULU_UNI 1  => LULU-TYPE 1 & 2 & 5 & 50
 //                        // defo LULU_UNI 2  => LULU-TYPE 9
 //                        // defo LULU_UNI 3  => LULU-TYPE 50
 //                        // defo LULU_UNI 4  => LULU-TYPE 11
@@ -80,7 +80,6 @@ void setup()
   //   light->copyFixture({strip[0], 0, RUBAN_size, strip[1], 0}); // fluo clone
   // else
   //   light->copyFixture({strip[0], RUBAN_size, RUBAN_size + 18, strip[1], 0}); // jauge sortie 2
-
 
   // TEST Sequence
   light_tests();
@@ -203,8 +202,8 @@ void setup()
           .broker = "2.0.0.1", // Komplex
           // .broker = "2.0.0.10",     // Riri dev home
           // .broker = "192.168.43.132",  // MGR dev home
-          .beatInterval = 5000,   // heartbeat interval milliseconds (0 = disable)
-          .statusInterval = 15000 // full beacon interval milliseconds (0 = disable)
+          .beatInterval = 0,   // heartbeat interval milliseconds (0 = disable) 5000
+          .statusInterval = 0 // full beacon interval milliseconds (0 = disable) 15000
       });
 
     ////////////////// OSC
