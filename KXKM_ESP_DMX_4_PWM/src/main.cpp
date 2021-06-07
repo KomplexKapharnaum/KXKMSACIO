@@ -1,6 +1,6 @@
 #include <Arduino.h>
 
-#define LULU_VER 80
+#define LULU_VER 82
 #define LULU_TYPE 30 
                     // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot" \
                     // 10="power" 11="DMX_strobe" 12="DMX_Par_led"                                          \
@@ -12,10 +12,10 @@
 
 /////////////////////////////////////////ID/////////////////////////////////////////
 
-// #define K32_SET_NODEID 131 // board unique id
-#define K32_SET_CHANNEL 1 // board channel mqtt
-#define LULU_ID 1  // permet de calculer l'adresse DMX
-#define LULU_UNI 6 // univers artnet 
+// #define K32_SET_NODEID 76 // board unique id
+// #define K32_SET_CHANNEL 3 // board channel mqtt
+// #define LULU_ID 1  // permet de calculer l'adresse DMX
+// #define LULU_UNI 1 // univers artnet 
 //                        // defo LULU_UNI 0  => LULU-TYPE 6 & 7 & 8 & 10 & 20 & 34
 //                        // defo LULU_UNI 1  => LULU-TYPE 1 & 2 & 5 & 50
 //                        // defo LULU_UNI 2  => LULU-TYPE 9
@@ -109,6 +109,9 @@ void setup()
   #if (LULU_TYPE >= 20 || LULU_TYPE == 2 || LULU_TYPE == 6)
     // light->anim("artnet")->push(MEM_NO_WIFI, LULU_PATCHSIZE);
     // light->anim("artnet")->mod(new K32_mod_sinus)->at(2)->period(8500)->phase(0)->mini(-255)->maxi(255); // modulo
+
+    // light->anim("artnet")->push( MEM_SK[20], LULU_PATCHSIZE); // baro auto circulation elp
+    // light->anim("artnet")->mod(new K32_mod_sinus)->at(7)->period(8500)->mini(0)->maxi(45);// baro auto circulation elp
   #endif
 
   /////////////////////////////////////////////// NETWORK //////////////////////////////////////
