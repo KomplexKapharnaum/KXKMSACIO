@@ -155,11 +155,11 @@
   // #include "macro/mem_cube_parled.h"
   // #include "macro/Show/larochelle/mem_cube_parled_roch.h"
 
-  // #include "macro/Show/Baro/mem_pwm_baro_127.h"   // cube 1 3 5 7 9
-  // #include "macro/Show/Baro/mem_cube_baro_127.h"
+  #include "macro/Show/Baro/mem_pwm_baro_127.h"   // cube 1 3 5 7 9
+  #include "macro/Show/Baro/mem_cube_baro_127.h"
 
-  #include "macro/Show/Baro/mem_pwm_baro_125.h"   // cube 2 4 6 8 10
-  #include "macro/Show/Baro/mem_cube_baro_125.h"
+  // #include "macro/Show/Baro/mem_pwm_baro_125.h"   // cube 2 4 6 8 10
+  // #include "macro/Show/Baro/mem_cube_baro_125.h"
 
 #elif LULU_TYPE == 22
   #define RUBAN_SIZE 60
@@ -275,7 +275,7 @@
 
 #elif LULU_TYPE == 60
   #define L_NAME "lyre_DMX"
-  #define RUBAN_SIZE 28
+  #define RUBAN_SIZE 27
   #define OUT_PATCHSIZE 16
   #define DMXOUT_ADDR 1
 
