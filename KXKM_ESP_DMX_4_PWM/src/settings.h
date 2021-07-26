@@ -81,7 +81,7 @@
 
 #elif LULU_TYPE == 6
   #define L_NAME "Barrette"
-  #define RUBAN_SIZE 60
+  #define RUBAN_SIZE 64
   // #include "macro/Type/SK/mem.h" // mem global sk & pwm
 
   #include "macro/Type/4pwm/mem_4pwm.h" // defo
