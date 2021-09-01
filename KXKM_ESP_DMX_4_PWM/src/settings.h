@@ -130,8 +130,9 @@
   #include "macro/Type/strobe/mem_strobe_dmx.h"
 
 #elif LULU_TYPE == 12
-  #define RUBAN_SIZE 0
   #define L_NAME "Dmx_par"
+  #define RUBAN_SIZE 0
+  #define DMXOUT_ADDR 1
   #define OUT_PATCHSIZE 5 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
   #include "macro/Type/parled/mem_pwm_parled_dmx.h"
 
