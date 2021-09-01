@@ -180,6 +180,9 @@ void setup()
           }
         }
 
+      #elif LULU_TYPE == 12
+        light->anim("dmxthru")->push(data, min(length, PAR_PATCHSIZE) );  // DMX out
+
       // STRIP ONLY
       #else
         light->anim("artnet")->push(data, min(length, LULU_PATCHSIZE) );

@@ -61,7 +61,11 @@ void boutons_loop()
     {
         LOGF("REMOTE: -> set Active Macro = %d\n", activeMacro);
 
-        load_mem( light->anim("manu"), activeMacro );
+        #if LULU_TYPE == 12
+            load_mem( light->anim("dmxthru"), activeMacro );
+        #else
+            load_mem( light->anim("manu"), activeMacro );
+        #endif
     }
 
     // PREVIEW Macro
