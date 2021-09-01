@@ -98,7 +98,10 @@ void setup()
 
   #if LULU_TYPE == 60
     // ANIM dmx thru
-    light->anim(lyreaudio, "lyre", new Anim_dmx_thru, LYRE_PATCHSIZE/4 )->play();
+    light->anim(lyreaudio, "dmxthru", new Anim_dmx_thru, LYRE_PATCHSIZE/4 )->play();
+  #elif  LULU_TYPE == 12
+    // ANIM dmx thru
+    light->anim(pardmx, "dmxthru", new Anim_dmx_thru, PAR_PATCHSIZE/4 )->play();
   #endif
 
 
@@ -163,7 +166,7 @@ void setup()
       
       // LYRE + STRIP
       #if LULU_TYPE == 60   
-        light->anim("lyre")->push(data, min(length, LYRE_PATCHSIZE) );  // DMX out
+        light->anim("dmxthru")->push(data, min(length, LYRE_PATCHSIZE) );  // DMX out
 
         if (length >= LYRE_PATCHSIZE+9) {
           const uint8_t *dataStrip = &data[LYRE_PATCHSIZE];         
