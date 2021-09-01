@@ -43,6 +43,8 @@ K32_lyreaudio* lyreaudio = nullptr;
 #include <K32_light.h>
 K32_light* light = nullptr;
 
+#include<fixtures/K32_pardmx.h>
+K32_pardmx* pardmx = nullptr;
 
 // CHECK MCP SWITCH to select Wifi or BT
 //
@@ -90,6 +92,12 @@ void k32_setup() {
             light->addFixture( strip[k] );
         }
 
+    // PARDMX
+    #if LULU_TYPE == 12
+        pardmx = new K32_pardmx(DMX_PIN[k32->system->hw()], LULU_adr);
+        light->addFixture( pardmx );
+    #endif
+    
     // ELP
     #if LULU_TYPE == 50
         elp = new K32_elp(DMX_PIN[k32->system->hw()], DMXOUT_addr, RUBAN_size);
