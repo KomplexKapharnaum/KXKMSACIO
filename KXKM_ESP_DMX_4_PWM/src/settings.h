@@ -270,8 +270,11 @@
   // #include "macro/Type/SK/mem_sk.h"     // defo
   // #include "macro/mem_barre_pwm.h"
 
-  #include "macro/Show/Baro/mem_sk_baro.h"
-  #include "macro/Show/Baro/mem_barre_pwm_baro.h"
+  // #include "macro/Show/Baro/mem_sk_baro.h"
+  // #include "macro/Show/Baro/mem_barre_pwm_baro.h"
+
+  #include "macro/Show/Baro/mem_sk_elp_baro.h"
+  #include "macro/Show/Baro/mem_barre_pwm_elp_baro.h"
   
 
 #elif LULU_TYPE == 60
