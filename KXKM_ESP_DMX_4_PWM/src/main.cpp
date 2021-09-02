@@ -1,21 +1,21 @@
 #include <Arduino.h>
 
-#define LULU_VER 82
-#define LULU_TYPE 12
-                    // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot" \
+#define LULU_VER 85
+#define LULU_TYPE 50
+// 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot" \
                     // 10="power" 11="DMX_strobe" 12="DMX_Par_led"                                          \
                     // 20="Cube_str" 21="Cube_par"  22="Cube_MiniKOLOR" 23="Cube_Elp"                       \
                     // 30="Sucette_parled" 31="Sucette_Strobe" 32="Sucette_MiniKolor" 33="sucette_Elp"  34="Banc"     \
                     // 40="New_Fluo" \
                     // 50="strip to elp dmx"
-                    // 60="Lyre audio dmx + strip"
+// 60="Lyre audio dmx + strip"
 
 /////////////////////////////////////////ID/////////////////////////////////////////
 
-#define K32_SET_NODEID 60 // board unique id
-#define K32_SET_CHANNEL 7 // board channel mqtt 
-#define LULU_ID 1  // permet de calculer l'adresse DMX
-#define LULU_UNI 1 // univers artnet 
+// #define K32_SET_NODEID 68 // board unique id
+// #define K32_SET_CHANNEL 15 // board channel mqtt
+// #define LULU_ID 1  // permet de calculer l'adresse DMX
+// #define LULU_UNI 4 // univers artnet
 //                        // defo LULU_UNI 0  => LULU-TYPE 6 & 7 & 8 & 10 & 20 & 34
 //                        // defo LULU_UNI 1  => LULU-TYPE 1 & 2 & 5 & 50
 //                        // defo LULU_UNI 2  => LULU-TYPE 9
@@ -25,7 +25,6 @@
 //                        // defo LULU_UNI 6  => LULU-TYPE 4 & 30 & 31 & 32 & 33 & 40
 //                        // defo LULU_UNI 7  => LULU-TYPE 3 & 23
 //                        // defo LULU_UNI 16 => LULU-TYPE 60 (Lyres)
-
 
 /////////////////////////////////////////Adresse/////////////////////////////////////
 
@@ -96,26 +95,25 @@ void setup()
   light->anim(strip[0], "preview", new Anim_preview, LULU_PREVPIX, RUBAN_size + 8)->master(MASTER_PREV)->play();
   light->anim(strip[0], "rssi", new Anim_rssi, 1, RUBAN_size + 17)->master(MASTER_PREV * 1.5)->play();
 
-  #if LULU_TYPE == 60
-    // ANIM dmx thru
-    light->anim(lyreaudio, "dmxthru", new Anim_dmx_thru, LYRE_PATCHSIZE/4 )->play();
-  #elif  LULU_TYPE == 12
-    // ANIM dmx thru
-    light->anim(pardmx, "dmxthru", new Anim_dmx_thru, PAR_PATCHSIZE/4 )->play();
-  #endif
-
+#if LULU_TYPE == 60
+  // ANIM dmx thru
+  light->anim(lyreaudio, "dmxthru", new Anim_dmx_thru, LYRE_PATCHSIZE / 4)->play();
+#elif LULU_TYPE == 12
+  // ANIM dmx thru
+  light->anim(pardmx, "dmxthru", new Anim_dmx_thru, PAR_PATCHSIZE / 4)->play();
+#endif
 
   // REMOTE
   remote->setMacroMax(NUMBER_OF_MEM); // TODO: clean MEM loading (and setMemMax)
 
-  // MEM NO WIFI
-  #if (LULU_TYPE >= 20 || LULU_TYPE == 2 || LULU_TYPE == 6)
-    // light->anim("artnet")->push(MEM_NO_WIFI, LULU_PATCHSIZE);
-    // light->anim("artnet")->mod(new K32_mod_sinus)->at(2)->period(8500)->phase(0)->mini(-255)->maxi(255); // modulo
+// MEM NO WIFI
+#if (LULU_TYPE >= 20 || LULU_TYPE == 2 || LULU_TYPE == 6)
+      // light->anim("artnet")->push(MEM_NO_WIFI, LULU_PATCHSIZE);
+      // light->anim("artnet")->mod(new K32_mod_sinus)->at(2)->period(8500)->phase(0)->mini(-255)->maxi(255); // modulo
 
-    // light->anim("artnet")->push( MEM_SK[20], LULU_PATCHSIZE); // baro auto circulation elp
-    // light->anim("artnet")->mod(new K32_mod_sinus)->at(7)->period(8500)->mini(0)->maxi(45);// baro auto circulation elp
-  #endif
+  // light->anim("artnet")->push( MEM_SK[20], LULU_PATCHSIZE); // baro auto circulation elp
+  // light->anim("artnet")->mod(new K32_mod_sinus)->at(7)->period(8500)->mini(0)->maxi(45);// baro auto circulation elp
+#endif
 
   /////////////////////////////////////////////// NETWORK //////////////////////////////////////
 
@@ -126,19 +124,19 @@ void setup()
 
     wifi->staticIP("2.0.0." + String(k32->system->id() + 100), "2.0.0.1", "255.0.0.0"); // WARNING: netmask !!
     wifi->connect("kxkm24", NULL);                                                      //KXKM
-    // wifi->connect("kxkm24lulu", NULL); //KXKM
-    // wifi->connect("mgr4g", NULL); //Maigre dev
-    // wifi->connect("interweb", "superspeed37"); //Maigre dev home
-    // wifi->connect("riri_new", "B2az41opbn6397"); //Riri dev home
-    // TODO: if wifi->connect ommited = crash on mqtt/artnet/osc
+// wifi->connect("kxkm24lulu", NULL); //KXKM
+// wifi->connect("mgr4g", NULL); //Maigre dev
+// wifi->connect("interweb", "superspeed37"); //Maigre dev home
+// wifi->connect("riri_new", "B2az41opbn6397"); //Riri dev home
+// TODO: if wifi->connect ommited = crash on mqtt/artnet/osc
 
-    ////////////////// ARTNET
-    #if LULU_TYPE == 60
-      FRAME_size = LYRE_PATCHSIZE + 9;      // 9: MEM R G B W PWM1 PWM2 PWM3 PWM4
-    #else
-      FRAME_size = LULU_PATCHSIZE;
-    #endif
-    
+////////////////// ARTNET
+#if LULU_TYPE == 60
+    FRAME_size = LYRE_PATCHSIZE + 9; // 9: MEM R G B W PWM1 PWM2 PWM3 PWM4
+#else
+    FRAME_size = LULU_PATCHSIZE;
+#endif
+
     artnet = new K32_artnet(k32, {.universe = LULU_uni,
                                   .address = LULU_adr,
                                   .framesize = FRAME_size,
@@ -147,71 +145,76 @@ void setup()
 
     // EVENT: full frame
     //
-    artnet->onFullDmx([](const uint8_t *data, int length) {
-      // Force Auto
-      if (length > 511 && data[511] > 250) // data 512 = end dmx trame
-      {
-        remote->setState(REMOTE_AUTO);
-        remote->lock();
-      }
-      // LOGF("ARTNET fullframe: %d \n", length);
-    });
-
+    artnet->onFullDmx([](const uint8_t *data, int length)
+                      {
+                        // Force Auto
+                        if (length > 511 && data[511] > 250) // data 512 = end dmx trame
+                        {
+                          remote->setState(REMOTE_AUTO);
+                          remote->lock();
+                        }
+                        // LOGF("ARTNET fullframe: %d \n", length);
+                      });
 
     // EVENT: new artnet frame received
     //
-    artnet->onDmx([](const uint8_t *data, int length) 
-    {
-      if (length <= 0) return;
-      
-      // LYRE + STRIP
-      #if LULU_TYPE == 60   
-        light->anim("dmxthru")->push(data, min(length, LYRE_PATCHSIZE) );  // DMX out
+    artnet->onDmx([](const uint8_t *data, int length)
+                  {
+                    if (length <= 0)
+                      return;
 
-        if (length >= LYRE_PATCHSIZE+9) {
-          const uint8_t *dataStrip = &data[LYRE_PATCHSIZE];         
+// LYRE + STRIP
+#if LULU_TYPE == 60
+                    light->anim("dmxthru")->push(data, min(length, LYRE_PATCHSIZE)); // DMX out
 
-          // MEM ou ARTNET FRAME
-          if (dataStrip[0] > 0 && dataStrip[0] <= NUMBER_OF_MEM) remote->stmSetMacro(dataStrip[0]-1);
-          else {
-            int stripframe[LULU_PATCHSIZE] =  {255, dataStrip[1], dataStrip[2], dataStrip[3], dataStrip[4], 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, dataStrip[5], dataStrip[6], dataStrip[7], dataStrip[8] };
-            light->anim("artnet")->push(stripframe, LULU_PATCHSIZE);
-            remote->setState(REMOTE_AUTO);
-          }
-        }
+                    if (length >= LYRE_PATCHSIZE + 9)
+                    {
+                      const uint8_t *dataStrip = &data[LYRE_PATCHSIZE];
 
-      #elif LULU_TYPE == 12
-        light->anim("dmxthru")->push(data, min(length, PAR_PATCHSIZE) );  // DMX out
+                      // MEM ou ARTNET FRAME
+                      if (dataStrip[0] > 0 && dataStrip[0] <= NUMBER_OF_MEM)
+                        remote->stmSetMacro(dataStrip[0] - 1);
+                      else
+                      {
+                        int stripframe[LULU_PATCHSIZE] = {255, dataStrip[1], dataStrip[2], dataStrip[3], dataStrip[4], 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, dataStrip[5], dataStrip[6], dataStrip[7], dataStrip[8]};
+                        light->anim("artnet")->push(stripframe, LULU_PATCHSIZE);
+                        remote->setState(REMOTE_AUTO);
+                      }
+                    }
 
-      // STRIP ONLY
-      #else
-        light->anim("artnet")->push(data, min(length, LULU_PATCHSIZE) );
-      #endif
-      
-      // LOGINL("ARTFRAME: ");
-      // LOGF("length=%d ", length);
-      // for (int k=0; k<length; k++) LOGF("%d ", data[k]);
-      // LOG();
-    });
+#elif LULU_TYPE == 12
+                    light->anim("dmxthru")->push(data, min(length, PAR_PATCHSIZE)); // DMX out
+
+// STRIP ONLY
+#else
+                    light->anim("artnet")->push(data, min(length, LULU_PATCHSIZE));
+#endif
+
+                    // LOGINL("ARTFRAME: ");
+                    // LOGF("length=%d ", length);
+                    // for (int k=0; k<length; k++) LOGF("%d ", data[k]);
+                    // LOG();
+                  });
 
     // EVENT: wifi lost
-    wifi->onDisconnect([&]() {
-      LOG("WIFI: connection lost..");
+    wifi->onDisconnect([&]()
+                       {
+                         LOG("WIFI: connection lost..");
 
 #if LULU_TYPE >= 20
-      light->anim("artnet")->push(MEM_NO_WIFI, LULU_PATCHSIZE);
+                        //  light->anim("artnet")->push(MEM_NO_WIFI, LULU_PATCHSIZE);
 #else
-      light->anim("artnet")->push(0); // @master 0
+                         light->anim("artnet")->push(0); // @master 0
 #endif
-    });
+                       });
 
     ////////////////// MQTT
     if (mqtt)
       mqtt->start({
           .broker = "2.0.0.1", // Komplex
-          // .broker = "2.0.0.10",     // Riri dev home
+          // .broker = "2.0.0.10", // Riri dev home
           // .broker = "192.168.43.132",  // MGR dev home
-          .beatInterval = 0,   // heartbeat interval milliseconds (0 = disable) 5000
+          .beatInterval = 0,  // heartbeat interval milliseconds (0 = disable) 5000
           .statusInterval = 0 // full beacon interval milliseconds (0 = disable) 15000
       });
 
@@ -228,40 +231,40 @@ void setup()
   ///////////////////// INFO //////////////////////////////////////
 
   // Monitoring refresh
-  k32->timer->every(REFRESH_INFO, []() {
-    if (stm32)
-      light->anim("battery")->push(stm32->battery());
+  k32->timer->every(REFRESH_INFO, []()
+                    {
+                      if (stm32)
+                        light->anim("battery")->push(stm32->battery());
 
-    static bool toggleRSSI = false;
-    toggleRSSI = !toggleRSSI;
+                      static bool toggleRSSI = false;
+                      toggleRSSI = !toggleRSSI;
 
-    // Wifi
-    if (wifi)
-    {
-      int rssi = wifi->getRSSI();
-      if (rssi < 0)
-        light->anim("rssi")->push(rssi);
-      else if (toggleRSSI)
-        light->anim("rssi")->push(-100);
-      else
-        light->anim("rssi")->push(0);
-    }
+                      // Wifi
+                      if (wifi)
+                      {
+                        int rssi = wifi->getRSSI();
+                        if (rssi < 0)
+                          light->anim("rssi")->push(rssi);
+                        else if (toggleRSSI)
+                          light->anim("rssi")->push(-100);
+                        else
+                          light->anim("rssi")->push(0);
+                      }
 
-    // Bluetooth
-    // TODO: enable BT
-    // if(bt)
-    // {
-    //   int rssi = bt->getRSSI();
-    //   if (rssi > 0)         light->anim("rssi")->push(rssi);
-    //   else if (toggleRSSI)  light->anim("rssi")->push(100);
-    //   else                  light->anim("rssi")->push(0);
-    // }
-  });
+                      // Bluetooth
+                      // TODO: enable BT
+                      // if(bt)
+                      // {
+                      //   int rssi = bt->getRSSI();
+                      //   if (rssi > 0)         light->anim("rssi")->push(rssi);
+                      //   else if (toggleRSSI)  light->anim("rssi")->push(100);
+                      //   else                  light->anim("rssi")->push(0);
+                      // }
+                    });
 
   // Remote status refresh
-  k32->timer->every(100, []() {
-    light->anim("remote")->push(remote->getState(), remote->isLocked());
-  });
+  k32->timer->every(100, []()
+                    { light->anim("remote")->push(remote->getState(), remote->isLocked()); });
 
   // Heap Memory log
   // k32->timer->every(1000, []() {
@@ -271,6 +274,8 @@ void setup()
   //   lastheap = heap;
   // });
 
+  // load_mem(light->anim("manu"), 4); //auto play
+  // light->anim("manu")->play();      //auto play
 } // setup
 
 ///////////////////////////////////////// LOOP /////////////////////////////////////////////////
