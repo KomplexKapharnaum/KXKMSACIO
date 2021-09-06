@@ -2,12 +2,12 @@
 
 #define LULU_VER 85
 #define LULU_TYPE 50
-// 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot" \
-                    // 10="power" 11="DMX_strobe" 12="DMX_Par_led"                                          \
-                    // 20="Cube_str" 21="Cube_par"  22="Cube_MiniKOLOR" 23="Cube_Elp"                       \
-                    // 30="Sucette_parled" 31="Sucette_Strobe" 32="Sucette_MiniKolor" 33="sucette_Elp"  34="Banc"     \
-                    // 40="New_Fluo" \
-                    // 50="strip to elp dmx"
+// 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot"
+// 10="power" 11="DMX_strobe" 12="DMX_Par_led"
+// 20="Cube_str" 21="Cube_par"  22="Cube_MiniKOLOR" 23="Cube_Elp"
+// 30="Sucette_parled" 31="Sucette_Strobe" 32="Sucette_MiniKolor" 33="sucette_Elp"  34="Banc"
+// 40="New_Fluo"
+// 50="strip to elp dmx"
 // 60="Lyre audio dmx + strip"
 
 /////////////////////////////////////////ID/////////////////////////////////////////
@@ -16,15 +16,15 @@
 // #define K32_SET_CHANNEL 15 // board channel mqtt
 // #define LULU_ID 1  // permet de calculer l'adresse DMX
 // #define LULU_UNI 4 // univers artnet
-//                        // defo LULU_UNI 0  => LULU-TYPE 6 & 7 & 8 & 10 & 20 & 34
-//                        // defo LULU_UNI 1  => LULU-TYPE 1 & 2 & 5 & 50
-//                        // defo LULU_UNI 2  => LULU-TYPE 9
-//                        // defo LULU_UNI 3  => LULU-TYPE 50
-//                        // defo LULU_UNI 4  => LULU-TYPE 11
-//                        // defo LULU_UNI 5  => LULU-TYPE 12 & 21 & 22
-//                        // defo LULU_UNI 6  => LULU-TYPE 4 & 30 & 31 & 32 & 33 & 40
-//                        // defo LULU_UNI 7  => LULU-TYPE 3 & 23
-//                        // defo LULU_UNI 16 => LULU-TYPE 60 (Lyres)
+//                    // defo LULU_UNI 0  => LULU-TYPE 6 & 7 & 8 & 10 & 20 & 34
+//                    // defo LULU_UNI 1  => LULU-TYPE 1 & 2 & 5 & 50
+//                    // defo LULU_UNI 2  => LULU-TYPE 9
+//                    // defo LULU_UNI 3  => LULU-TYPE 50
+//                    // defo LULU_UNI 4  => LULU-TYPE 11
+//                    // defo LULU_UNI 5  => LULU-TYPE 12 & 21 & 22
+//                    // defo LULU_UNI 6  => LULU-TYPE 4 & 30 & 31 & 32 & 33 & 40
+//                    // defo LULU_UNI 7  => LULU-TYPE 3 & 23
+//                    // defo LULU_UNI 16 => LULU-TYPE 60 (Lyres)
 
 /////////////////////////////////////////Adresse/////////////////////////////////////
 
@@ -108,11 +108,10 @@ void setup()
 
 // MEM NO WIFI
 #if (LULU_TYPE >= 20 || LULU_TYPE == 2 || LULU_TYPE == 6)
-      // light->anim("artnet")->push(MEM_NO_WIFI, LULU_PATCHSIZE);
+      // light->anim("artnet")->push(MEM_NO_WIFI, LULU_PATCHSIZE);// settings set
       // light->anim("artnet")->mod(new K32_mod_sinus)->at(2)->period(8500)->phase(0)->mini(-255)->maxi(255); // modulo
-
-  // light->anim("artnet")->push( MEM_SK[20], LULU_PATCHSIZE); // baro auto circulation elp
-  // light->anim("artnet")->mod(new K32_mod_sinus)->at(7)->period(8500)->mini(0)->maxi(45);// baro auto circulation elp
+      // light->anim("artnet")->push( MEM_SK[20], LULU_PATCHSIZE); // baro auto circulation elp
+      // light->anim("artnet")->mod(new K32_mod_sinus)->at(7)->period(8500)->mini(0)->maxi(45);// baro auto circulation elp
 #endif
 
   /////////////////////////////////////////////// NETWORK //////////////////////////////////////
@@ -153,7 +152,9 @@ void setup()
                           remote->setState(REMOTE_AUTO);
                           remote->lock();
                         }
-                        // LOGF("ARTNET fullframe: %d \n", length);
+#ifdef DEBUG_dmxframe
+                        LOGF("ARTNET fullframe: %d \n", length);
+#endif
                       });
 
     // EVENT: new artnet frame received
@@ -163,8 +164,17 @@ void setup()
                     if (length <= 0)
                       return;
 
+////////////////// DMXTHRU
+// STROBEDMX
+#if LULU_TYPE == 11
+                    light->anim("dmxthru")->push(data, min(length, STROBE_PATCHSIZE)); // DMX out
+
+// PARDMX
+#elif LULU_TYPE == 12
+                    light->anim("dmxthru")->push(data, min(length, PAR_PATCHSIZE)); // DMX out
+
 // LYRE + STRIP
-#if LULU_TYPE == 60
+#elif LULU_TYPE == 60
                     light->anim("dmxthru")->push(data, min(length, LYRE_PATCHSIZE)); // DMX out
 
                     if (length >= LYRE_PATCHSIZE + 9)
@@ -181,19 +191,19 @@ void setup()
                         remote->setState(REMOTE_AUTO);
                       }
                     }
-
-#elif LULU_TYPE == 12
-                    light->anim("dmxthru")->push(data, min(length, PAR_PATCHSIZE)); // DMX out
-
+                    
 // STRIP ONLY
 #else
                     light->anim("artnet")->push(data, min(length, LULU_PATCHSIZE));
 #endif
 
-                    // LOGINL("ARTFRAME: ");
-                    // LOGF("length=%d ", length);
-                    // for (int k=0; k<length; k++) LOGF("%d ", data[k]);
-                    // LOG();
+#ifdef DEBUG_dmxframe
+                    LOGINL("ARTFRAME: ");
+                    LOGF("length=%d ", length);
+                    for (int k = 0; k < length; k++)
+                      LOGF("%d ", data[k]);
+                    LOG();
+#endif
                   });
 
     // EVENT: wifi lost
@@ -202,7 +212,7 @@ void setup()
                          LOG("WIFI: connection lost..");
 
 #if LULU_TYPE >= 20
-                        //  light->anim("artnet")->push(MEM_NO_WIFI, LULU_PATCHSIZE);
+      //  light->anim("artnet")->push(MEM_NO_WIFI, LULU_PATCHSIZE);
 #else
                          light->anim("artnet")->push(0); // @master 0
 #endif
