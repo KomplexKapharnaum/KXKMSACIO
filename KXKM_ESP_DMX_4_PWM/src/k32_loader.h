@@ -46,6 +46,9 @@ K32_light* light = nullptr;
 #include<fixtures/K32_pardmx.h>
 K32_pardmx* pardmx = nullptr;
 
+#include<fixtures/K32_strobedmx.H>
+K32_strobedmx* strobedmx = nullptr;
+
 // CHECK MCP SWITCH to select Wifi or BT
 //
 bool wifiMode() {
@@ -94,7 +97,7 @@ void k32_setup() {
 
     // STROBEDMX
     #if LULU_TYPE == 11
-        pardmx = new K32_strobedmx(DMX_PIN[k32->system->hw()], LULU_adr);
+        strobedmx = new K32_strobedmx(DMX_PIN[k32->system->hw()], LULU_adr);
         light->addFixture( strobedmx );
 
     // PARDMX

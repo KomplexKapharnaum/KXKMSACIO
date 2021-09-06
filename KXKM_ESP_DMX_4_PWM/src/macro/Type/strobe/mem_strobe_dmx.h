@@ -3,6 +3,8 @@
 
 #define NUMBER_OF_MEM 16 // stm leave in last mem
 
+void init_mem() {}
+
 // 
 // MEM ANIMATOR DATA 
 //
