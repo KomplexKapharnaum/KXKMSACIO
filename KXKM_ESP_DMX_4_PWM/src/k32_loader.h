@@ -92,21 +92,24 @@ void k32_setup() {
             light->addFixture( strip[k] );
         }
 
+    // STROBEDMX
+    #if LULU_TYPE == 11
+        pardmx = new K32_strobedmx(DMX_PIN[k32->system->hw()], LULU_adr);
+        light->addFixture( strobedmx );
+
     // PARDMX
-    #if LULU_TYPE == 12
+    #elif LULU_TYPE == 12
         pardmx = new K32_pardmx(DMX_PIN[k32->system->hw()], LULU_adr);
         light->addFixture( pardmx );
-    #endif
     
     // ELP
-    #if LULU_TYPE == 50
+    #elif LULU_TYPE == 50
         elp = new K32_elp(DMX_PIN[k32->system->hw()], DMXOUT_addr, RUBAN_size);
         light->addFixture( elp ); // TODO: replace system->hw()
         light->copyFixture({strip[0], 0, RUBAN_size, elp, 0});
-    #endif
 
     // LYRE
-    #if LULU_TYPE == 60
+    #elif LULU_TYPE == 60
         lyreaudio = new K32_lyreaudio(DMX_PIN[k32->system->hw()], LULU_adr);
         light->addFixture( lyreaudio ); // TODO: replace system->hw()
     #endif
