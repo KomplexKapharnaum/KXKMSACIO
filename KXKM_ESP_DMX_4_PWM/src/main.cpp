@@ -1,6 +1,6 @@
 #include <Arduino.h>
 
-#define LULU_VER 85
+#define LULU_VER 86
 #define LULU_TYPE 50
 // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot"
 // 10="power" 11="DMX_strobe" 12="DMX_Par_led"
@@ -121,12 +121,13 @@ void setup()
   {
     wifi->setHostname(k32->system->name() + (nodeName != "") ? "-" + nodeName : "");
 
-    wifi->staticIP("2.0.0." + String(k32->system->id() + 100), "2.0.0.1", "255.0.0.0"); // WARNING: netmask !!
-    wifi->connect("kxkm24", NULL);                                                      //KXKM
-// wifi->connect("kxkm24lulu", NULL); //KXKM
-// wifi->connect("mgr4g", NULL); //Maigre dev
-// wifi->connect("interweb", "superspeed37"); //Maigre dev home
-// wifi->connect("riri_new", "B2az41opbn6397"); //Riri dev home
+    // wifi->staticIP("2.0.0." + String(k32->system->id() + 100), "2.0.0.1", "255.0.0.0"); // WARNING: netmask !!
+    wifi->staticIP("10.0.0." + String(k32->system->id() + 100), "10.0.0.1", "255.0.0.0");  // KXKM MESH
+    wifi->connect("kxkm24", NULL);                                                         //KXKM 24
+// wifi->connect("kxkm24lulu", NULL);                                                         //KXKM 24 lulu 
+// wifi->connect("mgr4g", NULL);                                                              //Maigre dev
+// wifi->connect("interweb", "superspeed37");                                                 //Maigre dev home
+// wifi->connect("riri_new", "B2az41opbn6397");                                               //Riri dev home
 // TODO: if wifi->connect ommited = crash on mqtt/artnet/osc
 
 ////////////////// ARTNET
@@ -221,7 +222,8 @@ void setup()
     ////////////////// MQTT
     if (mqtt)
       mqtt->start({
-          .broker = "2.0.0.1", // Komplex
+          // .broker = "2.0.0.1", // Komplex
+          .broker = "10.0.0.1", // KXKM MESH
           // .broker = "2.0.0.10", // Riri dev home
           // .broker = "192.168.43.132",  // MGR dev home
           .beatInterval = 0,  // heartbeat interval milliseconds (0 = disable) 5000
