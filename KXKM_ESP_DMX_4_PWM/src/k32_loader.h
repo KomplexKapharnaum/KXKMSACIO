@@ -31,6 +31,9 @@ K32_mqtt* mqtt = nullptr;
 #include <K32_artnet.h>
 K32_artnet* artnet = nullptr;
 
+#include <K32_light.h>
+K32_light* light = nullptr;
+
 #include <fixtures/K32_ledstrip.h>
 K32_ledstrip* strip[LED_N_STRIPS] = {nullptr};
 
@@ -40,13 +43,10 @@ K32_elp* elp = nullptr;
 #include <fixtures/K32_lyreaudio.h>
 K32_lyreaudio* lyreaudio = nullptr;
 
-#include <K32_light.h>
-K32_light* light = nullptr;
-
-#include<fixtures/K32_pardmx.h>
+#include <fixtures/K32_pardmx.h>
 K32_pardmx* pardmx = nullptr;
 
-#include<fixtures/K32_strobedmx.H>
+#include <fixtures/K32_strobedmx.h>
 K32_strobedmx* strobedmx = nullptr;
 
 // CHECK MCP SWITCH to select Wifi or BT
