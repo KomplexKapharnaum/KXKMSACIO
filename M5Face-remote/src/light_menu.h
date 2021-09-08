@@ -28,7 +28,7 @@ String MQTT_ID = "all";
 String MQTT_K32 = "k32/";
 
 uint8_t light_id_fonction = 1;
-String light_id_fonct = "ID";
+String light_id_fonct = "CH";
 String id_cal_light = "all";
 
 uint8_t red, green, blue, white, str, mod, mirror;
@@ -509,7 +509,7 @@ bool id_value()
     String res_value = "";
     String msg = "";
 
-    msg += " Enter N° ID & =";
+    msg += " Enter N° CH & =";
     msg += "|0 = all";
 
     ez.msgBox("M5 REMOTE LIGHT", msg, "## idmode|" + light_id_fonct + "### Back", false);

@@ -22,7 +22,7 @@ int8_t Volume = 80;
 String _Volu = String(Volume);
 
 uint8_t audio_id_fonction = 1;
-String audio_id_fonct = "ID";
+String audio_id_fonct = "CH";
 
 bool mqtt_loop = false;
 
@@ -67,7 +67,7 @@ bool id_value_audio()
     String res_value = "";
     String msg = "";
 
-    msg += " Enter N° ID & =";
+    msg += " Enter N° CH & =";
     msg += "|0 = all";
     ez.msgBox("M5 REMOTE AUDIO", msg, "## func|"+audio_id_fonct + "### Back", false);
     draw_loop();
