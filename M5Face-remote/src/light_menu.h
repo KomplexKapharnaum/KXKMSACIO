@@ -27,7 +27,7 @@ bool esc_light = true;
 String MQTT_ID = "all";
 String MQTT_K32 = "k32/";
 
-uint8_t light_id_fonction = 0;
+uint8_t light_id_fonction = 1;
 String light_id_fonct = "ID";
 String id_cal_light = "all";
 
