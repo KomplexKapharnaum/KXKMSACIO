@@ -22,7 +22,7 @@ uint8_t MEM_SK[NUMBER_OF_MEM][16] = {
     {  255,   0,   0, 255,   0,       0,         0,      127,        0,          0,       0,       0,       0,       0,           0,  255}, // 12 blue all
     {  255,   0,   0, 255,   0,      55,       170,       56,        0,          0,       0,       0,       0,       0,          35,  255}, // 13 blue parcielle
     {  255,   0,   0, 255,   0,       0,         1,      127,        5,          0,       0,       0,       0,       0,           0,  255}, // 14 respi blue **0**38 > 217 
-    {    0,   0,   0,   0,   0,       0,         0,        0,        0,          0,       0,       0,       0,       0,           0,    0}, // 15 BLACK stm leave lset mem
+    {  255,   0,   0,   0,   0,       0,         0,        0,        0,          0,       0,       0,       0,       0,           0,  255}, // 15 BLACK stm leave lset mem
 };
 //{master , r  , g  , b  , w  ,pix mod , pix long , pix_pos , str_mod , str_speed , r_fond , g_fond , b_fond , w_fond , mirror_mod , zoom }
 //{0      , 1  , 2  , 3  , 4  ,5       , 6        , 7       , 8       , 9         , 10     , 11     , 12     , 13     , 14         , 15   } adr + -1

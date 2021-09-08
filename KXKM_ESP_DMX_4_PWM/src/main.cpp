@@ -121,8 +121,8 @@ void setup()
   {
     wifi->setHostname(k32->system->name() + (nodeName != "") ? "-" + nodeName : "");
 
-    // wifi->staticIP("2.0.0." + String(k32->system->id() + 100), "2.0.0.1", "255.0.0.0"); // WARNING: netmask !!
-    wifi->staticIP("10.0.0." + String(k32->system->id() + 100), "10.0.0.1", "255.0.0.0");  // KXKM MESH
+    wifi->staticIP("2.0.0." + String(k32->system->id() + 100), "2.0.0.1", "255.0.0.0"); // WARNING: netmask !!
+    // wifi->staticIP("10.0.0." + String(k32->system->id() + 100), "10.0.0.1", "255.0.0.0");  // KXKM MESH
     wifi->connect("kxkm24", NULL);                                                         //KXKM 24
 // wifi->connect("kxkm24lulu", NULL);                                                         //KXKM 24 lulu 
 // wifi->connect("mgr4g", NULL);                                                              //Maigre dev
@@ -222,8 +222,8 @@ void setup()
     ////////////////// MQTT
     if (mqtt)
       mqtt->start({
-          // .broker = "2.0.0.1", // Komplex
-          .broker = "10.0.0.1", // KXKM MESH
+          .broker = "2.0.0.1", // Komplex
+          // .broker = "10.0.0.1", // KXKM MESH
           // .broker = "2.0.0.10", // Riri dev home
           // .broker = "192.168.43.132",  // MGR dev home
           .beatInterval = 0,  // heartbeat interval milliseconds (0 = disable) 5000
@@ -286,8 +286,8 @@ void setup()
   //   lastheap = heap;
   // });
 
-  // load_mem(light->anim("manu"), 4); //auto play
-  // light->anim("manu")->play();      //auto play
+  load_mem(light->anim("manu"), 15); //auto play 
+  light->anim("manu")->play();      //auto play
 } // setup
 
 ///////////////////////////////////////// LOOP /////////////////////////////////////////////////
@@ -295,8 +295,8 @@ void loop()
 {
 
   ///////////////////// BOUTONS ///////////////////////
-  boutons_loop();
+  // boutons_loop();
 
-  delay(20);
+  // delay(20);
 
 } //loop
