@@ -24,7 +24,7 @@ uint8_t MEM[NUMBER_OF_MEM][LULU_PATCHSIZE] = {
     {255, 255, 255, 255, 10, 170, 126, 82, 0},   // 12 color form
     {255, 0, 127, 255, 0, 126, 82, 0, 255},      // 13 blue parcielle
     {255, 0, 80, 200, 0, 82, 0, 255, 170},       // 14 respi blue **0**38 > 217
-    {0, 0, 0, 0, 0, 0, 0, 0, 0},                 // 15 BLACK stm leave lset mem
+    {255, 0, 0, 0, 0, 0, 0, 0, 0},               // 15 BLACK stm leave lset mem
 };
 //{master , r  , g  , b  , str , pwm1, pwm2, pwm3, pwm4}
 //{0      , 1  , 2  , 3  ,  4  ,  5  ,  6  ,  7  , 8   } adr + -1
