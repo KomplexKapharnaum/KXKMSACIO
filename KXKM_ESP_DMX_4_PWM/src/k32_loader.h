@@ -46,6 +46,9 @@ K32_lyreaudio* lyreaudio = nullptr;
 #include <fixtures/K32_pardmx.h>
 K32_pardmx* pardmx = nullptr;
 
+#include <fixtures/K32_node.h>
+K32_node* node = nullptr;
+
 #include <fixtures/K32_strobedmx.h>
 K32_strobedmx* strobedmx = nullptr;
 
@@ -104,6 +107,11 @@ void k32_setup() {
     #elif LULU_TYPE == 12
         pardmx = new K32_pardmx(DMX_PIN[k32->system->hw()], LULU_adr);
         light->addFixture( pardmx );
+
+        // NODE
+    #elif LULU_TYPE == 13
+        node = new K32_node(DMX_PIN[k32->system->hw()], LULU_adr);
+        light->addFixture( node );
     
     // ELP
     #elif LULU_TYPE == 50

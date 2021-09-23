@@ -1,9 +1,9 @@
 #include <Arduino.h>
 
-#define LULU_VER 86
-#define LULU_TYPE 50
+#define LULU_VER 88
+#define LULU_TYPE 13
 // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot"
-// 10="power" 11="DMX_strobe" 12="DMX_Par_led"
+// 10="power" 11="DMX_strobe" 12="DMX_Par_led" 13="NODE_dmx_thru"
 // 20="Cube_str" 21="Cube_par"  22="Cube_MiniKOLOR" 23="Cube_Elp"
 // 30="Sucette_parled" 31="Sucette_Strobe" 32="Sucette_MiniKolor" 33="sucette_Elp"  34="Banc"
 // 40="New_Fluo"
@@ -12,7 +12,7 @@
 
 /////////////////////////////////////////ID/////////////////////////////////////////
 
-// #define K32_SET_NODEID 68 // board unique id
+// #define K32_SET_NODEID 15 // board unique id
 // #define K32_SET_CHANNEL 15 // board channel mqtt
 // #define LULU_ID 1  // permet de calculer l'adresse DMX
 // #define LULU_UNI 4 // univers artnet
@@ -101,6 +101,9 @@ void setup()
 #elif LULU_TYPE == 12
   // ANIM dmx thru
   light->anim(pardmx, "dmxthru", new Anim_dmx_thru, PAR_PATCHSIZE / 4)->play();
+#elif LULU_TYPE == 13
+  // ANIM dmx thru
+  light->anim(node, "dmxthru", new Anim_dmx_thru, NODE_PATCHSIZE / 4)->play();
 #endif
 
   // REMOTE
@@ -158,12 +161,20 @@ void setup()
 #endif
                       });
 
-    // EVENT: new artnet frame received
-    //
+#if LULU_TYPE ==13
+    artnet->onFullDmx([](const uint8_t *data, int length)
+                  {
+                    if (length <= 0)
+                      return;
+#elif
+    EVENT: new artnet frame received
+    
     artnet->onDmx([](const uint8_t *data, int length)
                   {
                     if (length <= 0)
                       return;
+                      
+#endif
 
 ////////////////// DMXTHRU
 // STROBEDMX
@@ -173,6 +184,10 @@ void setup()
 // PARDMX
 #elif LULU_TYPE == 12
                     light->anim("dmxthru")->push(data, min(length, PAR_PATCHSIZE)); // DMX out
+
+// NODE
+#elif LULU_TYPE == 13
+                    node->setBuffer(data, length);
 
 // LYRE + STRIP
 #elif LULU_TYPE == 60

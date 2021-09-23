@@ -135,6 +135,13 @@
 #define OUT_PATCHSIZE 5                           // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
 #include "macro/Type/parled/mem_pwm_parled_dmx.h" // mem global
 
+#elif LULU_TYPE == 13
+#define L_NAME "NODE"
+#define RUBAN_SIZE 0
+#define DMXOUT_ADDR 1
+#define OUT_PATCHSIZE 508                           // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
+#include "macro/Type/node/node.h" // mem global
+
 #elif LULU_TYPE == 20
 #define RUBAN_SIZE 60
 #define L_NAME "Cube_str"
