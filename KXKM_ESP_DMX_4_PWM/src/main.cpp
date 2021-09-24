@@ -1,7 +1,7 @@
 #include <Arduino.h>
 
 #define LULU_VER 88
-#define LULU_TYPE 13
+#define LULU_TYPE 2
 // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot"
 // 10="power" 11="DMX_strobe" 12="DMX_Par_led" 13="NODE_dmx_thru"
 // 20="Cube_str" 21="Cube_par"  22="Cube_MiniKOLOR" 23="Cube_Elp"
@@ -12,10 +12,10 @@
 
 /////////////////////////////////////////ID/////////////////////////////////////////
 
-// #define K32_SET_NODEID 15 // board unique id
-// #define K32_SET_CHANNEL 15 // board channel mqtt
-// #define LULU_ID 1  // permet de calculer l'adresse DMX
-// #define LULU_UNI 4 // univers artnet
+#define K32_SET_NODEID 1 // board unique id
+#define K32_SET_CHANNEL 1 // board channel mqtt
+#define LULU_ID 1  // permet de calculer l'adresse DMX
+#define LULU_UNI 1 // univers artnet
 //                    // defo LULU_UNI 0  => LULU-TYPE 6 & 7 & 8 & 10 & 20 & 34
 //                    // defo LULU_UNI 1  => LULU-TYPE 1 & 2 & 5 & 50
 //                    // defo LULU_UNI 2  => LULU-TYPE 9
@@ -73,12 +73,14 @@ void setup()
 
   // CLONE STRIP
   //struct copyFixture({ srcFixture, srcStart, srcStop, destFixture, destPos};
-  // if (LULU_type == 9)
-  //   light->copyFixture({strip[0], 0, RUBAN_size, strip[1], 0}); // chariot clone
-  // else if (LULU_type == 40)
-  //   light->copyFixture({strip[0], 0, RUBAN_size, strip[1], 0}); // fluo clone
-  // else
-  //   light->copyFixture({strip[0], RUBAN_size, RUBAN_size + 18, strip[1], 0}); // jauge sortie 2
+  if (LULU_type == 9)
+    light->copyFixture({strip[0], 0, RUBAN_size, strip[1], 0}); // chariot clone
+  else if (LULU_type == 40)
+    light->copyFixture({strip[0], 0, RUBAN_size, strip[1], 0}); // fluo clone
+  else if (k32->system->hw() == 4)
+    light->copyFixture({strip[0], 0, RUBAN_size, strip[1], 0}); 
+  else
+    light->copyFixture({strip[0], RUBAN_size, RUBAN_size + 18, strip[1], 0}); // jauge sortie 2
 
   // TEST Sequence
   light_tests();
@@ -166,8 +168,8 @@ void setup()
                   {
                     if (length <= 0)
                       return;
-#elif
-    EVENT: new artnet frame received
+#else
+    // EVENT: new artnet frame received
     
     artnet->onDmx([](const uint8_t *data, int length)
                   {
@@ -309,9 +311,9 @@ void setup()
 void loop()
 {
 
-  ///////////////////// BOUTONS ///////////////////////
-  // boutons_loop();
+  /////////////////// BOUTONS ///////////////////////
+  boutons_loop();
 
-  // delay(20);
+  delay(20);
 
 } //loop

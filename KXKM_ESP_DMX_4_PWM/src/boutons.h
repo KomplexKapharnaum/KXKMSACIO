@@ -36,7 +36,7 @@ void boutons_init()
     remote->setState(REMOTE_AUTO);
     remote->lock();
 
-    if (k32->system->hw() == 3)
+    if (k32->system->hw() >= 3)
         pinMode(39, INPUT_PULLUP);
 }
 
@@ -46,7 +46,7 @@ void boutons_loop()
     if (stm32 && stm32->clicked()) remote->stmNext();
 
     //////////////////    Click on Atom    ////////////////////
-    if (k32->system->hw() == 3)
+    if (k32->system->hw() >= 3 )
     {
         int btn = digitalRead(39);
         if (didChange(W_ATOMBTN, btn) && btn == 0)
