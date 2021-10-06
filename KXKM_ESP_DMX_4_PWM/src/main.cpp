@@ -78,7 +78,7 @@ void setup()
   else if (LULU_type == 40)
     light->copyFixture({strip[0], 0, RUBAN_size, strip[1], 0}); // fluo clone
   else if (k32->system->hw() == 4)
-    light->copyFixture({strip[0], 0, RUBAN_size, strip[1], 0}); 
+    light->copyFixture({strip[0], 0, RUBAN_size, strip[1], 0}); // atom lite clone
   else
     light->copyFixture({strip[0], RUBAN_size, RUBAN_size + 18, strip[1], 0}); // jauge sortie 2
 
@@ -111,7 +111,7 @@ void setup()
   // REMOTE
   remote->setMacroMax(NUMBER_OF_MEM); // TODO: clean MEM loading (and setMemMax)
 
-// MEM NO WIFI
+// MEM ON BOOT
 #if (LULU_TYPE >= 20 || LULU_TYPE == 2 || LULU_TYPE == 6)
       // light->anim("artnet")->push(MEM_NO_WIFI, LULU_PATCHSIZE);// settings set
       // light->anim("artnet")->mod(new K32_mod_sinus)->at(2)->period(8500)->phase(0)->mini(-255)->maxi(255); // modulo
@@ -163,7 +163,7 @@ void setup()
 #endif
                       });
 
-#if LULU_TYPE ==13
+#if LULU_TYPE == 13
     artnet->onFullDmx([](const uint8_t *data, int length)
                   {
                     if (length <= 0)
@@ -189,7 +189,7 @@ void setup()
 
 // NODE
 #elif LULU_TYPE == 13
-                    node->setBuffer(data, length);
+                    node->setBuffer(data, length); // full frame DMX out
 
 // LYRE + STRIP
 #elif LULU_TYPE == 60
