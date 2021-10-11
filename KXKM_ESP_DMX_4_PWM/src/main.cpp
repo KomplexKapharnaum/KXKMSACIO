@@ -12,10 +12,10 @@
 
 /////////////////////////////////////////ID/////////////////////////////////////////
 
-#define K32_SET_NODEID 1 // board unique id
+#define K32_SET_NODEID 1  // board unique id
 #define K32_SET_CHANNEL 1 // board channel mqtt
-#define LULU_ID 1  // permet de calculer l'adresse DMX
-#define LULU_UNI 1 // univers artnet
+#define LULU_ID 1         // permet de calculer l'adresse DMX
+#define LULU_UNI 1        // univers artnet
 //                    // defo LULU_UNI 0  => LULU-TYPE 6 & 7 & 8 & 10 & 20 & 34
 //                    // defo LULU_UNI 1  => LULU-TYPE 1 & 2 & 5 & 50
 //                    // defo LULU_UNI 2  => LULU-TYPE 9
@@ -126,10 +126,13 @@ void setup()
   {
     wifi->setHostname(k32->system->name() + (nodeName != "") ? "-" + nodeName : "");
 
-    wifi->staticIP("2.0.0." + String(k32->system->id() + 100), "2.0.0.1", "255.0.0.0"); // WARNING: netmask !!
+    if (k32->system->hw() != 4)
+      wifi->staticIP("2.0.0." + String(k32->system->id() + 100), "2.0.0.1", "255.0.0.0"); // WARNING: netmask !!
+    if (k32->system->hw() == 4)
+      wifi->staticIP("2.0.1." + String(k32->system->id()), "2.0.0.1", "255.0.0.0"); // hw4
     // wifi->staticIP("10.0.0." + String(k32->system->id() + 100), "10.0.0.1", "255.0.0.0");  // KXKM MESH
-    wifi->connect("kxkm24", NULL);                                                         //KXKM 24
-// wifi->connect("kxkm24lulu", NULL);                                                         //KXKM 24 lulu 
+    wifi->connect("kxkm24", NULL); //KXKM 24
+// wifi->connect("kxkm24lulu", NULL);                                                         //KXKM 24 lulu
 // wifi->connect("mgr4g", NULL);                                                              //Maigre dev
 // wifi->connect("interweb", "superspeed37");                                                 //Maigre dev home
 // wifi->connect("riri_new", "B2az41opbn6397");                                               //Riri dev home
@@ -165,23 +168,23 @@ void setup()
 
 #if LULU_TYPE == 13
     artnet->onFullDmx([](const uint8_t *data, int length)
-                  {
-                    if (length <= 0)
-                      return;
+                      {
+                        if (length <= 0)
+                          return;
 #else
     // EVENT: new artnet frame received
-    
+
     artnet->onDmx([](const uint8_t *data, int length)
                   {
                     if (length <= 0)
                       return;
-                      
+
 #endif
 
 ////////////////// DMXTHRU
 // STROBEDMX
 #if LULU_TYPE == 11
-                    light->anim("dmxthru")->push(data, min(length, STROBE_PATCHSIZE)); // DMX out
+                        light->anim("dmxthru")->push(data, min(length, STROBE_PATCHSIZE)); // DMX out
 
 // PARDMX
 #elif LULU_TYPE == 12
@@ -189,40 +192,40 @@ void setup()
 
 // NODE
 #elif LULU_TYPE == 13
-                    node->setBuffer(data, length); // full frame DMX out
+    node->setBuffer(data, length); // full frame DMX out
 
 // LYRE + STRIP
 #elif LULU_TYPE == 60
-                    light->anim("dmxthru")->push(data, min(length, LYRE_PATCHSIZE)); // DMX out
+    light->anim("dmxthru")->push(data, min(length, LYRE_PATCHSIZE)); // DMX out
 
-                    if (length >= LYRE_PATCHSIZE + 9)
-                    {
-                      const uint8_t *dataStrip = &data[LYRE_PATCHSIZE];
+    if (length >= LYRE_PATCHSIZE + 9)
+    {
+      const uint8_t *dataStrip = &data[LYRE_PATCHSIZE];
 
-                      // MEM ou ARTNET FRAME
-                      if (dataStrip[0] > 0 && dataStrip[0] <= NUMBER_OF_MEM)
-                        remote->stmSetMacro(dataStrip[0] - 1);
-                      else
-                      {
-                        int stripframe[LULU_PATCHSIZE] = {255, dataStrip[1], dataStrip[2], dataStrip[3], dataStrip[4], 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, dataStrip[5], dataStrip[6], dataStrip[7], dataStrip[8]};
-                        light->anim("artnet")->push(stripframe, LULU_PATCHSIZE);
-                        remote->setState(REMOTE_AUTO);
-                      }
-                    }
-                    
+      // MEM ou ARTNET FRAME
+      if (dataStrip[0] > 0 && dataStrip[0] <= NUMBER_OF_MEM)
+        remote->stmSetMacro(dataStrip[0] - 1);
+      else
+      {
+        int stripframe[LULU_PATCHSIZE] = {255, dataStrip[1], dataStrip[2], dataStrip[3], dataStrip[4], 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, dataStrip[5], dataStrip[6], dataStrip[7], dataStrip[8]};
+        light->anim("artnet")->push(stripframe, LULU_PATCHSIZE);
+        remote->setState(REMOTE_AUTO);
+      }
+    }
+
 // STRIP ONLY
 #else
-                    light->anim("artnet")->push(data, min(length, LULU_PATCHSIZE));
+    light->anim("artnet")->push(data, min(length, LULU_PATCHSIZE));
 #endif
 
 #ifdef DEBUG_dmxframe
-                    LOGINL("ARTFRAME: ");
-                    LOGF("length=%d ", length);
-                    for (int k = 0; k < length; k++)
-                      LOGF("%d ", data[k]);
-                    LOG();
+                        LOGINL("ARTFRAME: ");
+                        LOGF("length=%d ", length);
+                        for (int k = 0; k < length; k++)
+                          LOGF("%d ", data[k]);
+                        LOG();
 #endif
-                  });
+                      });
 
     // EVENT: wifi lost
     wifi->onDisconnect([&]()
@@ -303,8 +306,8 @@ void setup()
   //   lastheap = heap;
   // });
 
-  load_mem(light->anim("manu"), 15); //auto play 
-  light->anim("manu")->play();      //auto play
+  load_mem(light->anim("manu"), 15); //auto play
+  light->anim("manu")->play();       //auto play
 } // setup
 
 ///////////////////////////////////////// LOOP /////////////////////////////////////////////////
