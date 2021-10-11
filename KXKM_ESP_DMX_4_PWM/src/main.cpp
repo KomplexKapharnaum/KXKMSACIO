@@ -262,7 +262,7 @@ void setup()
           .beatInterval = 5000,   // heartbeat interval milliseconds (0 = disable)
           .statusInterval = 15000 // full beacon interval milliseconds (0 = disable)
       });
-  }
+  } // if(wifi)
 
   ///////////////////// INFO //////////////////////////////////////
 
@@ -310,8 +310,8 @@ void setup()
   //   lastheap = heap;
   // });
 
-  load_mem(light->anim("manu"), 15); //auto play
-  light->anim("manu")->play();       //auto play
+  load_mem(light->anim("manu"), 1); //auto play
+  light->anim("manu")->play();      //auto play
 } // setup
 
 ///////////////////////////////////////// LOOP /////////////////////////////////////////////////
@@ -319,7 +319,12 @@ void loop()
 {
 
   /////////////////// BOUTONS ///////////////////////
-  boutons_loop();
+  // boutons_loop();
+  int pos = analogRead(33);        // potentiometre rochelle
+  pos = map(pos, 0, 4095, 0, 255); // mapage in
+  // LOGF("pos = %d ", pos);
+
+  light->anim("manu")->push(255, 255, 255, 255, 255, 55, 10, pos);
 
   delay(20);
 
