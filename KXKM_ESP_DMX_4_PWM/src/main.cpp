@@ -127,10 +127,14 @@ void setup()
     wifi->setHostname(k32->system->name() + (nodeName != "") ? "-" + nodeName : "");
 
     if (k32->system->hw() != 4)
+    {
       wifi->staticIP("2.0.0." + String(k32->system->id() + 100), "2.0.0.1", "255.0.0.0"); // WARNING: netmask !!
+      // wifi->staticIP("10.0.0." + String(k32->system->id() + 100), "10.0.0.1", "255.0.0.0");  // KXKM MESH
+    }
     if (k32->system->hw() == 4)
+    {
       wifi->staticIP("2.0.1." + String(k32->system->id()), "2.0.0.1", "255.0.0.0"); // hw4
-    // wifi->staticIP("10.0.0." + String(k32->system->id() + 100), "10.0.0.1", "255.0.0.0");  // KXKM MESH
+    }
     wifi->connect("kxkm24", NULL); //KXKM 24
 // wifi->connect("kxkm24lulu", NULL);                                                         //KXKM 24 lulu
 // wifi->connect("mgr4g", NULL);                                                              //Maigre dev
