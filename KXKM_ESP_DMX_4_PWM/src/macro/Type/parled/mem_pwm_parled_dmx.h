@@ -29,12 +29,12 @@ uint8_t MEM[NUMBER_OF_MEM][LULU_PATCHSIZE] = {
 //{master , r  , g  , b  , str , pwm1, pwm2, pwm3, pwm4}
 //{0      , 1  , 2  , 3  ,  4  ,  5  ,  6  ,  7  , 8   } adr + -1
 
-uint8_t MEM_NO_WIFI[LULU_PATCHSIZE] = {255, 0, 0, 0, 0, ON_NO_WIFI, ON_NO_WIFI, ON_NO_WIFI, ON_NO_WIFI};
+uint8_t MEM_NO_WIFI[LULU_PATCHSIZE] = {255, 0, 0, 0, 0, LULU_MEMNOWIFI_MASTER, LULU_MEMNOWIFI_MASTER, LULU_MEMNOWIFI_MASTER, LULU_MEMNOWIFI_MASTER};
 
 //
 // PREVIEW PIXEL MAP
 //
-uint8_t MEM_PREV[NUMBER_OF_MEM][LULU_PREVPIX * 4] = {
+uint8_t MEM_PREV[NUMBER_OF_MEM][LULU_PREV_SIZE * 4] = {
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, // 00 red
     {0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, // 01 Green
     {0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, // 02 Blue

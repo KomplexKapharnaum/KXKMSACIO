@@ -30,6 +30,6 @@ uint8_t MEM_PWM[NUMBER_OF_MEM][4] = {
 //{master , r  , g  , b  , str , pwm1, pwm2, pwm3, pwm4}
 //{0      , 1  , 2  , 3  ,  4  ,  16  ,  17  ,  18  , 19   } adr + -1
 
-uint8_t MEM_PWM_NO_WIFI[4] = {ON_NO_WIFI,  ON_NO_WIFI,  ON_NO_WIFI,  ON_NO_WIFI};
+uint8_t MEM_PWM_NO_WIFI[4] = {LULU_MEMNOWIFI_MASTER,  LULU_MEMNOWIFI_MASTER,  LULU_MEMNOWIFI_MASTER,  LULU_MEMNOWIFI_MASTER};
 
 #endif

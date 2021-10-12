@@ -74,7 +74,7 @@ void boutons_loop()
     {
         LOGF("REMOTE: -> set Preview Macro = %d\n", previewMacro);
 
-        light->anim("preview")->push(MEM_PREV[previewMacro], LULU_PREVPIX * 4);
+        light->anim("preview")->push(MEM_PREV[previewMacro], LULU_PREV_SIZE * 4);
     }
 
     // STATE Changed

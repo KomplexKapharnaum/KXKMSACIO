@@ -1,6 +1,6 @@
 #include <Arduino.h>
 
-#define LULU_VER 88
+#define LULU_VER 89
 #define LULU_TYPE 8
 // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot"
 // 10="power" 11="DMX_strobe" 12="DMX_Par_led" 13="NODE_dmx_thru"
@@ -9,13 +9,14 @@
 // 40="New_Fluo"
 // 50="strip to elp dmx"
 // 60="Lyre audio dmx + strip"
+// 70="Strobe" 71="4x Strobe"
 
 /////////////////////////////////////////ID/////////////////////////////////////////
 
 #define K32_SET_NODEID 337  // board unique id
-#define K32_SET_CHANNEL 1 // board channel mqtt
-#define LULU_ID 1         // permet de calculer l'adresse DMX
-#define LULU_UNI 1        // univers artnet
+#define K32_SET_CHANNEL 1   // board channel mqtt
+#define LULU_ID 1           // permet de calculer l'adresse DMX
+#define LULU_UNI 1          // univers artnet
 //                    // defo LULU_UNI 0  => LULU-TYPE 6 & 7 & 8 & 10 & 20 & 34
 //                    // defo LULU_UNI 1  => LULU-TYPE 1 & 2 & 5 & 50
 //                    // defo LULU_UNI 2  => LULU-TYPE 9
@@ -29,24 +30,15 @@
 /////////////////////////////////////////Adresse/////////////////////////////////////
 
 int LULU_id;
-int LULU_type;
 int LULU_uni;
 int LULU_adr;
 
 String nodeName;
 
-int RUBAN_type;
-int RUBAN_size;
-
-int FAKE_current;
-int DMXOUT_addr;
-
-int FRAME_size;
 
 /////////////////////////////////////////K32/////////////////////////////////////////
 
 #include "k32_loader.h"
-#include "settings.h"
 
 ///////////////////////////////////////////////// include ////////////////////////////////////////
 
@@ -60,42 +52,28 @@ int FRAME_size;
 ///////////////////////////////////////////////// SETUP ////////////////////////////////////////
 void setup()
 {
-
-  settings();
   k32_setup();
   boutons_init();
 
-  LOG("NAME:   " + nodeName + "\n");
-  LOGF("CHANNEL: %d\n", k32->system->channel());
+  LOG("\nNAME:   " + nodeName );
+  LOGF("CHANNEL: %d\n\n", k32->system->channel());
 
   /////////////////////////////////////////////// LIGHT //////////////////////////////////////
-  init_mem();
-
-  // CLONE STRIP
-  //struct copyFixture({ srcFixture, srcStart, srcStop, destFixture, destPos};
-  if (LULU_type == 9)
-    light->copyFixture({strip[0], 0, RUBAN_size, strip[1], 0}); // chariot clone
-  else if (LULU_type == 40)
-    light->copyFixture({strip[0], 0, RUBAN_size, strip[1], 0}); // fluo clone
-  else if (k32->system->hw() == 4)
-    light->copyFixture({strip[0], 0, RUBAN_size, strip[1], 0}); // atom lite clone
-  else
-    light->copyFixture({strip[0], RUBAN_size, RUBAN_size + 18, strip[1], 0}); // jauge sortie 2
 
   // TEST Sequence
   light_tests();
 
   // ANIM leds - artnet
-  light->anim(strip[0], "artnet", new Anim_dmx_strip, RUBAN_size)->play();
+  light->anim(strip[0], "artnet", new Anim_dmx_strip, LULU_STRIP_SIZE)->play();
 
   // ANIM leds - manuframe
-  light->anim(strip[0], "manu", new Anim_dmx_strip, RUBAN_size);
+  light->anim(strip[0], "manu", new Anim_dmx_strip, LULU_STRIP_SIZE);
 
   // ANIM leds - monitoring
-  light->anim(strip[0], "battery", new Anim_battery, 4, RUBAN_size + 1)->master(MASTER_PREV)->play();
-  light->anim(strip[0], "remote", new Anim_remote, LULU_PREVPIX + 4, RUBAN_size + 6)->master(MASTER_PREV)->play();
-  light->anim(strip[0], "preview", new Anim_preview, LULU_PREVPIX, RUBAN_size + 8)->master(MASTER_PREV)->play();
-  light->anim(strip[0], "rssi", new Anim_rssi, 1, RUBAN_size + 17)->master(MASTER_PREV * 1.5)->play();
+  light->anim(strip[0], "battery", new Anim_battery, 4, LULU_STRIP_SIZE + 1)->master(LULU_PREV_MASTER)->play();
+  light->anim(strip[0], "remote", new Anim_remote, LULU_PREV_SIZE + 4, LULU_STRIP_SIZE + 6)->master(LULU_PREV_MASTER)->play();
+  light->anim(strip[0], "preview", new Anim_preview, LULU_PREV_SIZE, LULU_STRIP_SIZE + 8)->master(LULU_PREV_MASTER)->play();
+  light->anim(strip[0], "rssi", new Anim_rssi, 1, LULU_STRIP_SIZE + 17)->master(LULU_PREV_MASTER * 1.5)->play();
 
 #if LULU_TYPE == 60
   // ANIM dmx thru
@@ -144,9 +122,9 @@ void setup()
 
 ////////////////// ARTNET
 #if LULU_TYPE == 60
-    FRAME_size = LYRE_PATCHSIZE + 9; // 9: MEM R G B W PWM1 PWM2 PWM3 PWM4
+    int FRAME_size = LYRE_PATCHSIZE + 9; // 9: MEM R G B W PWM1 PWM2 PWM3 PWM4
 #else
-    FRAME_size = LULU_PATCHSIZE;
+    int FRAME_size = LULU_PATCHSIZE;
 #endif
 
     artnet = new K32_artnet(k32, {.universe = LULU_uni,

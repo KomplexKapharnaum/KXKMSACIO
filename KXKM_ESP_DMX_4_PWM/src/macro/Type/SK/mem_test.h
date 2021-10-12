@@ -31,7 +31,7 @@ uint8_t MEM[NUMBER_OF_MEM][LULU_PATCHSIZE] = {
 // 
 // PREVIEW PIXEL MAP
 //
-uint8_t MEM_PREV[NUMBER_OF_MEM][LULU_PREVPIX*4] = {
+uint8_t MEM_PREV[NUMBER_OF_MEM][LULU_PREV_SIZE*4] = {
     {0, 0, 1, 0,  0, 0, 1, 0,  0, 0, 0, 1,  0, 0, 0, 1,  1, 0, 0, 0,  1, 0, 0, 0},    // 00 bleu blanc rouge
     {0, 0, 0, 1,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0},    // 01 white
     {1, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0},    // 02 Red
