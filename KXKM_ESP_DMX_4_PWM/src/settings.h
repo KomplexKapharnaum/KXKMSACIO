@@ -306,27 +306,21 @@ void settings()
 
   prefs.begin("k32-settings", false);
 
-// Save to EEPROM if DEFINE
-#ifdef LULU_ID
-  prefs.putUInt("LULU_id", LULU_ID);
-  LULU_id = LULU_ID;
-#else
-  LULU_id = prefs.getUInt("LULU_id", 1);
-#endif
-
-#if LULU_TYPE == 60
-  LULU_adr = (1 + (LULU_id - 1) * 32); // DMX Offset = 32
-#else
-  LULU_adr = (1 + (LULU_id - 1) * LULU_PATCHSIZE);
-#endif
+  int LULU_id;
+  #ifdef LULU_ID
+    prefs.putUInt("LULU_id", LULU_ID);
+    LULU_id = LULU_ID;
+  #else
+    LULU_id = prefs.getUInt("LULU_id", 1);
+  #endif
 
 
-#ifdef LULU_UNI
-  prefs.putUInt("LULU_uni", LULU_UNI);
-  LULU_uni = LULU_UNI;
-#else
-  LULU_uni = prefs.getUInt("LULU_uni", 0);
-#endif
+  #ifdef LULU_UNI
+    prefs.putUInt("LULU_uni", LULU_UNI);
+    LULU_uni = LULU_UNI;
+  #else
+    LULU_uni = prefs.getUInt("LULU_uni", 0);
+  #endif
 
 
   // NAME

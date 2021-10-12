@@ -114,17 +114,17 @@ void k32_setup() {
 
     // STROBEDMX
     #elif LULU_TYPE == 11
-        strobedmx = new K32_strobedmx(DMX_PIN[k32->system->hw()], LULU_adr);
+        strobedmx = new K32_strobedmx(DMX_PIN[k32->system->hw()], DMXOUT_ADDR);
         light->addFixture( strobedmx );
 
     // PARDMX
     #elif LULU_TYPE == 12
-        pardmx = new K32_pardmx(DMX_PIN[k32->system->hw()], LULU_adr);
+        pardmx = new K32_pardmx(DMX_PIN[k32->system->hw()], DMXOUT_ADDR);
         light->addFixture( pardmx );
 
     // NODE
     #elif LULU_TYPE == 13
-        node = new K32_node(DMX_PIN[k32->system->hw()], LULU_adr);
+        node = new K32_node(DMX_PIN[k32->system->hw()]);
         light->addFixture( node );
 
     // FLUO 
@@ -139,7 +139,8 @@ void k32_setup() {
 
     // LYRE
     #elif LULU_TYPE == 60
-        lyreaudio = new K32_lyreaudio(DMX_PIN[k32->system->hw()], LULU_adr);
+        int DMX_address = (1 + (LULU_id - 1) * 32);  // DMX Offset = 32  =>  Lyre 1 addr=1 / Lyre 2 addr=33 / ...
+        lyreaudio = new K32_lyreaudio(DMX_PIN[k32->system->hw()], DMX_address);
         light->addFixture( lyreaudio ); // TODO: replace system->hw()
 
     // OTHERS

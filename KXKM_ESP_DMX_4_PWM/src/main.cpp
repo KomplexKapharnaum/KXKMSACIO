@@ -29,9 +29,8 @@
 
 /////////////////////////////////////////Adresse/////////////////////////////////////
 
-int LULU_id;
+
 int LULU_uni;
-int LULU_adr;
 
 String nodeName;
 
@@ -126,9 +125,10 @@ void setup()
 #else
     int FRAME_size = LULU_PATCHSIZE;
 #endif
+    int ARTNET_address = (1 + (LULU_id - 1) * LULU_PATCHSIZE);
 
     artnet = new K32_artnet(k32, {.universe = LULU_uni,
-                                  .address = LULU_adr,
+                                  .address = ARTNET_address,
                                   .framesize = FRAME_size,
                                   .shortName = nodeName,
                                   .longName = nodeName});
