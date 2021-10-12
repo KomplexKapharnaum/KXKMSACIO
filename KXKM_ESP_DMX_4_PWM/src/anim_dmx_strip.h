@@ -61,12 +61,12 @@ Anim_dmx hérite de la classe K32_anim.
 
     - Une K32_anim est créée et attachée dans le programme principal en utilisant k32->light:
         
-        k32->light->anim( 0, "artnet", new Anim_dmx, RUBAN_size, 0);
+        k32->light->anim( 0, "artnet", new Anim_dmx, LULU_STRIP_SIZE, 0);
 
             0               = numéro de la sortie (strip) sur laquelle opère l'animation
             "artnet"        = alias de l'animation, permet de la rappeler par la suite en utilisant k32->light->anim("artnet")
             new Anim_dmx    = l'animation en question, new permet de créer une nouvelle instance à partir de classe Anim_dmx
-            RUBAN_size      = nombre de pixels utiles pour l'animation (optionnel -> defaut = full strip size)
+            LULU_STRIP_SIZE      = nombre de pixels utiles pour l'animation (optionnel -> defaut = full strip size)
             0               = décalage en pixel à partir du début du strip (optionnel -> defaut = 0)
 
 

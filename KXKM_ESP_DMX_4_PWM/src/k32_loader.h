@@ -3,6 +3,7 @@
 #include <K32.h> // https://github.com/KomplexKapharnaum/K32-lib
 K32* k32 = nullptr;
 
+
 #include <hardware/K32_stm32.h>
 K32_stm32* stm32 = nullptr;
 
@@ -52,6 +53,9 @@ K32_node* node = nullptr;
 #include <fixtures/K32_strobedmx.h>
 K32_strobedmx* strobedmx = nullptr;
 
+
+#include "settings.h"
+
 // CHECK MCP SWITCH to select Wifi or BT
 //
 bool wifiMode() {
@@ -66,6 +70,8 @@ bool wifiMode() {
 //
 void k32_setup() {
 
+    settings();
+
     //////////////////////////////////////// K32_lib ////////////////////////////////////
     k32 = new K32();
 
@@ -77,29 +83,37 @@ void k32_setup() {
 
     // MCP
     mcp = new K32_mcp(MCP_PIN[k32->system->hw()]);
-    // TODO : what happens if MCP is missing ?
 
     // POWER
     power = new K32_power(stm32, LIPO, true);
-    power->setMCPcalib(mcp);
-    //power->setExternalCurrentSensor(HO10_P_SP33, CURRENT_PIN[k32->system->hw()], 15000);  // TODO: test sensor
+    //power->setExternalCurrentSensor(HO10_P_SP33, CURRENT_PIN[k32->system->hw()], PWR_FAKE_CURRENT);  // TODO: test sensor
+    if(mcp->ok) power->setMCPcalib(mcp);
 
     // Remote
-    // TODO: pluginify remote
     remote = new K32_remote(k32, mcp);
 
     /////////////////////////////////////////////// LIGHT //////////////////////////////////////
 
     light = new K32_light(k32);
 
-    for(int k=0; k<LED_N_STRIPS; k++)
-        if(LEDS_PIN[k32->system->hw()][k] > 0) {  // TODO: allow -1 pin but disable output
-            strip[k] = new K32_ledstrip(k, LEDS_PIN[k32->system->hw()][k], (led_types)RUBAN_type, RUBAN_size + 30);
-            light->addFixture( strip[k] );
-        }
+    // LED STRIPS
+    for(int k=0; k<LED_N_STRIPS; k++) { 
+        strip[k] = new K32_ledstrip(k, LEDS_PIN[k32->system->hw()][k], (led_types)LULU_STRIP_TYPE, LULU_STRIP_SIZE + 30);
+        light->addFixture( strip[k] );
+    }
+
+    // PWM
+    for (int k = 0; k < PWM_N_CHAN; k++)
+        if (PWM_PIN[k32->system->hw()][k] > 0) // TODO: allow -1 pin but disable output
+            light->pwm->attach(PWM_PIN[k32->system->hw()][k]);  // TODO: convert PWM into DIMMER fixture
+    
+
+    // CHARIOT
+    #if LULU_TYPE == 9
+        light->copyFixture({strip[0], 0, LULU_STRIP_SIZE, strip[1], 0}); // Clone
 
     // STROBEDMX
-    #if LULU_TYPE == 11
+    #elif LULU_TYPE == 11
         strobedmx = new K32_strobedmx(DMX_PIN[k32->system->hw()], LULU_adr);
         light->addFixture( strobedmx );
 
@@ -108,28 +122,36 @@ void k32_setup() {
         pardmx = new K32_pardmx(DMX_PIN[k32->system->hw()], LULU_adr);
         light->addFixture( pardmx );
 
-        // NODE
+    // NODE
     #elif LULU_TYPE == 13
         node = new K32_node(DMX_PIN[k32->system->hw()], LULU_adr);
         light->addFixture( node );
+
+    // FLUO 
+    #elif LULU_TYPE == 40
+        light->copyFixture({strip[0], 0, LULU_STRIP_SIZE, strip[1], 0}); // Clone
     
     // ELP
     #elif LULU_TYPE == 50
-        elp = new K32_elp(DMX_PIN[k32->system->hw()], DMXOUT_addr, RUBAN_size);
+        elp = new K32_elp(DMX_PIN[k32->system->hw()], DMXOUT_ADDR, LULU_STRIP_SIZE);
         light->addFixture( elp ); // TODO: replace system->hw()
-        light->copyFixture({strip[0], 0, RUBAN_size, elp, 0});
+        light->copyFixture({strip[0], 0, LULU_STRIP_SIZE, elp, 0});
 
     // LYRE
     #elif LULU_TYPE == 60
         lyreaudio = new K32_lyreaudio(DMX_PIN[k32->system->hw()], LULU_adr);
         light->addFixture( lyreaudio ); // TODO: replace system->hw()
+
+    // OTHERS
+    #else
+        light->copyFixture({strip[0], LULU_STRIP_SIZE, LULU_STRIP_SIZE + 18, strip[1], 0}); // jauge sortie 2
+        
     #endif
 
-    // PWM
-    for (int k = 0; k < PWM_N_CHAN; k++)
-        if (PWM_PIN[k32->system->hw()][k] > 0) // TODO: allow -1 pin but disable output
-            light->pwm->attach(PWM_PIN[k32->system->hw()][k]);
 
+
+    // LOAD MACRO AND PRESETS
+    init_mem();
 
     /////////////////////////////////////////////// NETWORK //////////////////////////////////////
 
@@ -140,7 +162,7 @@ void k32_setup() {
         LOG("NETWORK: wifi");
         wifi = new K32_wifi(k32);
         mqtt = new K32_mqtt(k32, wifi, stm32);
-        // osc = new K32_osc(k32, wifi);
+        // osc = new K32_osc(k32, wifi);    // TODO: re-enable OSC
     }
     
     ////////////////// BLUETOOTH MODE

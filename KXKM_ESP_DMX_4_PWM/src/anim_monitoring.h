@@ -112,7 +112,7 @@ public:
         clear();
 
         // SET MASTER
-        master(MASTER_PREV);
+        master(LULU_PREV_MASTER);
 
 
         /////////////////////  GREEN   ///////////////////////
