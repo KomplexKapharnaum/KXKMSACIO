@@ -324,7 +324,7 @@ void loop()
   pos = map(pos, 0, 4095, 0, 255); // mapage in
   // LOGF("pos = %d ", pos);
 
-  light->anim("manu")->push(255, 255, 255, 255, 255, 55, 10, pos);
+  light->anim("manu")->push(255, 255, 255, 255, 255, 35, 255, pos);
 
   delay(20);
 
