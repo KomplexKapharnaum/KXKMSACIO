@@ -11,7 +11,7 @@ bool color_value();
 void draw_master();
 void send_master();
 void send_color();
-void draw_coloe();
+void draw_color();
 void send_str();
 void draw_str();
 void send_mod();
