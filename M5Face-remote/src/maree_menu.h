@@ -9,18 +9,17 @@ bool pixel_value();
 bool maree_id_value();
 bool haute_value();
 bool basse_value();
+bool temps_value();
 
 void draw_pixel();
 void draw_haute();
 void draw_basse();
-void draw_mod();
-void draw_mirror();
+void draw_temps();
 
 void send_pixel();
 void send_haute();
 void send_basse();
-void send_mod();
-void send_mirror();
+void send_temps();
 
 // bool _mod_coarse = false;
 // bool color_front_back = false;
@@ -40,12 +39,12 @@ uint16_t haute, basse, temps, pixel;
 // int16_t pix_pos = 127;
 // int16_t zoom = 255;
 
-int16_t Pixel = 255;
+int16_t Pixel;
 String _Pixel = String(Pixel);
 
 char MAREE_MQTT_TOPIC[] = "k32/all/leds/maree/tenless";
 String maree_mqtt_topic;
-String MAREE_MQTT_Pixel ="k32/all/leds/maree/pixel";
+String MAREE_MQTT_Pixel = "k32/all/leds/maree/pixel";
 String MAREE_MQTT_MEM = "/leds/mem";
 String MAREE_MQTT_STOP = "/leds/stop";
 String MAREE_MQTT_SLOWER = "/leds/modall/slower";
@@ -67,6 +66,17 @@ String maree_mqtt_frame = "/leds/frame";
 // String MAREE_MQTT_FULL = "/leds/master/full";
 
 ///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////DRAW ///////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+void draw()
+{
+    draw_pixel();
+    draw_haute();
+    draw_basse();
+    draw_temps();
+}
+
+///////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////DRAW PIXEL//////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
 void draw_pixel()
@@ -76,8 +86,43 @@ void draw_pixel()
     ez.setFont(ez.theme->menu_big_font);
     m5.lcd.setTextDatum(TR_DATUM);
     int16_t text_h = ez.fontHeight();
-        m5.lcd.drawString("Pixel", TFT_W - ez.theme->input_hmargin, 10 + ez.theme->input_vmargin + text_h + 10);
-    
+    m5.lcd.drawString("Pixel:" + String(Pixel), TFT_W - ez.theme->input_hmargin, 10 + ez.theme->input_vmargin + text_h + 10);
+}
+
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////DRAW HAUTE//////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+void draw_haute()
+{
+    m5.lcd.setTextColor(TFT_BLUE);
+    ez.setFont(ez.theme->menu_big_font);
+    m5.lcd.setTextDatum(TR_DATUM);
+    int16_t text_h = ez.fontHeight();
+    m5.lcd.drawString("haute:" + String(haute), 10, 10 + ez.theme->input_vmargin + text_h + 10);
+}
+
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////DRAW BASSE//////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+void draw_basse()
+{
+    m5.lcd.setTextColor(TFT_CYAN);
+    ez.setFont(ez.theme->menu_big_font);
+    m5.lcd.setTextDatum(TR_DATUM);
+    int16_t text_h = ez.fontHeight();
+    m5.lcd.drawString("basse:" + String(basse), 10, 10 + ez.theme->input_vmargin + text_h + 35);
+}
+
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////DRAW TEMPS//////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+void draw_temps()
+{
+    m5.lcd.setTextColor(TFT_ORANGE);
+    ez.setFont(ez.theme->menu_big_font);
+    m5.lcd.setTextDatum(TR_DATUM);
+    int16_t text_h = ez.fontHeight();
+    m5.lcd.drawString("temps:" + String(temps), TFT_W - ez.theme->input_hmargin, 10 + ez.theme->input_vmargin + text_h + 35);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -86,7 +131,14 @@ void draw_pixel()
 //{master , r  , g  , b  , w  ,pix mod , pix long , pix_pos , str_mod , str_speed , r_fond , g_fond , b_fond , w_fond , mirror_mod , zoom }
 void send_haute()
 {
-    
+}
+
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////SEND BASSE//////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+//{master , r  , g  , b  , w  ,pix mod , pix long , pix_pos , str_mod , str_speed , r_fond , g_fond , b_fond , w_fond , mirror_mod , zoom }
+void send_basse()
+{
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -101,18 +153,12 @@ void send_pixel()
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////DRAW Pixel/////////////////////////////////////
+///////////////////////////////////////SEND TEMPS//////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
-// void draw_pixel()
-// {
-//     m5.lcd.setTextColor(TFT_WHITE);
-//     ez.setFont(ez.theme->menu_big_font);
-//     m5.lcd.setTextDatum(TR_DATUM);
-//     int16_t text_h = ez.fontHeight();
-//     m5.lcd.drawString("Pixel:" + String(Pixel), 10, 10 + ez.theme->input_vmargin + text_h + 10);
-//         draw_pixel();
-  
-// }
+//{master , r  , g  , b  , w  ,pix mod , pix long , pix_pos , str_mod , str_speed , r_fond , g_fond , b_fond , w_fond , mirror_mod , zoom }
+void send_temps()
+{
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////HAUTE_VALUE//////////////////////////////////////////////
@@ -128,14 +174,15 @@ bool haute_value()
 
     msg += " Enter haute to pixel 0 -> 300 & =";
     ez.msgBox("M5 REMOTE MAREE", msg, "#####Back", false);
-    draw_haute();
+    draw();
 
     while (true)
     {
         // Check Buttons
         action = ez.buttons.poll();
 
-        if (action == "Back") return false;
+        if (action == "Back")
+            return false;
 
         res = atoi(res_value.c_str());
         // FACE
@@ -182,7 +229,7 @@ bool haute_value()
                         msg = "";
                         msg += " Enter haute to pixel 0 -> 300 & =";
                         ez.msgBox("M5 REMOTE MAREE", msg, "#####Back", false);
-                        draw_haute();
+                        draw();
                     }
                     break;
                 case '-':
@@ -198,7 +245,7 @@ bool haute_value()
                     msg = "";
                     msg += " Enter haute to pixel 0 -> 300 & =";
                     ez.msgBox("M5 REMOTE MAREE", msg, "#####Back", false);
-                    draw_haute();
+                    draw();
 
                     break;
                 case 'M':
@@ -211,7 +258,7 @@ bool haute_value()
                 LOG(value);
                 if (bad != true)
                     ez.msgBox("M5 REMOTE MAREE", res_value, "#####Back", false);
-                draw_haute();
+                draw();
             }
         }
     }
@@ -231,14 +278,15 @@ bool basse_value()
 
     msg += " Enter basse to pixel 0 -> 300 & =";
     ez.msgBox("M5 REMOTE MAREE", msg, "#####Back", false);
-    draw_basse();
+    draw();
 
     while (true)
     {
         // Check Buttons
         action = ez.buttons.poll();
 
-        if (action == "Back") return false;
+        if (action == "Back")
+            return false;
 
         res = atoi(res_value.c_str());
         // FACE
@@ -285,7 +333,7 @@ bool basse_value()
                         msg = "";
                         msg += " Enter basse to pixel 0 -> 300 & =";
                         ez.msgBox("M5 REMOTE MAREE", msg, "#####Back", false);
-                        draw_basse();
+                        draw();
                     }
                     break;
                 case '-':
@@ -301,7 +349,7 @@ bool basse_value()
                     msg = "";
                     msg += " Enter basse to pixel 0 -> 300 & =";
                     ez.msgBox("M5 REMOTE MAREE", msg, "#####Back", false);
-                    draw_basse();
+                    draw();
 
                     break;
                 case 'M':
@@ -314,160 +362,16 @@ bool basse_value()
                 LOG(value);
                 if (bad != true)
                     ez.msgBox("M5 REMOTE MAREE", res_value, "#####Back", false);
-                draw_basse();
+                draw();
             }
         }
     }
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////MAREE_ID_VALUE////////////////////////////////////
+//////////////////////////////TEMPS_VALUE//////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
-
-bool maree_id_value()
-{
-    bool bad = false;
-    String action = "";
-    String res_value = "";
-    String msg = "";
-
-    msg += " Enter N° CH & =";
-    msg += "|0 = all";
-
-    ez.msgBox("M5 REMOTE MAREE", msg, "## idmode|" + maree_id_fonct + "### Back", false);
-    draw_pixel();
-
-    while (true)
-    {
-        // Check Buttons
-        action = ez.buttons.poll();
-
-        // BTN A/B/C
-        if (action == "Back") return false;
-
-        if (action == "idmode")
-        {
-            maree_id_fonction += 1;
-            if (maree_id_fonction >= 2)
-            {
-                maree_id_fonction = 0;
-            }
-            if (maree_id_fonction == 0)
-            {
-                maree_id_fonct = "ID";
-                msg = "";
-                msg += " Enter N° ID & =";
-                msg += "|0 = all";
-                ez.msgBox("M5 REMOTE MAREE", msg, "## idmode|"+maree_id_fonct + "### Back", false);
-                draw_pixel();
-            }
-            else if (maree_id_fonction == 1)
-            {
-                maree_id_fonct = "CH";
-                msg = "";
-                msg += " Enter N° CH & =";
-                msg += "|0 = all";
-                ez.msgBox("M5 REMOTE MAREE", msg, "## idmode|"+maree_id_fonct + "### Back", false);
-                draw_pixel();
-            }
-        };
-        // FACE
-        //
-        if (digitalRead(KEYBOARD_INT) == LOW)
-        {
-            Wire.requestFrom(KEYBOARD_I2C_ADDR, 1); // request 1 byte from keyboard
-            while (Wire.available())
-            {
-                uint8_t key_val = Wire.read(); // receive a byte as character
-                String value((char)key_val);
-
-                switch ((char)key_val)
-                {
-                case '0':
-                case '1':
-                case '2':
-                case '3':
-                case '4':
-                case '5':
-                case '6':
-                case '7':
-                case '8':
-                case '9':
-                    bad = false;
-                    res_value += value;
-                    break;
-
-                case '.':
-                    break;
-                case '=':
-                    if (res_value == "") res_value = "0";
-                    
-                    if (res_value == "0") 
-                    {   
-                        MAREE_MQTT_ID = "all";
-                        id_cal_maree = "all";
-                    }
-                    else if (maree_id_fonction == 0)
-                    {
-                        MAREE_MQTT_ID = String('e') + String(res_value);
-                        id_cal_maree = "id"+res_value;
-                    }
-                    else if (maree_id_fonction == 1)
-                    {
-                        MAREE_MQTT_ID = String('c') + String(res_value);
-                        id_cal_maree = "ch"+res_value;
-                    }
-                    return true;
-                    break;
-                case '-':
-
-                    break;
-                case '+':
-
-                    break;
-
-                case 'A':
-                    res_value = "";
-                    if (maree_id_fonction == 0)
-                    {
-                        maree_id_fonct = "ID";
-                        msg = "";
-                        msg += " Enter N° ID & =";
-                        msg += "|0 = all";
-                    }
-                    else if (maree_id_fonction == 1)
-                    {
-                        maree_id_fonct = "CH";
-                        msg = "";
-                        msg += " Enter N° CH & =";
-                        msg += "|0 = all";
-                    }
-
-                    ez.msgBox("M5 REMOTE MAREE", msg, "## idmode|" + maree_id_fonct + "### Back", false);
-                    draw_pixel();
-                    bad = true;
-
-                    break;
-                case 'M':
-
-                    break;
-                case '%':
-
-                    break;
-                }
-                if (bad != true) {
-                    ez.msgBox("M5 REMOTE MAREE", res_value, "## idmode|" + maree_id_fonct + "### Back", false);
-                    draw_pixel();
-                }
-            }
-        }
-    }
-}
-
-///////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////pixel_value/////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////
-bool pixel_value()
+bool temps_value()
 {
     bool bad = false;
     String action = "";
@@ -476,16 +380,17 @@ bool pixel_value()
     int res;
     esc_maree = true;
 
-    msg += " Enter value to Pixel 0 -> 255 & =";
+    msg += " Enter temps en Secondes & =";
     ez.msgBox("M5 REMOTE MAREE", msg, "#####Back", false);
-    draw_pixel();
+    draw();
 
     while (true)
     {
         // Check Buttons
         action = ez.buttons.poll();
 
-        if (action == "Back") return false;
+        if (action == "Back")
+            return false;
 
         res = atoi(res_value.c_str());
         // FACE
@@ -519,10 +424,10 @@ bool pixel_value()
                     break;
                 case '=':
 
-                    if (res < 256)
+                    if (res < 32768)
                     {
-                        Pixel = res_value.toInt();
-                        send_pixel();
+                        temps = res_value.toInt();
+                        send_temps();
                         return true;
                     }
                     else
@@ -530,9 +435,9 @@ bool pixel_value()
                         bad = true;
                         res_value = "";
                         msg = "";
-                        msg += " Enter value to Pixel 0 -> 255 & =";
+                        msg += " Enter temps en Secondes & =";
                         ez.msgBox("M5 REMOTE MAREE", msg, "#####Back", false);
-                        draw_pixel();
+                        draw();
                     }
                     break;
                 case '-':
@@ -546,9 +451,9 @@ bool pixel_value()
                     bad = true;
                     res_value = "";
                     msg = "";
-                    msg += " Enter value to Pixel 0 -> 255 & =";
+                    msg += " Enter temps en Secondes & =";
                     ez.msgBox("M5 REMOTE MAREE", msg, "#####Back", false);
-                    draw_pixel();
+                    draw();
 
                     break;
                 case 'M':
@@ -561,14 +466,265 @@ bool pixel_value()
                 LOG(value);
                 if (bad != true)
                     ez.msgBox("M5 REMOTE MAREE", res_value, "#####Back", false);
-                draw_pixel();
+                draw();
             }
         }
     }
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////REMOTE_LULU//////////////////////////////////////////////////
+/////////////////////////////////////MAREE_ID_VALUE////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+
+bool maree_id_value()
+{
+    bool bad = false;
+    String action = "";
+    String res_value = "";
+    String msg = "";
+
+    msg += " Enter N° CH & =";
+    msg += "|0 = all";
+
+    ez.msgBox("M5 REMOTE MAREE", msg, "## idmode|" + maree_id_fonct + "### Back", false);
+    draw();
+
+    while (true)
+    {
+        // Check Buttons
+        action = ez.buttons.poll();
+
+        // BTN A/B/C
+        if (action == "Back")
+            return false;
+
+        if (action == "idmode")
+        {
+            maree_id_fonction += 1;
+            if (maree_id_fonction >= 2)
+            {
+                maree_id_fonction = 0;
+            }
+            if (maree_id_fonction == 0)
+            {
+                maree_id_fonct = "ID";
+                msg = "";
+                msg += " Enter N° ID & =";
+                msg += "|0 = all";
+                ez.msgBox("M5 REMOTE MAREE", msg, "## idmode|" + maree_id_fonct + "### Back", false);
+                draw;
+            }
+            else if (maree_id_fonction == 1)
+            {
+                maree_id_fonct = "CH";
+                msg = "";
+                msg += " Enter N° CH & =";
+                msg += "|0 = all";
+                ez.msgBox("M5 REMOTE MAREE", msg, "## idmode|" + maree_id_fonct + "### Back", false);
+                draw;
+            }
+        };
+        // FACE
+        //
+        if (digitalRead(KEYBOARD_INT) == LOW)
+        {
+            Wire.requestFrom(KEYBOARD_I2C_ADDR, 1); // request 1 byte from keyboard
+            while (Wire.available())
+            {
+                uint8_t key_val = Wire.read(); // receive a byte as character
+                String value((char)key_val);
+
+                switch ((char)key_val)
+                {
+                case '0':
+                case '1':
+                case '2':
+                case '3':
+                case '4':
+                case '5':
+                case '6':
+                case '7':
+                case '8':
+                case '9':
+                    bad = false;
+                    res_value += value;
+                    break;
+
+                case '.':
+                    break;
+                case '=':
+                    if (res_value == "")
+                        res_value = "0";
+
+                    if (res_value == "0")
+                    {
+                        MAREE_MQTT_ID = "all";
+                        id_cal_maree = "all";
+                    }
+                    else if (maree_id_fonction == 0)
+                    {
+                        MAREE_MQTT_ID = String('e') + String(res_value);
+                        id_cal_maree = "id" + res_value;
+                    }
+                    else if (maree_id_fonction == 1)
+                    {
+                        MAREE_MQTT_ID = String('c') + String(res_value);
+                        id_cal_maree = "ch" + res_value;
+                    }
+                    return true;
+                    break;
+                case '-':
+
+                    break;
+                case '+':
+
+                    break;
+
+                case 'A':
+                    res_value = "";
+                    if (maree_id_fonction == 0)
+                    {
+                        maree_id_fonct = "ID";
+                        msg = "";
+                        msg += " Enter N° ID & =";
+                        msg += "|0 = all";
+                    }
+                    else if (maree_id_fonction == 1)
+                    {
+                        maree_id_fonct = "CH";
+                        msg = "";
+                        msg += " Enter N° CH & =";
+                        msg += "|0 = all";
+                    }
+
+                    ez.msgBox("M5 REMOTE MAREE", msg, "## idmode|" + maree_id_fonct + "### Back", false);
+                    draw;
+                    bad = true;
+
+                    break;
+                case 'M':
+
+                    break;
+                case '%':
+
+                    break;
+                }
+                if (bad != true)
+                {
+                    ez.msgBox("M5 REMOTE MAREE", res_value, "## idmode|" + maree_id_fonct + "### Back", false);
+                    draw;
+                }
+            }
+        }
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////pixel_value/////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+bool pixel_value()
+{
+    bool bad = false;
+    String action = "";
+    String res_value = "";
+    String msg = "";
+    int res;
+    esc_maree = true;
+
+    msg += " Enter value to Pixel 0 -> 300 & =";
+    ez.msgBox("M5 REMOTE MAREE", msg, "#####Back", false);
+    draw();
+
+    while (true)
+    {
+        // Check Buttons
+        action = ez.buttons.poll();
+
+        if (action == "Back")
+            return false;
+
+        res = atoi(res_value.c_str());
+        // FACE
+        //
+        if (digitalRead(KEYBOARD_INT) == LOW)
+        {
+            Wire.requestFrom(KEYBOARD_I2C_ADDR, 1); // request 1 byte from keyboard
+            while (Wire.available())
+            {
+                uint8_t key_val = Wire.read(); // receive a byte as character
+                String value((char)key_val);
+
+                switch ((char)key_val)
+                {
+                case '0':
+                case '1':
+                case '2':
+                case '3':
+                case '4':
+                case '5':
+                case '6':
+                case '7':
+                case '8':
+                case '9':
+                    if (bad == true)
+                        bad = false;
+                    res_value += value;
+                    break;
+
+                case '.':
+                    break;
+                case '=':
+
+                    if (res < 301)
+                    {
+                        Pixel = res_value.toInt();
+                        send_pixel();
+                        return true;
+                    }
+                    else
+                    {
+                        bad = true;
+                        res_value = "";
+                        msg = "";
+                        msg += " Enter value to Pixel 0 -> 300 & =";
+                        ez.msgBox("M5 REMOTE MAREE", msg, "#####Back", false);
+                        draw();
+                    }
+                    break;
+                case '-':
+
+                    break;
+                case '+':
+
+                    break;
+
+                case 'A':
+                    bad = true;
+                    res_value = "";
+                    msg = "";
+                    msg += " Enter value to Pixel 0 -> 300 & =";
+                    ez.msgBox("M5 REMOTE MAREE", msg, "#####Back", false);
+                    draw();
+
+                    break;
+                case 'M':
+
+                    break;
+                case '%':
+
+                    break;
+                }
+                LOG(value);
+                if (bad != true)
+                    ez.msgBox("M5 REMOTE MAREE", res_value, "#####Back", false);
+                draw();
+            }
+        }
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////REMOTE_MAREE/////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
 void remote_maree()
 {
@@ -582,24 +738,25 @@ void remote_maree()
     uint8_t page_mem = 0;
     String page_me = "0-9";
 
-    ez.msgBox("M5 REMOTE MAREE", "Welcome", "id|"+id_cal_maree + "# Menu # func|"+fonct + " # # page|"+ page_me + "#", false);
-    draw_pixel();
-    
+    ez.msgBox("M5 REMOTE MAREE", "Welcome", "id|" + id_cal_maree + "# Menu # func|" + fonct + " # # page|" + page_me + "#", false);
+    draw();
+
     while (true)
     {
         // Check Buttons
-        action = ez.buttons.poll();        
+        action = ez.buttons.poll();
 
         // Back
-        if (action == "Menu") break;
+        if (action == "Menu")
+            break;
 
         // ID select
         if (action == "id")
         {
             maree_id_value();
 
-            ez.msgBox("M5 REMOTE MAREE", id_cal_maree, "id|"+id_cal_maree + "# Menu # func|"+fonct + " # # page|"+ page_me + "#", false);
-            draw_pixel();
+            ez.msgBox("M5 REMOTE MAREE", id_cal_maree, "id|" + id_cal_maree + "# Menu # func|" + fonct + " # # page|" + page_me + "#", false);
+            draw();
         };
 
         if (action == "func")
@@ -634,8 +791,8 @@ void remote_maree()
                 fonct = "Mirror";
             }
 
-            ez.msgBox("M5 REMOTE MAREE", fonct, "id|"+id_cal_maree + "# Menu # func|"+fonct + " # # page|"+ page_me + "#", false);
-            draw_pixel();
+            ez.msgBox("M5 REMOTE MAREE", fonct, "id|" + id_cal_maree + "# Menu # func|" + fonct + " # # page|" + page_me + "#", false);
+            draw();
         };
 
         if (action == "page")
@@ -657,9 +814,9 @@ void remote_maree()
             {
                 page_me = "20-29";
             }
-            
-            ez.msgBox("M5 REMOTE MAREE", page_me, "id|"+id_cal_maree + "# Menu # func|"+fonct + " # # page|"+ page_me + "#", false);
-            draw_pixel();
+
+            ez.msgBox("M5 REMOTE MAREE", page_me, "id|" + id_cal_maree + "# Menu # func|" + fonct + " # # page|" + page_me + "#", false);
+            draw();
         };
 
         // FACE
@@ -684,75 +841,76 @@ void remote_maree()
                 case '7':
                 case '8':
                 case '9':
-                        maree_mqtt_topic = String(MAREE_MQTT_K32) + String(MAREE_MQTT_ID) + String(MAREE_MQTT_MEM);
-                        maree_mqtt_topic.toCharArray(MAREE_MQTT_TOPIC, maree_mqtt_topic.length() + 1);
-                        k32->mqtt->publish(MAREE_MQTT_TOPIC, (page_mem + msg).c_str(), 1);
-                        msg += " " + maree_mqtt_topic + (page_mem + msg);
+                    maree_mqtt_topic = String(MAREE_MQTT_K32) + String(MAREE_MQTT_ID) + String(MAREE_MQTT_MEM);
+                    maree_mqtt_topic.toCharArray(MAREE_MQTT_TOPIC, maree_mqtt_topic.length() + 1);
+                    k32->mqtt->publish(MAREE_MQTT_TOPIC, (page_mem + msg).c_str(), 1);
+                    msg += " " + maree_mqtt_topic + (page_mem + msg);
 
-                        send_pixel();
+                    send_pixel();
 
                     break;
 
                 case '.':
-                    
+                    temps_value();
+
                     break;
                 case '=':
-                        pixel_value();
-                        msg = "pixel " + _Pixel + " SEND";
+                    pixel_value();
+                    msg = "pixel " + _Pixel + " SEND";
                     break;
                 case '-':
-                        Pixel -= 1;
-                        if (Pixel < 0)
-                        {
-                            Pixel = 0;
-                        }
-                        send_pixel();
-                        msg += "|" + maree_mqtt_topic + "|" + _Pixel.c_str();
+                    Pixel -= 1;
+                    if (Pixel < 0)
+                    {
+                        Pixel = 0;
+                    }
+                    send_pixel();
+                    msg += "|" + maree_mqtt_topic + "|" + _Pixel.c_str();
                     break;
                 case '+':
-                        Pixel += 1;
-                        if (Pixel > 300)
-                        {
-                            Pixel = 300;
-                        }
-                        send_pixel();
-                        msg += "|" + maree_mqtt_topic + "|" + _Pixel.c_str();
+                    Pixel += 1;
+                    if (Pixel > 300)
+                    {
+                        Pixel = 300;
+                    }
+                    send_pixel();
+                    msg += "|" + maree_mqtt_topic + "|" + _Pixel.c_str();
                     break;
 
                 case 'A':
-                        
+
                     break;
                 case 'M':
-                    
+
                     break;
                 case '%':
-                    
+                    haute_value();
                     break;
                 case '/':
-                        Pixel -= 10;
-                        if (Pixel < 0)
-                        {
-                            Pixel = 0;
-                        }
-                        send_pixel();
-                        msg += "|" + maree_mqtt_topic + "|" + _Pixel.c_str();
+                    Pixel -= 10;
+                    if (Pixel < 0)
+                    {
+                        Pixel = 0;
+                    }
+                    send_pixel();
+                    msg += "|" + maree_mqtt_topic + "|" + _Pixel.c_str();
                     break;
                 case '*':
-                        Pixel += 10;
-                        if (Pixel > 300)
-                        {
-                            Pixel = 300;
-                        }
-                        send_pixel();
-                        msg += "|" + maree_mqtt_topic + "|" + _Pixel.c_str();
+                    Pixel += 10;
+                    if (Pixel > 300)
+                    {
+                        Pixel = 300;
+                    }
+                    send_pixel();
+                    msg += "|" + maree_mqtt_topic + "|" + _Pixel.c_str();
                     break;
                 case '`':
-                    
+                    basse_value();
                     break;
                 }
                 LOG(msg);
-                ez.msgBox("M5 REMOTE MAREE", msg, "id|"+id_cal_maree + "# Menu # func|"+fonct + " # # page|"+ page_me + "#", false);
-                draw_pixel();
+                ez.msgBox("M5 REMOTE MAREE", msg, "id|" + id_cal_maree + "# Menu # func|" + fonct + " # # page|" + page_me + "#", false);
+                draw();
             }
         }
     }
