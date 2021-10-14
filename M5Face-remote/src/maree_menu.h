@@ -33,37 +33,28 @@ uint8_t maree_id_fonction = 1;
 String maree_id_fonct = "CH";
 String id_cal_maree = "all";
 
-uint16_t haute, basse, temps, pixel;
-// int16_t str_speed = 127;
-// int16_t pix_long = 127;
-// int16_t pix_pos = 127;
-// int16_t zoom = 255;
+uint16_t Pixel, haute, basse, temps;
 
-int16_t Pixel;
 String _Pixel = String(Pixel);
+String _haute = String(haute);
+String _basse = String(basse);
+String _temps = String(temps);
 
 char MAREE_MQTT_TOPIC[] = "k32/all/leds/maree/tenless";
 String maree_mqtt_topic;
-String MAREE_MQTT_Pixel = "k32/all/leds/maree/pixel";
-String MAREE_MQTT_MEM = "/leds/mem";
+String MAREE_MQTT_Pixel = "/leds/maree/pixel";
+String MAREE_MQTT_HAUTE = "/leds/maree/haute";
+String MAREE_MQTT_BASSE = "/leds/maree/basse";
+String MAREE_MQTT_TEMPS = "/leds/maree/temps";
+String MAREE_MQTT_GO_UP = "/leds/maree/go_p";
+String MAREE_MQTT_GO_DOWN = "/leds/maree/go_m";
+
+String MAREE_MQTT_MASTER = "/leds/master";
 String MAREE_MQTT_STOP = "/leds/stop";
-String MAREE_MQTT_SLOWER = "/leds/modall/slower";
-String MAREE_MQTT_SMALLER = "/leds/modall/smaller";
-String MAREE_MQTT_FASTER = "/leds/modall/faster";
-String MAREE_MQTT_BIGGER = "/leds/modall/bigger";
+String MAREE_MQTT_MEM = "/leds/mem";
 String MAREE_MQTT_FADE_IN = "/leds/master/fadein";
 String MAREE_MQTT_FADE_OUT = "/leds/master/fadeout";
-String MAREE_MQTT_MASTER = "/leds/master";
 String maree_mqtt_frame = "/leds/frame";
-
-// String MAREE_MQTT_COLOR_ALL = "/leds/all";
-// String MAREE_MQTT_COLOR_STRIP = "/leds/strip";
-// String MAREE_MQTT_COLOR_PIXEL = "/leds/pixel";
-// String MAREE_MQTT_LESS = "/leds/master/less";
-// String MAREE_MQTT_TENLESS = "/leds/master/tenless";
-// String MAREE_MQTT_MORE = "/leds/master/more";
-// String MAREE_MQTT_TENMORE = "/leds/master/tenmore";
-// String MAREE_MQTT_FULL = "/leds/master/full";
 
 ///////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////DRAW ///////////////////////////////////////////
@@ -131,6 +122,10 @@ void draw_temps()
 //{master , r  , g  , b  , w  ,pix mod , pix long , pix_pos , str_mod , str_speed , r_fond , g_fond , b_fond , w_fond , mirror_mod , zoom }
 void send_haute()
 {
+    _haute = String(haute);
+    maree_mqtt_topic = String(MAREE_MQTT_K32) + String(MAREE_MQTT_ID) + String(MAREE_MQTT_HAUTE);
+    maree_mqtt_topic.toCharArray(MAREE_MQTT_TOPIC, maree_mqtt_topic.length() + 1);
+    k32->mqtt->publish(MAREE_MQTT_TOPIC, _haute.c_str(), 1);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -139,6 +134,10 @@ void send_haute()
 //{master , r  , g  , b  , w  ,pix mod , pix long , pix_pos , str_mod , str_speed , r_fond , g_fond , b_fond , w_fond , mirror_mod , zoom }
 void send_basse()
 {
+    _basse = String(basse);
+    maree_mqtt_topic = String(MAREE_MQTT_K32) + String(MAREE_MQTT_ID) + String(MAREE_MQTT_BASSE);
+    maree_mqtt_topic.toCharArray(MAREE_MQTT_TOPIC, maree_mqtt_topic.length() + 1);
+    k32->mqtt->publish(MAREE_MQTT_TOPIC, _basse.c_str(), 1);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -158,6 +157,10 @@ void send_pixel()
 //{master , r  , g  , b  , w  ,pix mod , pix long , pix_pos , str_mod , str_speed , r_fond , g_fond , b_fond , w_fond , mirror_mod , zoom }
 void send_temps()
 {
+    _temps = String(temps);
+    maree_mqtt_topic = String(MAREE_MQTT_K32) + String(MAREE_MQTT_ID) + String(MAREE_MQTT_TEMPS);
+    maree_mqtt_topic.toCharArray(MAREE_MQTT_TOPIC, maree_mqtt_topic.length() + 1);
+    k32->mqtt->publish(MAREE_MQTT_TOPIC, _temps.c_str(), 1);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
