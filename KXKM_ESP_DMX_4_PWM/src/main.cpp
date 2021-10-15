@@ -325,7 +325,7 @@ void loop()
   pos = map(pos, 0, 4095, 0, 255); // mapage in
   // LOGF("pos = %d ", pos);
 
-  light->anim("manu")->push(255, 255, 255, 255, 255, 35, 255, pos);
+  // light->anim("manu")->push(255, 255, 255, 255, 255, 35, 255, pos);
   pixelColor_t color = pixelFromRGBW(255, 255, 255, 255);
   fixture->pix(0, pos, color);
 
