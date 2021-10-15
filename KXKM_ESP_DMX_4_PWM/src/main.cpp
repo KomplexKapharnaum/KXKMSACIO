@@ -1,7 +1,7 @@
 #include <Arduino.h>
 
 #define LULU_VER 88
-#define LULU_TYPE 2
+#define LULU_TYPE 80
 // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot"
 // 10="power" 11="DMX_strobe" 12="DMX_Par_led" 13="NODE_dmx_thru"
 // 20="Cube_str" 21="Cube_par"  22="Cube_MiniKOLOR" 23="Cube_Elp"
@@ -9,6 +9,7 @@
 // 40="New_Fluo"
 // 50="strip to elp dmx"
 // 60="Lyre audio dmx + strip"
+// 80="Maree_SK"
 
 /////////////////////////////////////////ID/////////////////////////////////////////
 
@@ -325,6 +326,8 @@ void loop()
   // LOGF("pos = %d ", pos);
 
   light->anim("manu")->push(255, 255, 255, 255, 255, 35, 255, pos);
+  pixelColor_t color = pixelFromRGBW(255, 255, 255, 255);
+  fixture->pix(0, pos, color);
 
   delay(20);
 
