@@ -39,6 +39,7 @@ K32_ledstrip* strip[LED_N_STRIPS] = {nullptr};
 
 #include <fixtures/K32_elp.h>
 K32_elp* elp = nullptr;
+K32_fixture* fixture = nullptr;
 
 #include <fixtures/K32_lyreaudio.h>
 K32_lyreaudio* lyreaudio = nullptr;
