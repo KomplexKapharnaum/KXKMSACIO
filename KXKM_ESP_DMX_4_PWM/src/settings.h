@@ -292,6 +292,16 @@
 #include "macro/Type/SK/mem_sk.h"     // defo
 #include "macro/mem_barre_pwm.h"
 
+#elif LULU_TYPE == 80
+#define L_NAME "Maree_SK"
+#define RUBAN_SIZE 300
+#define OUT_PATCHSIZE 16
+#define DMXOUT_ADDR 1
+
+#include "macro/Type/4pwm/mem_4pwm.h" // defo
+#include "macro/Show/larochelle/mem_sk_maree.h"     
+#include "macro/Show/larochelle/mem_barre_pwm_maree.h"
+
 #endif
 #endif
 
