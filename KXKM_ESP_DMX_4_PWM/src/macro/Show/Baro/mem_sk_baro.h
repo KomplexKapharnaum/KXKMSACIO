@@ -1,12 +1,12 @@
 #ifndef mem_sk_baro_h
 #define mem_sk_baro_h
 
-#define NUMBER_OF_MEM 24 // stm leave in last mem
+#define PRESET_COUNT 24 // stm leave in last mem
 
 // 
 // MEM ANIMATOR DATA 
 //
-uint8_t MEM_SK[NUMBER_OF_MEM][16] = {
+uint8_t MEM_SK[PRESET_COUNT][16] = {
     {    0,   0,   0,   0,   0,       0,         0,        0,        0,          0,       0,       0,       0,       0,           0,  255}, // 00 black
     {    0,   0,   0,   0,   0,       0,         0,        0,        0,          0,       0,       0,       0,       0,           0,  255}, // 01 black
     {    0,   0,   0,   0,   0,       0,         0,        0,        0,          0,       0,       0,       0,       0,           0,  255}, // 02 black

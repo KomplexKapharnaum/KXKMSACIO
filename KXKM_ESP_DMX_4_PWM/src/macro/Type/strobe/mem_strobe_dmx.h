@@ -1,14 +1,18 @@
 #ifndef mem_strobe_dmx_h
 #define mem_strobe_dmx_h
 
-#define NUMBER_OF_MEM 16 // stm leave in last mem
+#define STROBE_PRESET_COUNT 16
+#define STROBE_PRESET_SIZE  18
 
-void init_mem() {}
+// LIMITER
+#if !defined(PRESET_COUNT) || PRESET_COUNT >  STROBE_PRESET_COUNT
+    #define PRESET_COUNT                       STROBE_PRESET_COUNT
+#endif
 
 // 
 // MEM ANIMATOR DATA 
 //
-uint8_t MEM[NUMBER_OF_MEM][LULU_PATCHSIZE] = {
+uint8_t MEM_STROBE[STROBE_PRESET_COUNT][STROBE_PRESET_SIZE] = {
     {  255,   2,        0, 255,   0,   0,         0,        0,        0,          0,       0,      0,      0,      0,        0,             255}, // 00 Red
     {  255,   2,        0,   0, 255,   0,         0,        0,        0,          0,       0,      0,      0,      0,        0,             255}, // 01 Green
     {  255,   2,        0,   0,   0, 255,         0,        0,        0,          0,       0,      0,      0,      0,        0,             255}, // 02 Blue
@@ -33,7 +37,7 @@ uint8_t MEM[NUMBER_OF_MEM][LULU_PATCHSIZE] = {
 // 
 // PREVIEW PIXEL MAP
 //
-uint8_t MEM_PREV[NUMBER_OF_MEM][LULU_PREV_SIZE*4] = {
+uint8_t MEM_PREV[STROBE_PRESET_COUNT][LULU_PREV_SIZE*4] = {
     {1, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0},    // 00 red
     {0, 1, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0},    // 01 Green
     {0, 0, 1, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0},    // 02 Blue
@@ -52,52 +56,6 @@ uint8_t MEM_PREV[NUMBER_OF_MEM][LULU_PREV_SIZE*4] = {
     {0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0},    // 15 BLACK stm leave last mem
 };
 //  {r1,g1,b1,w1, r2,g2,b2,w2, r3,g3,w3,w3, r4,g4,b4,w4, r5,g5,b5,w5, r6,g6,b6,w6},
-
-
-// 
-// APPLY MACRO WITH CUSTOM MODULATORS INTO anim
-//
-void load_mem(K32_anim *anim, int macro) {
-
-    // remove disposable modulators
-    //
-    anim->unmod();
-
-    // push new data
-    //
-    anim->push(MEM[macro], LULU_PATCHSIZE);
-
-    // add modulators
-    //
-    if (macro == 4)
-    {
-        anim->mod(new K32_mod_sinus)->at(3)->period(8500)->phase(0)->mini(0)->maxi(255);
-        anim->mod(new K32_mod_sinus)->at(4)->period(8500)->phase(120)->mini(0)->maxi(255);
-        anim->mod(new K32_mod_sinus)->at(5)->period(8500)->phase(240)->mini(0)->maxi(255);
-    }
-    else if (macro == 9)
-    {
-        anim->mod(new K32_mod_sinus)->at(9)->mini(100)->maxi(255)->period(2000);
-    }
-    else if (macro == 10)
-    {
-        anim->mod(new K32_mod_sawtooth)->at(7)->period(7000);
-    }
-    else if (macro == 11)
-    {
-        anim->mod(new K32_mod_pulse)->at(3)->at(4)->param(1, 100)->period(7000);
-    }
-    else if (macro == 12)
-    {
-        anim->mod(new K32_mod_sinus)->at(3)->period(8500)->phase(0)->mini(0)->maxi(255);
-        anim->mod(new K32_mod_sinus)->at(4)->period(8500)->phase(120)->mini(0)->maxi(255);
-        anim->mod(new K32_mod_sinus)->at(5)->period(8500)->phase(240)->mini(0)->maxi(255);
-    }
-    else if (macro == 14)
-    {
-        anim->mod(new K32_mod_sinus)->at(0)->period(8500)->mini(38)->maxi(217);
-    }
-}
 
 
 

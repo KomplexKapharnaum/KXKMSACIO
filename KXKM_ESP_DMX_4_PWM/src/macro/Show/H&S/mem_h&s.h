@@ -1,12 +1,12 @@
 #ifndef mem_hs_h
 #define mem_hs_h
 
-#define NUMBER_OF_MEM 16 // stm leave in last mem
+#define PRESET_COUNT 16 // stm leave in last mem
 
 // 
 // MEM ANIMATOR DATA 
 //
-uint8_t MEM[NUMBER_OF_MEM][LULU_PATCHSIZE] = {
+uint8_t MEM[PRESET_COUNT][LULU_PATCHSIZE] = {
     {  133, 133,   0,   0,   0,       0,         0,        0,        0,          0,       0,       0,       0,       0,           0,  255,     0,    0}, // 00 Red
     {  255, 255, 255, 255, 255,       0,         0,        0,        0,          0,       0,       0,       0,       0,           0,  255,     0,    0}, // 01 White
     {  255, 255, 255, 255, 255,       0,         1,      127,        5,          0,       0,       0,       0,       0,           0,  255,     0,    0}, // 02 respi white **0** 38 > 217
@@ -32,7 +32,7 @@ uint8_t MEM[NUMBER_OF_MEM][LULU_PATCHSIZE] = {
 // 
 // PREVIEW PIXEL MAP
 //
-uint8_t MEM_PREV[NUMBER_OF_MEM][LULU_PREV_SIZE*4] = {
+uint8_t MEM_PREV[PRESET_COUNT][LULU_PREV_SIZE*4] = {
     {1, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0},    // 00 red
     {0, 0, 0, 1,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0},    // 01 white
     {0, 0, 0, 0,  0, 0, 0, 1,  0, 0, 0, 0,  0, 0, 0, 1,  0, 0, 0, 0,  0, 0, 0, 0},    // 02 respi white

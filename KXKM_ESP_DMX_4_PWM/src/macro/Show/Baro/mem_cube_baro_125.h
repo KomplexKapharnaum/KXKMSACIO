@@ -1,19 +1,19 @@
 #ifndef mem_cube_baro_125_h
 #define mem_cube_baro_125_h
 
-#ifndef NUMBER_OF_MEM
-#define NUMBER_OF_MEM 17 // stm leave in last mem
+#ifndef PRESET_COUNT
+#define PRESET_COUNT 17 // stm leave in last mem
 #endif
 
 // 
 // MEM ANIMATOR DATA ! modulateur relatif a la valeur du tableau
 //
-uint8_t MEM[NUMBER_OF_MEM][LULU_PATCHSIZE] = {0};
+uint8_t MEM[PRESET_COUNT][LULU_PATCHSIZE] = {0};
 uint8_t MEM_NO_WIFI[LULU_PATCHSIZE] = {};
 
 void init_mem()
 {
-  for (int n = 0 ; n < NUMBER_OF_MEM ; n++)
+  for (int n = 0 ; n < PRESET_COUNT ; n++)
    {
     //   for (int i = 0 ; i < LULU_PATCHSIZE -4 ; i++) 
     //   {
@@ -27,7 +27,7 @@ void init_mem()
       }
    }
 
-    // for (int n = 0 ; n < NUMBER_OF_MEM ; n++)
+    // for (int n = 0 ; n < PRESET_COUNT ; n++)
     // {
     // LOGF("MEM %d : -> loaded =", n);
     // for (int i = 0 ; i < LULU_PATCHSIZE ; i++) LOGF(" %d", MEM[n][i]);
@@ -39,7 +39,7 @@ void init_mem()
 // 
 // PREVIEW PIXEL MAP
 //
-uint8_t MEM_PREV[NUMBER_OF_MEM][LULU_PREV_SIZE*4] = {
+uint8_t MEM_PREV[PRESET_COUNT][LULU_PREV_SIZE*4] = {
     {1, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0},    // 00 red
     {0, 1, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0},    // 01 Green
     {0, 0, 1, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0},    // 02 Blue

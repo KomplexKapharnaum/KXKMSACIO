@@ -1,7 +1,7 @@
 #include <Arduino.h>
 
 #define LULU_VER 89
-#define LULU_TYPE 8
+#define LULU_TYPE 1
 // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot"
 // 10="power" 11="DMX_strobe" 12="DMX_Par_led" 13="NODE_dmx_thru"
 // 20="Cube_str" 21="Cube_par"  22="Cube_MiniKOLOR" 23="Cube_Elp"
@@ -10,6 +10,7 @@
 // 50="strip to elp dmx"
 // 60="Lyre audio dmx + strip"
 // 70="Strobe" 71="4x Strobe"
+
 
 /////////////////////////////////////////ID/////////////////////////////////////////
 
@@ -31,6 +32,7 @@
 
 
 int LULU_uni;
+int LULU_id;
 
 String nodeName;
 
@@ -44,7 +46,7 @@ String nodeName;
 #include "anim_monitoring.h"
 #include "anim_dmx_test.h"
 #include "anim_dmx_strip.h"
-#include "anim_dmx_thru.h"
+#include "anim_datathru.h"
 #include "boutons.h"
 #include "test.h"
 
@@ -63,30 +65,24 @@ void setup()
   light_tests();
 
   // ANIM leds - artnet
-  light->anim(strip[0], "artnet", new Anim_dmx_strip, LULU_STRIP_SIZE)->play();
+  light->anim("artnet", new Anim_dmx_strip, LULU_STRIP_SIZE)->attach(strip[0])->play();
 
   // ANIM leds - manuframe
-  light->anim(strip[0], "manu", new Anim_dmx_strip, LULU_STRIP_SIZE);
+  light->anim("manu", new Anim_dmx_strip, LULU_STRIP_SIZE)->attach(strip[0]);
 
   // ANIM leds - monitoring
-  light->anim(strip[0], "battery", new Anim_battery, 4, LULU_STRIP_SIZE + 1)->master(LULU_PREV_MASTER)->play();
-  light->anim(strip[0], "remote", new Anim_remote, LULU_PREV_SIZE + 4, LULU_STRIP_SIZE + 6)->master(LULU_PREV_MASTER)->play();
-  light->anim(strip[0], "preview", new Anim_preview, LULU_PREV_SIZE, LULU_STRIP_SIZE + 8)->master(LULU_PREV_MASTER)->play();
-  light->anim(strip[0], "rssi", new Anim_rssi, 1, LULU_STRIP_SIZE + 17)->master(LULU_PREV_MASTER * 1.5)->play();
+  light->anim("battery", new Anim_battery, 4, LULU_STRIP_SIZE + 1)->attach(strip[0])->master(LULU_PREV_MASTER)->play();
+  light->anim("remote", new Anim_remote, LULU_PREV_SIZE + 4, LULU_STRIP_SIZE + 6)->attach(strip[0])->master(LULU_PREV_MASTER)->play();
+  light->anim("preview", new Anim_preview, LULU_PREV_SIZE, LULU_STRIP_SIZE + 8)->attach(strip[0])->master(LULU_PREV_MASTER)->play();
+  light->anim("rssi", new Anim_rssi, 1, LULU_STRIP_SIZE + 17)->attach(strip[0])->master(LULU_PREV_MASTER * 1.5)->play();
 
-#if LULU_TYPE == 60
-  // ANIM dmx thru
-  light->anim(lyreaudio, "dmxthru", new Anim_dmx_thru, LYRE_PATCHSIZE / 4)->play();
-#elif LULU_TYPE == 12
-  // ANIM dmx thru
-  light->anim(pardmx, "dmxthru", new Anim_dmx_thru, PAR_PATCHSIZE / 4)->play();
-#elif LULU_TYPE == 13
-  // ANIM dmx thru
-  light->anim(node, "dmxthru", new Anim_dmx_thru, NODE_PATCHSIZE / 4)->play();
-#endif
+  // ANIM dmx fixtures 
+  light->anim("datathru", new Anim_datathru , DMXFIXTURE_PATCHSIZE / 4)->play();
+  for (int k=0; k<DMX_N_FIXTURES; k++)
+    if (fixs[k]) light->anim("datathru")->attach(fixs[k]);
 
   // REMOTE
-  remote->setMacroMax(NUMBER_OF_MEM); // TODO: clean MEM loading (and setMemMax)
+  remote->setMacroMax(PRESET_COUNT); // TODO: clean MEM loading (and setMemMax)
 
 // MEM ON BOOT
 #if (LULU_TYPE >= 20 || LULU_TYPE == 2 || LULU_TYPE == 6)
@@ -101,113 +97,71 @@ void setup()
   ////////////////// WIFI
   if (wifi)
   {
-    wifi->setHostname(k32->system->name() + (nodeName != "") ? "-" + nodeName : "");
 
-    if (k32->system->hw() != 4)
-    {
-      wifi->staticIP("2.0.0." + String(k32->system->id() + 100), "2.0.0.1", "255.0.0.0"); // WARNING: netmask !!
-      // wifi->staticIP("10.0.0." + String(k32->system->id() + 100), "10.0.0.1", "255.0.0.0");  // KXKM MESH
-    }
-    if (k32->system->hw() == 4)
-    {
-      wifi->staticIP("2.0.1." + String(k32->system->id()), "2.0.0.1", "255.0.0.0"); // hw4
-    }
+    String router = "2.0.0.1";
+    String basenet = router.substring(0, router.indexOf('.', router.indexOf('.')+1));   // 2.0.
+    String subnet = "0";
+    if (k32->system->hw() == 4) subnet = "1";
+
+    wifi->staticIP(basenet + subnet + "." + String(k32->system->id() + 100), router, "255.0.0.0");
+
     wifi->connect("kxkm24", NULL); //KXKM 24
-// wifi->connect("kxkm24lulu", NULL);                                                         //KXKM 24 lulu
-// wifi->connect("mgr4g", NULL);                                                              //Maigre dev
-// wifi->connect("interweb", "superspeed37");                                                 //Maigre dev home
-// wifi->connect("riri_new", "B2az41opbn6397");                                               //Riri dev home
-// TODO: if wifi->connect ommited = crash on mqtt/artnet/osc
+    // wifi->connect("kxkm24lulu", NULL);                                                         //KXKM 24 lulu
+    // wifi->connect("mgr4g", NULL);                                                              //Maigre dev
+    // wifi->connect("interweb", "superspeed37");                                                 //Maigre dev home
+    // wifi->connect("riri_new", "B2az41opbn6397");                                               //Riri dev home
+    // TODO: if wifi->connect ommited = crash on mqtt/artnet/osc
 
-////////////////// ARTNET
-#if LULU_TYPE == 60
-    int FRAME_size = LYRE_PATCHSIZE + 9; // 9: MEM R G B W PWM1 PWM2 PWM3 PWM4
-#else
-    int FRAME_size = LULU_PATCHSIZE;
-#endif
-    int ARTNET_address = (1 + (LULU_id - 1) * LULU_PATCHSIZE);
+    ////////////////// ARTNET
+    #if LULU_TYPE == 60
+        int FRAME_size = LYRE_PATCHSIZE + 9; // 9: MEM R G B W PWM1 PWM2 PWM3 PWM4
+    #else
+        int FRAME_size = LULU_PATCHSIZE;
+    #endif
+        int ARTNET_address = (1 + (LULU_id - 1) * LULU_PATCHSIZE);
 
-    artnet = new K32_artnet(k32, {.universe = LULU_uni,
-                                  .address = ARTNET_address,
-                                  .framesize = FRAME_size,
-                                  .shortName = nodeName,
-                                  .longName = nodeName});
+    
+    
 
-    // EVENT: full frame
-    //
-    artnet->onFullDmx([](const uint8_t *data, int length)
-                      {
-                        // Force Auto
-                        if (length > 511 && data[511] > 250) // data 512 = end dmx trame
-                        {
-                          remote->setState(REMOTE_AUTO);
-                          remote->lock();
-                        }
-#ifdef DEBUG_dmxframe
-                        LOGF("ARTNET fullframe: %d \n", length);
-#endif
-                      });
+    // ARTNET: subscribe dmx frame
+    artnet->onDmx( {
+      .address    = ARTNET_address, 
+      .framesize  = FRAME_size, 
+      .callback   = [](const uint8_t *data, int length) 
+      { 
+        
+        if (ARTNET_TO_DMXDIRECT) 
+          light->anim("datathru")->push(data, min(length, DMXFIXTURE_PATCHSIZE));
+        
+        if (ARTNET_TO_STRIPS)
+          light->anim("artnet")->push(data, min(length, LULU_PATCHSIZE));
 
-#if LULU_TYPE == 13
-    artnet->onFullDmx([](const uint8_t *data, int length)
-                      {
-                        if (length <= 0)
-                          return;
-#else
-    // EVENT: new artnet frame received
+        // LYRE
+        #if LULUTYPE == 60
+          if (length >= DMXFIXTURE_PATCHSIZE + 9)
+          {
+            const uint8_t *dataStrip = &data[DMXFIXTURE_PATCHSIZE];
 
-    artnet->onDmx([](const uint8_t *data, int length)
-                  {
-                    if (length <= 0)
-                      return;
+            // MEM ou ARTNET FRAME
+            if (dataStrip[0] > 0 && dataStrip[0] <= PRESET_COUNT)
+              remote->stmSetMacro(dataStrip[0] - 1);
+            else
+            {
+              int stripframe[LULU_PATCHSIZE] = {255, dataStrip[1], dataStrip[2], dataStrip[3], dataStrip[4], 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, dataStrip[5], dataStrip[6], dataStrip[7], dataStrip[8]};
+              light->anim("artnet")->push(stripframe, LULU_PATCHSIZE);
+              remote->setState(REMOTE_AUTO);
+            }
+          }
+        #endif
 
-#endif
-
-////////////////// DMXTHRU
-// STROBEDMX
-#if LULU_TYPE == 11
-                        light->anim("dmxthru")->push(data, min(length, STROBE_PATCHSIZE)); // DMX out
-
-// PARDMX
-#elif LULU_TYPE == 12
-                    light->anim("dmxthru")->push(data, min(length, PAR_PATCHSIZE)); // DMX out
-
-// NODE
-#elif LULU_TYPE == 13
-    node->setBuffer(data, length); // full frame DMX out
-
-// LYRE + STRIP
-#elif LULU_TYPE == 60
-    light->anim("dmxthru")->push(data, min(length, LYRE_PATCHSIZE)); // DMX out
-
-    if (length >= LYRE_PATCHSIZE + 9)
-    {
-      const uint8_t *dataStrip = &data[LYRE_PATCHSIZE];
-
-      // MEM ou ARTNET FRAME
-      if (dataStrip[0] > 0 && dataStrip[0] <= NUMBER_OF_MEM)
-        remote->stmSetMacro(dataStrip[0] - 1);
-      else
-      {
-        int stripframe[LULU_PATCHSIZE] = {255, dataStrip[1], dataStrip[2], dataStrip[3], dataStrip[4], 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, dataStrip[5], dataStrip[6], dataStrip[7], dataStrip[8]};
-        light->anim("artnet")->push(stripframe, LULU_PATCHSIZE);
-        remote->setState(REMOTE_AUTO);
+        // LOGINL("ARTFRAME: ");
+        // LOGF("length=%d ", length);
+        // for (int k = 0; k < length; k++)
+        //   LOGF("%d ", data[k]);
+        // LOG();
       }
-    }
+    });
 
-// STRIP ONLY
-#else
-    light->anim("artnet")->push(data, min(length, LULU_PATCHSIZE));
-#endif
-
-#ifdef DEBUG_dmxframe
-                        LOGINL("ARTFRAME: ");
-                        LOGF("length=%d ", length);
-                        for (int k = 0; k < length; k++)
-                          LOGF("%d ", data[k]);
-                        LOG();
-#endif
-                      });
 
     // EVENT: wifi lost
     wifi->onDisconnect([&]()
@@ -224,8 +178,7 @@ void setup()
     ////////////////// MQTT
     if (mqtt)
       mqtt->start({
-          .broker = "2.0.0.1", // Komplex
-          // .broker = "10.0.0.1", // KXKM MESH
+          .broker = router.c_str(), // Komplex
           // .broker = "2.0.0.10", // Riri dev home
           // .broker = "192.168.43.132",  // MGR dev home
           .beatInterval = 0,  // heartbeat interval milliseconds (0 = disable) 5000

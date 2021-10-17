@@ -1,14 +1,14 @@
 #ifndef mem_strobe_h
 #define mem_strobe_h
 
-#ifndef NUMBER_OF_MEM
-#define NUMBER_OF_MEM 16 // stm leave in last mem
+#ifndef PRESET_COUNT
+#define PRESET_COUNT 16 // stm leave in last mem
 #endif
 
 // 
 // MEM ANIMATOR DATA ! modulateur relatif a la valeur du tableau
 //
-uint8_t MEM_STROBE[NUMBER_OF_MEM][16] = {
+uint8_t MEM_STROBE[PRESET_COUNT][16] = {
     {  255,   2,        0, 255,   0,   0,         0,        0,        0,          0,       0,      0,      0,      0,        0,             255}, // 00 Red
     {  255,   2,        0,   0, 255,   0,         0,        0,        0,          0,       0,      0,      0,      0,        0,             255}, // 01 Green
     {  255,   2,        0,   0,   0, 255,         0,        0,        0,          0,       0,      0,      0,      0,        0,             255}, // 02 Blue

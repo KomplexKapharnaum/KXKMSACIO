@@ -1,7 +1,7 @@
 #include <K32_light.h>
 #include <K32_dmx.h>
 
-class Anim_dmx_thru : public K32_anim
+class Anim_datathru  : public K32_anim
 {
 
 public:

@@ -1,42 +1,65 @@
-#ifndef mem_4pwm_h
-#define mem_4pwm_h
+#include <K32_presets.h>
 
-#ifndef NUMBER_OF_MEM
-#define NUMBER_OF_MEM 24 // stm leave in last mem
-#endif
+class BankPWM : LBank <4> { 
+    public:
+        BankPWM() {
 
-// 
-// MEM ANIMATOR DATA ! modulateur relatif a la valeur du tableau
-//
-uint8_t MEM_PWM[NUMBER_OF_MEM][4] = {
-    {  255,  255,  255,  255}, // 00 
-    {  170,  170,  170,  170}, // 01 
-    {  126,  126,  126,  126}, // 02 
-    {   82,   82,   82,   82}, // 03 
-    {  255,  255,  255,  255}, // 04 **
-    {    0,    0,    0,    0}, // 05 
-    {  255,  170,  126,   82}, // 06 
-    {  170,  126,   82,    0}, // 07 
-    {  126,   82,    0,  255}, // 08 
-    {   82,    0,  255,  170}, // 09 
-    {    0,  255,  170,  126}, // 10 
-    {  170,  126,   82,    0}, // 12 
-    {  255,  170,  126,   82}, // 11 
-    {  126,   82,    0,  255}, // 13 
-    {   82,    0,  255,  170}, // 14 
-    {    0,    0,    0,    0}, // 15 BLACK
-    {    0,    0,    0,    0}, // 16 BLACK
-    {    0,    0,    0,    0}, // 17 BLACK
-    {    0,    0,    0,    0}, // 18 BLACK
-    {    0,    0,    0,    0}, // 19 BLACK
-    {    0,    0,    0,    0}, // 20 BLACK
-    {    0,    0,    0,    0}, // 21 BLACK
-    {    0,    0,    0,    0}, // 22 BLACK
-    {    0,    0,    0,    0}, // 23 BLACK stm leave lset mem
+            add(mem_t {  255,  255,  255,  255});   // 00 
+
+            add(mem_t {  170,  170,  170,  170});   // 01 
+
+            add(mem_t {  126,  126,  126,  126});   // 02 
+
+            add(mem_t {   82,   82,   82,   82});   // 03 
+
+            add(mem_t {  255,  255,  255,  255})    // 04
+                ->onload([](K32_anim *anim){ 
+                    anim->mod(new K32_mod_sinus)->at(1)->at(5)->at(8)->at(3)->at(7)->at(2)->at(6)->period(8500)->phase(0)->mini(-50)->maxi(255);
+                });
+
+            add(mem_t {    0,    0,    0,    0});   // 05 
+
+            add(mem_t {  255,  170,  126,   82})    // 06
+                ->onload([](K32_anim *anim){ 
+                    anim->mod(new K32_mod_pulse)->at(1)->at(2)->at(3)->at(7)->at(8)->at(6)->at(5)->param(1, 10)->period(500);
+                });
+
+            add(mem_t {  170,  126,   82,    0});   // 07 
+
+            add(mem_t {  126,   82,    0,  255});   // 08 
+
+            add(mem_t {   82,    0,  255,  170})    // 09
+                ->onload([](K32_anim *anim){ 
+                    anim->mod(new K32_mod_sinus)->at(0)->mini(100)->maxi(255)->period(2000);
+                });
+
+            add(mem_t {    0,  255,  170,  126})    // 10
+                ->onload([](K32_anim *anim){ 
+                    anim->mod(new K32_mod_sinus)->at(1)->at(2)->period(8500)->phase(0)->mini(0)->maxi(255);
+                });
+
+            add(mem_t {  170,  126,   82,    0})    // 11
+                ->onload([](K32_anim *anim){ 
+                    anim->mod(new K32_mod_pulse)->at(2)->at(3)->param(1, 100)->period(7000);
+                });
+
+            add(mem_t {  255,  170,  126,   82})    // 12
+                ->onload([](K32_anim *anim){ 
+                    anim->mod(new K32_mod_sinus)->at(1)->period(8500)->phase(0)->mini(0)->maxi(255);
+                    anim->mod(new K32_mod_sinus)->at(2)->period(8500)->phase(120)->mini(0)->maxi(255);
+                    anim->mod(new K32_mod_sinus)->at(3)->period(8500)->phase(240)->mini(0)->maxi(255);
+                });
+
+            add(mem_t {  126,   82,    0,  255});   // 13 
+
+            add(mem_t {   82,    0,  255,  170})    // 14
+                ->onload([](K32_anim *anim){ 
+                    anim->mod(new K32_mod_sinus)->at(0)->period(8500)->mini(38)->maxi(217);
+                }); 
+
+            add(mem_t {    0,    0,    0,    0});   // 15 BLACK
+
+
+            nowifi(mem_t { LULU_MEMNOWIFI_MASTER, LULU_MEMNOWIFI_MASTER, LULU_MEMNOWIFI_MASTER, LULU_MEMNOWIFI_MASTER});            
+        }
 };
-//  { pwm1, pwm2, pwm3, pwm4}
-//{  5  ,  6  ,  7  , 8   } adr + -1
-
-uint8_t MEM_PWM_NO_WIFI[4] = { LULU_MEMNOWIFI_MASTER,  LULU_MEMNOWIFI_MASTER,  LULU_MEMNOWIFI_MASTER,  LULU_MEMNOWIFI_MASTER};
-
-#endif

@@ -1,14 +1,14 @@
 #ifndef mem_pwm_baro_131_h
 #define mem_pwm_baro_131_h
 
-#ifndef NUMBER_OF_MEM
-#define NUMBER_OF_MEM 17 // stm leave in last mem
+#ifndef PRESET_COUNT
+#define PRESET_COUNT 17 // stm leave in last mem
 #endif
 
 // 
 // MEM ANIMATOR DATA ! modulateur relatif a la valeur du tableau
 //
-uint8_t MEM_PWM[NUMBER_OF_MEM][4] = {
+uint8_t MEM_PWM[PRESET_COUNT][4] = {
     {255,  255,  255,  255}, // 00 Red on
     {170,  170,  170,  170}, // 01 Green grad
     {126,  126,  126,  126}, // 02 Blue grad +

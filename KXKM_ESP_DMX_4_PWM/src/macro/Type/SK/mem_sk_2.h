@@ -1,12 +1,18 @@
 #ifndef mem_h
 #define mem_h
 
-#define NUMBER_OF_MEM 16 // stm leave in last mem
+#define SK_PRESET_COUNT 16
+#define SK_PRESET_SIZE  18
+
+// LIMITER
+#if !defined(PRESET_COUNT) || PRESET_COUNT >  SK_PRESET_COUNT
+    #define PRESET_COUNT                       SK_PRESET_COUNT
+#endif
 
 // 
 // MEM ANIMATOR DATA 
 //
-uint8_t MEM[NUMBER_OF_MEM][LULU_PATCHSIZE] = {
+uint8_t MEM_SK[SK_PRESET_COUNT][SK_PRESET_SIZE] = {
     {  133, 133,   0,   0,   0,       0,         0,        0,        0,          0,       0,       0,       0,       0,           0,  255,     0,    0}, // 00 Red
     {  255, 255, 255, 255, 255,       0,         0,        0,        0,          0,       0,       0,       0,       0,           0,  255,     0,    0}, // 01 White
     {  255, 255, 255, 255, 255,       0,         1,      127,        5,          0,       0,       0,       0,       0,           0,  255,     0,    0}, // 02 respi white **0** 38 > 217
@@ -27,11 +33,13 @@ uint8_t MEM[NUMBER_OF_MEM][LULU_PATCHSIZE] = {
 //{master , r  , g  , b  , w  ,pix mod , pix long , pix_pos , str_mod , str_speed , r_fond , g_fond , b_fond , w_fond , mirror_mod , zoom , pw1 , pw2 }
 //{0      , 1  , 2  , 3  , 4  ,5       , 6        , 7       , 8       , 9         , 10     , 11     , 12     , 13     , 14         , 15   , 16  , 17  } adr + -1
 
+uint8_t MEM_SK_NO_WIFI[SK_PRESET_SIZE] = 
+    { 0,   0,   0,   0,    0,       0,         0,        0,        0,          0,       0,       0,       0,       0,           0,  0, 0, 0};
 
 // 
 // PREVIEW PIXEL MAP
 //
-uint8_t MEM_PREV[NUMBER_OF_MEM][LULU_PREV_SIZE*4] = {
+uint8_t MEM_PREV[SK_PRESET_COUNT][LULU_PREV_SIZE*4] = {
     {1, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0},    // 00 red
     {0, 0, 0, 1,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0},    // 01 white
     {0, 0, 0, 0,  0, 0, 0, 1,  0, 0, 0, 0,  0, 0, 0, 1,  0, 0, 0, 0,  0, 0, 0, 0},    // 02 respi white
@@ -52,47 +60,7 @@ uint8_t MEM_PREV[NUMBER_OF_MEM][LULU_PREV_SIZE*4] = {
 //  {r1,g1,b1,w1, r2,g2,b2,w2, r3,g3,w3,w3, r4,g4,b4,w4, r5,g5,b5,w5, r6,g6,b6,w6},
 
 
-// 
-// APPLY MACRO WITH CUSTOM MODULATORS INTO anim
-//
-void load_mem(K32_anim *anim, int macro) {
 
-    // remove disposable modulators
-    //
-    anim->unmod();
-
-    // push new data
-    //
-    anim->push(MEM[macro], LULU_PATCHSIZE);
-
-    // add modulators
-    //
-    if (macro == 2)
-    {
-        anim->mod(new K32_mod_sinus)->at(0)->period(8500)->mini(38)->maxi(217);
-    }
-    else if (macro == 3)
-    {
-        anim->mod(new K32_mod_sinus)->at(0)->period(4800)->mini(38)->maxi(217);
-    }
-    else if (macro == 9)
-    {
-        anim->mod(new K32_mod_sawtooth)->at(9)->mini(229)->maxi(238)->period(3700);
-    }
-    else if (macro == 10)
-    {
-        anim->mod(new K32_mod_sawtooth)->at(7)->period(7000);
-    }
-    else if (macro == 11)
-    {
-        anim->mod(new K32_mod_pulse)->at(1)->at(2)->at(4)->param(1, 66)->period(7000);
-        anim->mod(new K32_mod_pulse)->at(8)              ->param(1, 66)->period(7000);
-    }
-    else if (macro == 14)
-    {
-        anim->mod(new K32_mod_sinus)->at(0)->period(8500)->mini(38)->maxi(217);
-    }
-}
 
 
 

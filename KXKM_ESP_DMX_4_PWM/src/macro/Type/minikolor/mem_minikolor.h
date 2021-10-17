@@ -1,14 +1,14 @@
 #ifndef mem_minikolor_h
 #define mem_minikolor_h
 
-#ifndef NUMBER_OF_MEM
-#define NUMBER_OF_MEM 16 // stm leave in last mem
+#ifndef PRESET_COUNT
+#define PRESET_COUNT 16 // stm leave in last mem
 #endif
 
 // 
 // MEM ANIMATOR DATA ! modulateur relatif a la valeur du tableau
 //
-uint8_t MEM_MINIKOLOR[NUMBER_OF_MEM][9] = {
+uint8_t MEM_MINIKOLOR[PRESET_COUNT][9] = {
     {  255, 255,   0,   0,    0,    0,    0,    0,    0}, // 00 Red
     {  255,   0, 255,   0,    0,    0,    0,    0,    0}, // 01 Green
     {  255,   0,   0, 255,    0,    0,    0,    0,    0}, // 02 Blue

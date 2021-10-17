@@ -1,14 +1,14 @@
 #ifndef mem_pwm_esch_132_h
 #define mem_pwm_esch_132_h
 
-#ifndef NUMBER_OF_MEM
-#define NUMBER_OF_MEM 16 // stm leave in last mem
+#ifndef PRESET_COUNT
+#define PRESET_COUNT 16 // stm leave in last mem
 #endif
 
 // 
 // MEM ANIMATOR DATA ! modulateur relatif a la valeur du tableau
 //
-uint8_t MEM_PWM[NUMBER_OF_MEM][4] = {
+uint8_t MEM_PWM[PRESET_COUNT][4] = {
     {255,  255,  255,  255}, // 00 on
     {  0,    0,    0,    0}, // 01 off
     {255,  255,  255,  255}, // 02 circle **5 6 7 8**

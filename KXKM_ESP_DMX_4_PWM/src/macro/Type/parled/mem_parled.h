@@ -1,14 +1,14 @@
 #ifndef mem_parled_h
 #define mem_parled_h
 
-#ifndef NUMBER_OF_MEM
-#define NUMBER_OF_MEM 17 // stm leave in last mem
+#ifndef PRESET_COUNT
+#define PRESET_COUNT 17 // stm leave in last mem
 #endif
 
 // 
 // MEM ANIMATOR DATA 
 //
-uint8_t MEM_PARLED[NUMBER_OF_MEM][5] = {
+uint8_t MEM_PARLED[PRESET_COUNT][5] = {
     {  255, 255,   0,   0,   0}, // 00 Red
     {  255,   0, 255,   0,   0}, // 01 Green
     {  255,   0,   0, 255,   0}, // 02 Blue

@@ -1,14 +1,14 @@
 #ifndef mem_fluo_h
 #define mem_fluo_h
 
-#ifndef NUMBER_OF_MEM
-#define NUMBER_OF_MEM 16 // stm leave in last mem
+#ifndef PRESET_COUNT
+#define PRESET_COUNT 16 // stm leave in last mem
 #endif
 
 // 
 // MEM ANIMATOR DATA 
 //
-uint8_t MEM_NEW_FLUO[NUMBER_OF_MEM][16] = {
+uint8_t MEM_NEW_FLUO[PRESET_COUNT][16] = {
     {  255,   0, 255, 255,   0,       0,         0,        0,        0,          0,       0,       0,       0,       0,           0,  255}, // 00 BLUE
     {  255, 255, 255, 255, 255,       0,         0,        0,        0,          0,       0,       0,       0,       0,           0,  255}, // 01 White
     {  255, 255, 255, 255, 255,       0,         1,      127,        5,          0,       0,       0,       0,       0,           0,  255}, // 02 respi white **0** 38 > 217

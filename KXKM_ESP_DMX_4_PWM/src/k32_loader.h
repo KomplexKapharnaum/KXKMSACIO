@@ -1,8 +1,8 @@
-
+#include <Preferences.h>
+Preferences prefs;
 
 #include <K32.h> // https://github.com/KomplexKapharnaum/K32-lib
 K32* k32 = nullptr;
-
 
 #include <hardware/K32_stm32.h>
 K32_stm32* stm32 = nullptr;
@@ -35,23 +35,14 @@ K32_artnet* artnet = nullptr;
 #include <K32_light.h>
 K32_light* light = nullptr;
 
+#include "K32_dmx.h"
+K32_dmx* dmx = nullptr;
+
 #include <fixtures/K32_ledstrip.h>
 K32_ledstrip* strip[LED_N_STRIPS] = {nullptr};
 
-#include <fixtures/K32_elp.h>
-K32_elp* elp = nullptr;
-
-#include <fixtures/K32_lyreaudio.h>
-K32_lyreaudio* lyreaudio = nullptr;
-
-#include <fixtures/K32_pardmx.h>
-K32_pardmx* pardmx = nullptr;
-
-#include <fixtures/K32_node.h>
-K32_node* node = nullptr;
-
-#include <fixtures/K32_strobedmx.h>
-K32_strobedmx* strobedmx = nullptr;
+#include <fixtures/K32_dmxfixture.h>
+K32_dmxfixture* fixs[DMX_N_FIXTURES] = {nullptr};
 
 
 #include "settings.h"
@@ -70,7 +61,34 @@ bool wifiMode() {
 //
 void k32_setup() {
 
-    settings();
+    prefs.begin("k32-settings", false);
+
+    #ifdef LULU_ID
+        prefs.putUInt("LULU_id", LULU_ID);
+        LULU_id = LULU_ID;
+    #else
+        LULU_id = prefs.getUInt("LULU_id", 1);
+    #endif
+
+
+    #ifdef LULU_UNI
+        prefs.putUInt("LULU_uni", LULU_UNI);
+        LULU_uni = LULU_UNI;
+    #else
+        LULU_uni = prefs.getUInt("LULU_uni", 0);
+    #endif
+
+
+    // NAME
+    nodeName = L_NAME;
+
+    if (LULU_STRIP_TYPE == LED_SK6812_V1)         nodeName += "-SK";
+    else if (LULU_STRIP_TYPE == LED_SK6812W_V1)   nodeName += "-SKW";
+    else                                          nodeName += "-WS";
+
+    nodeName += "-" + String(LULU_id) + "-v" + String(LULU_VER);
+
+    prefs.end();
 
     //////////////////////////////////////// K32_lib ////////////////////////////////////
     k32 = new K32();
@@ -107,41 +125,27 @@ void k32_setup() {
         if (PWM_PIN[k32->system->hw()][k] > 0) // TODO: allow -1 pin but disable output
             light->pwm->attach(PWM_PIN[k32->system->hw()][k]);  // TODO: convert PWM into DIMMER fixture
     
+    // DMX
+    dmx = new K32_dmx(DMX_PIN[k32->system->hw()], DMX_OUT);
 
-    // CHARIOT
-    #if LULU_TYPE == 9
+
+    //      CHARIOT             FLUO
+    #if LULU_TYPE == 9 || LULU_TYPE == 40
         light->copyFixture({strip[0], 0, LULU_STRIP_SIZE, strip[1], 0}); // Clone
 
-    // STROBEDMX
-    #elif LULU_TYPE == 11
-        strobedmx = new K32_strobedmx(DMX_PIN[k32->system->hw()], DMXOUT_ADDR);
-        light->addFixture( strobedmx );
+    //      STROBEDMX           PARDMX                                        
+    #elif LULU_TYPE == 11 || LULU_TYPE == 12
+        fixs[0] = new K32_dmxfixture(dmx, DMXOUT_ADDR, DMXFIXTURE_PATCHSIZE);
 
-    // PARDMX
-    #elif LULU_TYPE == 12
-        pardmx = new K32_pardmx(DMX_PIN[k32->system->hw()], DMXOUT_ADDR);
-        light->addFixture( pardmx );
-
-    // NODE
-    #elif LULU_TYPE == 13
-        node = new K32_node(DMX_PIN[k32->system->hw()]);
-        light->addFixture( node );
-
-    // FLUO 
-    #elif LULU_TYPE == 40
-        light->copyFixture({strip[0], 0, LULU_STRIP_SIZE, strip[1], 0}); // Clone
-    
     // ELP
     #elif LULU_TYPE == 50
-        elp = new K32_elp(DMX_PIN[k32->system->hw()], DMXOUT_ADDR, LULU_STRIP_SIZE);
-        light->addFixture( elp ); // TODO: replace system->hw()
+        fixs[0] = new K32_dmxfixture(dmx, DMXOUT_ADDR, DMXFIXTURE_PATCHSIZE);
         light->copyFixture({strip[0], 0, LULU_STRIP_SIZE, elp, 0});
 
     // LYRE
     #elif LULU_TYPE == 60
         int DMX_address = (1 + (LULU_id - 1) * 32);  // DMX Offset = 32  =>  Lyre 1 addr=1 / Lyre 2 addr=33 / ...
-        lyreaudio = new K32_lyreaudio(DMX_PIN[k32->system->hw()], DMX_address);
-        light->addFixture( lyreaudio ); // TODO: replace system->hw()
+        fixs[0] = new K32_dmxfixture(dmx, DMX_address, DMXFIXTURE_PATCHSIZE);
 
     // OTHERS
     #else
@@ -149,7 +153,9 @@ void k32_setup() {
         
     #endif
 
-
+    // REGISTER dmxfixtures
+    for (int k=0; k<DMX_N_FIXTURES; k++)
+        if (fixs[k]) light->addFixture(fixs[k]);
 
     // LOAD MACRO AND PRESETS
     init_mem();
@@ -159,11 +165,39 @@ void k32_setup() {
     ////////////////// WIFI MODE
     if (wifiMode()) 
     {
-        ////////////////// WIFI
+        // WIFI
         LOG("NETWORK: wifi");
         wifi = new K32_wifi(k32);
+        wifi->setHostname(k32->system->name() + (nodeName != "") ? "-" + nodeName : "");
+
+
+        // MQTT
         mqtt = new K32_mqtt(k32, wifi, stm32);
+        
+
+        // OSC
         // osc = new K32_osc(k32, wifi);    // TODO: re-enable OSC
+        
+
+        //ARTNET
+        artnet = new K32_artnet(k32, nodeName, LULU_uni); 
+
+        artnet->onFullDmx([](const uint8_t *data, int length)
+        {
+            // Force Auto
+            if (length > 511 && data[511] > 250) // data 512 = end dmx trame
+            {
+            remote->setState(REMOTE_AUTO);
+            remote->lock();
+            }
+            // LOGF("ARTNET fullframe: %d \n", length);
+
+            // FULL NODE
+            if (ARTNET_DMXNODE && dmx) 
+            dmx->setMultiple(data, length);
+        });
+
+
     }
     
     ////////////////// BLUETOOTH MODE
@@ -181,5 +215,4 @@ void k32_setup() {
 
 
 }
-
 

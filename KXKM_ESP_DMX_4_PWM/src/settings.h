@@ -4,18 +4,22 @@
 
 #define LULU_PATCHSIZE 20 // Size of artnet frame to listen to
 
-#define DMXOUT_ADDR    1  // DMX output start address
-#define OUT_PATCHSIZE 20  // DMX passthru size (frame size to copy from Artnet to DMX)
+#define DMXOUT_ADDR           1   // DMX output start address
+#define DMXFIXTURE_PATCHSIZE  32  // DMX fixture patch size
 
 #define PWR_FAKE_CURRENT  0   // Courant virtuel si gauge adaptative désactivée
 
 #define LULU_STRIP_TYPE   LED_SK6812W_V1  // Type de strip led          
 #define LULU_STRIP_SIZE   5
 
-#define LULU_PREV_SIZE    6               // Nbr pixel prévisu
-#define LULU_PREV_MASTER  40              // Luminosité prévisu
+#define LULU_PREV_SIZE    6         // Nbr pixel prévisu
+#define LULU_PREV_MASTER  40        // Luminosité prévisu
 
-#define LULU_MEMNOWIFI_MASTER 0               // Luminosité Preset NOWIFI
+#define LULU_MEMNOWIFI_MASTER 0     // Luminosité Preset NOWIFI
+
+#define ARTNET_DMXNODE      0       // send Artnet full-frame -> DmxOut (NODE)
+#define ARTNET_TO_DMXDIRECT 0       // Send Artnet sub-frame  -> animation "datathru"
+#define ARTNET_TO_STRIPS    0       // Send Artnet sub-frame  -> animation "artnet"
 
 #define REFRESH_INFO 1000 // Refresh affichage Wifi & Battery
 
@@ -32,117 +36,48 @@
 #ifdef LULU_TYPE
 
 #if LULU_TYPE == 1
-#define L_NAME "Sac"
-#define LULU_STRIP_SIZE 120
-#define PWR_FAKE_CURRENT 12500
-// #include "macro/Type/SK/mem.h" // mem global sk & pwm
-
-#include "macro/Type/4pwm/mem_4pwm.h" // defo
-#include "macro/Type/SK/mem_sk.h"     // defo
-#include "macro/mem_sac_pwm.h"
+#include "type/01-sac.h"
 
 #elif LULU_TYPE == 2
-#define L_NAME "Barre"
-#define LULU_STRIP_SIZE 120
-// #include "macro/Type/SK/mem.h" // mem global sk & pwm
-
-#include "macro/Type/4pwm/mem_4pwm.h" // defo
-// #include "macro/Type/SK/mem_sk.h"  // defo
-#include "macro/Show/larochelle/mem_sk_roch.h"
-// #include "macro/Show/esch/mem_sk_esch.h"
-#include "macro/mem_barre_pwm.h"
+#include "type/02-barre.h"
 
 #elif LULU_TYPE == 3
-#define L_NAME "Pince"
-#define LULU_STRIP_SIZE 17
-// #include "macro/Type/SK/mem.h" // mem global sk & pwm
-
-#include "macro/Type/4pwm/mem_4pwm.h" // defo
-#include "macro/Type/SK/mem_sk.h"     // defo
-#include "macro/mem_pince_pwm.h"
+#include "type/03-pince.h"
 
 #elif LULU_TYPE == 4
-#define L_NAME "Fluo"
-#define LULU_STRIP_SIZE 73
-// #include "macro/Type/SK/mem.h" // mem global sk & pwm
-
-#include "macro/Type/4pwm/mem_4pwm.h" // defo
-#include "macro/Type/SK/mem_sk.h"     // defo
-#include "macro/mem_fluo_pwm.h"
+#include "type/04-fluo.h"
 
 #elif LULU_TYPE == 5
-#define L_NAME "Flex"
-#define LULU_STRIP_SIZE 186
-// #include "macro/Type/SK/mem.h" // mem global sk & pwm
-
-#include "macro/Type/4pwm/mem_4pwm.h" // defo
-#include "macro/Type/SK/mem_sk.h"     // defo
-#include "macro/mem_flex_pwm.h"
+#include "type/05-flex.h"
 
 #elif LULU_TYPE == 6
-#define L_NAME "Barrette"
-#define LULU_STRIP_SIZE 64
-// #include "macro/Type/SK/mem.h" // mem global sk & pwm
-
-#include "macro/Type/4pwm/mem_4pwm.h" // defo
-// #include "macro/Type/SK/mem_sk.h"  // defo
-#include "macro/Show/larochelle/mem_sk_roch.h"
-#include "macro/mem_barre_pwm.h"
+#include "type/06-barrette.h"
 
 #elif LULU_TYPE == 7
-#define L_NAME "Phone"
-#define LULU_STRIP_SIZE 35
-// #include "macro/Type/SK/mem.h" // mem global sk & pwm
-
-#include "macro/Type/4pwm/mem_4pwm.h" // defo
-#include "macro/Type/SK/mem_sk.h"     // defo
-#include "macro/mem_phone_pwm.h"
+#include "type/07-phone.h"
 
 #elif LULU_TYPE == 8
-#define L_NAME "Atom"
-#define LULU_STRIP_SIZE 25                                         // 5 pour tester avec les jauges de monitoring
-#define LULU_STRIP_TYPE   LED_WS2812_V1
-// #include "macro/Type/SK/mem.h" // mem global sk & pwm
-
-#include "macro/Type/4pwm/mem_4pwm.h" // defo
-#include "macro/Type/SK/mem_sk.h"     // defo
-#include "macro/mem_atom_pwm.h"
+#include "type/08-atom.h"
 
 #elif LULU_TYPE == 9
-#define L_NAME "Chariot"
-#define LULU_STRIP_SIZE 120
-// #include "macro/Show/H&S/mem_h&s.h" // mem global sk & pwm
-
-#include "macro/Type/4pwm/mem_4pwm.h" // defo
-// #include "macro/Type/SK/mem_sk.h"  // defo
-
-#include "macro/Show/H&S/mem_h&s_sk.h"
-#include "macro/mem_chariot_pwm.h"
+#include "type/09-chariot.h"
 
 #elif LULU_TYPE == 10
-#define L_NAME "Power"
-#define LULU_STRIP_SIZE 120
-#include "macro/Type/SK/mem.h" // mem global sk & pwm
+#include "type/10-power.h"
 
 #elif LULU_TYPE == 11
-#define L_NAME "Dmx_strobe"
-#define LULU_STRIP_SIZE 0
-#define DMXOUT_ADDR 1
-#define OUT_PATCHSIZE 16                      // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
-#include "macro/Type/strobe/mem_strobe_dmx.h" // mem global
+#include "type/11-strobe.h"
 
 #elif LULU_TYPE == 12
 #define L_NAME "Dmx_par"
 #define LULU_STRIP_SIZE 0
-#define DMXOUT_ADDR 1
-#define OUT_PATCHSIZE 5                           // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
+#define DMXFIXTURE_PATCHSIZE 5                           // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
 #include "macro/Type/parled/mem_pwm_parled_dmx.h" // mem global
 
 #elif LULU_TYPE == 13
 #define L_NAME "NODE"
 #define LULU_STRIP_SIZE 0
-#define DMXOUT_ADDR 1
-#define OUT_PATCHSIZE 508                           // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
+#define ARTNET_DMXNODE 1
 #include "macro/Type/node/node.h" // mem global
 
 #elif LULU_TYPE == 20
@@ -156,7 +91,7 @@
 #elif LULU_TYPE == 21
 #define LULU_STRIP_SIZE 60
 #define L_NAME "Cube_par"
-#define OUT_PATCHSIZE 9 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
+#define DMXFIXTURE_PATCHSIZE 9        // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
 #define LULU_MEMNOWIFI_MASTER 255
 #include "macro/Type/parled/mem_parled.h"
 // #include "macro/Show/larochelle/mem_parled_roch.h"
@@ -174,7 +109,7 @@
 #elif LULU_TYPE == 22
 #define LULU_STRIP_SIZE 60
 #define L_NAME "Cube_minikolor"
-#define OUT_PATCHSIZE 13 //  20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
+#define DMXFIXTURE_PATCHSIZE 13                 //  20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
 #define LULU_MEMNOWIFI_MASTER 255
 #include "macro/Type/4pwm/mem_4pwm.h"           // defo
 #include "macro/Type/minikolor/mem_minikolor.h" // defo
@@ -183,7 +118,7 @@
 #elif LULU_TYPE == 23
 #define LULU_STRIP_SIZE 60
 #define L_NAME "Cube_elp"
-#define OUT_PATCHSIZE 7 //  20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor / = elp
+#define DMXFIXTURE_PATCHSIZE 7         //  20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor / = elp
 #define LULU_MEMNOWIFI_MASTER 255
 #include "macro/Type/4pwm/mem_4pwm.h" // defo
 #include "macro/Type/elp/mem_elp.h"   // defo
@@ -192,8 +127,8 @@
 #elif LULU_TYPE == 30
 #define LULU_STRIP_SIZE 60
 #define L_NAME "Sucette_parled"
-#define OUT_PATCHSIZE 9 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
-#define LULU_MEMNOWIFI_MASTER 82   // 82 niveau pour les statics baronnie
+#define DMXFIXTURE_PATCHSIZE 9         // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
+#define LULU_MEMNOWIFI_MASTER 82        // 82 niveau pour les statics baronnie
 #include "macro/Type/parled/mem_parled.h"
 
 // #include "macro/Type/4pwm/mem_4pwm.h"             // defo
@@ -213,8 +148,8 @@
 #elif LULU_TYPE == 31
 #define LULU_STRIP_SIZE 60
 #define L_NAME "Sucette_strobe"
-#define OUT_PATCHSIZE 9 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
-#define LULU_MEMNOWIFI_MASTER 255  //
+#define DMXFIXTURE_PATCHSIZE 9        // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
+#define LULU_MEMNOWIFI_MASTER 255     //
 #include "macro/Type/strobe/mem_strobe.h" // defo
 
 #include "macro/Type/4pwm/mem_4pwm.h" // defo
@@ -223,8 +158,8 @@
 #elif LULU_TYPE == 32
 #define LULU_STRIP_SIZE 60
 #define L_NAME "Sucette_MiniKolor"
-#define OUT_PATCHSIZE 9 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
-#define LULU_MEMNOWIFI_MASTER 255  //
+#define DMXFIXTURE_PATCHSIZE 9        // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
+#define LULU_MEMNOWIFI_MASTER 255     //
 #include "macro/Type/minikolor/mem_minikolor.h" // defo
 
 #include "macro/Type/4pwm/mem_4pwm.h" // defo
@@ -233,8 +168,8 @@
 #elif LULU_TYPE == 33
 #define LULU_STRIP_SIZE 60
 #define L_NAME "Sucette_Elp"
-#define OUT_PATCHSIZE 9 // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
-#define LULU_MEMNOWIFI_MASTER 255  //
+#define DMXFIXTURE_PATCHSIZE 9      // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
+#define LULU_MEMNOWIFI_MASTER 255   //
 #include "macro/Type/elp/mem_elp.h" // defo
 
 #include "macro/Type/4pwm/mem_4pwm.h" // defo
@@ -272,11 +207,11 @@
 #elif LULU_TYPE == 50
 #define L_NAME "elp_DMX"
 #define LULU_STRIP_SIZE 50
-#define OUT_PATCHSIZE 20
 #define DMXOUT_ADDR 20
+#define DMXFIXTURE_PATCHSIZE LULU_STRIP_SIZE
 
 #include "macro/Type/4pwm/mem_4pwm.h" // defo
-// #include "macro/Type/SK/mem_sk.h"     // defo
+// #include "macro/Type/SK/mem_sk_1.h"     // defo
 // #include "macro/mem_barre_pwm.h"
 
 // #include "macro/Show/Baro/mem_sk_baro.h"
@@ -288,50 +223,13 @@
 #elif LULU_TYPE == 60
 #define L_NAME "lyre_DMX"
 #define LULU_STRIP_SIZE 27
-#define OUT_PATCHSIZE 16
-#define DMXOUT_ADDR 1
+#define DMXFIXTURE_PATCHSIZE 16
 
 #include "macro/Type/4pwm/mem_4pwm.h" // defo
-#include "macro/Type/SK/mem_sk.h"     // defo
+#include "macro/Type/SK/mem_sk_1.h"     // defo
 #include "macro/mem_barre_pwm.h"
 
 #endif
 #endif
 
-#include <Preferences.h>
-Preferences prefs;
 
-void settings()
-{
-
-  prefs.begin("k32-settings", false);
-
-  int LULU_id;
-  #ifdef LULU_ID
-    prefs.putUInt("LULU_id", LULU_ID);
-    LULU_id = LULU_ID;
-  #else
-    LULU_id = prefs.getUInt("LULU_id", 1);
-  #endif
-
-
-  #ifdef LULU_UNI
-    prefs.putUInt("LULU_uni", LULU_UNI);
-    LULU_uni = LULU_UNI;
-  #else
-    LULU_uni = prefs.getUInt("LULU_uni", 0);
-  #endif
-
-
-  // NAME
-  nodeName = L_NAME;
-  
-  if (LULU_STRIP_TYPE == LED_SK6812_V1)         nodeName += "-SK";
-  else if (LULU_STRIP_TYPE == LED_SK6812W_V1)   nodeName += "-SKW";
-  else                                          nodeName += "-WS";
-
-  nodeName += "-" + String(LULU_id) + "-v" + String(LULU_VER);
-
-  prefs.end();
-
-} //k32_settings()

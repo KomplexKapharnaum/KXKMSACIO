@@ -1,14 +1,14 @@
 #ifndef node_h
 #define node_h
 
-#define NUMBER_OF_MEM 16 // stm leave in last mem
+#define PRESET_COUNT 16 // stm leave in last mem
 
 void init_mem() {}
 
 //
 // MEM ANIMATOR DATA ! modulateur relatif a la valeur du tableau
 //
-uint8_t MEM[NUMBER_OF_MEM][LULU_PATCHSIZE] = {
+uint8_t MEM[PRESET_COUNT][LULU_PATCHSIZE] = {
     {255, 255, 0, 0, 0, 255, 255, 255, 255},     // 00 Red
     {255, 0, 255, 0, 0, 170, 170, 170, 170},     // 01 Green
     {255, 0, 0, 255, 0, 126, 126, 126, 126},     // 02 Blue
@@ -34,7 +34,7 @@ uint8_t MEM_NO_WIFI[LULU_PATCHSIZE] = {255, 0, 0, 0, 0, LULU_MEMNOWIFI_MASTER, L
 //
 // PREVIEW PIXEL MAP
 //
-uint8_t MEM_PREV[NUMBER_OF_MEM][LULU_PREV_SIZE * 4] = {
+uint8_t MEM_PREV[PRESET_COUNT][LULU_PREV_SIZE * 4] = {
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, // 00 red
     {0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, // 01 Green
     {0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, // 02 Blue

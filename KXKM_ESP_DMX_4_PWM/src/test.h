@@ -7,8 +7,10 @@ void light_tests() {
   int timeStep = 300;
   
   // INIT TEST STRIPS
-    light->anim( strip[0], "test0",   new K32_anim_test )->push(timeStep)->master(LULU_PREV_MASTER)->play();
-    light->anim( strip[1], "test1",   new K32_anim_test )->push(timeStep)->master(LULU_PREV_MASTER)->play();
+    light->anim( "test0", new K32_anim_test )->push(timeStep)->master(LULU_PREV_MASTER);
+    for (int k=0; k<LED_N_STRIPS; k++)
+      light->anim("test0")->attach(strip[k]);
+    light->anim("test0")->play();
 
   // DMX TEST
     // light->anim( strip[0], "testDMX",   new Anim_dmx_test )->push(timeStep)->master(LULU_PREV_MASTER)->play();
@@ -36,7 +38,6 @@ void light_tests() {
 
   // WAIT END
     light->anim("test0")->wait();
-    light->anim("test1")->wait();
     // light->anim("testDMX")->wait();
   
   // COLOR TEST
