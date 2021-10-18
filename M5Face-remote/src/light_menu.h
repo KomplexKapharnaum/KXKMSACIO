@@ -8,16 +8,18 @@ void remote_light();
 bool master_value();
 bool id_value();
 bool color_value();
+
 void draw_master();
+void draw_color();
+void draw_str();
+void draw_mod();
+void draw_mirror();
+
 void send_master();
 void send_color();
-void draw_color();
 void send_str();
-void draw_str();
 void send_mod();
-void draw_mod();
 void send_mirror();
-void draw_mirror();
 
 bool _mod_coarse = false;
 bool color_front_back = false;
