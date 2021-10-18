@@ -324,7 +324,7 @@ public:
       // Dash Length + Offset
       if (LULU_TYPE == 80)
       {
-        dashLength = 300;     // pix_start
+        dashLength = data[6]; // pix_start
         dashOffset = data[7]; // pix_pos
         // LOGF("dashLength: %d ", dashLength);
         LOGF(" dashOffset: %d ", dashOffset);
