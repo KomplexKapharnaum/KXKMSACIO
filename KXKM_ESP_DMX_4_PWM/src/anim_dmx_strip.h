@@ -318,14 +318,16 @@ public:
       if (colorMode == COLOR_BI)
         backColor = CRGBW{data[10], data[11], data[12], data[13]};
 
-        int dashLength ;
-        int dashOffset ;
+      int dashLength;
+      int dashOffset;
 
       // Dash Length + Offset
       if (LULU_TYPE == 80)
       {
-        dashLength = 2;
-        dashOffset = 10;
+        dashLength = 300;     // pix_start
+        dashOffset = data[7]; // pix_pos
+        // LOGF("dashLength: %d ", dashLength);
+        LOGF(" dashOffset: %d ", dashOffset);
       }
       else if (LULU_TYPE != 80)
       {
