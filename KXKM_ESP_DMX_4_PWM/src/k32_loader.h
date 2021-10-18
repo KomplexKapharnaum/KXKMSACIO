@@ -16,6 +16,9 @@ K32_power* power = nullptr;
 #include <hardware/K32_remote.h>
 K32_remote* remote = nullptr;
 
+#include <hardware/K32_pwm.h>
+K32_pwm* pwm = nullptr;
+
 #include <K32_wifi.h>
 K32_wifi* wifi = nullptr;
 
@@ -38,14 +41,8 @@ K32_light* light = nullptr;
 #include "K32_dmx.h"
 K32_dmx* dmx = nullptr;
 
-#include <fixtures/K32_ledstrip.h>
-K32_ledstrip* strip[LED_N_STRIPS] = {nullptr};
-
-#include <fixtures/K32_dmxfixture.h>
-K32_dmxfixture* fixs[DMX_N_FIXTURES] = {nullptr};
-
-
 #include "settings.h"
+
 
 // CHECK MCP SWITCH to select Wifi or BT
 //
@@ -82,9 +79,9 @@ void k32_setup() {
     // NAME
     nodeName = L_NAME;
 
-    if (LULU_STRIP_TYPE == LED_SK6812_V1)         nodeName += "-SK";
-    else if (LULU_STRIP_TYPE == LED_SK6812W_V1)   nodeName += "-SKW";
-    else                                          nodeName += "-WS";
+    // if (LULU_STRIP_TYPE == LED_SK6812_V1)         nodeName += "-SK";
+    // else if (LULU_STRIP_TYPE == LED_SK6812W_V1)   nodeName += "-SKW";
+    // else                                          nodeName += "-WS";
 
     nodeName += "-" + String(LULU_id) + "-v" + String(LULU_VER);
 
@@ -93,7 +90,7 @@ void k32_setup() {
     //////////////////////////////////////// K32_lib ////////////////////////////////////
     k32 = new K32();
 
-    //////////////////////////////////////// K32 modules ////////////////////////////////////
+    //////////////////////////////////////// K32 hardware ////////////////////////////////////
     // STM32
     #ifdef HW_ENABLE_STM32
         stm32 = new K32_stm32(k32, true);
@@ -110,56 +107,20 @@ void k32_setup() {
     // Remote
     remote = new K32_remote(k32, mcp);
 
+    // PWM
+    pwm = new K32_pwm(k32);
+    for (int k = 0; k < PWM_N_CHAN; k++)
+        if (PWM_PIN[k32->system->hw()][k] > 0) // TODO: allow -1 pin but disable output
+            pwm->attach(PWM_PIN[k32->system->hw()][k]);
+
     /////////////////////////////////////////////// LIGHT //////////////////////////////////////
 
     light = new K32_light(k32);
-
-    // LED STRIPS
-    for(int k=0; k<LED_N_STRIPS; k++) { 
-        strip[k] = new K32_ledstrip(k, LEDS_PIN[k32->system->hw()][k], (led_types)LULU_STRIP_TYPE, LULU_STRIP_SIZE + 30);
-        light->addFixture( strip[k] );
-    }
-
-    // PWM
-    for (int k = 0; k < PWM_N_CHAN; k++)
-        if (PWM_PIN[k32->system->hw()][k] > 0) // TODO: allow -1 pin but disable output
-            light->pwm->attach(PWM_PIN[k32->system->hw()][k]);  // TODO: convert PWM into DIMMER fixture
     
-    // DMX
-    dmx = new K32_dmx(DMX_PIN[k32->system->hw()], DMX_OUT);
+    dmx = new K32_dmx(DMX_PIN[k32->system->hw()], DMX_OUT);    
 
-
-    //      CHARIOT             FLUO
-    #if LULU_TYPE == 9 || LULU_TYPE == 40
-        light->copyFixture({strip[0], 0, LULU_STRIP_SIZE, strip[1], 0}); // Clone
-
-    //      STROBEDMX           PARDMX                                        
-    #elif LULU_TYPE == 11 || LULU_TYPE == 12
-        fixs[0] = new K32_dmxfixture(dmx, DMXOUT_ADDR, DMXFIXTURE_PATCHSIZE);
-
-    // ELP
-    #elif LULU_TYPE == 50
-        fixs[0] = new K32_dmxfixture(dmx, DMXOUT_ADDR, DMXFIXTURE_PATCHSIZE);
-        light->copyFixture({strip[0], 0, LULU_STRIP_SIZE, elp, 0});
-
-    // LYRE
-    #elif LULU_TYPE == 60
-        int DMX_address = (1 + (LULU_id - 1) * 32);  // DMX Offset = 32  =>  Lyre 1 addr=1 / Lyre 2 addr=33 / ...
-        fixs[0] = new K32_dmxfixture(dmx, DMX_address, DMXFIXTURE_PATCHSIZE);
-
-    // OTHERS
-    #else
-        light->copyFixture({strip[0], LULU_STRIP_SIZE, LULU_STRIP_SIZE + 18, strip[1], 0}); // jauge sortie 2
-        
-    #endif
-
-    // REGISTER dmxfixtures
-    for (int k=0; k<DMX_N_FIXTURES; k++)
-        if (fixs[k]) light->addFixture(fixs[k]);
-
-    // LOAD MACRO AND PRESETS
-    init_mem();
-
+    init_lights();
+    
     /////////////////////////////////////////////// NETWORK //////////////////////////////////////
 
     ////////////////// WIFI MODE
@@ -180,22 +141,23 @@ void k32_setup() {
         
 
         //ARTNET
-        artnet = new K32_artnet(k32, nodeName, LULU_uni); 
+        // FIX
+        // artnet = new K32_artnet(k32, nodeName, LULU_uni); 
 
-        artnet->onFullDmx([](const uint8_t *data, int length)
-        {
-            // Force Auto
-            if (length > 511 && data[511] > 250) // data 512 = end dmx trame
-            {
-            remote->setState(REMOTE_AUTO);
-            remote->lock();
-            }
-            // LOGF("ARTNET fullframe: %d \n", length);
+        // artnet->onFullDmx([](const uint8_t *data, int length)
+        // {
+        //     // Force Auto
+        //     if (length > 511 && data[511] > 250) // data 512 = end dmx trame
+        //     {
+        //     remote->setState(REMOTE_AUTO);
+        //     remote->lock();
+        //     }
+        //     // LOGF("ARTNET fullframe: %d \n", length);
 
-            // FULL NODE
-            if (ARTNET_DMXNODE && dmx) 
-            dmx->setMultiple(data, length);
-        });
+        //     // FULL NODE
+        //     if (ARTNET_DMXNODE && dmx) 
+        //     dmx->setMultiple(data, length);
+        // });
 
 
     }

@@ -18,8 +18,8 @@
 #define LULU_MEMNOWIFI_MASTER 0     // Luminosité Preset NOWIFI
 
 #define ARTNET_DMXNODE      0       // send Artnet full-frame -> DmxOut (NODE)
-#define ARTNET_TO_DMXDIRECT 0       // Send Artnet sub-frame  -> animation "datathru"
-#define ARTNET_TO_STRIPS    0       // Send Artnet sub-frame  -> animation "artnet"
+#define ARTNET_TO_DMXDIRECT 0       // Send Artnet sub-frame  -> animation "artnet-dmxfix"
+#define ARTNET_TO_STRIPS    0       // Send Artnet sub-frame  -> animation "artnet-strip"
 
 #define REFRESH_INFO 1000 // Refresh affichage Wifi & Battery
 
@@ -32,6 +32,13 @@
 #define DEBUG_btn 1
 
 /////////////////////////////////////////def LULU_STRIP_TYPE & LULU_TYPE /////////////////////////////////////////
+
+// LIGHT ANIMATIONS
+#include <animations/K32_anim_basics.h>
+#include "anim_monitoring.h"
+#include "anim_dmx_test.h"
+#include "anim_dmx_strip.h"
+
 
 #ifdef LULU_TYPE
 

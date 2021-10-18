@@ -61,20 +61,20 @@ Anim_dmx hérite de la classe K32_anim.
 
     - Une K32_anim est créée et attachée dans le programme principal en utilisant k32->light:
         
-        k32->light->anim( 0, "artnet", new Anim_dmx, LULU_STRIP_SIZE, 0);
+        k32->light->anim( 0, "artnet-strip", new Anim_dmx, LULU_STRIP_SIZE, 0);
 
             0               = numéro de la sortie (strip) sur laquelle opère l'animation
-            "artnet"        = alias de l'animation, permet de la rappeler par la suite en utilisant k32->light->anim("artnet")
+            "artnet-strip"        = alias de l'animation, permet de la rappeler par la suite en utilisant k32->light->anim("artnet-strip")
             new Anim_dmx    = l'animation en question, new permet de créer une nouvelle instance à partir de classe Anim_dmx
             LULU_STRIP_SIZE      = nombre de pixels utiles pour l'animation (optionnel -> defaut = full strip size)
             0               = décalage en pixel à partir du début du strip (optionnel -> defaut = 0)
 
 
-    - Une anim existante peut être rappelée en utilisant    k32->light->anim("artnet");
+    - Une anim existante peut être rappelée en utilisant    k32->light->anim("artnet-strip");
 
 
     - Dans le programme principal, une animation propose les fonctions publiques suivantes.
-      Elles peuvent être chainnées ainsi:   k32->light->anim("artnet")->master(100)->play()->wait(1000)->push(200);
+      Elles peuvent être chainnées ainsi:   k32->light->anim("artnet-strip")->master(100)->play()->wait(1000)->push(200);
 
         *  play()               lance l'animation
         *  play(1000)           lance l'animation pour une durée limitée (en millisecondes) puis s'arrête
@@ -187,15 +187,15 @@ class Anim_dmx_strip : public K32_anim {
       // ONDMXFRAME
       //
 
-      //PWM
-      if (light->pwm)
-      {
-        light->pwm->set(0, data[LULU_PATCHSIZE-4]*this->master()/255 );
-        light->pwm->set(1, data[LULU_PATCHSIZE-3]*this->master()/255 );
-        light->pwm->set(2, data[LULU_PATCHSIZE-2]*this->master()/255 );
-        light->pwm->set(3, data[LULU_PATCHSIZE-1]*this->master()/255 );
-        // LOGF5("ANIM: -> Master %d PWM %d %d %d %d \n", this->master(), data[LULU_PATCHSIZE-4], data[LULU_PATCHSIZE-3], data[LULU_PATCHSIZE-2], data[LULU_PATCHSIZE-1]);
-      }
+      // //PWM
+      // if (light->pwm)
+      // {
+      //   light->pwm->set(0, data[LULU_PATCHSIZE-4]*this->master()/255 );
+      //   light->pwm->set(1, data[LULU_PATCHSIZE-3]*this->master()/255 );
+      //   light->pwm->set(2, data[LULU_PATCHSIZE-2]*this->master()/255 );
+      //   light->pwm->set(3, data[LULU_PATCHSIZE-1]*this->master()/255 );
+      //   // LOGF5("ANIM: -> Master %d PWM %d %d %d %d \n", this->master(), data[LULU_PATCHSIZE-4], data[LULU_PATCHSIZE-3], data[LULU_PATCHSIZE-2], data[LULU_PATCHSIZE-1]);
+      // }
 
       // LOGF("ANIM: %s frame ", name());
       // for (int i=0; i<LULU_PATCHSIZE; i++) {

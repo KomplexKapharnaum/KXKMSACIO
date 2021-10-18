@@ -43,12 +43,7 @@ String nodeName;
 
 ///////////////////////////////////////////////// include ////////////////////////////////////////
 
-#include "anim_monitoring.h"
-#include "anim_dmx_test.h"
-#include "anim_dmx_strip.h"
-#include "anim_datathru.h"
 #include "boutons.h"
-#include "test.h"
 
 ///////////////////////////////////////////////// SETUP ////////////////////////////////////////
 void setup()
@@ -61,36 +56,7 @@ void setup()
 
   /////////////////////////////////////////////// LIGHT //////////////////////////////////////
 
-  // TEST Sequence
-  light_tests();
-
-  // ANIM leds - artnet
-  light->anim("artnet", new Anim_dmx_strip, LULU_STRIP_SIZE)->attach(strip[0])->play();
-
-  // ANIM leds - manuframe
-  light->anim("manu", new Anim_dmx_strip, LULU_STRIP_SIZE)->attach(strip[0]);
-
-  // ANIM leds - monitoring
-  light->anim("battery", new Anim_battery, 4, LULU_STRIP_SIZE + 1)->attach(strip[0])->master(LULU_PREV_MASTER)->play();
-  light->anim("remote", new Anim_remote, LULU_PREV_SIZE + 4, LULU_STRIP_SIZE + 6)->attach(strip[0])->master(LULU_PREV_MASTER)->play();
-  light->anim("preview", new Anim_preview, LULU_PREV_SIZE, LULU_STRIP_SIZE + 8)->attach(strip[0])->master(LULU_PREV_MASTER)->play();
-  light->anim("rssi", new Anim_rssi, 1, LULU_STRIP_SIZE + 17)->attach(strip[0])->master(LULU_PREV_MASTER * 1.5)->play();
-
-  // ANIM dmx fixtures 
-  light->anim("datathru", new Anim_datathru , DMXFIXTURE_PATCHSIZE / 4)->play();
-  for (int k=0; k<DMX_N_FIXTURES; k++)
-    if (fixs[k]) light->anim("datathru")->attach(fixs[k]);
-
-  // REMOTE
-  remote->setMacroMax(PRESET_COUNT); // TODO: clean MEM loading (and setMemMax)
-
-// MEM ON BOOT
-#if (LULU_TYPE >= 20 || LULU_TYPE == 2 || LULU_TYPE == 6)
-      // light->anim("artnet")->push(MEM_NO_WIFI, LULU_PATCHSIZE);// settings set
-      // light->anim("artnet")->mod(new K32_mod_sinus)->at(2)->period(8500)->phase(0)->mini(-255)->maxi(255); // modulo
-      // light->anim("artnet")->push( MEM_SK[20], LULU_PATCHSIZE); // baro auto circulation elp
-      // light->anim("artnet")->mod(new K32_mod_sinus)->at(7)->period(8500)->mini(0)->maxi(45);// baro auto circulation elp
-#endif
+   
 
   /////////////////////////////////////////////// NETWORK //////////////////////////////////////
 
@@ -124,43 +90,44 @@ void setup()
     
 
     // ARTNET: subscribe dmx frame
-    artnet->onDmx( {
-      .address    = ARTNET_address, 
-      .framesize  = FRAME_size, 
-      .callback   = [](const uint8_t *data, int length) 
-      { 
+    // FIX
+    // artnet->onDmx( {
+    //   .address    = ARTNET_address, 
+    //   .framesize  = FRAME_size, 
+    //   .callback   = [](const uint8_t *data, int length) 
+    //   { 
         
-        if (ARTNET_TO_DMXDIRECT) 
-          light->anim("datathru")->push(data, min(length, DMXFIXTURE_PATCHSIZE));
+    //     if (ARTNET_TO_DMXDIRECT) 
+    //       light->anim("artnet-dmxfix")->push(data, min(length, DMXFIXTURE_PATCHSIZE));
         
-        if (ARTNET_TO_STRIPS)
-          light->anim("artnet")->push(data, min(length, LULU_PATCHSIZE));
+    //     if (ARTNET_TO_STRIPS)
+    //       light->anim("artnet-strip")->push(data, min(length, LULU_PATCHSIZE));
 
-        // LYRE
-        #if LULUTYPE == 60
-          if (length >= DMXFIXTURE_PATCHSIZE + 9)
-          {
-            const uint8_t *dataStrip = &data[DMXFIXTURE_PATCHSIZE];
+    //     // LYRE
+    //     #if LULUTYPE == 60
+    //       if (length >= DMXFIXTURE_PATCHSIZE + 9)
+    //       {
+    //         const uint8_t *dataStrip = &data[DMXFIXTURE_PATCHSIZE];
 
-            // MEM ou ARTNET FRAME
-            if (dataStrip[0] > 0 && dataStrip[0] <= PRESET_COUNT)
-              remote->stmSetMacro(dataStrip[0] - 1);
-            else
-            {
-              int stripframe[LULU_PATCHSIZE] = {255, dataStrip[1], dataStrip[2], dataStrip[3], dataStrip[4], 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, dataStrip[5], dataStrip[6], dataStrip[7], dataStrip[8]};
-              light->anim("artnet")->push(stripframe, LULU_PATCHSIZE);
-              remote->setState(REMOTE_AUTO);
-            }
-          }
-        #endif
+    //         // MEM ou ARTNET FRAME
+    //         if (dataStrip[0] > 0 && dataStrip[0] <= PRESET_COUNT)
+    //           remote->stmSetMacro(dataStrip[0] - 1);
+    //         else
+    //         {
+    //           int stripframe[LULU_PATCHSIZE] = {255, dataStrip[1], dataStrip[2], dataStrip[3], dataStrip[4], 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, dataStrip[5], dataStrip[6], dataStrip[7], dataStrip[8]};
+    //           light->anim("artnet-strip")->push(stripframe, LULU_PATCHSIZE);
+    //           remote->setState(REMOTE_AUTO);
+    //         }
+    //       }
+    //     #endif
 
-        // LOGINL("ARTFRAME: ");
-        // LOGF("length=%d ", length);
-        // for (int k = 0; k < length; k++)
-        //   LOGF("%d ", data[k]);
-        // LOG();
-      }
-    });
+    //     // LOGINL("ARTFRAME: ");
+    //     // LOGF("length=%d ", length);
+    //     // for (int k = 0; k < length; k++)
+    //     //   LOGF("%d ", data[k]);
+    //     // LOG();
+    //   }
+    // });
 
 
     // EVENT: wifi lost
@@ -169,9 +136,9 @@ void setup()
                          LOG("WIFI: connection lost..");
 
 #if LULU_TYPE >= 20
-      //  light->anim("artnet")->push(MEM_NO_WIFI, LULU_PATCHSIZE);
+      //  light->anim("artnet-strip")->push(MEM_NO_WIFI, LULU_PATCHSIZE);
 #else
-                         light->anim("artnet")->push(0); // @master 0
+                         light->anim("artnet-strip")->push(0); // @master 0
 #endif
                        });
 
@@ -201,7 +168,7 @@ void setup()
   k32->timer->every(REFRESH_INFO, []()
                     {
                       if (stm32)
-                        light->anim("battery")->push(stm32->battery());
+                        light->anim("battery-strip")->push(stm32->battery());
 
                       static bool toggleRSSI = false;
                       toggleRSSI = !toggleRSSI;
@@ -211,11 +178,11 @@ void setup()
                       {
                         int rssi = wifi->getRSSI();
                         if (rssi < 0)
-                          light->anim("rssi")->push(rssi);
+                          light->anim("rssi-strip")->push(rssi);
                         else if (toggleRSSI)
-                          light->anim("rssi")->push(-100);
+                          light->anim("rssi-strip")->push(-100);
                         else
-                          light->anim("rssi")->push(0);
+                          light->anim("rssi-strip")->push(0);
                       }
 
                       // Bluetooth
@@ -223,15 +190,15 @@ void setup()
                       // if(bt)
                       // {
                       //   int rssi = bt->getRSSI();
-                      //   if (rssi > 0)         light->anim("rssi")->push(rssi);
-                      //   else if (toggleRSSI)  light->anim("rssi")->push(100);
-                      //   else                  light->anim("rssi")->push(0);
+                      //   if (rssi > 0)         light->anim("rssi-strip")->push(rssi);
+                      //   else if (toggleRSSI)  light->anim("rssi-strip")->push(100);
+                      //   else                  light->anim("rssi-strip")->push(0);
                       // }
                     });
 
   // Remote status refresh
   k32->timer->every(100, []()
-                    { light->anim("remote")->push(remote->getState(), remote->isLocked()); });
+                    { light->anim("remote-strip")->push(remote->getState(), remote->isLocked()); });
 
   // Heap Memory log
   // k32->timer->every(1000, []() {
@@ -241,8 +208,6 @@ void setup()
   //   lastheap = heap;
   // });
 
-  load_mem(light->anim("manu"), 15); //auto play
-  light->anim("manu")->play();       //auto play
 } // setup
 
 ///////////////////////////////////////// LOOP /////////////////////////////////////////////////

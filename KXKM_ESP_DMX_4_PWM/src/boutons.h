@@ -62,9 +62,9 @@ void boutons_loop()
         LOGF("REMOTE: -> set Active Macro = %d\n", activeMacro);
 
         #if LULU_TYPE == 12
-            load_mem( light->anim("datathru"), activeMacro );
+            light->anim("mem-dmxfix")->mem(activeMacro);
         #else
-            load_mem( light->anim("manu"), activeMacro );
+            light->anim("mem-strip")->mem(activeMacro);
         #endif
     }
 
@@ -73,8 +73,7 @@ void boutons_loop()
     if (didChange(W_PREVMACRO, previewMacro))
     {
         LOGF("REMOTE: -> set Preview Macro = %d\n", previewMacro);
-
-        light->anim("preview")->push(MEM_SK_PREV[previewMacro], LULU_PREV_SIZE * 4);
+        light->anim("memprev-strip")->mem(previewMacro);
     }
 
     // STATE Changed
@@ -84,25 +83,25 @@ void boutons_loop()
         // AUTO
         if (stateR == REMOTE_AUTO)
         {
-            light->anim("manu")->stop();
-            light->anim("preview")->stop();
-            light->anim("artnet")->play();
+            light->anim("mem-strip")->stop();
+            light->anim("memprev-strip")->stop();
+            light->anim("artnet-strip")->play();
             LOG("REMOTE: -> Mode AUTO");
         }
 
         // STM
         else if (stateR == REMOTE_MANU_STM)
         {
-            light->anim("artnet")->stop();
-            light->anim("preview")->play();
-            light->anim("manu")->play();
+            light->anim("artnet-strip")->stop();
+            light->anim("memprev-strip")->play();
+            light->anim("mem-strip")->play();
             LOG("REMOTE: -> Mode STM");
         }
 
         // MANU
         else if (stateR == REMOTE_MANU || stateR == REMOTE_MANU_LAMP)
         {
-            light->anim("preview")->play();
+            light->anim("memprev-strip")->play();
             LOG("REMOTE: -> Mode MANU");
         }
     }
@@ -111,8 +110,8 @@ void boutons_loop()
     if (remote->getSendMacro())
         if (stateR == REMOTE_MANU || stateR == REMOTE_MANU_LAMP)
         {
-            light->anim("artnet")->stop();
-            light->anim("manu")->play();
+            light->anim("artnet-strip")->stop();
+            light->anim("mem-strip")->play();
             LOG("REMOTE: -> MANU -> GO Macro !");
         }
 
@@ -126,8 +125,8 @@ void boutons_loop()
         }
         else
         {
-            light->anim("artnet")->push();
-            light->anim("manu")->push();
+            light->anim("artnet-strip")->push();
+            light->anim("mem-strip")->push();
         }
         LOGF("REMOTE: -> getLAMP @%d\n", lamp);
     }
