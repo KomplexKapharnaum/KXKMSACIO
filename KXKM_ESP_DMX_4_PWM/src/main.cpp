@@ -136,11 +136,11 @@ void setup()
     {
       wifi->staticIP("2.0.1." + String(k32->system->id()), "2.0.0.1", "255.0.0.0"); // hw4
     }
-    wifi->connect("kxkm24", NULL); //KXKM 24
-// wifi->connect("kxkm24lulu", NULL);                                                         //KXKM 24 lulu
-// wifi->connect("mgr4g", NULL);                                                              //Maigre dev
-// wifi->connect("interweb", "superspeed37");                                                 //Maigre dev home
-// wifi->connect("riri_new", "B2az41opbn6397");                                               //Riri dev home
+    // wifi->connect("kxkm24", NULL); //KXKM 24
+    // wifi->connect("kxkm24lulu", NULL);                                                         //KXKM 24 lulu
+    // wifi->connect("mgr4g", NULL);                                                              //Maigre dev
+    // wifi->connect("interweb", "superspeed37");                                                 //Maigre dev home
+    wifi->connect("riri_new", "B2az41opbn6397"); //Riri dev home
 // TODO: if wifi->connect ommited = crash on mqtt/artnet/osc
 
 ////////////////// ARTNET
@@ -218,6 +218,9 @@ void setup()
       }
     }
 
+// Maree no artnet
+#elif LULU_TYPE == 80
+
 // STRIP ONLY
 #else
     light->anim("artnet")->push(data, min(length, LULU_PATCHSIZE));
@@ -247,9 +250,9 @@ void setup()
     ////////////////// MQTT
     if (mqtt)
       mqtt->start({
-          .broker = "2.0.0.1", // Komplex
+          // .broker = "2.0.0.1", // Komplex
           // .broker = "10.0.0.1", // KXKM MESH
-          // .broker = "2.0.0.10", // Riri dev home
+          .broker = "2.0.0.10", // Riri dev home
           // .broker = "192.168.43.132",  // MGR dev home
           .beatInterval = 0,  // heartbeat interval milliseconds (0 = disable) 5000
           .statusInterval = 0 // full beacon interval milliseconds (0 = disable) 15000
@@ -307,12 +310,14 @@ void setup()
   // k32->timer->every(1000, []() {
   //   static int lastheap = 0;
   //   int heap = ESP.getFreeHeap();
-  //   LOGF2("Free memory: %d / %d\n", heap, heap - lastheap);
+  // LOGF2("Free memory: %d / %d\n", heap, heap - lastheap);
   //   lastheap = heap;
   // });
 
   load_mem(light->anim("manu"), 1); //auto play
-  light->anim("manu")->play();      //auto play
+  light->anim("manu")->push(50, 255, 255, 255, 255, 35, 300, 0);
+  light->anim("manu")->mod(new K32_mod_fadeout)->at(0)->at(7)->period(3600000)->mini(0)->maxi(150);
+  light->anim("manu")->play(); //auto play
 } // setup
 
 ///////////////////////////////////////// LOOP /////////////////////////////////////////////////
@@ -321,13 +326,16 @@ void loop()
 
   /////////////////// BOUTONS ///////////////////////
   // boutons_loop();
-  int pos = analogRead(33);        // potentiometre rochelle
-  pos = map(pos, 0, 4095, 0, 255); // mapage in
+  // int pos = analogRead(33);        // potentiometre rochelle
+  // pos = map(pos, 0, 4095, 0, 255); // mapage in
   // LOGF("pos = %d ", pos);
 
-  // light->anim("manu")->push(255, 255, 255, 255, 255, 35, 255, pos);
-  pixelColor_t color = pixelFromRGBW(255, 255, 255, 255);
-  fixture->pix(0, pos, color);
+  // for (int pos = 1; pos < 301; pos++)
+  // {
+  //   light->anim("manu")->push(50, 255, 255, 255, 255, 35, 300, pos);
+  //   LOGF(" pos = %d ", pos);
+  //   delay(20);
+  // }
 
   delay(20);
 
