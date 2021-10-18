@@ -315,8 +315,8 @@ void setup()
   // });
 
   load_mem(light->anim("manu"), 1); //auto play
-  light->anim("manu")->push(50, 255, 255, 255, 255, 35, 300, 0);
-  light->anim("manu")->mod(new K32_mod_fadeout)->at(0)->at(7)->period(3600000)->mini(0)->maxi(150);
+  // light->anim("manu")->push(50, 255, 255, 255, 255, 35, 300, 0);
+  // light->anim("manu")->mod(new K32_mod_fadeout)->at(0)->at(7)->period(3600000)->mini(0)->maxi(150);
   light->anim("manu")->play(); //auto play
 } // setup
 
