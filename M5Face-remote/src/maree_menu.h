@@ -56,7 +56,7 @@ String MAREE_MQTT_STOP = "/leds/stop";
 String MAREE_MQTT_MEM = "/leds/mem";
 String MAREE_MQTT_FADE_IN = "/leds/master/fadein";
 String MAREE_MQTT_FADE_OUT = "/leds/master/fadeout";
-String maree_mqtt_frame = "/leds/frame";
+String maree_mqtt_frame = "";
 
 ///////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////DRAW ///////////////////////////////////////////
@@ -171,9 +171,11 @@ void send_temps()
 //{master , r  , g  , b  , w  ,pix mod , pix long , pix_pos , str_mod , str_speed , r_fond , g_fond , b_fond , w_fond , mirror_mod , zoom }
 void send_go_up()
 {
+    maree_mqtt_frame = "";
+    maree_mqtt_frame += String(temps) + "|" + String(haute)+ "|" + String(basse);
     maree_mqtt_topic = String(MAREE_MQTT_K32) + String(MAREE_MQTT_ID) + String(MAREE_MQTT_GO_UP);
     maree_mqtt_topic.toCharArray(MAREE_MQTT_TOPIC, maree_mqtt_topic.length() + 1);
-    k32->mqtt->publish(MAREE_MQTT_TOPIC, "", 1);
+    k32->mqtt->publish(MAREE_MQTT_TOPIC, maree_mqtt_frame.c_str(), 1);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -182,9 +184,11 @@ void send_go_up()
 //{master , r  , g  , b  , w  ,pix mod , pix long , pix_pos , str_mod , str_speed , r_fond , g_fond , b_fond , w_fond , mirror_mod , zoom }
 void send_go_down()
 {
+    maree_mqtt_frame = "";
+    maree_mqtt_frame += String(temps) + "|" + String(haute)+ "|" + String(basse);
     maree_mqtt_topic = String(MAREE_MQTT_K32) + String(MAREE_MQTT_ID) + String(MAREE_MQTT_GO_DOWN);
     maree_mqtt_topic.toCharArray(MAREE_MQTT_TOPIC, maree_mqtt_topic.length() + 1);
-    k32->mqtt->publish(MAREE_MQTT_TOPIC, "", 1);
+    k32->mqtt->publish(MAREE_MQTT_TOPIC, maree_mqtt_frame.c_str(), 1);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
