@@ -141,23 +141,22 @@ void k32_setup() {
         
 
         //ARTNET
-        // FIX
-        // artnet = new K32_artnet(k32, nodeName, LULU_uni); 
+        artnet = new K32_artnet(k32, wifi, nodeName, LULU_uni); 
 
-        // artnet->onFullDmx([](const uint8_t *data, int length)
-        // {
-        //     // Force Auto
-        //     if (length > 511 && data[511] > 250) // data 512 = end dmx trame
-        //     {
-        //     remote->setState(REMOTE_AUTO);
-        //     remote->lock();
-        //     }
-        //     // LOGF("ARTNET fullframe: %d \n", length);
+        artnet->onFullDmx([](const uint8_t *data, int length)
+        {
+            // Force Auto
+            if (length > 511 && data[511] > 250) // data 512 = end dmx trame
+            {
+            remote->setState(REMOTE_AUTO);
+            remote->lock();
+            }
+            // LOGF("ARTNET fullframe: %d \n", length);
 
-        //     // FULL NODE
-        //     if (ARTNET_DMXNODE && dmx) 
-        //     dmx->setMultiple(data, length);
-        // });
+            // FULL NODE
+            if (ARTNET_DMXNODE && dmx) 
+            dmx->setMultiple(data, length);
+        });
 
 
     }

@@ -84,9 +84,12 @@ void init_lights()
         ->drawTo(strips[0])
         //->bank(new BankSK_PREV)   // TODO
         ->mem(-1)
-        ->master(LULU_PREV_MASTER)
-        ->play();
+        ->master(LULU_PREV_MASTER);
 
+
+    //
+    // MONITORING
+    //
 
     // ANIM leds - monitoring
     light->anim("battery-strip", new Anim_battery, 4, LULU_STRIP_SIZE + 1)

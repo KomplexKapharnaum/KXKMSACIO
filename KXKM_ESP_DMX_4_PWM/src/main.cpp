@@ -69,12 +69,12 @@ void setup()
     String subnet = "0";
     if (k32->system->hw() == 4) subnet = "1";
 
-    wifi->staticIP(basenet + subnet + "." + String(k32->system->id() + 100), router, "255.0.0.0");
+    // wifi->staticIP(basenet + subnet + "." + String(k32->system->id() + 100), router, "255.0.0.0");
 
-    wifi->connect("kxkm24", NULL); //KXKM 24
+    // wifi->connect("kxkm24", NULL); //KXKM 24
     // wifi->connect("kxkm24lulu", NULL);                                                         //KXKM 24 lulu
     // wifi->connect("mgr4g", NULL);                                                              //Maigre dev
-    // wifi->connect("interweb", "superspeed37");                                                 //Maigre dev home
+    wifi->connect("interweb", "superspeed37");                                                 //Maigre dev home
     // wifi->connect("riri_new", "B2az41opbn6397");                                               //Riri dev home
     // TODO: if wifi->connect ommited = crash on mqtt/artnet/osc
 
@@ -90,44 +90,43 @@ void setup()
     
 
     // ARTNET: subscribe dmx frame
-    // FIX
-    // artnet->onDmx( {
-    //   .address    = ARTNET_address, 
-    //   .framesize  = FRAME_size, 
-    //   .callback   = [](const uint8_t *data, int length) 
-    //   { 
+    artnet->onDmx( {
+      .address    = ARTNET_address, 
+      .framesize  = FRAME_size, 
+      .callback   = [](const uint8_t *data, int length) 
+      { 
         
-    //     if (ARTNET_TO_DMXDIRECT) 
-    //       light->anim("artnet-dmxfix")->push(data, min(length, DMXFIXTURE_PATCHSIZE));
+        if (ARTNET_TO_DMXDIRECT) 
+          light->anim("artnet-dmxfix")->push(data, min(length, DMXFIXTURE_PATCHSIZE));
         
-    //     if (ARTNET_TO_STRIPS)
-    //       light->anim("artnet-strip")->push(data, min(length, LULU_PATCHSIZE));
+        if (ARTNET_TO_STRIPS)
+          light->anim("artnet-strip")->push(data, min(length, LULU_PATCHSIZE));
 
-    //     // LYRE
-    //     #if LULUTYPE == 60
-    //       if (length >= DMXFIXTURE_PATCHSIZE + 9)
-    //       {
-    //         const uint8_t *dataStrip = &data[DMXFIXTURE_PATCHSIZE];
+        // LYRE
+        #if LULUTYPE == 60
+          if (length >= DMXFIXTURE_PATCHSIZE + 9)
+          {
+            const uint8_t *dataStrip = &data[DMXFIXTURE_PATCHSIZE];
 
-    //         // MEM ou ARTNET FRAME
-    //         if (dataStrip[0] > 0 && dataStrip[0] <= PRESET_COUNT)
-    //           remote->stmSetMacro(dataStrip[0] - 1);
-    //         else
-    //         {
-    //           int stripframe[LULU_PATCHSIZE] = {255, dataStrip[1], dataStrip[2], dataStrip[3], dataStrip[4], 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, dataStrip[5], dataStrip[6], dataStrip[7], dataStrip[8]};
-    //           light->anim("artnet-strip")->push(stripframe, LULU_PATCHSIZE);
-    //           remote->setState(REMOTE_AUTO);
-    //         }
-    //       }
-    //     #endif
+            // MEM ou ARTNET FRAME
+            if (dataStrip[0] > 0 && dataStrip[0] <= PRESET_COUNT)
+              remote->stmSetMacro(dataStrip[0] - 1);
+            else
+            {
+              int stripframe[LULU_PATCHSIZE] = {255, dataStrip[1], dataStrip[2], dataStrip[3], dataStrip[4], 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, dataStrip[5], dataStrip[6], dataStrip[7], dataStrip[8]};
+              light->anim("artnet-strip")->push(stripframe, LULU_PATCHSIZE);
+              remote->setState(REMOTE_AUTO);
+            }
+          }
+        #endif
 
-    //     // LOGINL("ARTFRAME: ");
-    //     // LOGF("length=%d ", length);
-    //     // for (int k = 0; k < length; k++)
-    //     //   LOGF("%d ", data[k]);
-    //     // LOG();
-    //   }
-    // });
+        // LOGINL("ARTFRAME: ");
+        // LOGF("length=%d ", length);
+        // for (int k = 0; k < length; k++)
+        //   LOGF("%d ", data[k]);
+        // LOG();
+      }
+    });
 
 
     // EVENT: wifi lost
