@@ -20,6 +20,8 @@ void send_pixel();
 void send_haute();
 void send_basse();
 void send_temps();
+void send_go_up();
+void send_go_down();
 
 // bool _mod_coarse = false;
 // bool color_front_back = false;
@@ -161,6 +163,28 @@ void send_temps()
     maree_mqtt_topic = String(MAREE_MQTT_K32) + String(MAREE_MQTT_ID) + String(MAREE_MQTT_TEMPS);
     maree_mqtt_topic.toCharArray(MAREE_MQTT_TOPIC, maree_mqtt_topic.length() + 1);
     k32->mqtt->publish(MAREE_MQTT_TOPIC, _temps.c_str(), 1);
+}
+
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////SEND GO_UP//////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+//{master , r  , g  , b  , w  ,pix mod , pix long , pix_pos , str_mod , str_speed , r_fond , g_fond , b_fond , w_fond , mirror_mod , zoom }
+void send_go_up()
+{
+    maree_mqtt_topic = String(MAREE_MQTT_K32) + String(MAREE_MQTT_ID) + String(MAREE_MQTT_GO_UP);
+    maree_mqtt_topic.toCharArray(MAREE_MQTT_TOPIC, maree_mqtt_topic.length() + 1);
+    k32->mqtt->publish(MAREE_MQTT_TOPIC, "", 1);
+}
+
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////SEND GO_DOWN////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+//{master , r  , g  , b  , w  ,pix mod , pix long , pix_pos , str_mod , str_speed , r_fond , g_fond , b_fond , w_fond , mirror_mod , zoom }
+void send_go_down()
+{
+    maree_mqtt_topic = String(MAREE_MQTT_K32) + String(MAREE_MQTT_ID) + String(MAREE_MQTT_GO_DOWN);
+    maree_mqtt_topic.toCharArray(MAREE_MQTT_TOPIC, maree_mqtt_topic.length() + 1);
+    k32->mqtt->publish(MAREE_MQTT_TOPIC, "", 1);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -855,6 +879,7 @@ void remote_maree()
 
                 case '.':
                     temps_value();
+                    msg = "temps " + _temps + " SEND";
 
                     break;
                 case '=':
@@ -881,13 +906,18 @@ void remote_maree()
                     break;
 
                 case 'A':
+                    send_go_up();
+                    msg = "GO Marée haute SEND";
 
                     break;
                 case 'M':
+                    send_go_down();
+                    msg = "GO Marée basse SEND";
 
                     break;
                 case '%':
                     haute_value();
+                    msg = "haute " + _haute + " SEND";
                     break;
                 case '/':
                     Pixel -= 10;
@@ -909,6 +939,7 @@ void remote_maree()
                     break;
                 case '`':
                     basse_value();
+                    msg = "basse " + _basse + " SEND";
                     break;
                 }
                 LOG(msg);
