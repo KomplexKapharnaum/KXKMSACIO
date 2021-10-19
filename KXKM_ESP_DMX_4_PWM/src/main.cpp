@@ -1,7 +1,7 @@
 #include <Arduino.h>
 
 #define LULU_VER 90
-#define LULU_TYPE 8
+#define LULU_TYPE 80
 // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot"
 // 10="power" 11="DMX_strobe" 12="DMX_Par_led" 13="NODE_dmx_thru"
 // 20="Cube_str" 21="Cube_par"  22="Cube_MiniKOLOR" 23="Cube_Elp"
@@ -10,12 +10,13 @@
 // 50="strip to elp dmx"
 // 60="Lyre audio dmx + strip"
 // 70="Strobe" 71="4x Strobe"
+// 80="Maree atom-lite"
 
 
 /////////////////////////////////////////ID/////////////////////////////////////////
 
-#define K32_SET_NODEID      337         // board unique id
-#define K32_SET_CHANNEL     2           // board channel mqtt
+#define K32_SET_NODEID      1         // board unique id
+#define K32_SET_CHANNEL     1           // board channel mqtt
 #define LIGHT_SET_ID        1           // permet de calculer l'adresse DMX
 #define ARTNET_SET_UNIVERSE 0           // univers artnet
 //                    // defo ARTNET_SET_UNIVERSE 0  => LULU-TYPE 6 & 7 & 8 & 10 & 20 & 34
@@ -54,12 +55,12 @@ void setup()
     String subnet = "0";
     if (k32->system->hw() == 4) subnet = "1";
 
-    // wifi->staticIP(basenet + subnet + "." + String(k32->system->id() + 100), router, "255.0.0.0");
+    wifi->staticIP(basenet + subnet + "." + String(k32->system->id() + 100), router, "255.0.0.0");
 
-    // wifi->connect("kxkm24", NULL); //KXKM 24
+    wifi->connect("kxkm24", NULL); //KXKM 24
     // wifi->connect("kxkm24lulu", NULL);                                                         //KXKM 24 lulu
     // wifi->connect("mgr4g", NULL);                                                              //Maigre dev
-    wifi->connect("interweb", "superspeed37");                                                 //Maigre dev home
+    // wifi->connect("interweb", "superspeed37");                                                 //Maigre dev home
     // wifi->connect("riri_new", "B2az41opbn6397");                                               //Riri dev home
     // TODO: if wifi->connect ommited = crash on mqtt/artnet/osc
 
@@ -88,41 +89,41 @@ void setup()
 
   ///////////////////// INFO //////////////////////////////////////
 
-  // Monitoring refresh
-  k32->timer->every(REFRESH_INFO, []()
-        {
-          if (stm32)
-            light->anim("battery-strip")->push(stm32->battery());
+  // Monitoring refresh // FIX
+  // k32->timer->every(REFRESH_INFO, []()
+  //       {
+  //         if (stm32)
+  //           light->anim("battery-strip")->push(stm32->battery());
 
-          static bool toggleRSSI = false;
-          toggleRSSI = !toggleRSSI;
+  //         static bool toggleRSSI = false;
+  //         toggleRSSI = !toggleRSSI;
 
-          // Wifi
-          if (wifi)
-          {
-            int rssi = wifi->getRSSI();
-            if (rssi < 0)
-              light->anim("rssi-strip")->push(rssi);
-            else if (toggleRSSI)
-              light->anim("rssi-strip")->push(-100);
-            else
-              light->anim("rssi-strip")->push(0);
-          }
+  //         // Wifi
+  //         if (wifi)
+  //         {
+  //           int rssi = wifi->getRSSI();
+  //           if (rssi < 0)
+  //             light->anim("rssi-strip")->push(rssi);
+  //           else if (toggleRSSI)
+  //             light->anim("rssi-strip")->push(-100);
+  //           else
+  //             light->anim("rssi-strip")->push(0);
+  //         }
 
-          // Bluetooth
-          // TODO: enable BT
-          // if(bt)
-          // {
-          //   int rssi = bt->getRSSI();
-          //   if (rssi > 0)         light->anim("rssi-strip")->push(rssi);
-          //   else if (toggleRSSI)  light->anim("rssi-strip")->push(100);
-          //   else                  light->anim("rssi-strip")->push(0);
-          // }
-        });
+  //         // Bluetooth
+  //         // TODO: enable BT
+  //         // if(bt)
+  //         // {
+  //         //   int rssi = bt->getRSSI();
+  //         //   if (rssi > 0)         light->anim("rssi-strip")->push(rssi);
+  //         //   else if (toggleRSSI)  light->anim("rssi-strip")->push(100);
+  //         //   else                  light->anim("rssi-strip")->push(0);
+  //         // }
+  //       });
 
-  // Remote status refresh
-  k32->timer->every(100, []()
-                    { light->anim("remote-strip")->push(remote->getState(), remote->isLocked()); });
+  // Remote status refresh // FIX
+  // k32->timer->every(100, []()
+  //                   { light->anim("remote-strip")->push(remote->getState(), remote->isLocked()); });
 
   // Heap Memory log
   // k32->timer->every(1000, []() {
@@ -139,7 +140,9 @@ void loop()
 {
 
   /////////////////// BOUTONS ///////////////////////
-  boutons_loop();
+  #if LULU_TYPE != 80 // FIX
+    boutons_loop();
+  #endif
 
   delay(20);
 

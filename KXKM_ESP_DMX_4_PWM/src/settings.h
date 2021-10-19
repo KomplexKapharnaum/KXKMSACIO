@@ -244,6 +244,9 @@
 #include "macro/Type/SK/mem_sk.h"     // defo
 #include "macro/mem_barre_pwm.h"
 
+#elif LULU_TYPE == 80
+#include "type/80-maree.h"
+
 #endif
 #endif
 
