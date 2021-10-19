@@ -1,7 +1,7 @@
 
 #define L_NAME "Power"
 
-#include "macro/Type/SK/mem_sk_2.h"     // defo
+#include "macro/Type/SK/mem_sk.h"     // defo
 
 
 #define LULU_STRIP_SIZE     120                                  

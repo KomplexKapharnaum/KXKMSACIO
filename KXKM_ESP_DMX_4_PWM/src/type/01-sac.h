@@ -1,19 +1,14 @@
 
 #define L_NAME "Sac"
 
-#define LULU_STRIP_SIZE     25              //120 // FIX
-#define LULU_STRIP_TYPE     LED_WS2812_V1   //LED_SK6812W_V1       // FIX                // Strip type
+#define LULU_STRIP_SIZE     120 
+#define LULU_STRIP_TYPE     LED_SK6812W_V1               // Strip type
 
 #define PWR_FAKE_CURRENT    12500
 
 #include "macro/Type/4pwm/mem_4pwm.h"
-#include "macro/Type/SK/mem_sk_1.h"
+#include "macro/Type/SK/mem_sk.h"
 
-#include <fixtures/K32_ledstrip.h>
-K32_fixture* strips[LED_N_STRIPS] = {nullptr};
-
-#include <fixtures/K32_pwmfixture.h>
-K32_fixture* dimmer = nullptr;
 
  
 void init_lights() 
@@ -23,14 +18,17 @@ void init_lights()
     //
 
     // PWM fixture
-    dimmer = new K32_pwmfixture(pwm);
+    K32_fixture* dimmer = new K32_pwmfixture(pwm);
     light->addFixture( dimmer );
 
+
     // LED STRIPS fixtures
+    K32_fixture* strips[LED_N_STRIPS] = {nullptr};
     for(int k=0; k<LED_N_STRIPS; k++)
         strips[k] = new K32_ledstrip(k, LEDS_PIN[k32->system->hw()][k], (led_types)LULU_STRIP_TYPE, LULU_STRIP_SIZE + 30);    
     light->addFixtures( strips, LED_N_STRIPS )
          ->copyFixture({strips[0], LULU_STRIP_SIZE, LULU_STRIP_SIZE + 18, strips[1], 0}); // jauge sortie 2
+
     //
     // TEST Sequence
     //
@@ -75,7 +73,7 @@ void init_lights()
     // ANIM leds - presets preview
     light->anim("memprev-strip", new Anim_preview, LULU_PREV_SIZE, LULU_STRIP_SIZE + 8)
         ->drawTo(strips[0])
-        //->bank(new BankSK_PREV)   // TODO
+        ->bank(new BankSK_PREV)   // TODO
         ->mem(-1)
         ->master(LULU_PREV_MASTER);
 
@@ -130,9 +128,11 @@ void init_lights()
       }
     });
     
+
     //
     // NOWIFI
     //
+
     // EVENT: wifi lost
     wifi->onDisconnect([&]()
     {

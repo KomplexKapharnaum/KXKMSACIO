@@ -41,6 +41,10 @@
 #include "anim_dmx_test.h"
 #include "anim_dmx_strip.h"
 
+// LIGHT FIXTURES
+#include <fixtures/K32_ledstrip.h>
+#include <fixtures/K32_pwmfixture.h>
+
 
 #ifdef LULU_TYPE
 
@@ -220,7 +224,7 @@
 #define DMXFIXTURE_PATCHSIZE LULU_STRIP_SIZE
 
 #include "macro/Type/4pwm/mem_4pwm.h" // defo
-// #include "macro/Type/SK/mem_sk_1.h"     // defo
+// #include "macro/Type/SK/mem_sk.h"     // defo
 // #include "macro/mem_barre_pwm.h"
 
 // #include "macro/Show/Baro/mem_sk_baro.h"
@@ -235,7 +239,7 @@
 #define DMXFIXTURE_PATCHSIZE 16
 
 #include "macro/Type/4pwm/mem_4pwm.h" // defo
-#include "macro/Type/SK/mem_sk_1.h"     // defo
+#include "macro/Type/SK/mem_sk.h"     // defo
 #include "macro/mem_barre_pwm.h"
 
 #endif

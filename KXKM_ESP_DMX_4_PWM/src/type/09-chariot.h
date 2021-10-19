@@ -1,7 +1,7 @@
 #define L_NAME "Chariot"
 
 #include "macro/Type/4pwm/mem_4pwm.h" // defo
-// #include "macro/Type/SK/mem_sk_1.h"  // defo
+// #include "macro/Type/SK/mem_sk.h"  // defo
 #include "macro/Show/H&S/mem_h&s_sk.h"
 
 

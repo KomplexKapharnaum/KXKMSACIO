@@ -1,13 +1,127 @@
 
 #define L_NAME "Atom"
 
-// #include "macro/Type/SK/mem_sk_2.h" // mem global sk & pwm
-#include "macro/Type/4pwm/mem_4pwm.h" // defo
-#include "macro/Type/SK/mem_sk_1.h"     // defo
-
 #define LULU_STRIP_SIZE     25                                  // 5 pour tester avec les jauges de monitoring
 #define LULU_STRIP_TYPE     LED_WS2812_V1                       // Strip type
-#define LULU_PATCHSIZE      SK_PRESET_SIZE+PWM_PRESET_SIZE      // Total size of Preset
+
+
+#include "macro/Type/4pwm/mem_4pwm.h" // defo
+#include "macro/Type/SK/mem_sk.h"     // defo
+
+
+
+void init_lights() 
+{
+    //
+    // FIXTURES 
+    //
+
+    // PWM fixture
+    K32_fixture* dimmer = new K32_pwmfixture(pwm);
+    light->addFixture( dimmer );
+
+
+    // LED STRIPS fixtures
+    K32_fixture* strips[LED_N_STRIPS] = {nullptr};
+    for(int k=0; k<LED_N_STRIPS; k++)
+        strips[k] = new K32_ledstrip(k, LEDS_PIN[k32->system->hw()][k], (led_types)LULU_STRIP_TYPE, LULU_STRIP_SIZE + 30);    
+    light->addFixtures( strips, LED_N_STRIPS )
+         ->copyFixture({strips[0], LULU_STRIP_SIZE, LULU_STRIP_SIZE + 18, strips[1], 0}); // jauge sortie 2
+
+    //
+    // TEST Sequence
+    //
+
+        // INIT TEST STRIPS
+            light->anim( "test-strip", new Anim_test_strip, LULU_STRIP_SIZE )
+                ->drawTo(strips, LED_N_STRIPS)
+                ->push(300)
+                ->master(LULU_PREV_MASTER)
+                ->play();
+
+        // PWM TEST
+            light->anim( "test-pwm", new Anim_test_pwm, LULU_STRIP_SIZE )
+                ->drawTo(dimmer)
+                ->push(300)
+                ->master(LULU_PREV_MASTER)
+                ->play();
+
+        // WAIT END
+            light->anim("test-strip")->wait();
+            light->anim("test-pwm")->wait();
+
+    
+    // 
+    //  PRESETS
+    // 
+
+    // ANIM pwm - presets
+    light->anim("mem-pwm", new Anim_datathru, PWM_N_CHAN)
+        ->drawTo(dimmer)
+        ->bank(new BankPWM)
+        ->mem(-1);
+
+    // ANIM leds - presets
+    light->anim("mem-strip", new Anim_dmx_strip, LULU_STRIP_SIZE)
+        ->drawTo(strips[0])
+        ->bank(new BankSK)
+        ->mem(-1);
+    remote->setMacroMax( light->anim("mem-strip")->bank()->size() );
+    
+
+    // 
+    // ARTNET
+    //
+
+    // ANIM pwm - artnet
+    light->anim("artnet-pwm", new Anim_datathru, PWM_N_CHAN)
+        ->drawTo(dimmer)
+        ->play();
+
+    // ANIM leds - artnet
+    light->anim("artnet-strip", new Anim_dmx_strip, LULU_STRIP_SIZE)
+        ->drawTo(strips[0])
+        ->play();
+
+    // ARTNET: subscribe dmx frame
+    int FRAME_size = light->anim("mem-strip")->bank()->preset_size() + light->anim("mem-pwm")->bank()->preset_size();
+    int ARTNET_address = (1 + (light->id() - 1) * FRAME_size);
+
+    artnet->onDmx( {
+      .address    = ARTNET_address, 
+      .framesize  = FRAME_size, 
+      .callback   = [](const uint8_t *data, int length) 
+      { 
+        // LOGINL("ARTFRAME: "); LOGF("length=%d ", length); for (int k = 0; k < length; k++) LOGF("%d ", data[k]); LOG();
+        light->anim("artnet-strip")->push(data, length);
+      }
+    });
+    
+
+    //
+    // NOWIFI
+    //
+
+    // EVENT: wifi lost
+    wifi->onDisconnect([&]()
+    {
+        LOG("WIFI: connection lost..");
+        //  light->anim("artnet-strip")->push(MEM_NO_WIFI, LULU_PATCHSIZE);
+        light->anim("artnet-strip")->push(0); // @master 0
+    });
+
+}
+
+
+
+
+
+
+
+
+
+
+
 
 // 
 // MEM ANIMATOR DATA ! modulateur relatif a la valeur du tableau
