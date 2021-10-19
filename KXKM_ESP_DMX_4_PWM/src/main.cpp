@@ -136,11 +136,11 @@ void setup()
     {
       wifi->staticIP("2.0.1." + String(k32->system->id()), "2.0.0.1", "255.0.0.0"); // hw4
     }
-    // wifi->connect("kxkm24", NULL); //KXKM 24
+    wifi->connect("kxkm24", NULL);                                                                //KXKM 24
     // wifi->connect("kxkm24lulu", NULL);                                                         //KXKM 24 lulu
     // wifi->connect("mgr4g", NULL);                                                              //Maigre dev
     // wifi->connect("interweb", "superspeed37");                                                 //Maigre dev home
-    wifi->connect("riri_new", "B2az41opbn6397"); //Riri dev home
+    // wifi->connect("riri_new", "B2az41opbn6397");                                               //Riri dev home
 // TODO: if wifi->connect ommited = crash on mqtt/artnet/osc
 
 ////////////////// ARTNET
@@ -218,7 +218,7 @@ void setup()
       }
     }
 
-// Maree no artnet
+// Maree no artnet not work to do arnet off
 #elif LULU_TYPE == 80
 
 // STRIP ONLY
@@ -250,9 +250,9 @@ void setup()
     ////////////////// MQTT
     if (mqtt)
       mqtt->start({
-          // .broker = "2.0.0.1", // Komplex
+          .broker = "2.0.0.1", // Komplex
           // .broker = "10.0.0.1", // KXKM MESH
-          .broker = "2.0.0.10", // Riri dev home
+          // .broker = "2.0.0.10", // Riri dev home
           // .broker = "192.168.43.132",  // MGR dev home
           .beatInterval = 0,  // heartbeat interval milliseconds (0 = disable) 5000
           .statusInterval = 0 // full beacon interval milliseconds (0 = disable) 15000
