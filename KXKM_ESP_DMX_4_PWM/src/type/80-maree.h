@@ -5,7 +5,7 @@
 #define LULU_STRIP_TYPE     LED_SK6812W_V1                       // Strip type
 
 
-void init_lights() 
+void init_lights()  
 {
     //
     // FIXTURES 
