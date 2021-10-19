@@ -61,10 +61,11 @@ void boutons_loop()
     {
         LOGF("REMOTE: -> set Active Macro = %d\n", activeMacro);
 
-        #if LULU_TYPE == 12
+        #if LULU_TYPE == 12 // FIX
             light->anim("mem-dmxfix")->mem(activeMacro);
         #else
             light->anim("mem-strip")->mem(activeMacro);
+            light->anim("mem-pwm")->mem(activeMacro);
         #endif
     }
 

@@ -4,7 +4,6 @@
 #define LULU_STRIP_SIZE     25                                  // 5 pour tester avec les jauges de monitoring
 #define LULU_STRIP_TYPE     LED_WS2812_V1                       // Strip type
 
-
 #include "macro/Type/4pwm/mem_4pwm.h" // defo
 #include "macro/Type/SK/mem_sk.h"     // defo
 
@@ -17,16 +16,16 @@ void init_lights()
     //
 
     // PWM fixture
-    K32_fixture* dimmer = new K32_pwmfixture(pwm);
+    K32_fixture* dimmer = new K32_pwmfixture(pwm); 
     light->addFixture( dimmer );
 
 
     // LED STRIPS fixtures
     K32_fixture* strips[LED_N_STRIPS] = {nullptr};
     for(int k=0; k<LED_N_STRIPS; k++)
-        strips[k] = new K32_ledstrip(k, LEDS_PIN[k32->system->hw()][k], (led_types)LULU_STRIP_TYPE, LULU_STRIP_SIZE + 30);    
-    light->addFixtures( strips, LED_N_STRIPS )
-         ->copyFixture({strips[0], LULU_STRIP_SIZE, LULU_STRIP_SIZE + 18, strips[1], 0}); // jauge sortie 2
+        strips[k] = new K32_ledstrip(k, LEDS_PIN[k32->system->hw()][k], (led_types)LULU_STRIP_TYPE, LULU_STRIP_SIZE);    
+    light->addFixtures( strips, LED_N_STRIPS );
+
 
     //
     // TEST Sequence
@@ -58,14 +57,12 @@ void init_lights()
     // ANIM pwm - presets
     light->anim("mem-pwm", new Anim_datathru, PWM_N_CHAN)
         ->drawTo(dimmer)
-        ->bank(new BankPWM)
-        ->mem(-1);
+        ->bank(new BankPWM);
 
     // ANIM leds - presets
     light->anim("mem-strip", new Anim_dmx_strip, LULU_STRIP_SIZE)
-        ->drawTo(strips[0])
-        ->bank(new BankSK)
-        ->mem(-1);
+        ->drawTo(strips, LED_N_STRIPS)
+        ->bank(new BankSK);
     remote->setMacroMax( light->anim("mem-strip")->bank()->size() );
     
 
@@ -80,22 +77,27 @@ void init_lights()
 
     // ANIM leds - artnet
     light->anim("artnet-strip", new Anim_dmx_strip, LULU_STRIP_SIZE)
-        ->drawTo(strips[0])
+        ->drawTo(strips, LED_N_STRIPS)
         ->play();
 
     // ARTNET: subscribe dmx frame
     int FRAME_size = light->anim("mem-strip")->bank()->preset_size() + light->anim("mem-pwm")->bank()->preset_size();
     int ARTNET_address = (1 + (light->id() - 1) * FRAME_size);
 
-    artnet->onDmx( {
-      .address    = ARTNET_address, 
-      .framesize  = FRAME_size, 
-      .callback   = [](const uint8_t *data, int length) 
-      { 
-        // LOGINL("ARTFRAME: "); LOGF("length=%d ", length); for (int k = 0; k < length; k++) LOGF("%d ", data[k]); LOG();
-        light->anim("artnet-strip")->push(data, length);
-      }
-    });
+    if (artnet)
+        artnet->onDmx( {
+        .address    = ARTNET_address, 
+        .framesize  = FRAME_size, 
+        .callback   = [](const uint8_t *data, int length) 
+        { 
+            int sizeSK = light->anim("mem-strip")->bank()->preset_size();
+            int sizePWM = light->anim("mem-pwm")->bank()->preset_size();
+
+            // LOGINL("ARTFRAME: "); LOGF("length=%d ", length); for (int k = 0; k < length; k++) LOGF("%d ", data[k]); LOG();
+            light->anim("artnet-strip")->push(data, min(sizeSK, length));
+            // light->anim("artnet-pwm")->push(data, min(sizePWM,length)); // FIX
+        }
+        });
     
 
     //
@@ -120,7 +122,7 @@ void init_lights()
 
 
 
-
+#ifdef zzzzzzz
 
 
 // 
@@ -197,3 +199,5 @@ void load_mem(K32_anim *anim, int macro) {
         anim->mod(new K32_mod_sinus)->at(0)->period(8500)->mini(38)->maxi(217);
     }
 }
+
+#endif

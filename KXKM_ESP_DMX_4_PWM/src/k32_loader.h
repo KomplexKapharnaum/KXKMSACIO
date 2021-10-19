@@ -123,22 +123,24 @@ void k32_setup() {
         
 
         //ARTNET
-        artnet = new K32_artnet(k32, wifi, nodeName);
-        artnet->loadprefs();
-        artnet->start(); 
+        #ifdef ARTNET_ENABLE
+            artnet = new K32_artnet(k32, wifi, nodeName);
+            artnet->loadprefs();
+            artnet->start(); 
 
-        artnet->onFullDmx([](const uint8_t *data, int length)
-        {
-            // LOGF("ARTNET fullframe: %d \n", length);
+            artnet->onFullDmx([](const uint8_t *data, int length)
+            {
+                // LOGF("ARTNET fullframe: %d \n", length);
 
-            // Force Auto
-            if (length > 511 && data[511] > 250) // data 512 = end dmx trame
-                remote->setState(REMOTE_AUTO)->lock();
+                // Force Auto
+                if (length > 511 && data[511] > 250) // data 512 = end dmx trame   
+                    remote->setState(REMOTE_AUTO)->lock();
 
-            // FULL NODE
-            if (ARTNET_DMXNODE && dmx) 
-                dmx->setMultiple(data, length);
-        });
+                // FULL NODE
+                if (ARTNET_DMXNODE && dmx) 
+                    dmx->setMultiple(data, length);
+            });
+        #endif
 
 
     }

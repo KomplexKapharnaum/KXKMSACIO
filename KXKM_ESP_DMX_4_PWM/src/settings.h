@@ -17,6 +17,7 @@
 
 #define LULU_MEMNOWIFI_MASTER 0     // Luminosité Preset NOWIFI
 
+#define ARTNET_ENABLE       1       // enable/disable ArtNet
 #define ARTNET_DMXNODE      0       // send Artnet full-frame -> DmxOut (NODE)
 
 #define HAS_LED_STRIPS      0       // 

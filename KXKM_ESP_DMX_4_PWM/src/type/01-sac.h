@@ -118,15 +118,16 @@ void init_lights()
     int FRAME_size = light->anim("mem-strip")->bank()->preset_size() + light->anim("mem-pwm")->bank()->preset_size();
     int ARTNET_address = (1 + (light->id() - 1) * FRAME_size);
 
-    artnet->onDmx( {
-      .address    = ARTNET_address, 
-      .framesize  = FRAME_size, 
-      .callback   = [](const uint8_t *data, int length) 
-      { 
-        // LOGINL("ARTFRAME: "); LOGF("length=%d ", length); for (int k = 0; k < length; k++) LOGF("%d ", data[k]); LOG();
-        light->anim("artnet-strip")->push(data, length);
-      }
-    });
+    if (artnet)
+        artnet->onDmx( {
+        .address    = ARTNET_address, 
+        .framesize  = FRAME_size, 
+        .callback   = [](const uint8_t *data, int length) 
+        { 
+            // LOGINL("ARTFRAME: "); LOGF("length=%d ", length); for (int k = 0; k < length; k++) LOGF("%d ", data[k]); LOG();
+            light->anim("artnet-strip")->push(data, length);
+        }
+        });
     
 
     //
