@@ -35,7 +35,7 @@ uint8_t maree_id_fonction = 1;
 String maree_id_fonct = "CH";
 String id_cal_maree = "all";
 
-uint16_t Pixel, haute, basse, temps;
+int16_t Pixel, haute, basse, temps;
 
 String _Pixel = String(Pixel);
 String _haute = String(haute);
@@ -172,7 +172,7 @@ void send_temps()
 void send_go_up()
 {
     maree_mqtt_frame = "";
-    maree_mqtt_frame += String(temps) + "|" + String(haute)+ "|" + String(basse);
+    maree_mqtt_frame += String(temps) + "|" + String(haute)+ "|" + String(basse)+ "|" + String(Pixel);
     maree_mqtt_topic = String(MAREE_MQTT_K32) + String(MAREE_MQTT_ID) + String(MAREE_MQTT_GO_UP);
     maree_mqtt_topic.toCharArray(MAREE_MQTT_TOPIC, maree_mqtt_topic.length() + 1);
     k32->mqtt->publish(MAREE_MQTT_TOPIC, maree_mqtt_frame.c_str(), 1);
@@ -185,7 +185,7 @@ void send_go_up()
 void send_go_down()
 {
     maree_mqtt_frame = "";
-    maree_mqtt_frame += String(temps) + "|" + String(haute)+ "|" + String(basse);
+    maree_mqtt_frame += String(temps) + "|" + String(haute)+ "|" + String(basse)+ "|" + String(Pixel);
     maree_mqtt_topic = String(MAREE_MQTT_K32) + String(MAREE_MQTT_ID) + String(MAREE_MQTT_GO_DOWN);
     maree_mqtt_topic.toCharArray(MAREE_MQTT_TOPIC, maree_mqtt_topic.length() + 1);
     k32->mqtt->publish(MAREE_MQTT_TOPIC, maree_mqtt_frame.c_str(), 1);
