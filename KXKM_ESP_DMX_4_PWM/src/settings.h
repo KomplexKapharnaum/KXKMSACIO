@@ -18,8 +18,10 @@
 #define LULU_MEMNOWIFI_MASTER 0     // Luminosité Preset NOWIFI
 
 #define ARTNET_DMXNODE      0       // send Artnet full-frame -> DmxOut (NODE)
-#define ARTNET_TO_DMXDIRECT 0       // Send Artnet sub-frame  -> animation "artnet-dmxfix"
-#define ARTNET_TO_STRIPS    0       // Send Artnet sub-frame  -> animation "artnet-strip"
+
+#define HAS_LED_STRIPS      0       // 
+#define HAS_DMX_FIXTURES    0       // 
+#define HAS_PWM_FIXTURES    0       // 
 
 #define REFRESH_INFO 1000 // Refresh affichage Wifi & Battery
 

@@ -1,5 +1,3 @@
-#include <Preferences.h>
-Preferences prefs;
 
 #include <K32.h> // https://github.com/KomplexKapharnaum/K32-lib
 K32* k32 = nullptr;
@@ -58,35 +56,6 @@ bool wifiMode() {
 //
 void k32_setup() {
 
-    prefs.begin("k32-settings", false);
-
-    #ifdef LULU_ID
-        prefs.putUInt("LULU_id", LULU_ID);
-        LULU_id = LULU_ID;
-    #else
-        LULU_id = prefs.getUInt("LULU_id", 1);
-    #endif
-
-
-    #ifdef LULU_UNI
-        prefs.putUInt("LULU_uni", LULU_UNI);
-        LULU_uni = LULU_UNI;
-    #else
-        LULU_uni = prefs.getUInt("LULU_uni", 0);
-    #endif
-
-
-    // NAME
-    nodeName = L_NAME;
-
-    // if (LULU_STRIP_TYPE == LED_SK6812_V1)         nodeName += "-SK";
-    // else if (LULU_STRIP_TYPE == LED_SK6812W_V1)   nodeName += "-SKW";
-    // else                                          nodeName += "-WS";
-
-    nodeName += "-" + String(LULU_id) + "-v" + String(LULU_VER);
-
-    prefs.end();
-
     //////////////////////////////////////// K32_lib ////////////////////////////////////
     k32 = new K32();
 
@@ -116,10 +85,23 @@ void k32_setup() {
     /////////////////////////////////////////////// LIGHT //////////////////////////////////////
 
     light = new K32_light(k32);
+    light->loadprefs();
     
     dmx = new K32_dmx(DMX_PIN[k32->system->hw()], DMX_OUT);    
 
     init_lights();
+
+
+    /////////////////////////////////////////////// NAME //////////////////////////////////////
+
+    String nodeName = L_NAME;
+    // if (LULU_STRIP_TYPE == LED_SK6812_V1)         nodeName += "-SK";
+    // else if (LULU_STRIP_TYPE == LED_SK6812W_V1)   nodeName += "-SKW";
+    // else                                          nodeName += "-WS";
+    nodeName += "-" + String(light->id()) + "-v" + String(LULU_VER);
+
+    LOG("\nNAME:   " + nodeName );
+    LOGF("CHANNEL: %d\n\n", k32->system->channel());
     
     /////////////////////////////////////////////// NETWORK //////////////////////////////////////
 
@@ -141,21 +123,21 @@ void k32_setup() {
         
 
         //ARTNET
-        artnet = new K32_artnet(k32, wifi, nodeName, LULU_uni); 
+        artnet = new K32_artnet(k32, wifi, nodeName);
+        artnet->loadprefs();
+        artnet->start(); 
 
         artnet->onFullDmx([](const uint8_t *data, int length)
         {
+            // LOGF("ARTNET fullframe: %d \n", length);
+
             // Force Auto
             if (length > 511 && data[511] > 250) // data 512 = end dmx trame
-            {
-            remote->setState(REMOTE_AUTO);
-            remote->lock();
-            }
-            // LOGF("ARTNET fullframe: %d \n", length);
+                remote->setState(REMOTE_AUTO)->lock();
 
             // FULL NODE
             if (ARTNET_DMXNODE && dmx) 
-            dmx->setMultiple(data, length);
+                dmx->setMultiple(data, length);
         });
 
 

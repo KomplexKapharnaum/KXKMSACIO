@@ -18,35 +18,23 @@ K32_fixture* dimmer = nullptr;
  
 void init_lights() 
 {
-
     //
-    // PWM
+    // FIXTURES 
     //
 
     // PWM fixture
     dimmer = new K32_pwmfixture(pwm);
     light->addFixture( dimmer );
-    
-    // ANIM pwm - artnet
-    light->anim("artnet-pwm", new Anim_datathru, PWM_N_CHAN)
-        ->drawTo(dimmer);
-
-    // ANIM pwm - presets
-    light->anim("mem-pwm", new Anim_datathru, PWM_N_CHAN)
-        ->drawTo(dimmer);
-
-
-    //
-    // STRIPS 
-    //
 
     // LED STRIPS fixtures
     for(int k=0; k<LED_N_STRIPS; k++)
         strips[k] = new K32_ledstrip(k, LEDS_PIN[k32->system->hw()][k], (led_types)LULU_STRIP_TYPE, LULU_STRIP_SIZE + 30);    
     light->addFixtures( strips, LED_N_STRIPS )
          ->copyFixture({strips[0], LULU_STRIP_SIZE, LULU_STRIP_SIZE + 18, strips[1], 0}); // jauge sortie 2
-
+    //
     // TEST Sequence
+    //
+
         // INIT TEST STRIPS
             light->anim( "test-strip", new Anim_test_strip, LULU_STRIP_SIZE )
                 ->drawTo(strips, LED_N_STRIPS)
@@ -65,11 +53,16 @@ void init_lights()
             light->anim("test-strip")->wait();
             light->anim("test-pwm")->wait();
 
+    
+    // 
+    //  PRESETS
+    // 
 
-    // ANIM leds - artnet
-    light->anim("artnet-strip", new Anim_dmx_strip, LULU_STRIP_SIZE)
-        ->drawTo(strips[0])
-        ->play();
+    // ANIM pwm - presets
+    light->anim("mem-pwm", new Anim_datathru, PWM_N_CHAN)
+        ->drawTo(dimmer)
+        ->bank(new BankPWM)
+        ->mem(-1);
 
     // ANIM leds - presets
     light->anim("mem-strip", new Anim_dmx_strip, LULU_STRIP_SIZE)
@@ -108,7 +101,45 @@ void init_lights()
         ->play();
     
 
+    // 
+    // ARTNET
+    //
+
+    // ANIM pwm - artnet
+    light->anim("artnet-pwm", new Anim_datathru, PWM_N_CHAN)
+        ->drawTo(dimmer)
+        ->play();
+
+
+    // ANIM leds - artnet
+    light->anim("artnet-strip", new Anim_dmx_strip, LULU_STRIP_SIZE)
+        ->drawTo(strips[0])
+        ->play();
+
+    // ARTNET: subscribe dmx frame
+    int FRAME_size = light->anim("mem-strip")->bank()->preset_size() + light->anim("mem-pwm")->bank()->preset_size();
+    int ARTNET_address = (1 + (light->id() - 1) * FRAME_size);
+
+    artnet->onDmx( {
+      .address    = ARTNET_address, 
+      .framesize  = FRAME_size, 
+      .callback   = [](const uint8_t *data, int length) 
+      { 
+        // LOGINL("ARTFRAME: "); LOGF("length=%d ", length); for (int k = 0; k < length; k++) LOGF("%d ", data[k]); LOG();
+        light->anim("artnet-strip")->push(data, length);
+      }
+    });
     
+    //
+    // NOWIFI
+    //
+    // EVENT: wifi lost
+    wifi->onDisconnect([&]()
+    {
+        LOG("WIFI: connection lost..");
+        //  light->anim("artnet-strip")->push(MEM_NO_WIFI, LULU_PATCHSIZE);
+        light->anim("artnet-strip")->push(0); // @master 0
+    });
 
 }
 
@@ -159,7 +190,7 @@ K32_dmxfixture* dmxfixs[DMX_N_FIXTURES] = {nullptr};
 
     // LYRE
     #elif LULU_TYPE == 60
-        int DMX_address = (1 + (LULU_id - 1) * 32);  // DMX Offset = 32  =>  Lyre 1 addr=1 / Lyre 2 addr=33 / ...
+        int DMX_address = (1 + (light->id() - 1) * 32);  // DMX Offset = 32  =>  Lyre 1 addr=1 / Lyre 2 addr=33 / ...
         dmxfixs[0] = new K32_dmxfixture(dmx, DMX_address, DMXFIXTURE_PATCHSIZE);
 
     // OTHERS
@@ -175,6 +206,59 @@ K32_dmxfixture* dmxfixs[DMX_N_FIXTURES] = {nullptr};
 
 
     
+// ARTNET: subscribe dmx frame
+    #if LULU_TYPE == 60
+        int FRAME_size = LYRE_PATCHSIZE + 9; // 9: MEM R G B W PWM1 PWM2 PWM3 PWM4
+    #else
+        int FRAME_size = LULU_PATCHSIZE;
+    #endif
+        int ARTNET_address = (1 + (light->id() - 1) * LULU_PATCHSIZE);
 
+    artnet->onDmx( {
+      .address    = ARTNET_address, 
+      .framesize  = FRAME_size, 
+      .callback   = [](const uint8_t *data, int length) 
+      { 
+        
+        light->anim("artnet-strip")->push(data, min(length, LULU_PATCHSIZE));
+
+        // LYRE
+        #if LULUTYPE == 60
+          if (length >= DMXFIXTURE_PATCHSIZE + 9)
+          {
+            const uint8_t *dataStrip = &data[DMXFIXTURE_PATCHSIZE];
+
+            // MEM ou ARTNET FRAME
+            if (dataStrip[0] > 0 && dataStrip[0] <= PRESET_COUNT)
+              remote->stmSetMacro(dataStrip[0] - 1);
+            else
+            {
+              int stripframe[LULU_PATCHSIZE] = {255, dataStrip[1], dataStrip[2], dataStrip[3], dataStrip[4], 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, dataStrip[5], dataStrip[6], dataStrip[7], dataStrip[8]};
+              light->anim("artnet-strip")->push(stripframe, LULU_PATCHSIZE);
+              remote->setState(REMOTE_AUTO);
+            }
+          }
+        #endif
+
+        // LOGINL("ARTFRAME: ");
+        // LOGF("length=%d ", length);
+        // for (int k = 0; k < length; k++)
+        //   LOGF("%d ", data[k]);
+        // LOG();
+      }
+    });
+
+
+// EVENT: wifi lost
+    wifi->onDisconnect([&]()
+                       {
+                         LOG("WIFI: connection lost..");
+
+#if LULU_TYPE >= 20
+      //  light->anim("artnet-strip")->push(MEM_NO_WIFI, LULU_PATCHSIZE);
+#else
+                         light->anim("artnet-strip")->push(0); // @master 0
+#endif
+                       });
 
 #endif
