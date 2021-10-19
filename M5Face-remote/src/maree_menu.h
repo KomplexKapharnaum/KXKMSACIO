@@ -176,10 +176,7 @@ void send_go_up()
     maree_mqtt_topic = String(MAREE_MQTT_K32) + String(MAREE_MQTT_ID) + String(MAREE_MQTT_GO_UP);
     maree_mqtt_topic.toCharArray(MAREE_MQTT_TOPIC, maree_mqtt_topic.length() + 1);
     k32->mqtt->publish(MAREE_MQTT_TOPIC, maree_mqtt_frame.c_str(), 1);
-<<<<<<< Updated upstream
-=======
     Pixel = haute ;
->>>>>>> Stashed changes
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -193,10 +190,7 @@ void send_go_down()
     maree_mqtt_topic = String(MAREE_MQTT_K32) + String(MAREE_MQTT_ID) + String(MAREE_MQTT_GO_DOWN);
     maree_mqtt_topic.toCharArray(MAREE_MQTT_TOPIC, maree_mqtt_topic.length() + 1);
     k32->mqtt->publish(MAREE_MQTT_TOPIC, maree_mqtt_frame.c_str(), 1);
-<<<<<<< Updated upstream
-=======
     Pixel = basse ;
->>>>>>> Stashed changes
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -920,19 +914,13 @@ void remote_maree()
                 case 'A':
                     send_go_up();
                     msg = "GO Marée haute SEND";
-<<<<<<< Updated upstream
-=======
                     draw();
->>>>>>> Stashed changes
 
                     break;
                 case 'M':
                     send_go_down();
                     msg = "GO Marée basse SEND";
-<<<<<<< Updated upstream
-=======
                     draw();
->>>>>>> Stashed changes
 
                     break;
                 case '%':
