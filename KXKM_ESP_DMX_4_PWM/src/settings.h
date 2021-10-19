@@ -41,6 +41,7 @@
 #include "anim_monitoring.h"
 #include "anim_dmx_test.h"
 #include "anim_dmx_strip.h"
+#include "anim_maree.h"
 
 // LIGHT FIXTURES
 #include <fixtures/K32_ledstrip.h>
