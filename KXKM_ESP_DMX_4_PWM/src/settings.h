@@ -46,6 +46,7 @@
 // LIGHT FIXTURES
 #include <fixtures/K32_ledstrip.h>
 #include <fixtures/K32_pwmfixture.h>
+#include <fixtures/K32_dmxfixture.h>
 
 
 #ifdef LULU_TYPE
@@ -243,6 +244,9 @@
 #include "macro/Type/4pwm/mem_4pwm.h" // defo
 #include "macro/Type/SK/mem_sk.h"     // defo
 #include "macro/mem_barre_pwm.h"
+
+#elif LULU_TYPE == 71
+#include "type/71-4strobes.h"
 
 #elif LULU_TYPE == 80
 #include "type/80-maree.h"

@@ -60,9 +60,12 @@ void boutons_loop()
     if (didChange(W_ACTIVEMACRO, activeMacro))
     {
         LOGF("REMOTE: -> set Active Macro = %d\n", activeMacro);
+        
 
         #if LULU_TYPE == 12 // FIX
             light->anim("mem-dmxfix")->mem(activeMacro);
+        #elif LULU_TYPE == 71 // FIX
+            light->anim("mem-strobe")->mem(activeMacro);
         #else 
             light->anim("mem-strip")->mem(activeMacro);
             light->anim("mem-pwm")->mem(activeMacro);
@@ -74,63 +77,67 @@ void boutons_loop()
     if (didChange(W_PREVMACRO, previewMacro))
     {
         LOGF("REMOTE: -> set Preview Macro = %d\n", previewMacro);
-        light->anim("memprev-strip")->mem(previewMacro);
+        // is
     }
 
     // STATE Changed
     remoteState stateR = remote->getState();
     if (didChange(W_STATE, stateR))
-    {
-        // AUTO
-        if (stateR == REMOTE_AUTO)
-        {
-            light->anim("mem-strip")->stop();
-            light->anim("memprev-strip")->stop();
-            light->anim("artnet-strip")->play();
-            LOG("REMOTE: -> Mode AUTO");
-        }
+    {   
+        #if ARTNET_ENABLE  // FIX
+            // AUTO
+            if (stateR == REMOTE_AUTO)
+            {
+                light->anim("mem-strip")->stop();
+                light->anim("memprev-strip")->stop();
+                light->anim("artnet-strip")->play();
+                LOG("REMOTE: -> Mode AUTO");
+            }
 
-        // STM
-        else if (stateR == REMOTE_MANU_STM)
-        {
-            light->anim("artnet-strip")->stop();
-            light->anim("memprev-strip")->play();
-            light->anim("mem-strip")->play();
-            LOG("REMOTE: -> Mode STM");
-        }
+            // STM
+            else if (stateR == REMOTE_MANU_STM)
+            {
+                light->anim("artnet-strip")->stop();
+                light->anim("memprev-strip")->play();
+                light->anim("mem-strip")->play();
+                LOG("REMOTE: -> Mode STM");
+            }
 
-        // MANU
-        else if (stateR == REMOTE_MANU || stateR == REMOTE_MANU_LAMP)
-        {
-            light->anim("memprev-strip")->play();
-            LOG("REMOTE: -> Mode MANU");
-        }
+            // MANU
+            else if (stateR == REMOTE_MANU || stateR == REMOTE_MANU_LAMP)
+            {
+                light->anim("memprev-strip")->play();
+                LOG("REMOTE: -> Mode MANU");
+            }
+        #endif
     }
 
     // GO Active Macro
     if (remote->getSendMacro())
         if (stateR == REMOTE_MANU || stateR == REMOTE_MANU_LAMP)
         {
-            light->anim("artnet-strip")->stop();
-            light->anim("mem-strip")->play();
-            LOG("REMOTE: -> MANU -> GO Macro !");
+            #if ARTNET_ENABLE  // FIX
+                light->anim("artnet-strip")->stop();
+                light->anim("mem-strip")->play();
+                LOG("REMOTE: -> MANU -> GO Macro !");
+            #endif
         }
 
     // LAMP
-    int lamp = remote->getLamp();
-    if (didChange(W_LAMP, lamp))
-    {
-        if (lamp >= 0) {
-            // light->pwm->set(0, lamp);
-            // light->pwm->set(1, lamp);
-        }
-        else
-        {
-            light->anim("artnet-strip")->push();
-            light->anim("mem-strip")->push();
-        }
-        LOGF("REMOTE: -> getLAMP @%d\n", lamp);
-    }
+    // int lamp = remote->getLamp();
+    // if (didChange(W_LAMP, lamp))
+    // {
+    //     if (lamp >= 0) {
+    //         // light->pwm->set(0, lamp);
+    //         // light->pwm->set(1, lamp);
+    //     }
+    //     else
+    //     {
+    //         light->anim("artnet-strip")->push();    // FIX
+    //         light->anim("mem-strip")->push();       // FIX
+    //     }
+    //     LOGF("REMOTE: -> getLAMP @%d\n", lamp);
+    // }
 
 } // void boutons();
 
