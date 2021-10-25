@@ -1,16 +1,28 @@
 #include <K32_presets.h>
 
+class BankStrobe : public LBank
+{
+public:
+    BankStrobe() : LBank(17)
+    {
+        //        0     1    2    3    4    5    6    7    8    9    10   11   12   13   14   15   16
+        //       dim, stro,R1-4,G1-4,B1-4,  R1,  G1,  B1,  R2,  G2,  B2,  R3,  G3,  B3,  R4,  G4,  B4
 
-class BankStrobe : public LBank { 
-    public:
-        BankStrobe() : LBank(17) {
+        add(mem_t{255, 000, 255, 000, 000, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255}); // 00 Red
 
-            add(mem_t {  255, 255,   0,   0,   0,       0,         0,        0,        0,          0,       0,       0,       0,       0,           0,  0});   // 00 Red
+        add(mem_t{255, 000, 000, 255, 000, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255}); // 01 Green sinus
+        mem->mod(new K32_mod_sinus)->at(0)->mini(0)->maxi(255);
 
-            add(mem_t {  255, 255,   0,   0,   0,       0,         0,        0,        0,          0,       0,       0,       0,       0,           0,  0}); // 01 Red sinus
-                mem->mod(new K32_mod_sinus)->at(0)->mini(0)->maxi(255);
-    
-            add(mem_t {   0,    0,   0,   0,   0,       0,         0,        0,        0,          0,       0,       0,       0,       0,           0,  0});   // 02 Black
-        
-        }
+        add(mem_t{255, 000, 000, 000, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255}); // 02 Blue
+
+        add(mem_t{255, 255, 255, 255, 000, 255, 000, 000, 000, 255, 000, 000, 000, 255, 255, 255, 255}); // 03 RGBW
+
+        add(mem_t{255, 000, 255, 127, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000}); // 04 GYRO 
+        mem->mod(new K32_mod_sinus)->period(8500)->at(5)->at(6)->phase(0)->mini(0)->maxi(255);
+        mem->mod(new K32_mod_sinus)->period(8500)->at(8)->at(9)->phase(90)->mini(0)->maxi(255);
+        mem->mod(new K32_mod_sinus)->period(8500)->at(11)->at(12)->phase(180)->mini(0)->maxi(255);
+        mem->mod(new K32_mod_sinus)->period(8500)->at(14)->at(15)->phase(270)->mini(0)->maxi(255);
+
+        add(mem_t{000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000}); // 05 Black
+    }
 };
