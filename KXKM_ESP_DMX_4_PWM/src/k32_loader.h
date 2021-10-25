@@ -76,6 +76,15 @@ void k32_setup() {
     // Remote
     remote = new K32_remote(k32, mcp);
 
+    k32->on("stm32/btn-click", [](Orderz* order){
+        remote->stmNext();
+    });
+    k32->on("atom/btn-click", [](Orderz* order){
+        remote->stmNext();
+    });
+
+
+
     // PWM
     pwm = new K32_pwm(k32);
     for (int k = 0; k < PWM_N_CHAN; k++)

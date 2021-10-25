@@ -63,7 +63,6 @@ void init_lights()
     light->anim("mem-strip", new Anim_dmx_strip, LULU_STRIP_SIZE)
         ->drawTo(strips, LED_N_STRIPS)
         ->bank(new BankSK);
-    remote->setMacroMax( light->anim("mem-strip")->bank()->size() );
     
 
     // 
@@ -112,6 +111,48 @@ void init_lights()
         light->anim("artnet-strip")->push(0); // @master 0
     });
 
+
+    //
+    // REMOTE
+    //
+
+    remote->setMacroMax( light->anim("mem-strip")->bank()->size() );
+    
+    k32->on("remote/macro", [](Orderz* order){
+        light->anim("mem-strip")->mem( order->getData(0)->toInt() );
+        light->anim("mem-pwm")->mem( order->getData(0)->toInt() );
+    });
+
+    k32->on("remote/state", [](Orderz* order){
+
+        remoteState stateR = (remoteState) order->getData(0)->toInt();
+
+        // AUTO
+        if (stateR == REMOTE_AUTO)
+        {
+            light->anim("mem-strip")->stop();
+            light->anim("artnet-strip")->play();
+            LOG("REMOTE: -> Mode AUTO");
+        }
+
+        // STM
+        else if (stateR == REMOTE_MANU_STM)
+        {
+            light->anim("artnet-strip")->stop();
+            light->anim("mem-strip")->play();
+            LOG("REMOTE: -> Mode STM");
+        }
+
+        // MANU
+        else if (stateR == REMOTE_MANU || stateR == REMOTE_MANU_LAMP)
+        {
+            light->anim("artnet-strip")->stop();
+            light->anim("mem-strip")->play();
+            LOG("REMOTE: -> Mode MANU");
+        }
+    });
+
+    
 }
 
 
