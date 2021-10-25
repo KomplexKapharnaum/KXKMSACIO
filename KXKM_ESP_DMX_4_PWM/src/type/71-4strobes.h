@@ -31,8 +31,17 @@ void init_lights()
         ->bank(new BankStrobe)
         ->push(0)
         ->play();
-    remote->setMacroMax( light->anim("mem-strobe")->bank()->size() );
+    
+    //
+    // REMOTE
+    //
 
+    remote->setMacroMax( light->anim("mem-strobe")->bank()->size() );
+    
+    k32->on("remote/macro", [](Orderz* order){
+        light->anim("mem-strobe")->mem( order->getData(0)->toInt() );
+        LOGF("mem-strobe: %d\n", order->getData(0)->toInt());
+    });
 
 
 }

@@ -67,7 +67,6 @@ void init_lights()
         ->drawTo(strips[0])
         ->bank(new BankSK)
         ->mem(-1);
-    remote->setMacroMax( light->anim("mem-strip")->bank()->size() );
 
 
     // ANIM leds - presets preview
@@ -140,6 +139,65 @@ void init_lights()
         LOG("WIFI: connection lost..");
         //  light->anim("artnet-strip")->push(MEM_NO_WIFI, LULU_PATCHSIZE);
         light->anim("artnet-strip")->push(0); // @master 0
+    });
+
+
+    //
+    // REMOTE
+    //
+
+    remote->setMacroMax( light->anim("mem-strip")->bank()->size() );
+    
+    k32->on("remote/macro", [](Orderz* order){
+        light->anim("mem-strip")->mem( order->getData(0)->toInt() );
+        light->anim("mem-pwm")->mem( order->getData(0)->toInt() );
+    });
+
+    k32->on("remote/preview", [](Orderz* order){
+        light->anim("memprev-strip")->mem( order->getData(0)->toInt() );
+    });
+
+    k32->on("remote/lock", [](Orderz* order){
+        light->anim("remote-strip")->push(remote->getState(), true);
+    });
+
+    k32->on("remote/unlock", [](Orderz* order){
+        light->anim("remote-strip")->push(remote->getState(), false);
+    });
+
+    k32->on("remote/state", [](Orderz* order){
+
+        remoteState stateR = (remoteState) order->getData(0)->toInt();
+
+        // AUTO
+        if (stateR == REMOTE_AUTO)
+        {
+            light->anim("mem-strip")->stop();
+            light->anim("memprev-strip")->stop();
+            light->anim("artnet-strip")->play();
+            LOG("REMOTE: -> Mode AUTO");
+        }
+
+        // STM
+        else if (stateR == REMOTE_MANU_STM)
+        {
+            light->anim("artnet-strip")->stop();
+            light->anim("memprev-strip")->play();
+            light->anim("mem-strip")->play();
+            LOG("REMOTE: -> Mode STM");
+        }
+
+        // MANU
+        else if (stateR == REMOTE_MANU || stateR == REMOTE_MANU_LAMP)
+        {
+            light->anim("artnet-strip")->stop();
+            light->anim("mem-strip")->play();
+            light->anim("memprev-strip")->play();
+            LOG("REMOTE: -> Mode MANU");
+        }
+
+        // REMOTE LED
+        light->anim("remote-strip")->push(stateR, remote->isLocked());
     });
 
 }

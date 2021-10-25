@@ -121,28 +121,21 @@ void setup()
   //         // }
   //       });
 
-  // Remote status refresh // FIX
-  // k32->timer->every(100, []()
-  //                   { light->anim("remote-strip")->push(remote->getState(), remote->isLocked()); });
 
   // Heap Memory log
-  // k32->timer->every(1000, []() {
-  //   static int lastheap = 0;
-  //   int heap = ESP.getFreeHeap();
-  //   LOGF2("Free memory: %d / %d\n", heap, heap - lastheap);
-  //   lastheap = heap;
-  // });
+  k32->timer->every(1000, []() {
+    static int lastheap = 0;
+    int heap = ESP.getFreeHeap();
+    LOGF2("Free memory: %d / %d\n", heap, heap - lastheap);
+    lastheap = heap;
+  });
 
 } // setup
 
 ///////////////////////////////////////// LOOP /////////////////////////////////////////////////
 void loop()
 {
-
-  /////////////////// BOUTONS ///////////////////////
-  #if LULU_TYPE != 80 // FIX
-    boutons_loop();
-  #endif
+  boutons_loop(); // ATOM Btn // TODO make plugin
 
   delay(20);
 
