@@ -15,10 +15,10 @@
 
 /////////////////////////////////////////ID/////////////////////////////////////////
 
-#define K32_SET_NODEID      1         // board unique id
+#define K32_SET_NODEID      60         // board unique id
 #define K32_SET_CHANNEL     1           // board channel mqtt
 #define LIGHT_SET_ID        1           // permet de calculer l'adresse DMX
-#define ARTNET_SET_UNIVERSE 0           // univers artnet
+#define ARTNET_SET_UNIVERSE 4           // univers artnet
 //                    // defo ARTNET_SET_UNIVERSE 0  => LULU-TYPE 6 & 7 & 8 & 10 & 20 & 34
 //                    // defo ARTNET_SET_UNIVERSE 1  => LULU-TYPE 1 & 2 & 5 & 50
 //                    // defo ARTNET_SET_UNIVERSE 2  => LULU-TYPE 9
@@ -55,9 +55,11 @@ void setup()
     String subnet = "0";
     if (k32->system->hw() == 4) subnet = "1";
 
-    wifi->staticIP(basenet + subnet + "." + String(k32->system->id() + 100), router, "255.0.0.0");
+    // wifi->staticIP(basenet + subnet + "." + String(k32->system->id() + 100), router, "255.0.0.0");
+    // wifi->staticIP(basenet + subnet + "." + "160", router, "255.0.0.0");
 
     wifi->connect("kxkm24", NULL); //KXKM 24
+    // wifi->connect("phare", NULL); //KXKM phare
     // wifi->connect("kxkm24lulu", NULL);                                                         //KXKM 24 lulu
     // wifi->connect("mgr4g", NULL);                                                              //Maigre dev
     // wifi->connect("interweb", "superspeed37");                                                 //Maigre dev home
@@ -73,7 +75,7 @@ void setup()
           .broker = router.c_str(), // Komplex
           // .broker = "2.0.0.10", // Riri dev home
           // .broker = "192.168.43.132",  // MGR dev home
-          .beatInterval = 0,  // heartbeat interval milliseconds (0 = disable) 5000
+          .beatInterval = 5000,  // heartbeat interval milliseconds (0 = disable) 5000
           .statusInterval = 0 // full beacon interval milliseconds (0 = disable) 15000
       });
 
@@ -123,12 +125,12 @@ void setup()
 
 
   // Heap Memory log
-  k32->timer->every(1000, []() {
-    static int lastheap = 0;
-    int heap = ESP.getFreeHeap();
-    LOGF2("Free memory: %d / %d\n", heap, heap - lastheap);
-    lastheap = heap;
-  });
+  // k32->timer->every(1000, []() {
+  //   static int lastheap = 0;
+  //   int heap = ESP.getFreeHeap();
+  //   LOGF2("Free memory: %d / %d\n", heap, heap - lastheap);
+  //   lastheap = heap;
+  // });
 
 } // setup
 
