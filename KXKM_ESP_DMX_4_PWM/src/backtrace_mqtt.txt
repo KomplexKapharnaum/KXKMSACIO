@@ -1,0 +1,82 @@
+Paste your Backtrace: 
+Backtrace: 0x400d62bc:0x3ffb4620 0x400d3dc6:0x3ffb4690 0x400d3e4c:0x3ffb46c0 0x4008a5be:0x3ffb46f0
+
+stack:
+0x400d62bc: K32_light::command(Orderz*) at E:\Documents\GitHub\K32-lib\K32-light\src/K32_light.cpp:234
+0x400d3dc6: K32::dispatch(Orderz*) at E:/Documents/GitHub/K32-lib/K32-core/src/class/K32_module.h:29
+  \-> inlined by: K32::dispatch(Orderz*) at E:/Documents/GitHub/K32-lib/K32-core/src/K32.h:125
+0x400d3e4c: K32::run(void*) at E:/Documents/GitHub/K32-lib/K32-core/src/K32.h:145
+0x4008a5be: vPortTaskWrapper at /home/runner/work/esp32-arduino-lib-builder/esp32-arduino-lib-builder/esp-idf/components/freertos/port.c:143
+
+
+
+
+le moniteur pour info :
+
+__/\\\________/\\\_____/\\\\\\\\\\_____/\\\\\\\\\_____
+ _\/\\\_____/\\\//____/\\\///////\\\__/\\\///////\\\___
+  _\/\\\__/\\\//______\///______/\\\__\///______\//\\\__
+   _\/\\\\\\//\\\_____________/\\\//_____________/\\\/___     
+    _\/\\\//_\//\\\___________\////\\\_________/\\\//_____
+     _\/\\\____\//\\\_____________\//\\\_____/\\\//________
+      _\/\\\_____\//\\\___/\\\______/\\\____/\\\/___________  
+       _\/\\\______\//\\\_\///\\\\\\\\\/____/\\\\\\\\\\\\\\\_
+        _\///________\///____\/////////_____\///////////////__
+
+
+
+NODE id: 60
+HW rev: 2
+
+MCP: not found.. disabled
+### POWER: init
+P POWER : Switch on adaptive gauge
+1
+### B
+REMOTE: init
+DMX: output STARTED
+ANIM: mem-strobe play
+
+NAME:   4Strobes-1-v90
+CHANNEL: 1
+
+### %
+NETWORK: wifi
+Battery -1
+### B
+### V
+POWER: Nb cells detected: voltage=11493 cells=3
+### C
+POWER: Current sensor lost.. fallback to STM32
+### 0 9798
+### 1 10788
+### 2 11088
+### 3 11313
+### 4 11463
+### 5 11763
+### 6 12588
+POWER : new profile with current : 100 mA 
+### B
+### B
+### B
+### B
+### B
+### C
+### B
+### B
+### B
+### B
+### B
+### C
+### B
+WIFI: connected = 10.0.2.31
+ - wifi/connected
+OTA: started = -4Strobes-1-v90
+ - mqtt/started
+MQTT: connected to broker
+MQTT: subscribed to k32/c1/#
+MQTT: subscribed to k32/e60/#
+MQTT: subscribed to k32/all/#
+### B
+ARTNET: subscribing to subnet=0 universe=4
+ - artnet/started
