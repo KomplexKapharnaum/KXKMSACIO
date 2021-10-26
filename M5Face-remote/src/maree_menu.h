@@ -52,7 +52,7 @@ String MAREE_MQTT_GO_UP = "/leds/maree/go_p";
 String MAREE_MQTT_GO_DOWN = "/leds/maree/go_m";
 
 String MAREE_MQTT_MASTER = "/leds/master";
-String MAREE_MQTT_STOP = "/leds/stop";
+String MAREE_MQTT_STOP = "/leds/maree/stop";
 String MAREE_MQTT_MEM = "/leds/mem";
 String MAREE_MQTT_FADE_IN = "/leds/master/fadein";
 String MAREE_MQTT_FADE_OUT = "/leds/master/fadeout";
@@ -172,11 +172,11 @@ void send_temps()
 void send_go_up()
 {
     maree_mqtt_frame = "";
-    maree_mqtt_frame += String(temps) + "|" + String(haute)+ "|" + String(basse)+ "|" + String(Pixel);
+    maree_mqtt_frame += String(temps) + "|" + String(haute) + "|" + String(basse) + "|" + String(Pixel);
     maree_mqtt_topic = String(MAREE_MQTT_K32) + String(MAREE_MQTT_ID) + String(MAREE_MQTT_GO_UP);
     maree_mqtt_topic.toCharArray(MAREE_MQTT_TOPIC, maree_mqtt_topic.length() + 1);
     k32->mqtt->publish(MAREE_MQTT_TOPIC, maree_mqtt_frame.c_str(), 1);
-    Pixel = haute ;
+    Pixel = haute;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -186,11 +186,11 @@ void send_go_up()
 void send_go_down()
 {
     maree_mqtt_frame = "";
-    maree_mqtt_frame += String(temps) + "|" + String(haute)+ "|" + String(basse)+ "|" + String(Pixel);
+    maree_mqtt_frame += String(temps) + "|" + String(haute) + "|" + String(basse) + "|" + String(Pixel);
     maree_mqtt_topic = String(MAREE_MQTT_K32) + String(MAREE_MQTT_ID) + String(MAREE_MQTT_GO_DOWN);
     maree_mqtt_topic.toCharArray(MAREE_MQTT_TOPIC, maree_mqtt_topic.length() + 1);
     k32->mqtt->publish(MAREE_MQTT_TOPIC, maree_mqtt_frame.c_str(), 1);
-    Pixel = basse ;
+    Pixel = basse;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -794,8 +794,10 @@ void remote_maree()
 
         if (action == "func")
         {
+            String msg = " ";
+
             maree_fonction += 1;
-            if (maree_fonction >= 6)
+            if (maree_fonction >= 2)
             {
                 maree_fonction = 0;
             }
@@ -805,26 +807,16 @@ void remote_maree()
             }
             else if (maree_fonction == 1)
             {
-                fonct = "Speed";
-            }
-            else if (maree_fonction == 2)
-            {
-                fonct = "Color";
-            }
-            else if (maree_fonction == 3)
-            {
-                fonct = "Strobe";
-            }
-            else if (maree_fonction == 4)
-            {
-                fonct = "Pixel Mode";
-            }
-            else if (maree_fonction == 5)
-            {
-                fonct = "Mirror";
+                fonct = "STOP";
+
+                maree_mqtt_topic = String(MAREE_MQTT_K32) + String(MAREE_MQTT_ID) + String(MAREE_MQTT_STOP);
+                maree_mqtt_topic.toCharArray(MAREE_MQTT_TOPIC, maree_mqtt_topic.length() + 1);
+                k32->mqtt->publish(MAREE_MQTT_TOPIC, nullptr, 1);
+                msg =  maree_mqtt_topic;
+                maree_fonction = 0;
             }
 
-            ez.msgBox("M5 REMOTE MAREE", fonct, "id|" + id_cal_maree + "# Menu # func|" + fonct + " # # page|" + page_me + "#", false);
+            ez.msgBox("M5 REMOTE MAREE", msg, "id|" + id_cal_maree + "# Menu # func|" + fonct + " # # page|" + page_me + "#", false);
             draw();
         };
 
