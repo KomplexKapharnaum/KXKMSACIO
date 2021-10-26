@@ -413,7 +413,7 @@ bool temps_value()
     int res;
     esc_maree = true;
 
-    msg += " Enter temps en Secondes & =";
+    msg += " Enter temps en Minutes & =";
     ez.msgBox("M5 REMOTE MAREE", msg, "#####Back", false);
     draw();
 
@@ -468,7 +468,7 @@ bool temps_value()
                         bad = true;
                         res_value = "";
                         msg = "";
-                        msg += " Enter temps en Secondes & =";
+                        msg += " Enter temps en Minutes & =";
                         ez.msgBox("M5 REMOTE MAREE", msg, "#####Back", false);
                         draw();
                     }
@@ -484,7 +484,7 @@ bool temps_value()
                     bad = true;
                     res_value = "";
                     msg = "";
-                    msg += " Enter temps en Secondes & =";
+                    msg += " Enter temps en Minutes & =";
                     ez.msgBox("M5 REMOTE MAREE", msg, "#####Back", false);
                     draw();
 
