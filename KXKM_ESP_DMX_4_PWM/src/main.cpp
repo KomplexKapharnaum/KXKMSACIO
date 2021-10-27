@@ -55,7 +55,7 @@ void setup()
     String subnet = "0";
     if (k32->system->hw() == 4) subnet = "1";
 
-    wifi->staticIP(basenet + subnet + "." + String(k32->system->id() + 100), router, "255.0.0.0");
+    wifi->staticIP(basenet + "." + subnet + "." + String(k32->system->id() + 100), router, "255.0.0.0");
 
     wifi->connect("kxkm24", NULL); //KXKM 24
     // wifi->connect("kxkm24lulu", NULL);                                                         //KXKM 24 lulu
