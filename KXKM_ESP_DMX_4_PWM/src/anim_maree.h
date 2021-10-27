@@ -10,9 +10,9 @@ public:
   {
     int position = data[0];
 
-    for (int k=0; k<size(); k++) 
+    for (int k=0; k<=size(); k++) 
     {
-      if (k < position) this->pixel(k, CRGBW{255, 255, 255, 255}); 
+      if (k >= position) this->pixel(k, CRGBW{255, 255, 255, 255}); 
       else this->pixel(k, CRGBW::Black); 
     }
 
