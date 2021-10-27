@@ -767,7 +767,7 @@ void remote_maree()
     bool _a_b = true;
     maree_mqtt_topic = String(MAREE_MQTT_K32) + String(MAREE_MQTT_ID) + String(MAREE_MQTT_MEM);
     maree_mqtt_topic.toCharArray(MAREE_MQTT_TOPIC, maree_mqtt_topic.length() + 1);
-    String fonct = "Pixel";
+    String fonct = "STOP";
     uint8_t page_mem = 0;
     String page_me = "0-9";
 
@@ -803,7 +803,7 @@ void remote_maree()
             }
             if (maree_fonction == 0)
             {
-                fonct = "Pixel";
+                fonct = "Stop";
             }
             else if (maree_fonction == 1)
             {
@@ -866,12 +866,12 @@ void remote_maree()
                 case '7':
                 case '8':
                 case '9':
-                    maree_mqtt_topic = String(MAREE_MQTT_K32) + String(MAREE_MQTT_ID) + String(MAREE_MQTT_MEM);
-                    maree_mqtt_topic.toCharArray(MAREE_MQTT_TOPIC, maree_mqtt_topic.length() + 1);
-                    k32->mqtt->publish(MAREE_MQTT_TOPIC, (page_mem + msg).c_str(), 1);
-                    msg += " " + maree_mqtt_topic + (page_mem + msg);
+                    // maree_mqtt_topic = String(MAREE_MQTT_K32) + String(MAREE_MQTT_ID) + String(MAREE_MQTT_MEM);
+                    // maree_mqtt_topic.toCharArray(MAREE_MQTT_TOPIC, maree_mqtt_topic.length() + 1);
+                    // k32->mqtt->publish(MAREE_MQTT_TOPIC, (page_mem + msg).c_str(), 1);
+                    // msg += " " + maree_mqtt_topic + (page_mem + msg);
 
-                    send_pixel();
+                    // send_pixel();
 
                     break;
 
