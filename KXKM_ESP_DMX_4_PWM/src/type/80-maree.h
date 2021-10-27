@@ -37,6 +37,7 @@ void init_lights()
     // ANIM leds - artnet
     light->anim("maree", new Anim_maree, LULU_STRIP_SIZE)
         ->drawTo(strips, LED_N_STRIPS)
+        ->remote(true)
         ->push(0)
         ->play();
 

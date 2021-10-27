@@ -60,12 +60,14 @@ void init_lights()
     light->anim("mem-pwm", new Anim_datathru, PWM_N_CHAN)
         ->drawTo(dimmer)
         ->bank(new BankPWM)
+        ->remote(true)
         ->mem(-1);
 
     // ANIM leds - presets
     light->anim("mem-strip", new Anim_dmx_strip, LULU_STRIP_SIZE)
         ->drawTo(strips[0])
         ->bank(new BankSK)
+        ->remote(true)
         ->mem(-1);
 
 

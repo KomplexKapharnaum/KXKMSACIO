@@ -29,6 +29,7 @@ void init_lights()
     light->anim("mem-strobe", new Anim_datathru, STROBE_PATCHSIZE)
         ->drawTo(strobes, STROBE_N)
         ->bank(new BankStrobe)
+        ->remote(true)
         ->push(0)
         ->play();
     
