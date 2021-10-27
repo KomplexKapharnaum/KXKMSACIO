@@ -15,10 +15,10 @@
 
 /////////////////////////////////////////ID/////////////////////////////////////////
 
-#define K32_SET_NODEID      2         // board unique id
-#define K32_SET_CHANNEL     1           // board channel mqtt
-#define LIGHT_SET_ID        1           // permet de calculer l'adresse DMX
-#define ARTNET_SET_UNIVERSE 0           // univers artnet
+// #define K32_SET_NODEID    1           // board unique id
+// #define K32_SET_CHANNEL     1           // board channel mqtt
+// #define LIGHT_SET_ID        1           // permet de calculer l'adresse DMX
+// #define ARTNET_SET_UNIVERSE 0           // univers artnet
 //                    // defo ARTNET_SET_UNIVERSE 0  => LULU-TYPE 6 & 7 & 8 & 10 & 20 & 34
 //                    // defo ARTNET_SET_UNIVERSE 1  => LULU-TYPE 1 & 2 & 5 & 50
 //                    // defo ARTNET_SET_UNIVERSE 2  => LULU-TYPE 9
@@ -55,7 +55,7 @@ void setup()
     String subnet = "0";
     if (k32->system->hw() == 4) subnet = "1";
 
-    wifi->staticIP(basenet + subnet + "." + String(k32->system->id() + 100), router, "255.0.0.0");
+    // wifi->staticIP(basenet + subnet + "." + String(k32->system->id() + 100), router, "255.0.0.0");
 
     // wifi->connect("kxkm24", NULL); //KXKM 24
     wifi->connect("maree", NULL); //KXKM maree
