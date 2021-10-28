@@ -23,25 +23,30 @@ public:
         add(mem_t{255, 000, 000, 000, 000, 255, 000, 000, 000, 255, 000, 000, 000, 255, 255, 255, 255}); // 03 RGBW
 
         add(mem_t{255, 000, 000, 000, 000, 255, 127, 000, 255, 127, 000, 255, 127, 000, 255, 127, 000}); // 04 GYRO 
-            mem->mod(new K32_mod_pulse)->period(1000)->at(5)->at(6)->phase(0)->param(1,25);
-            mem->mod(new K32_mod_pulse)->period(1000)->at(8)->at(9)->phase(90)->param(1,25);
-            mem->mod(new K32_mod_pulse)->period(1000)->at(11)->at(12)->phase(180)->param(1,25);
-            mem->mod(new K32_mod_pulse)->period(1000)->at(14)->at(15)->phase(270)->param(1,25);
-            mem->mod(new K32_mod_sawtooth)->period(4000)->at(ANIM_ROUTE)->absolute()->mini(1)->maxi(5); 
+            mem->mod(new K32_mod_pulse)->period(500)->at(5)->at(6)->phase(0)->param(1,25);
+            mem->mod(new K32_mod_pulse)->period(500)->at(8)->at(9)->phase(90)->param(1,25);
+            mem->mod(new K32_mod_pulse)->period(500)->at(11)->at(12)->phase(180)->param(1,25);
+            mem->mod(new K32_mod_pulse)->period(500)->at(14)->at(15)->phase(270)->param(1,25);
+            mem->mod(new K32_mod_sawtooth)->period(2000)->at(ANIM_ROUTE)->absolute()->mini(1)->maxi(5); 
 
 
         add(mem_t{255, 000, 000, 000, 000, 255, 255, 191, 255, 255, 191, 255, 255, 191, 255, 255, 191}); // 05 phare 
-            mem->mod(new K32_mod_pulse)->period(5000)->at(5)->at(6)->at(7)->phase(0)->param(1,25);
-            mem->mod(new K32_mod_pulse)->period(5000)->at(8)->at(9)->at(10)->phase(90)->param(1,25);
-            mem->mod(new K32_mod_pulse)->period(5000)->at(11)->at(12)->at(13)->phase(180)->param(1,25);
-            mem->mod(new K32_mod_pulse)->period(5000)->at(14)->at(15)->at(16)->phase(270)->param(1,25);
-            mem->mod(new K32_mod_sawtooth)->period(20000)->at(ANIM_ROUTE)->absolute()->mini(1)->maxi(5);
+            mem->mod(new K32_mod_pulse)->period(2500)->at(5)->at(6)->at(7)->phase(0)->param(1,25);
+            mem->mod(new K32_mod_pulse)->period(2500)->at(8)->at(9)->at(10)->phase(90)->param(1,25);
+            mem->mod(new K32_mod_pulse)->period(2500)->at(11)->at(12)->at(13)->phase(180)->param(1,25);
+            mem->mod(new K32_mod_pulse)->period(2500)->at(14)->at(15)->at(16)->phase(270)->param(1,25);
+            mem->mod(new K32_mod_sawtooth)->period(10000)->at(ANIM_ROUTE)->absolute()->mini(1)->maxi(5);
 
         add(mem_t{255, 000, 000, 000, 000, 255, 255, 191, 255, 255, 191, 255, 255, 191, 255, 255, 191}); // 06 phare 
             mem->mod(new K32_mod_sinus)->period(10000)->at(5)->at(6)->at(7)->phase(0)->mini(-255)->maxi(255);
-            mem->mod(new K32_mod_sinus)->period(10000)->at(8)->at(9)->at(10)->phase(90)->mini(-255)->maxi(255);
-            mem->mod(new K32_mod_sinus)->period(10000)->at(11)->at(12)->at(13)->phase(180)->mini(-255)->maxi(255);
-            mem->mod(new K32_mod_sinus)->period(10000)->at(14)->at(15)->at(16)->phase(270)->mini(-255)->maxi(255);
+            mem->mod(new K32_mod_sinus)->period(10000)->at(8)->at(9)->at(10)->phase(72)->mini(-255)->maxi(255);
+            mem->mod(new K32_mod_sinus)->period(10000)->at(11)->at(12)->at(13)->phase(144)->mini(-255)->maxi(255);
+            mem->mod(new K32_mod_sinus)->period(10000)->at(14)->at(15)->at(16)->phase(216)->mini(-255)->maxi(255);
+            mem->mod(new K32_mod_pulse)->period(10000)->param(1,80)  
+                                                        ->at(5)->at(6)->at(7)
+                                                        ->at(8)->at(9)->at(10)
+                                                        ->at(11)->at(12)->at(13)
+                                                        ->at(14)->at(15)->at(16);
             mem->mod(new K32_mod_sawtooth)->period(40000)->at(ANIM_ROUTE)->absolute()->mini(1)->maxi(5);
 
         add(mem_t{255, 000, 255, 255, 255, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000}); // 07 rgb
