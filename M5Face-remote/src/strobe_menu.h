@@ -1,25 +1,23 @@
 #ifndef STROBE_MENU_H
 #define STROBE_MENU_H
 
-#include "preset_color.h"
+#include "preset_color_str.h"
 
 void remote_strobe();
 
-bool master_value_str();
-bool id_value_str();
-bool color_value_str();
-void draw_master_str();
-void send_master_str();
-void send_color_str();
-// void draw_coloe_str();
-// void send_str_str();
-// void draw_str_str();
-void send_str_str();
 void draw_red_str();
 void send_red_str();
-void draw_mod_str();
-void send_mirror_str();
-void draw_mirror_str();
+void draw_green_str();
+void send_green_str();
+void draw_blue_str();
+void send_blue_str();
+void draw_color_str();
+void send_color_str();
+void draw_master_str();
+void send_master_str();
+bool color_value_str();
+bool id_value_str();
+bool master_value_str();
 
 bool _mod_coarse_str = false;
 bool color_front_back_str = false;
@@ -33,11 +31,8 @@ uint8_t strobe_id_fonction = 1;
 String strobe_id_fonct = "CH";
 String id_cal_strobe = "all";
 
-uint8_t strobe_red, strobe_green, strobe_blue, strobe_white, strobe_str, strobe_mod, strobe_mirror;
+uint8_t strobe_red, strobe_green, strobe_blue, strobe_str;
 int16_t strobe_str_speed = 127;
-int16_t strobe_pix_long = 127;
-int16_t strobe_pix_pos = 127;
-int16_t strobe_zoom = 255;
 
 String strobe_mqtt_frame;
 
@@ -58,62 +53,6 @@ String STROBE_MQTT_MASTER = "/leds/master";
 String STROBE_MQTT_FRAME = "/leds/frame";
 
 ///////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////DRAW BLUE //////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////
-void draw_blue_str()
-{
-    m5.lcd.setTextColor(TFT_BLUE);
-    ez.setFont(ez.theme->menu_big_font);
-    m5.lcd.setTextDatum(TR_DATUM);
-    int16_t text_h = ez.fontHeight();
-    m5.lcd.drawString("Blue : " + String(strobe_blue), TFT_W - ez.theme->input_hmargin, 10 + ez.theme->input_vmargin + text_h + 10);
-
-}
-
-///////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////SEND BLUE///////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////
-//        0     1    2    3    4    5    6    7    8    9    10   11   12   13   14   15   16
-//       dim, stro,R1-4,G1-4,B1-4,  R1,  G1,  B1,  R2,  G2,  B2,  R3,  G3,  B3,  R4,  G4,  B4
-void send_blue_str()
-{
-    strobe_mqtt_frame = "-1|-1|-1|-1|";
-    
-    strobe_mqtt_frame += String(strobe_blue);
-    strobe_mqtt_topic = String(STROBE_MQTT_K32) + String(STROBE_MQTT_ID) + String(STROBE_MQTT_FRAME);
-    strobe_mqtt_topic.toCharArray(STROBE_MQTT_TOPIC, strobe_mqtt_topic.length() + 1);
-    k32->mqtt->publish(STROBE_MQTT_TOPIC, strobe_mqtt_frame.c_str(), 1);
-}
-
-///////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////DRAW GREEN//////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////
-void draw_green_str()
-{
-    m5.lcd.setTextColor(TFT_GREEN);
-    ez.setFont(ez.theme->menu_big_font);
-    m5.lcd.setTextDatum(TR_DATUM);
-    int16_t text_h = ez.fontHeight();
-    m5.lcd.drawString("Green : " + String(strobe_green), TFT_W - ez.theme->input_hmargin, 10 + ez.theme->input_vmargin + text_h + 10);
-
-}
-
-///////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////SEND GREEN//////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////
-//        0     1    2    3    4    5    6    7    8    9    10   11   12   13   14   15   16
-//       dim, stro,R1-4,G1-4,B1-4,  R1,  G1,  B1,  R2,  G2,  B2,  R3,  G3,  B3,  R4,  G4,  B4
-void send_green_str()
-{
-    strobe_mqtt_frame = "-1|-1|-1|";
-    
-    strobe_mqtt_frame +=  String(strobe_green) ;
-    strobe_mqtt_topic = String(STROBE_MQTT_K32) + String(STROBE_MQTT_ID) + String(STROBE_MQTT_FRAME);
-    strobe_mqtt_topic.toCharArray(STROBE_MQTT_TOPIC, strobe_mqtt_topic.length() + 1);
-    k32->mqtt->publish(STROBE_MQTT_TOPIC, strobe_mqtt_frame.c_str(), 1);
-}
-
-///////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////DRAW RED////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
 void draw_red_str()
@@ -126,7 +65,6 @@ void draw_red_str()
     m5.lcd.drawString("Red : " + String(strobe_red), TFT_W - ez.theme->input_hmargin, 10 + ez.theme->input_vmargin + text_h + 10);
 
 }
-
 ///////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////SEND RED////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -142,6 +80,60 @@ void send_red_str()
     k32->mqtt->publish(STROBE_MQTT_TOPIC, strobe_mqtt_frame.c_str(), 1);
 
 }
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////DRAW GREEN//////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+void draw_green_str()
+{
+    m5.lcd.setTextColor(TFT_GREEN);
+    ez.setFont(ez.theme->menu_big_font);
+    m5.lcd.setTextDatum(TR_DATUM);
+    int16_t text_h = ez.fontHeight();
+    m5.lcd.drawString("Green : " + String(strobe_green), TFT_W - ez.theme->input_hmargin, 10 + ez.theme->input_vmargin + text_h + 10);
+
+}
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////SEND GREEN//////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+//        0     1    2    3    4    5    6    7    8    9    10   11   12   13   14   15   16
+//       dim, stro,R1-4,G1-4,B1-4,  R1,  G1,  B1,  R2,  G2,  B2,  R3,  G3,  B3,  R4,  G4,  B4
+void send_green_str()
+{
+    strobe_mqtt_frame = "-1|-1|-1|";
+    
+    strobe_mqtt_frame +=  String(strobe_green) ;
+    strobe_mqtt_topic = String(STROBE_MQTT_K32) + String(STROBE_MQTT_ID) + String(STROBE_MQTT_FRAME);
+    strobe_mqtt_topic.toCharArray(STROBE_MQTT_TOPIC, strobe_mqtt_topic.length() + 1);
+    k32->mqtt->publish(STROBE_MQTT_TOPIC, strobe_mqtt_frame.c_str(), 1);
+}
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////DRAW BLUE //////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+void draw_blue_str()
+{
+    m5.lcd.setTextColor(TFT_BLUE);
+    ez.setFont(ez.theme->menu_big_font);
+    m5.lcd.setTextDatum(TR_DATUM);
+    int16_t text_h = ez.fontHeight();
+    m5.lcd.drawString("Blue : " + String(strobe_blue), TFT_W - ez.theme->input_hmargin, 10 + ez.theme->input_vmargin + text_h + 10);
+
+}
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////SEND BLUE///////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+//        0     1    2    3    4    5    6    7    8    9    10   11   12   13   14   15   16
+//       dim, stro,R1-4,G1-4,B1-4,  R1,  G1,  B1,  R2,  G2,  B2,  R3,  G3,  B3,  R4,  G4,  B4
+void send_blue_str()
+{
+    strobe_mqtt_frame = "-1|-1|-1|-1|";
+    
+    strobe_mqtt_frame += String(strobe_blue);
+    strobe_mqtt_topic = String(STROBE_MQTT_K32) + String(STROBE_MQTT_ID) + String(STROBE_MQTT_FRAME);
+    strobe_mqtt_topic.toCharArray(STROBE_MQTT_TOPIC, strobe_mqtt_topic.length() + 1);
+    k32->mqtt->publish(STROBE_MQTT_TOPIC, strobe_mqtt_frame.c_str(), 1);
+}
+
+
 
 ///////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////DRAW COLOR//////////////////////////////////////
@@ -180,17 +172,6 @@ void send_color_str()
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////SEND MASTER/////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////
-void send_master_str()
-{
-    strobe_Mast = String(strobe_Master);
-    strobe_mqtt_topic = String(STROBE_MQTT_K32) + String(STROBE_MQTT_ID) + String(STROBE_MQTT_MASTER);
-    strobe_mqtt_topic.toCharArray(STROBE_MQTT_TOPIC, strobe_mqtt_topic.length() + 1);
-    k32->mqtt->publish(STROBE_MQTT_TOPIC, strobe_Mast.c_str(), 1);
-}
-
-///////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////DRAW MASTER/////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
 void draw_master_str()
@@ -217,14 +198,23 @@ void draw_master_str()
         draw_blue_str();
     }
 }
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////SEND MASTER/////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+void send_master_str()
+{
+    strobe_Mast = String(strobe_Master);
+    strobe_mqtt_topic = String(STROBE_MQTT_K32) + String(STROBE_MQTT_ID) + String(STROBE_MQTT_MASTER);
+    strobe_mqtt_topic.toCharArray(STROBE_MQTT_TOPIC, strobe_mqtt_topic.length() + 1);
+    k32->mqtt->publish(STROBE_MQTT_TOPIC, strobe_Mast.c_str(), 1);
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////COLOR_VALUE//////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
 bool color_value_str()
-
 {
-    bool r, g, b, w = false;
+    bool r, g, b = false;
     bool bad = false;
     String action = "";
     String res_value = "";
@@ -271,12 +261,6 @@ bool color_value_str()
                 msg = "";
                 msg += " Enter BLUE value & =";
             }
-            // else if (color_fonction == 3)
-            // {
-            //     color_fonct = "WHITE";
-            //     msg = "";
-            //     msg += " Enter WHITE value & =";
-            // }
 
             ez.msgBox("M5 REMOTE STROBE", msg, "## color|" + color_fonct + "###Back", false);
             draw_master_str();
@@ -328,11 +312,7 @@ bool color_value_str()
                             strobe_blue = res_value.toInt();
                             b = true;
                         }
-                        // else if (color_fonction == 3)
-                        // {
-                        //     strobe_white = res_value.toInt();
-                        //     w = true;
-                        // }
+
                         color_fonction += 1;
                         res_value = "";
                     }
@@ -350,10 +330,7 @@ bool color_value_str()
                         {
                             b = true;
                         }
-                        // else if (color_fonction == 3)
-                        // {
-                        //     w = true;
-                        // }
+
                         color_fonction += 1;
                         res_value = "";
                     }
@@ -380,12 +357,7 @@ bool color_value_str()
                             msg += " Enter BLUE value & =";
                             b = false;
                         }
-                        // else if (color_fonction == 3)
-                        // {
-                        //     color_fonct = "WHITE";
-                        //     msg += " Enter WHITE value & =";
-                        //     w = false;
-                        // }
+
                         ez.msgBox("M5 REMOTE STROBE", msg, "## color|" + color_fonct + "###Back", false);
                         draw_master_str();
                     }
@@ -418,12 +390,7 @@ bool color_value_str()
                             msg = "";
                             msg += " Enter BLUE value & =";
                         }
-                        // else if (color_fonction == 3)
-                        // {
-                        //     color_fonct = "WHITE";
-                        //     msg = "";
-                        //     msg += " Enter WHITE value & =";
-                        // }
+
                         ez.msgBox("M5 REMOTE STROBE", msg, "## color|" + color_fonct + "###Back", false);
                         draw_master_str();
                     }
@@ -455,12 +422,6 @@ bool color_value_str()
                         msg = "";
                         msg += " Enter BLUE value & =";
                     }
-                    // else if (color_fonction == 3)
-                    // {
-                    //     color_fonct = "WHITE";
-                    //     msg = "";
-                    //     msg += " Enter WHITE value & =";
-                    // }
 
                     ez.msgBox("M5 REMOTE STROBE", msg, "## color|" + color_fonct + "###Back", false);
                     draw_master_str();
@@ -801,18 +762,6 @@ void remote_strobe()
             {
                 fonct = "Blue";               
             }
-            // else if (strobe_fonction == 3)
-            // {
-            //     fonct = "Strobe";               // Strobe
-            // }
-            // else if (strobe_fonction == 4)
-            // {
-            //     fonct = "Pixel Mode";           // Pixel Mode
-            // }
-            // else if (strobe_fonction == 5)
-            // {
-            //     fonct = "Mirror";               // mirror
-            // }
 
             ez.msgBox("M5 REMOTE STROBE", fonct, "id|" + id_cal_strobe + "# Menu # func|" + fonct + " # # page|" + page_me + "#", false);
             draw_master_str();
@@ -875,41 +824,38 @@ void remote_strobe()
                     }
                     else if (strobe_fonction == 2)
                     {
-                        strobe_red = PRESET_COLOR[key_val - 48][0];
-                        strobe_green = PRESET_COLOR[key_val - 48][1];
-                        strobe_blue = PRESET_COLOR[key_val - 48][2];
-                        // strobe_white = PRESET_COLOR[key_val - 48][3];
+                        strobe_red = PRESET_COLOR_STR[key_val - 48][0];
+                        strobe_green = PRESET_COLOR_STR[key_val - 48][1];
+                        strobe_blue = PRESET_COLOR_STR[key_val - 48][2];
 
-                        msg += " " + NAME_PRESET_COLOR[key_val - 48];
-
-                        send_color_str();
+                        msg += " " + NAME_PRESET_COLOR_STR[key_val - 48];
                         msg += "|" + strobe_mqtt_topic + "|";
                         msg += "R " + String(strobe_red) + " G " + String(strobe_green);
-                        msg += " B " + String(strobe_blue) + " W ";// + String(strobe_white);
+                        msg += " B " + String(strobe_blue); 
 
-                        send_master_str();
+                        send_color_str();
                     }
                     else if (strobe_fonction == 3)
                     {
-                        strobe_str = PRESET_STR[key_val - 48];
+                        strobe_red = PRESET_RED[key_val - 48];
 
-                        msg += " " + NAME_PRESET_STR[key_val - 48];
+                        msg += " " + NAME_PRESET_RED[key_val - 48];
 
                         send_red_str();
                     }
                     else if (strobe_fonction == 4)
                     {
-                        strobe_mod = PRESET_MOD[key_val - 48];
+                        strobe_green = PRESET_GREEN[key_val - 48];
 
-                        msg += " " + NAME_PRESET_MOD[key_val - 48];
+                        msg += " " + NAME_PRESET_GREEN[key_val - 48];
 
                         send_green_str();
                     }
                     else if (strobe_fonction == 5)
                     {
-                        strobe_mirror = PRESET_MIRROR[key_val - 48];
+                        strobe_blue = PRESET_BLUE[key_val - 48];
 
-                        msg += " " + NAME_PRESET_MIRROR[key_val - 48];
+                        msg += " " + NAME_PRESET_BLUE[key_val - 48];
 
                         send_blue_str();
                     }
@@ -937,7 +883,7 @@ void remote_strobe()
                         msg = "Color SEND";
                         msg += "|" + strobe_mqtt_topic + "|";
                         msg += "R " + String(strobe_red) + " G " + String(strobe_green);
-                        msg += " B " + String(strobe_blue) + " W ";// + String(strobe_white);
+                        msg += " B " + String(strobe_blue);
                     }
                     break;
                 case '-':
@@ -965,7 +911,6 @@ void remote_strobe()
                         {
                             strobe_red = 0;
                         }
-                        // send_str_str();
                         send_red_str();
 
                     }
@@ -976,7 +921,6 @@ void remote_strobe()
                         {
                             strobe_green = 0;
                         }
-                        // send_mod_str();
                         send_green_str();
                     }
                     else if (strobe_fonction == 5)
@@ -986,7 +930,6 @@ void remote_strobe()
                         {
                             strobe_blue = 0;
                         }
-                        // send_mirror_str();
                         send_blue_str();
                     }
                     break;
@@ -1119,7 +1062,7 @@ void remote_strobe()
                     }
                     else if (strobe_fonction == 4)
                     {
-                        strobe_green -= 2;
+                        strobe_green -= 10;
                         if (strobe_green < 0)
                         {
                             strobe_green = 0;
@@ -1128,7 +1071,7 @@ void remote_strobe()
                     }
                     else if (strobe_fonction == 5)
                     {
-                        strobe_blue -= 2;
+                        strobe_blue -= 10;
                         if (strobe_blue < 0)
                         {
                             strobe_blue = 0;
@@ -1168,7 +1111,7 @@ void remote_strobe()
                     }
                     else if (strobe_fonction == 4)
                     {
-                        strobe_green += 2;
+                        strobe_green += 10;
                         if (strobe_green > 255)
                         {
                             strobe_green = 255;
@@ -1177,7 +1120,7 @@ void remote_strobe()
                     }
                     else if (strobe_fonction == 5)
                     {
-                        strobe_blue += 2;
+                        strobe_blue += 10;
                         if (strobe_blue > 255)
                         {
                             strobe_blue = 255;
