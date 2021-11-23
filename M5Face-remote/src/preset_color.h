@@ -97,7 +97,7 @@ uint8_t PRESET_BLUE[number_mem] = {
     225,    // 09 
 };
 
-String NAME_PRESET_BLUR[number_mem] = {
+String NAME_PRESET_BLUE[number_mem] = {
     " 0 ",          //00
     " 25 ",         //01
     " 50 ",         //02
