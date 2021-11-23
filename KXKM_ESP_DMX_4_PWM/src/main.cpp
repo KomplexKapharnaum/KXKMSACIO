@@ -57,8 +57,8 @@ void setup()
 
     wifi->staticIP(basenet + "." + subnet + "." + String(k32->system->id() + 100), router, "255.0.0.0");
 
-    wifi->connect("kxkm24", NULL); //KXKM 24
-    // wifi->connect("phare", NULL); //KXKM phare
+    // wifi->connect("kxkm24", NULL); //KXKM 24
+    wifi->connect("phare", NULL); //KXKM phare
     // wifi->connect("kxkm24lulu", NULL);                                                         //KXKM 24 lulu
     // wifi->connect("mgr4g", NULL);                                                              //Maigre dev
     // wifi->connect("interweb", "superspeed37");                                                 //Maigre dev home
