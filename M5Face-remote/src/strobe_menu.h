@@ -989,6 +989,10 @@ void remote_strobe()
                 case '9':
                     if (strobe_fonction < 2)
                     {
+                        strobe_red = PRESET_MEM_COLOR_STR[key_val - 48][0];
+                        strobe_green = PRESET_MEM_COLOR_STR[key_val - 48][1];
+                        strobe_blue = PRESET_MEM_COLOR_STR[key_val - 48][2];
+
                         strobe_mqtt_topic = String(STROBE_MQTT_K32) + String(STROBE_MQTT_ID) + String(STROBE_MQTT_MEM);
                         strobe_mqtt_topic.toCharArray(STROBE_MQTT_TOPIC, strobe_mqtt_topic.length() + 1);
                         k32->mqtt->publish(STROBE_MQTT_TOPIC, (page_mem + msg).c_str(), 1);
@@ -1046,6 +1050,15 @@ void remote_strobe()
                     {
                         master_value_str();
                         msg = "Master " + strobe_Mast + " SEND";
+                    }
+                    else if (strobe_fonction == 2)
+                    {
+                        color_value_str();
+                        send_color_str();
+                        msg = "Color SEND";
+                        msg += "|" + light_mqtt_topic + "|";
+                        msg += "R " + String(strobe_red) + " G " + String(strobe_green);
+                        msg += " B " + String(strobe_blue);
                     }
                     else if (strobe_fonction == 3)
                     {
