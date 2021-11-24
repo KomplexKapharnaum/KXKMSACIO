@@ -5,6 +5,20 @@
 #define number_mem 10
 #endif
 
+uint8_t PRESET_MEM_COLOR_STR[number_mem][3] = {
+    {000, 158, 219}, // 00 
+    {000, 000, 255}, // 01 
+    {255, 224, 000}, // 02 
+    {199, 190, 113}, // 03 
+    {133,  91,  39}, // 04 
+    {142, 212, 000}, // 05 
+    {000, 154,  61}, // 06 
+    {186,  99,  25}, // 07 
+    {226, 123, 000}, // 08 
+    {188,  52, 186}, // 09 
+};
+//  {red,gree,blue}
+
 uint8_t PRESET_COLOR_STR[number_mem][3] = {
     {000, 000, 000}, // 00 NOIR
     {255, 000, 000}, // 01 RED
@@ -17,7 +31,7 @@ uint8_t PRESET_COLOR_STR[number_mem][3] = {
     {255, 000, 255}, // 08 MAGENTA
     {255, 255, 255}, // 09 FULL ALL
 };
-//  {red,gree,blue,whit}
+//  {red,gree,blue}
 
 String NAME_PRESET_COLOR_STR[number_mem] = {
     " NOIR ",  // 0
