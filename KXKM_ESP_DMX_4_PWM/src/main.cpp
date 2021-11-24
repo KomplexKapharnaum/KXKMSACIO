@@ -15,7 +15,7 @@
 
 /////////////////////////////////////////ID/////////////////////////////////////////
 
-//#define K32_SET_NODEID      60         // board unique id
+// #define K32_SET_NODEID      15         // board unique id
 #define K32_SET_CHANNEL     1           // board channel mqtt
 #define LIGHT_SET_ID        1           // permet de calculer l'adresse DMX
 #define ARTNET_SET_UNIVERSE 4           // univers artnet
@@ -57,8 +57,8 @@ void setup()
 
     wifi->staticIP(basenet + "." + subnet + "." + String(k32->system->id() + 100), router, "255.0.0.0");
 
-    // wifi->connect("kxkm24", NULL); //KXKM 24
-    wifi->connect("phare", NULL); //KXKM phare
+    wifi->connect("kxkm24", NULL); //KXKM 24
+    // wifi->connect("phare", NULL); //KXKM phare
     // wifi->connect("kxkm24lulu", NULL);                                                         //KXKM 24 lulu
     // wifi->connect("mgr4g", NULL);                                                              //Maigre dev
     // wifi->connect("interweb", "superspeed37");                                                 //Maigre dev home
