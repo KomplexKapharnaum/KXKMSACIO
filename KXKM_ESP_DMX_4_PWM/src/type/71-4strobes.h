@@ -6,7 +6,8 @@
 
 #define ARTNET_ENABLE       0
 
-#include "macro/Show/larochelle/mem_strobe.h"  
+// #include "macro/Show/larochelle/mem_strobe.h"  
+#include "macro/Show/esch/mem_strobe.h"  
 
 void init_lights()  
 {
