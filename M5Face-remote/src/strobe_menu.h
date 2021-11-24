@@ -18,6 +18,7 @@ void send_master_str();
 bool color_value_str();
 bool id_value_str();
 bool master_value_str();
+bool rgb_value_str(uint8_t rgb);
 
 bool _mod_coarse_str = false;
 bool color_front_back_str = false;
@@ -63,7 +64,6 @@ void draw_red_str()
     m5.lcd.setTextDatum(TR_DATUM);
     int16_t text_h = ez.fontHeight();
     m5.lcd.drawString("Red : " + String(strobe_red), TFT_W - ez.theme->input_hmargin, 10 + ez.theme->input_vmargin + text_h + 10);
-
 }
 ///////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////SEND RED////////////////////////////////////////
@@ -73,12 +73,11 @@ void draw_red_str()
 void send_red_str()
 {
     strobe_mqtt_frame = "-1|-1|";
-    
+
     strobe_mqtt_frame += String(strobe_red);
     strobe_mqtt_topic = String(STROBE_MQTT_K32) + String(STROBE_MQTT_ID) + String(STROBE_MQTT_FRAME);
     strobe_mqtt_topic.toCharArray(STROBE_MQTT_TOPIC, strobe_mqtt_topic.length() + 1);
     k32->mqtt->publish(STROBE_MQTT_TOPIC, strobe_mqtt_frame.c_str(), 1);
-
 }
 ///////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////DRAW GREEN//////////////////////////////////////
@@ -90,7 +89,6 @@ void draw_green_str()
     m5.lcd.setTextDatum(TR_DATUM);
     int16_t text_h = ez.fontHeight();
     m5.lcd.drawString("Green : " + String(strobe_green), TFT_W - ez.theme->input_hmargin, 10 + ez.theme->input_vmargin + text_h + 10);
-
 }
 ///////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////SEND GREEN//////////////////////////////////////
@@ -100,8 +98,8 @@ void draw_green_str()
 void send_green_str()
 {
     strobe_mqtt_frame = "-1|-1|-1|";
-    
-    strobe_mqtt_frame +=  String(strobe_green) ;
+
+    strobe_mqtt_frame += String(strobe_green);
     strobe_mqtt_topic = String(STROBE_MQTT_K32) + String(STROBE_MQTT_ID) + String(STROBE_MQTT_FRAME);
     strobe_mqtt_topic.toCharArray(STROBE_MQTT_TOPIC, strobe_mqtt_topic.length() + 1);
     k32->mqtt->publish(STROBE_MQTT_TOPIC, strobe_mqtt_frame.c_str(), 1);
@@ -116,7 +114,6 @@ void draw_blue_str()
     m5.lcd.setTextDatum(TR_DATUM);
     int16_t text_h = ez.fontHeight();
     m5.lcd.drawString("Blue : " + String(strobe_blue), TFT_W - ez.theme->input_hmargin, 10 + ez.theme->input_vmargin + text_h + 10);
-
 }
 ///////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////SEND BLUE///////////////////////////////////////
@@ -126,14 +123,12 @@ void draw_blue_str()
 void send_blue_str()
 {
     strobe_mqtt_frame = "-1|-1|-1|-1|";
-    
+
     strobe_mqtt_frame += String(strobe_blue);
     strobe_mqtt_topic = String(STROBE_MQTT_K32) + String(STROBE_MQTT_ID) + String(STROBE_MQTT_FRAME);
     strobe_mqtt_topic.toCharArray(STROBE_MQTT_TOPIC, strobe_mqtt_topic.length() + 1);
     k32->mqtt->publish(STROBE_MQTT_TOPIC, strobe_mqtt_frame.c_str(), 1);
 }
-
-
 
 ///////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////DRAW COLOR//////////////////////////////////////
@@ -162,9 +157,9 @@ void draw_color_str()
 //       dim, stro,R1-4,G1-4,B1-4,  R1,  G1,  B1,  R2,  G2,  B2,  R3,  G3,  B3,  R4,  G4,  B4
 void send_color_str()
 {
-    
+
     strobe_mqtt_frame = "-1|-1|";
-    
+
     strobe_mqtt_frame += String(strobe_red) + "|" + String(strobe_green) + "|" + String(strobe_blue);
     strobe_mqtt_topic = String(STROBE_MQTT_K32) + String(STROBE_MQTT_ID) + String(STROBE_MQTT_FRAME);
     strobe_mqtt_topic.toCharArray(STROBE_MQTT_TOPIC, strobe_mqtt_topic.length() + 1);
@@ -696,6 +691,185 @@ bool master_value_str()
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////RGB_VALUE/////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+bool rgb_value_str(uint8_t rgb)
+{
+    bool bad = false;
+    String action = "";
+    String res_value = "";
+    String msg = "";
+    int res;
+    esc_strobe = true;
+
+    if (rgb == 0)
+    {
+        msg += " Enter value to Red 0 -> 255 & =";
+        ez.msgBox("M5 REMOTE STROBE", msg, "#####Back", false);
+        draw_red_str();
+    }
+    else if (rgb == 1)
+    {
+        msg += " Enter value to Green 0 -> 255 & =";
+        ez.msgBox("M5 REMOTE STROBE", msg, "#####Back", false);
+        draw_green_str();
+    }
+    else if (rgb == 2)
+    {
+        msg += " Enter value to Blue 0 -> 255 & =";
+        ez.msgBox("M5 REMOTE STROBE", msg, "#####Back", false);
+        draw_blue_str();
+    }
+
+    while (true)
+    {
+        // Check Buttons
+        action = ez.buttons.poll();
+
+        if (action == "Back")
+            return false;
+
+        res = atoi(res_value.c_str());
+        // FACE
+        //
+        if (digitalRead(KEYBOARD_INT) == LOW)
+        {
+            Wire.requestFrom(KEYBOARD_I2C_ADDR, 1); // request 1 byte from keyboard
+            while (Wire.available())
+            {
+                uint8_t key_val = Wire.read(); // receive a byte as character
+                String value((char)key_val);
+
+                switch ((char)key_val)
+                {
+                case '0':
+                case '1':
+                case '2':
+                case '3':
+                case '4':
+                case '5':
+                case '6':
+                case '7':
+                case '8':
+                case '9':
+                    if (bad == true)
+                        bad = false;
+                    res_value += value;
+                    break;
+
+                case '.':
+                    break;
+                case '=':
+
+                    if (res < 256)
+                    {
+                        if (rgb == 0)
+                        {
+                            strobe_red = res_value.toInt();
+                            send_red_str();
+                        }
+                        else if (rgb == 1)
+                        {
+                            strobe_green = res_value.toInt();
+                            send_green_str();
+                        }
+                        else if (rgb == 2)
+                        {
+                            strobe_blue = res_value.toInt();
+                            send_blue_str();
+                        }
+
+                        return true;
+                    }
+                    else
+                    {
+                        bad = true;
+                        res_value = "";
+                        msg = "";
+                        if (rgb == 0)
+                        {
+                            msg += " Enter value to Red 0 -> 255 & =";
+                            ez.msgBox("M5 REMOTE STROBE", msg, "#####Back", false);
+                            draw_red_str();
+                        }
+                        else if (rgb == 1)
+                        {
+                            msg += " Enter value to Green 0 -> 255 & =";
+                            ez.msgBox("M5 REMOTE STROBE", msg, "#####Back", false);
+                            draw_green_str();
+                        }
+                        else if (rgb == 2)
+                        {
+                            msg += " Enter value to Blue 0 -> 255 & =";
+                            ez.msgBox("M5 REMOTE STROBE", msg, "#####Back", false);
+                            draw_blue_str();
+                        }
+                    }
+                    break;
+                case '-':
+
+                    break;
+                case '+':
+
+                    break;
+
+                case 'A':
+                    bad = true;
+                    res_value = "";
+                    msg = "";
+                    if (rgb == 0)
+                    {
+                        msg += " Enter value to Red 0 -> 255 & =";
+                        ez.msgBox("M5 REMOTE STROBE", msg, "#####Back", false);
+                        draw_red_str();
+                    }
+                    else if (rgb == 1)
+                    {
+                        msg += " Enter value to Green 0 -> 255 & =";
+                        ez.msgBox("M5 REMOTE STROBE", msg, "#####Back", false);
+                        draw_green_str();
+                    }
+                    else if (rgb == 2)
+                    {
+                        msg += " Enter value to Blue 0 -> 255 & =";
+                        ez.msgBox("M5 REMOTE STROBE", msg, "#####Back", false);
+                        draw_blue_str();
+                    }
+
+                    break;
+                case 'M':
+
+                    break;
+                case '%':
+
+                    break;
+                }
+                LOG(value);
+                if (bad != true)
+                {
+                    ez.msgBox("M5 REMOTE STROBE", res_value, "#####Back", false);
+                }
+                if (rgb == 0)
+                {
+                    ez.msgBox("M5 REMOTE STROBE", res_value, "#####Back", false);
+                    draw_red_str();
+                }
+                else if (rgb == 1)
+                {
+                    ez.msgBox("M5 REMOTE STROBE", res_value, "#####Back", false);
+                    draw_green_str();
+                }
+                else if (rgb == 2)
+                {
+                    ez.msgBox("M5 REMOTE STROBE", res_value, "#####Back", false);
+                    draw_blue_str();
+                }
+            }
+        }
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////REMOTE_STROBE////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
 void remote_strobe()
@@ -752,15 +926,15 @@ void remote_strobe()
             }
             else if (strobe_fonction == 3)
             {
-                fonct = "Red";               
+                fonct = "Red";
             }
             else if (strobe_fonction == 4)
             {
-                fonct = "Green";           
+                fonct = "Green";
             }
             else if (strobe_fonction == 5)
             {
-                fonct = "Blue";               
+                fonct = "Blue";
             }
 
             ez.msgBox("M5 REMOTE STROBE", fonct, "id|" + id_cal_strobe + "# Menu # func|" + fonct + " # # page|" + page_me + "#", false);
@@ -831,7 +1005,7 @@ void remote_strobe()
                         msg += " " + NAME_PRESET_COLOR_STR[key_val - 48];
                         msg += "|" + strobe_mqtt_topic + "|";
                         msg += "R " + String(strobe_red) + " G " + String(strobe_green);
-                        msg += " B " + String(strobe_blue); 
+                        msg += " B " + String(strobe_blue);
 
                         send_color_str();
                     }
@@ -868,22 +1042,31 @@ void remote_strobe()
                     msg += " " + strobe_mqtt_topic;
                     break;
                 case '=':
-                    if (strobe_fonction == 0 || strobe_fonction == 3 || strobe_fonction == 5)
+                    if (strobe_fonction < 2)
                     {
                         master_value_str();
-                        msg = "strobe_Master " + strobe_Mast + " SEND";
+                        msg = "Master " + strobe_Mast + " SEND";
                     }
-                    else if (strobe_fonction == 1)
+                    else if (strobe_fonction == 3)
                     {
-                    }
-                    else if (strobe_fonction == 2 || strobe_fonction == 4)
-                    {
-                        color_value_str();
-                        send_color_str();
-                        msg = "Color SEND";
+                        rgb_value_str(0);
+                        msg = "SEND ";
                         msg += "|" + strobe_mqtt_topic + "|";
-                        msg += "R " + String(strobe_red) + " G " + String(strobe_green);
-                        msg += " B " + String(strobe_blue);
+                        msg += "Red " + String(strobe_red);
+                    }
+                    else if (strobe_fonction == 4)
+                    {
+                        rgb_value_str(1);
+                        msg = "SEND ";
+                        msg += "|" + strobe_mqtt_topic + "|";
+                        msg += "Green " + String(strobe_green);
+                    }
+                    else if (strobe_fonction == 5)
+                    {
+                        rgb_value_str(2);
+                        msg = "SEND ";
+                        msg += "|" + strobe_mqtt_topic + "|";
+                        msg += "Blue " + String(strobe_blue);
                     }
                     break;
                 case '-':
@@ -906,17 +1089,16 @@ void remote_strobe()
                     }
                     else if (strobe_fonction == 3)
                     {
-                        strobe_red -= 2;
+                        strobe_red -= 1;
                         if (strobe_red < 0)
                         {
                             strobe_red = 0;
                         }
                         send_red_str();
-
                     }
                     else if (strobe_fonction == 4)
                     {
-                        strobe_green -= 2;
+                        strobe_green -= 1;
                         if (strobe_green < 0)
                         {
                             strobe_green = 0;
@@ -925,7 +1107,7 @@ void remote_strobe()
                     }
                     else if (strobe_fonction == 5)
                     {
-                        strobe_blue -= 2;
+                        strobe_blue -= 1;
                         if (strobe_blue < 0)
                         {
                             strobe_blue = 0;
@@ -953,7 +1135,7 @@ void remote_strobe()
                     }
                     else if (strobe_fonction == 3)
                     {
-                        strobe_red += 2;
+                        strobe_red += 1;
                         if (strobe_red > 255)
                         {
                             strobe_red = 255;
@@ -962,7 +1144,7 @@ void remote_strobe()
                     }
                     else if (strobe_fonction == 4)
                     {
-                        strobe_green += 2;
+                        strobe_green += 1;
                         if (strobe_green > 255)
                         {
                             strobe_green = 255;
@@ -971,7 +1153,7 @@ void remote_strobe()
                     }
                     else if (strobe_fonction == 5)
                     {
-                        strobe_blue += 2;
+                        strobe_blue += 1;
                         if (strobe_blue > 255)
                         {
                             strobe_blue = 255;
@@ -989,20 +1171,20 @@ void remote_strobe()
                     }
                     else if (strobe_fonction == 3)
                     {
-                        strobe_red = 0;
-                        msg += "Reset Red value";
-                        send_green_str();
+                        strobe_red = 255;
+                        msg += "Full Red value";
+                        send_red_str();
                     }
                     else if (strobe_fonction == 4)
                     {
-                        strobe_green = 0;
-                        msg += "Reset Green value";
+                        strobe_green = 255;
+                        msg += "Full Green value";
                         send_green_str();
                     }
                     else if (strobe_fonction == 5)
                     {
-                        strobe_blue = 0;
-                        msg += "Reset Blue value";
+                        strobe_blue = 255;
+                        msg += "Full Blue value";
                         send_blue_str();
                     }
                     break;
@@ -1146,7 +1328,7 @@ void remote_strobe()
                         _mod_coarse_str = !_mod_coarse_str;
                         if (_mod_coarse_str)
                         {
-                            msg += "| Fine +- 2";
+                            msg += "| Fine +- 1";
                             inc_value = 2;
                         }
                         else
