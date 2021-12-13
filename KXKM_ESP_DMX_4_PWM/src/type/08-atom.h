@@ -4,6 +4,8 @@
 #define LULU_STRIP_SIZE     25                                  // 5 pour tester avec les jauges de monitoring
 #define LULU_STRIP_TYPE     LED_WS2812_V1                       // Strip type
 
+#define ARTNET_ENABLE   1
+
 #include "macro/Type/4pwm/mem_4pwm.h" // defo
 #include "macro/Type/SK/mem_sk.h"     // defo
 
@@ -123,6 +125,8 @@ void init_lights()
     k32->on("remote/macro", [](Orderz* order){
         light->anim("mem-strip")->mem( order->getData(0)->toInt() );
         light->anim("mem-pwm")->mem( order->getData(0)->toInt() );
+
+        remote->setState(REMOTE_MANU);
     });
 
     k32->on("remote/state", [](Orderz* order){
@@ -133,23 +137,23 @@ void init_lights()
         if (stateR == REMOTE_AUTO)
         {
             light->anim("mem-strip")->stop();
+            light->anim("mem-pwm")->stop();
+
             light->anim("artnet-strip")->play();
+            light->anim("artnet-pwm")->play();
+
             LOG("REMOTE: -> Mode AUTO");
         }
 
-        // STM
-        else if (stateR == REMOTE_MANU_STM)
-        {
-            light->anim("artnet-strip")->stop();
-            light->anim("mem-strip")->play();
-            LOG("REMOTE: -> Mode STM");
-        }
-
         // MANU
-        else if (stateR == REMOTE_MANU || stateR == REMOTE_MANU_LAMP)
+        else if (stateR == REMOTE_MANU || stateR == REMOTE_MANU_LAMP || stateR == REMOTE_MANU_STM)
         {
             light->anim("artnet-strip")->stop();
+            light->anim("artnet-pwm")->stop();
+
             light->anim("mem-strip")->play();
+            light->anim("mem-pwm")->play();
+
             LOG("REMOTE: -> Mode MANU");
         }
     });
