@@ -221,21 +221,6 @@
 #include "macro/mem_new_fluo_pwm.h"
 
 #elif LULU_TYPE == 50
-// #define L_NAME "elp_DMX"
-// #define LULU_STRIP_SIZE 50
-// #define DMXOUT_ADDR 20
-// #define DMXFIXTURE_PATCHSIZE LULU_STRIP_SIZE
-
-// #include "macro/Type/4pwm/mem_4pwm.h" // defo
-// // #include "macro/Type/SK/mem_sk.h"     // defo
-// // #include "macro/mem_barre_pwm.h"
-
-// // #include "macro/Show/Baro/mem_sk_baro.h"
-// // #include "macro/Show/Baro/mem_barre_pwm_baro.h"
-
-// #include "macro/Show/Baro/mem_sk_elp_baro.h"
-// #include "macro/Show/Baro/mem_barre_pwm_elp_baro.h"
-
 #include "type/50-elp_DMX.h"
 
 #elif LULU_TYPE == 60

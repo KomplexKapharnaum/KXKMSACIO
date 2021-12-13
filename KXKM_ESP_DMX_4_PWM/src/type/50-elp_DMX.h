@@ -1,12 +1,12 @@
 
 #define L_NAME "elp_DMX"
+
+#define LED_N_STRIPS    2
 #define LULU_STRIP_SIZE 50
 #define LULU_STRIP_TYPE LED_WS2812_V1 // Strip type
+
 #define DMXOUT_ADDR 20
 #define DMXFIXTURE_PATCHSIZE LULU_STRIP_SIZE
-
-#define STROBE_N 4
-#define STROBE_PATCHSIZE 17
 
 #define ARTNET_ENABLE 0
 
@@ -18,15 +18,10 @@ void init_lights()
     // FIXTURES
     //
 
-    // LED STRIPS fixtures
-    K32_fixture *strips[LED_N_STRIPS] = {nullptr};
-    for (int k = 0; k < LED_N_STRIPS; k++)
-        strips[k] = new K32_ledstrip(k, LEDS_PIN[k32->system->hw()][k], (led_types)LULU_STRIP_TYPE, LULU_STRIP_SIZE + 30);
+    // ELP fixtures
+    K32_fixture *elp = new K32_dmxfixture(dmx, DMXOUT_ADDR, LULU_STRIP_SIZE * 3);
 
-    K32_fixture *elp = {nullptr};
-    elp = new K32_dmxfixture(dmx, DMXOUT_ADDR, LULU_STRIP_SIZE * 3);
-    light->addFixture(elp); 
-    light->copyFixture({strips[0], 0, LULU_STRIP_SIZE, elp, 0});
+
     //
     // TEST Sequence
     //
