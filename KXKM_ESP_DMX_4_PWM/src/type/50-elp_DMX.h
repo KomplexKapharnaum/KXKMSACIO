@@ -1,9 +1,7 @@
 
 #define L_NAME "elp_DMX"
 
-#define LED_N_STRIPS    2
-#define LULU_STRIP_SIZE 50
-#define LULU_STRIP_TYPE LED_WS2812_V1 // Strip type
+#define ELP_PIXELS 50
 
 #define DMXOUT_ADDR 20
 #define DMXFIXTURE_PATCHSIZE LULU_STRIP_SIZE
@@ -19,30 +17,29 @@ void init_lights()
     //
 
     // ELP fixtures
-    K32_fixture *elp = new K32_dmxfixture(dmx, DMXOUT_ADDR, LULU_STRIP_SIZE * 3);
-
+    K32_fixture *elp = new K32_dmxfixture(dmx, DMXOUT_ADDR, ELP_PIXELS * 3, true);
+    light->addFixture(elp);
 
     //
     // TEST Sequence
     //
 
     // INIT TEST STRIPS
-    light->anim("test-strip", new Anim_test_strip, LULU_STRIP_SIZE)
-        ->drawTo(strips, LED_N_STRIPS)
+    light->anim("test-elp", new Anim_test_strip, ELP_PIXELS)
+        ->drawTo(elp)
         ->push(300)
         ->master(LULU_PREV_MASTER)
-        ->play();
+        ->play()
+        ->wait(); // WAIT END
 
-    // WAIT END
-    light->anim("test-strip")->wait();
-
+    
     //
     // ANIM
     //
 
     // ANIM elp
-    light->anim("mem-strip", new Anim_dmx_strip, LULU_STRIP_SIZE)
-        ->drawTo(strips[0])
+    light->anim("mem-elp", new Anim_dmx_strip, ELP_PIXELS)
+        ->drawTo(elp)
         ->bank(new BankSK)
         ->remote(true)
         ->push(0)
@@ -52,11 +49,11 @@ void init_lights()
     // REMOTE
     //
 
-    remote->setMacroMax(light->anim("mem-strip")->bank()->size());
+    remote->setMacroMax(light->anim("mem-elp")->bank()->size());
 
     k32->on("remote/macro", [](Orderz *order)
             {
-                light->anim("mem-strip")->mem(order->getData(0)->toInt());
-                LOGF("mem-strip: %d\n", order->getData(0)->toInt());
+                light->anim("mem-elp")->mem(order->getData(0)->toInt());
+                LOGF("mem-elp: %d\n", order->getData(0)->toInt());
             });
 }
