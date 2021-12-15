@@ -46,7 +46,7 @@ void init_lights()
 
 
     // ANIM leds - artnet
-    light->anim("artnet-elp", new Anim_dmx_strip, LULU_STRIP_SIZE)
+    light->anim("artnet-elp", new Anim_dmx_strip, ELP_PIXELS)
         ->drawTo(elp)
         ->play();
 
