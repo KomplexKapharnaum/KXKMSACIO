@@ -137,7 +137,7 @@ void k32_setup() {
             artnet->loadprefs();
             artnet->start(); 
 
-            artnet->onFullDmx([](const uint8_t *data, int length)
+            K32_artnet::onFullDmx([](const uint8_t *data, int length)
             {
                 // LOGF("ARTNET fullframe: %d \n", length);
 

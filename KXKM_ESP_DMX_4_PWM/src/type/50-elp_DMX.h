@@ -53,7 +53,7 @@ void init_lights()
     // ARTNET: subscribe dmx frame
     int memSize = light->anim("mem-elp")->bank()->preset_size();
 
-    artnet->onDmx( {
+    K32_artnet::onDmx( {
         .address    = (1 + (light->id() - 1) * memSize), 
         .framesize  = memSize, 
         .callback   = [](const uint8_t *data, int length) 
