@@ -2,7 +2,7 @@
 #define L_NAME "Sac"
 
 #define LULU_STRIP_SIZE     120 
-#define LULU_STRIP_TYPE     LED_SK6812W_V1               // Strip type
+#define LULU_STRIP_TYPE     LED_SK6812W_V3               // Strip type
 
 #define PWR_FAKE_CURRENT    12500
 
@@ -117,18 +117,20 @@ void init_lights()
 
     // ARTNET: subscribe dmx frame
     int FRAME_size = light->anim("mem-strip")->bank()->preset_size() + light->anim("mem-pwm")->bank()->preset_size();
-    int ARTNET_address = (1 + (light->id() - 1) * FRAME_size);
 
-    if (artnet)
-        artnet->onDmx( {
-        .address    = ARTNET_address, 
+    K32_artnet::onDmx( {
+        .address    = (1 + (light->id() - 1) * FRAME_size), 
         .framesize  = FRAME_size, 
         .callback   = [](const uint8_t *data, int length) 
         { 
+            int sizeSK = light->anim("mem-strip")->bank()->preset_size();
+            int sizePWM = light->anim("mem-pwm")->bank()->preset_size();
+
             // LOGINL("ARTFRAME: "); LOGF("length=%d ", length); for (int k = 0; k < length; k++) LOGF("%d ", data[k]); LOG();
-            light->anim("artnet-strip")->push(data, length);
+            light->anim("artnet-strip")->push(data, min(sizeSK, length));
+            // light->anim("artnet-pwm")->push(data, min(sizePWM,length)); // FIX
         }
-        });
+    });
     
 
     //
@@ -136,12 +138,12 @@ void init_lights()
     //
 
     // EVENT: wifi lost
-    wifi->onDisconnect([&]()
-    {
-        LOG("WIFI: connection lost..");
-        //  light->anim("artnet-strip")->push(MEM_NO_WIFI, LULU_PATCHSIZE);
-        light->anim("artnet-strip")->push(0); // @master 0
-    });
+    // wifi->onDisconnect([&]()
+    // {
+    //     LOG("WIFI: connection lost..");
+    //     //  light->anim("artnet-strip")->push(MEM_NO_WIFI, LULU_PATCHSIZE);
+    //     light->anim("artnet-strip")->push(0); // @master 0
+    // });
 
 
     //

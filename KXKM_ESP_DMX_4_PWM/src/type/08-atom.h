@@ -106,12 +106,12 @@ void init_lights()
     //
 
     // EVENT: wifi lost
-    wifi->onDisconnect([&]()
-    {
-        LOG("WIFI: connection lost..");
-        //  light->anim("artnet-strip")->push(MEM_NO_WIFI, LULU_PATCHSIZE);
-        light->anim("artnet-strip")->push(0); // @master 0
-    });
+    // wifi->onDisconnect([&]()
+    // {
+    //     LOG("WIFI: connection lost..");
+    //     //  light->anim("artnet-strip")->push(MEM_NO_WIFI, LULU_PATCHSIZE);
+    //     light->anim("artnet-strip")->push(0); // @master 0
+    // });
 
 
     //
