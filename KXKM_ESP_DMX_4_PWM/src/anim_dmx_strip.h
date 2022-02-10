@@ -187,16 +187,6 @@ class Anim_dmx_strip : public K32_anim {
       // ONDMXFRAME
       //
 
-      // //PWM
-      // if (light->pwm)
-      // {
-      //   light->pwm->set(0, data[LULU_PATCHSIZE-4]*this->master()/255 );
-      //   light->pwm->set(1, data[LULU_PATCHSIZE-3]*this->master()/255 );
-      //   light->pwm->set(2, data[LULU_PATCHSIZE-2]*this->master()/255 );
-      //   light->pwm->set(3, data[LULU_PATCHSIZE-1]*this->master()/255 );
-      //   // LOGF5("ANIM: -> Master %d PWM %d %d %d %d \n", this->master(), data[LULU_PATCHSIZE-4], data[LULU_PATCHSIZE-3], data[LULU_PATCHSIZE-2], data[LULU_PATCHSIZE-1]);
-      // }
-
       // LOGF("ANIM: %s frame ", name());
       // for (int i=0; i<LULU_PATCHSIZE; i++) {
       //   LOGINL(data[i]); LOGINL(" ");
@@ -310,14 +300,14 @@ class Anim_dmx_strip : public K32_anim {
         if (colorMode == COLOR_BI) backColor = CRGBW{data[10], data[11], data[12], data[13]};
 
         // Dash Length + Offset
-        int dashLength  = max(2, scale255(segmentSize, data[6]) );          // pix_start
-        int dashOffset  =  scale255(segmentSize, data[7]);                  // pix_pos
+        int dashLength  = max(1, scale255(segmentSize, data[6]) );          // pix_start
+        int dashOffset  =  scale255(segmentSize+dashLength, data[7]);                  // pix_pos
 
         // 2 colors = color1 one-dash / backColor background
         if (pixMode == 1 || pixMode == 7) 
         {
-          for(int i=0; i<segmentSize; i++) 
-            if (i < dashOffset || i >= dashOffset+dashLength) segment[i] = backColor;
+          for(int i=dashLength; i<segmentSize+dashLength; i++) 
+            if (i < dashOffset || i >= dashOffset+dashLength) segment[i-dashLength] = backColor;
         }
 
         // 01:02 = color1 + backColor dash 
