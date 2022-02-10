@@ -1,7 +1,7 @@
 #include <Arduino.h>
 
-#define LULU_VER 90
-#define LULU_TYPE 50
+#define LULU_VER 91
+#define LULU_TYPE 81
 // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot"
 // 10="power" 11="DMX_strobe" 12="DMX_Par_led" 13="NODE_dmx_thru"
 // 20="Cube_str" 21="Cube_par"  22="Cube_MiniKOLOR" 23="Cube_Elp"

@@ -79,10 +79,6 @@ void k32_setup() {
     k32->on("stm32/btn-click", [](Orderz* order){
         remote->stmNext();
     });
-    k32->on("atom/btn-click", [](Orderz* order){
-        remote->stmNext();
-    });
-
 
 
     // PWM
