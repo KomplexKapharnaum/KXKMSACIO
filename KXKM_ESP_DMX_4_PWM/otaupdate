@@ -1,6 +1,7 @@
 # py .\otaupdate // command exec
 # py .\otaupdate -t elp_dmx // name
 # py .\otaupdate -v 8 // version
+# py .\otaupdate -i 2.0.0.123 // ip
 
 #!/usr/bin/env python3
 
@@ -19,16 +20,17 @@ esp_respond_sender_port = 3235
 #
 print("\n.:: OTA UPLOADER ::.\n")
 
-
 # ARGUMENTS
 #
 parser = argparse.ArgumentParser()
 parser.add_argument('-v', '--version', default=False)
 parser.add_argument('-t', '--type', default=None)
+parser.add_argument('-i', '--ip', default=None)
 args = parser.parse_args()
 
 version_filter = args.version
 type_filter = args.type
+ip_filter = args.ip
 
 
 # FIND FIRMWARE
@@ -94,7 +96,8 @@ class ServiceListener(object):
 
             cli['upgradeVersion'] = (not version_filter or cli['version'] != version_filter)
             cli['upgradeType'] = (not type_filter or type_filter.lower() in cli['shortname'].lower())
-            cli['upgrade'] = cli['upgradeVersion'] and cli['upgradeType']
+            cli['upgradeIP'] = (not ip_filter or ip_filter == cli['ip'])
+            cli['upgrade'] = cli['upgradeVersion'] and cli['upgradeType'] and cli['upgradeIP']
 
             if new and cli['upgradeType']:
                 clients.append(cli)

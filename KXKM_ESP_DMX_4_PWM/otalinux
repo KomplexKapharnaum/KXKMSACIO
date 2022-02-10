@@ -1,30 +1,65 @@
 #!/usr/bin/env python3
 
+
 import subprocess, socket
-import os , sys, signal
+import os , sys, time
 from threading import Thread
 import netifaces as ni
-from zeroconf import ServiceBrowser, Zeroconf
-import time
+from operator import itemgetter
 import argparse
+from zeroconf import ServiceBrowser, Zeroconf
 
-dir_path = os.path.dirname(os.path.realpath(__file__))
-
-clients = []
-ip_of_sender = subprocess.check_output("hostname -I" , shell=True).decode('utf-8').rstrip()
+ip = []
 esp_respond_sender_port = 3235
-firmware = dir_path+'/.pio/build/hw2-kxkm/firmware.bin'
 
+# HELLO
+#
+print("\n.:: OTA UPLOADER ::.\n")
+
+
+# ARGUMENTS
+#
 parser = argparse.ArgumentParser()
 parser.add_argument('-v', '--version', default=False)
 parser.add_argument('-t', '--type', default=None)
+parser.add_argument('-i', '--ip', default=None)
 args = parser.parse_args()
 
 version_filter = args.version
 type_filter = args.type
+ip_filter = args.ip
 
 
- 
+# FIND FIRMWARE
+# 
+def findFirmware():
+    def all_subdirs_of(b='.'):
+        result = []
+        for d in os.listdir(b):
+            bd = os.path.join(b, d)
+            if os.path.isdir(bd): 
+                result.append(bd)
+        return result
+
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    build_dirs = all_subdirs_of( os.path.join(dir_path,'.pio/build/') )
+    if len(build_dirs) == 0:
+        print("No build found in ", os.path.join(dir_path,'.pio/build/'))
+        return False
+    latest_builddir = max(build_dirs, key=os.path.getmtime)
+    print("BUILD directory: ", '\t', '.pio/build/'+os.path.basename(latest_builddir))
+
+    firm = os.path.join(latest_builddir, 'firmware.bin')
+    if not os.path.isfile(firm):
+        print("Firmware not found at ", firm)
+        return False
+    print("FIRMWARE selected: ", '\t', os.path.basename(firm), '\t\t', time.ctime(os.path.getmtime(firm)))
+    return firm
+
+
+
+
+
 class ServiceListener(object):
     def __init__(self):
         self.r = Zeroconf()
@@ -32,6 +67,9 @@ class ServiceListener(object):
     def remove_service(self, zeroconf, type, name):
         print()
         print( "Service", name, "removed")
+        
+    def update_service(self):
+        pass
  
     def add_service(self, zeroconf, type, name):
         #print( "  Type is", type)
@@ -57,8 +95,9 @@ class ServiceListener(object):
                 cli['version'] = 0
 
             cli['upgradeVersion'] = (not version_filter or cli['version'] != version_filter)
-            cli['upgradeType'] = (not type_filter or type_filter in cli['shortname'].lower())
-            cli['upgrade'] = cli['upgradeVersion'] and cli['upgradeType']
+            cli['upgradeType'] = (not type_filter or type_filter.lower() in cli['shortname'].lower())
+            cli['upgradeIP'] = (not ip_filter or ip_filter == cli['ip'])
+            cli['upgrade'] = cli['upgradeVersion'] and cli['upgradeType'] and cli['upgradeIP']
 
             if new and cli['upgradeType']:
                 clients.append(cli)
@@ -74,7 +113,7 @@ class ServiceListener(object):
                             cli['ip']
                             )
 
-            
+                    
 class Upgrader(Thread):       
     def __init__(self, port, info):
         Thread.__init__(self)
@@ -82,40 +121,56 @@ class Upgrader(Thread):
         self.info = info
 
     def run(self):
-        stri = "Uploading to "+self.info['shortname']+"  "+str(self.info['ip'])
+
+        def findCloserIp(dest, srcList):
+            classif = []
+            for ip in srcList:
+                classif.append( (ip, len(os.path.commonprefix([ip, dest]))) )
+            classif = sorted(classif, key=lambda tup: tup[1])
+            if len(classif) > 0: return classif[-1][0]
+            else: return None
+
+        sender = findCloserIp(self.info['ip'], ip)        
+
+        stri = "Uploading to "+self.info['shortname']+"  "+str(self.info['ip'])+" using "+sender
         print(stri)
-        cmd = 'python3 ~/.platformio/packages/tool-espotapy/espota.py -i '+self.info['ip']+' -I '+ip_of_sender+' -p '+self.info['port']+' -P '+str(self.port)+' -f '+firmware
+        cmd = 'python3 ~/.platformio/packages/tool-espotapy/espota.py -i '+self.info['ip']+' -I '+sender+' -p '+self.info['port']+' -P '+str(self.port)+' -f '+firmware
+        # cmd = 'py C:\\Users\\ririf\\.platformio\\packages\\framework-arduinoespressif32\\tools\\espota.py -i '+self.info['ip']+' -I '+sender+' -p '+self.info['port']+' -P '+str(self.port)+' -f '+firmware
+        # print(cmd)
         p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         if (p.wait() == 0):
             stri = "Updated " +self.info['shortname']+"  "+str(self.info['ip'])
         else:
-            stri = "Failed " +self.info['shortname']+"  "+str(self.info['ip'])
+            stri = "Failed " +self.info['shortname']+"  "+str(self.info['ip']+" \n\t"+cmd)
         print(stri)
 
  
+ 
 if __name__ == '__main__':
+
     while True:
-        upgradeCount = 0
-        clients = []
-        subprocess.call('clear',shell=True)
-        r = Zeroconf()
-        listener = ServiceListener()
-        browser = ServiceBrowser(r, "_arduino._tcp.local.", listener)
+        subprocess.call('clear',shell=True) 
         # print("LOCAL ip: "+ str(ip_of_sender) +"\n")
         print("=============================================")
         print("============ ESP32 - OTA updater ============")
         print("=============================================")
         print("")
 
-        ip = []
+        firmware = findFirmware()
+        
+        
+        upgradeCount = 0
+        clients = []
+        r = Zeroconf()
+        listener = ServiceListener()
+        browser = ServiceBrowser(r, "_arduino._tcp.local.", listener)
+        
         for iface in ni.interfaces():
             if 2 in ni.ifaddresses(iface):
                 if ni.ifaddresses(iface)[2][0]['addr'] != '127.0.0.1':
                     ip.append(ni.ifaddresses(iface)[2][0]['addr'])
 
-        print("Your IP: ", ip)
-        print("")
-        print("Firmware date: ", time.ctime(os.stat(firmware).st_mtime))
+        print("SENDER ip: \t\t", ip)
         print("")
 
         try:
@@ -136,8 +191,7 @@ if __name__ == '__main__':
         else:
             upgradables = [cli for cli in clients if cli['upgrade']]
             y = input("Upload to "+str(len(upgradables))+" Devices ?... [y/n]\n\n")
-        if y != 'y':
-            continue
+        if y != 'y': continue
             
         threadlist = []
         for cli in upgradables:
