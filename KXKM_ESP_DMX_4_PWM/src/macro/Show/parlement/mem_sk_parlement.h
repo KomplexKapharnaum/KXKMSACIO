@@ -1,28 +1,34 @@
 #include <K32_presets.h>
 
 
-//                  {master , r  , g  , b  , w  ,pix mod , pix long , pix_pos , str_mod , str_speed , r_fond , g_fond , b_fond , w_fond , mirror_mod , zoom }
-//                  {0      , 1  , 2  , 3  , 4  ,5       , 6        , 7       , 8       , 9         , 10     , 11     , 12     , 13     , 14         , 15   } adr + -1
 
 class BankSK : public LBank { 
     public:
         BankSK() : LBank(16) {
 
-            add(mem_t {  133, 133,   0,   0,   0,       0,         0,        0,        0,          0,       0,       0,       0,       0,           0,  255}); // 00 Red
+            //      {master , r  , g  , b  , w  ,pix mod , pix long , pix_pos , str_mod , str_speed , r_fond , g_fond , b_fond , w_fond , mirror_mod , zoom }
+            //      {0      , 1  , 2  , 3  , 4  ,5       , 6        , 7       , 8       , 9         , 10     , 11     , 12     , 13     , 14         , 15   } adr + -1
+            add(mem_t {  255,   0,   0, 255,   0,       0,         0,        0,        0,          0,       0,       0,       0,       0,           0,  255}); // 00 bleu
 
-            add(mem_t {  255,  35,  45,  15,   0,     235,       127,      127,        0,          0,       0,       0,       0,       0,           0,  255}); // 01 bleu blanc rouge
+            add(mem_t {  255, 255, 255, 255,   0,       0,         0,        0,        0,          0,       0,       0,       0,       0,           0,  255}); // 01 white
 
-            add(mem_t {  255, 255, 255, 255,   0,      65,       255,      127,        0,          0,       0,     255,       0,       0,           0,  255}); // 02 arc
+            add(mem_t {  255,   0, 255,   0,   0,      11,        50,       43,        0,          0,       0,       0,       0,       0,           0,  255}); // 02 sablier vert
+                mem->mod(new K32_mod_isawtooth)->at(7)->period(8500)->phase(0)->mini(2)->maxi(43)->absolute();
+                mem->mod(new K32_mod_pulse)->param(0,2*8500)->at(2)->period(3*8500)->phase(0)->mini(0)->maxi(255)->absolute();
+                mem->mod(new K32_mod_pulse)->param(0,2*8500)->at(1)->period(3*8500)->phase(120)->mini(0)->maxi(255)->absolute();
 
-            add(mem_t {  255, 255, 255, 255, 255,       0,         1,      127,        5,          0,       0,       0,       0,       0,           0,  255}); // 03 respi white speed **0** 38 > 217
+            add(mem_t {  255, 255,   0,   0,   0,       0,         0,        0,       21,        180,       0,       0,       0,       0,           0,  255}); // 03 red smooth
 
-            add(mem_t {  255, 127, 255, 255,   0,      15,        86,      177,        0,          0,       0,       0,       0,       0,           0,  255}); // 04 vert blanc rouge
-                mem->mod(new K32_mod_sinus)->at(1)->at(5)->at(8)->at(3)->at(7)->at(2)->at(6)->period(8500)->phase(0)->mini(-50)->maxi(255);
+            add(mem_t {  255, 255,   0,   0,   0,       0,         0,        0,       11,        180,       0,       0,       0,       0,           0,  255}); // 04 red str
+
+            add(mem_t {  255, 255, 255, 255,   0,       0,         0,        0,       11,        100,       0,       0,       0,       0,           0,  255}); // 05 white str 
+
+            add(mem_t {  255, 255, 255, 255,   0,       0,         0,        0,       67,        180,       0,       0,       0,       0,           0,  255}); // 06 white str rnd 67
+
+
             
-            add(mem_t {  255, 255, 255,   0,   0,      12,        53,      205,        0,          0,       0,       0,       0,       0,           0,  255}); // 05 str rnd 67
 
-            add(mem_t {  255,   0, 255,   0,   0,       0,         0,        0,        0,          0,       0,      90,       0,       0,           0,  255}); // 06 Green
-                mem->mod(new K32_mod_pulse)->at(1)->at(2)->at(3)->at(7)->at(8)->at(6)->at(5)->param(1, 10)->period(500);
+            
             
             add(mem_t {  255,   0,   0, 255,   0,       0,         0,        0,        0,          0,       0,       0,      90,       0,           0,  255}); // 07 Blue
 
