@@ -526,7 +526,7 @@ bool id_value()
         if (action == "idmode")
         {
             light_id_fonction += 1;
-            if (light_id_fonction >= 2)
+            if (light_id_fonction >= 3)
             {
                 light_id_fonction = 0;
             }
@@ -544,6 +544,15 @@ bool id_value()
                 light_id_fonct = "CH";
                 msg = "";
                 msg += " Enter N° CH & =";
+                msg += "|0 = all";
+                ez.msgBox("M5 REMOTE LIGHT", msg, "## idmode|"+light_id_fonct + "### Back", false);
+                draw_master();
+            }
+            else if (light_id_fonction == 2)
+            {
+                light_id_fonct = "ID Lu";
+                msg = "";
+                msg += " Enter N° ID Lu & =";
                 msg += "|0 = all";
                 ez.msgBox("M5 REMOTE LIGHT", msg, "## idmode|"+light_id_fonct + "### Back", false);
                 draw_master();
@@ -595,6 +604,11 @@ bool id_value()
                         MQTT_ID = String('c') + String(res_value);
                         id_cal_light = "ch"+res_value;
                     }
+                    else if (light_id_fonction == 2)
+                    {
+                        MQTT_ID = String('l') + String(res_value);
+                        id_cal_light = "ch"+res_value;
+                    }
                     return true;
                     break;
                 case '-':
@@ -618,6 +632,13 @@ bool id_value()
                         light_id_fonct = "CH";
                         msg = "";
                         msg += " Enter N° CH & =";
+                        msg += "|0 = all";
+                    }
+                    else if (light_id_fonction == 2)
+                    {
+                        light_id_fonct = "ID Lu";
+                        msg = "";
+                        msg += " Enter N° ID Lu & =";
                         msg += "|0 = all";
                     }
 
