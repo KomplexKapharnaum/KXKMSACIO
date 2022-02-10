@@ -120,7 +120,7 @@ void k32_setup() {
 
 
         // MQTT
-        mqtt = new K32_mqtt(k32, wifi, stm32);
+        mqtt = new K32_mqtt(k32, wifi, stm32, light);
         
 
         // OSC
