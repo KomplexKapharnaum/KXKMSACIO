@@ -1,7 +1,7 @@
 #include <Arduino.h>
 
 #define LULU_VER 90
-#define LULU_TYPE 81
+#define LULU_TYPE 50
 // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot"
 // 10="power" 11="DMX_strobe" 12="DMX_Par_led" 13="NODE_dmx_thru"
 // 20="Cube_str" 21="Cube_par"  22="Cube_MiniKOLOR" 23="Cube_Elp"
@@ -9,20 +9,20 @@
 // 40="New_Fluo"
 // 50="strip to elp dmx"
 // 60="Lyre audio dmx + strip"
-// 70="Strobe" 71="4x Strobe"
+// 70="Strobe" 71="4x Strobe" 72="5x parled"
 // 80="Maree atom-lite"
 // 81="Buzzer atom-lite"
 
 
 /////////////////////////////////////////ID/////////////////////////////////////////
 
-#define K32_SET_NODEID      501          // board unique id
+// #define K32_SET_NODEID      501          // board unique id
 #define K32_SET_CHANNEL     1           // board channel mqtt
-#define LIGHT_SET_ID        1           // permet de calculer l'adresse DMX
-#define ARTNET_SET_UNIVERSE 4           // univers artnet
+#define LIGHT_SET_ID        6           // permet de calculer l'adresse DMX
+#define ARTNET_SET_UNIVERSE 1           // univers artnet
 //                    // defo ARTNET_SET_UNIVERSE 0  => LULU-TYPE 6 & 7 & 8 & 10 & 20 & 34
 //                    // defo ARTNET_SET_UNIVERSE 1  => LULU-TYPE 1 & 2 & 5 & 50
-//                    // defo ARTNET_SET_UNIVERSE 2  => LULU-TYPE 9
+//                    // defo ARTNET_SET_UNIVERSE 2  => LULU-TYPE 9 & 72
 //                    // defo ARTNET_SET_UNIVERSE 3  => LULU-TYPE 50
 //                    // defo ARTNET_SET_UNIVERSE 4  => LULU-TYPE 11
 //                    // defo ARTNET_SET_UNIVERSE 5  => LULU-TYPE 12 & 21 & 22

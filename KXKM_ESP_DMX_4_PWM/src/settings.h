@@ -235,6 +235,9 @@
 #elif LULU_TYPE == 71
 #include "type/71-4strobes.h"
 
+#elif LULU_TYPE == 72
+#include "type/72-5parled.h"
+
 #elif LULU_TYPE == 80
 #include "type/80-maree.h"
 
