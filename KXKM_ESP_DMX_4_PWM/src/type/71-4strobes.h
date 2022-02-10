@@ -9,7 +9,7 @@
 // #include "macro/Show/larochelle/mem_strobe.h"  
 #include "macro/Show/esch/mem_strobe.h"  
 
-void init_lights()  
+void setup_device()  
 {
     //
     // FIXTURES 

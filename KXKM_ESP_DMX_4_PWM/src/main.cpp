@@ -1,7 +1,7 @@
 #include <Arduino.h>
 
 #define LULU_VER 90
-#define LULU_TYPE 1
+#define LULU_TYPE 81
 // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot"
 // 10="power" 11="DMX_strobe" 12="DMX_Par_led" 13="NODE_dmx_thru"
 // 20="Cube_str" 21="Cube_par"  22="Cube_MiniKOLOR" 23="Cube_Elp"
@@ -11,11 +11,12 @@
 // 60="Lyre audio dmx + strip"
 // 70="Strobe" 71="4x Strobe"
 // 80="Maree atom-lite"
+// 81="Buzzer atom-lite"
 
 
 /////////////////////////////////////////ID/////////////////////////////////////////
 
-#define K32_SET_NODEID      153          // board unique id
+#define K32_SET_NODEID      501          // board unique id
 #define K32_SET_CHANNEL     1           // board channel mqtt
 #define LIGHT_SET_ID        1           // permet de calculer l'adresse DMX
 #define ARTNET_SET_UNIVERSE 4           // univers artnet
@@ -42,21 +43,24 @@
 void setup()
 {
   k32_setup();
-  boutons_init();
+  boutons_init(); // ATOM Btn // TODO make plugin
 
   /////////////////////////////////////////////// NETWORK //////////////////////////////////////
 
   ////////////////// WIFI
   if (wifi)
   {
-
+    // Define router (also MQTT broker)
     String router = "2.0.0.1";
+    
+    // Auto calculate IP, i.e.   ID: 45 => 2.0.0.145  //  ID: 318 => 2.0.3.118  // ID: 100 => 2.0.1.100
+    //
     String basenet = router.substring(0, router.indexOf('.', router.indexOf('.')+1));   // 2.0.
-    String subnet = "0";
-    if (k32->system->hw() == 4) subnet = "1";
+    int subnet = k32->system->id()/100;
+    wifi->staticIP(basenet + "." + String(subnet) + "." + String(k32->system->id() - subnet*100 + 100), router, "255.0.0.0");
 
-    wifi->staticIP(basenet + "." + subnet + "." + String(k32->system->id() + 100), router, "255.0.0.0");
-
+    // Wifi connect (SSID / password)
+    //
     wifi->connect("kxkm24", NULL); //KXKM 24
     // wifi->connect("phare", NULL); //KXKM phare
     // wifi->connect("kxkm24lulu", NULL);                                                         //KXKM 24 lulu

@@ -10,7 +10,7 @@
 
 #include "macro/Type/SK/mem_sk.h" // defo
 
-void init_lights()
+void setup_device()
 {
     //
     // FIXTURES

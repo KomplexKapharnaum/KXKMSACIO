@@ -6,7 +6,7 @@
 
 #define ARTNET_ENABLE       0
 
-void init_lights()  
+void setup_device()  
 {
     //
     // FIXTURES 

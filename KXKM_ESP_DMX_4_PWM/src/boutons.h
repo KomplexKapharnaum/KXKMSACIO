@@ -47,36 +47,6 @@ void boutons_loop()
             k32->emit("atom/btn-click");
     }
 
-    //////////////////////  REMOTE CONTROL   ///////////////////////////
-
-
-    // // GO Active Macro
-    // if (remote->getSendMacro())
-    //     if (stateR == REMOTE_MANU || stateR == REMOTE_MANU_LAMP)
-    //     {
-    //         #if ARTNET_ENABLE  // FIX
-    //             light->anim("artnet-strip")->stop();
-    //             light->anim("mem-strip")->play();
-    //             LOG("REMOTE: -> MANU -> GO Macro !");
-    //         #endif
-    //     }
-
-    // LAMP /// FIX
-    // int lamp = remote->getLamp();
-    // if (didChange(W_LAMP, lamp))
-    // {
-    //     if (lamp >= 0) {
-    //         // light->pwm->set(0, lamp);
-    //         // light->pwm->set(1, lamp);
-    //     }
-    //     else
-    //     {
-    //         light->anim("artnet-strip")->push();    // FIX
-    //         light->anim("mem-strip")->push();       // FIX
-    //     }
-    //     LOGF("REMOTE: -> getLAMP @%d\n", lamp);
-    // }
-
 } // void boutons();
 
 #endif

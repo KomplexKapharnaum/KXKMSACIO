@@ -21,7 +21,7 @@ public:
             mem->mod(new K32_mod_sinus)->period(10000)->at(15)->at(16)->phase(270)->mini(0)->maxi(255);
 
         add(mem_t{255, 000, 000, 000, 000, 255, 127, 000, 255, 127, 000, 255, 127, 000, 255, 127, 000}); // 03 GYRO odd even
-            mem->mod(new K32_mod_sawtooth)->period(500)->at(ANIM_ROUTE)->absolute()->mini(9)->maxi(11);
+            mem->mod(new K32_mod_sawtooth)->period(500)->at(ANIM_ROUTE)->absolute()->mini(9)->maxi(11); 
 
         add(mem_t{255, 000, 000, 000, 000, 255, 127, 000, 255, 127, 000, 255, 127, 000, 255, 127, 000}); // 04 GYRO fixture
             mem->mod(new K32_mod_sawtooth)->period(500)->at(ANIM_ROUTE)->absolute()->mini(1)->maxi(5);

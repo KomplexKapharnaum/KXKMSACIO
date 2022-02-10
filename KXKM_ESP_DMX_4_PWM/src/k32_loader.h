@@ -98,7 +98,7 @@ void k32_setup() {
     
     dmx = new K32_dmx(DMX_PIN[k32->system->hw()], DMX_OUT);    
 
-    init_lights();
+    setup_device();
 
 
     /////////////////////////////////////////////// NAME //////////////////////////////////////
@@ -132,7 +132,7 @@ void k32_setup() {
         
 
         //ARTNET
-        #ifdef ARTNET_ENABLE
+        #if ARTNET_ENABLE == 1
             artnet = new K32_artnet(k32, wifi, nodeName);
             artnet->loadprefs();
             artnet->start(); 

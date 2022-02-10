@@ -11,7 +11,7 @@
 
 
  
-void init_lights() 
+void setup_device() 
 {
     //
     // FIXTURES 
