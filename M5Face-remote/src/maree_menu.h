@@ -534,7 +534,7 @@ bool maree_id_value()
         if (action == "idmode")
         {
             maree_id_fonction += 1;
-            if (maree_id_fonction >= 2)
+            if (maree_id_fonction >= 3)
             {
                 maree_id_fonction = 0;
             }
@@ -552,6 +552,15 @@ bool maree_id_value()
                 maree_id_fonct = "CH";
                 msg = "";
                 msg += " Enter N° CH & =";
+                msg += "|0 = all";
+                ez.msgBox("M5 REMOTE MAREE", msg, "## idmode|" + maree_id_fonct + "### Back", false);
+                draw;
+            }
+            else if (maree_id_fonction == 2)
+            {
+                maree_id_fonct = "ID Lu";
+                msg = "";
+                msg += " Enter N° ID Lu & =";
                 msg += "|0 = all";
                 ez.msgBox("M5 REMOTE MAREE", msg, "## idmode|" + maree_id_fonct + "### Back", false);
                 draw;
@@ -604,6 +613,11 @@ bool maree_id_value()
                         MAREE_MQTT_ID = String('c') + String(res_value);
                         id_cal_maree = "ch" + res_value;
                     }
+                    else if (maree_id_fonction == 2)
+                    {
+                        MAREE_MQTT_ID = String('l') + String(res_value);
+                        id_cal_maree = "Lu" + res_value;
+                    }
                     return true;
                     break;
                 case '-':
@@ -627,6 +641,13 @@ bool maree_id_value()
                         maree_id_fonct = "CH";
                         msg = "";
                         msg += " Enter N° CH & =";
+                        msg += "|0 = all";
+                    }
+                    else if (maree_id_fonction == 2)
+                    {
+                        maree_id_fonct = "ID Lu";
+                        msg = "";
+                        msg += " Enter N° ID Lu & =";
                         msg += "|0 = all";
                     }
 
