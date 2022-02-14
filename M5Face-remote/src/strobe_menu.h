@@ -468,7 +468,7 @@ bool id_value_str()
         if (action == "idmode")
         {
             strobe_id_fonction += 1;
-            if (strobe_id_fonction >= 2)
+            if (strobe_id_fonction >= 3)
             {
                 strobe_id_fonction = 0;
             }
@@ -486,6 +486,15 @@ bool id_value_str()
                 strobe_id_fonct = "CH";
                 msg = "";
                 msg += " Enter N° CH & =";
+                msg += "|0 = all";
+                ez.msgBox("M5 REMOTE STROBE", msg, "## idmode|" + strobe_id_fonct + "### Back", false);
+                draw_master_str();
+            }
+            else if (strobe_id_fonction == 2)
+            {
+                strobe_id_fonct = "ID Lu";
+                msg = "";
+                msg += " Enter N° ID Lu & =";
                 msg += "|0 = all";
                 ez.msgBox("M5 REMOTE STROBE", msg, "## idmode|" + strobe_id_fonct + "### Back", false);
                 draw_master_str();
@@ -538,6 +547,11 @@ bool id_value_str()
                         STROBE_MQTT_ID = String('c') + String(res_value);
                         id_cal_strobe = "ch" + res_value;
                     }
+                    else if (strobe_id_fonction == 2)
+                    {
+                        STROBE_MQTT_ID = String('l') + String(res_value);
+                        id_cal_strobe = "Lu" + res_value;
+                    }
                     return true;
                     break;
                 case '-':
@@ -561,6 +575,13 @@ bool id_value_str()
                         strobe_id_fonct = "CH";
                         msg = "";
                         msg += " Enter N° CH & =";
+                        msg += "|0 = all";
+                    }
+                    else if (strobe_id_fonction == 2)
+                    {
+                        strobe_id_fonct = "ID Lu";
+                        msg = "";
+                        msg += " Enter N° ID Lu & =";
                         msg += "|0 = all";
                     }
 

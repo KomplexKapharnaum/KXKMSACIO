@@ -607,7 +607,7 @@ bool id_value()
                     else if (light_id_fonction == 2)
                     {
                         MQTT_ID = String('l') + String(res_value);
-                        id_cal_light = "ch"+res_value;
+                        id_cal_light = "Lu"+res_value;
                     }
                     return true;
                     break;
