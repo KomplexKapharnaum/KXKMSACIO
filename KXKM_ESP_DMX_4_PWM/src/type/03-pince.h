@@ -3,7 +3,7 @@
 
 #define LULU_STRIP_SIZE     17                                  
 #define LULU_STRIP_TYPE     LED_SK6812W_V3                      // Strip type
-#define LULU_PATCHSIZE      SK_PRESET_SIZE+PWM_PRESET_SIZE      // Total size of Preset
+// #define LULU_PATCHSIZE      SK_PRESET_SIZE+PWM_PRESET_SIZE      // Total size of Preset
 
 #include "macro/Type/4pwm/mem_4pwm.h" // defo
 #include "macro/Type/SK/mem_sk.h"     // defo
