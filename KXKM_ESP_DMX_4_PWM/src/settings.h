@@ -91,10 +91,7 @@
 #include "macro/Type/parled/mem_pwm_parled_dmx.h" // mem global
 
 #elif LULU_TYPE == 13
-#define L_NAME "NODE"
-#define LULU_STRIP_SIZE 0
-#define ARTNET_DMXNODE 1
-#include "macro/Type/node/node.h" // mem global
+#include "type/13-node_DMX.h"
 
 #elif LULU_TYPE == 20
 #define LULU_STRIP_SIZE 60
