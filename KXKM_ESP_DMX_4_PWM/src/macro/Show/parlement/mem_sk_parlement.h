@@ -12,10 +12,10 @@ class BankSK : public LBank {
 
             add(mem_t {  255, 255, 255, 255,   0,       0,         0,        0,        0,          0,       0,       0,       0,       0,           0,  255}); // 01 white
 
-            add(mem_t {  255,   0, 255,   0,   0,      11,        50,       43,        0,          0,       0,       0,       0,       0,           0,  255}); // 02 sablier vert
-                mem->mod(new K32_mod_isawtooth)->at(7)->period(8500)->phase(0)->mini(2)->maxi(43)->absolute();
-                mem->mod(new K32_mod_pulse)->param(0,2*8500)->at(2)->period(3*8500)->phase(0)->mini(0)->maxi(255)->absolute();
-                mem->mod(new K32_mod_pulse)->param(0,2*8500)->at(1)->period(3*8500)->phase(120)->mini(0)->maxi(255)->absolute();
+            add(mem_t {  255,   0,   0,   0,   0,      11,        50,       43,        0,          0,       0,       0,       0,       0,           0,  255}); // 02 sablier vert
+                mem->mod(new K32_mod_isawtooth)->phase(0)->at(7)->period(8500)->mini(2)->maxi(43)->absolute();
+                mem->mod(new K32_mod_pulse)->phase(0)->param(0,2*8500)->at(2)->period(3*8500)->mini(0)->maxi(255)->absolute();//green
+                mem->mod(new K32_mod_pulse)->phase(0)->param(0,8500)->at(1)->period(3*8500)->mini(255)->maxi(0)->absolute();//red
 
             add(mem_t {  255, 255,   0,   0,   0,       0,         0,        0,       21,        180,       0,       0,       0,       0,           0,  255}); // 03 red smooth
 
