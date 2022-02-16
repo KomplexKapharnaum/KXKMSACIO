@@ -9,7 +9,8 @@
   
 #include "macro/Show/parlement/mem_parled.h"  
 
-void init_lights()  
+// void init_lights()  
+void setup_device()
 {
     //
     // FIXTURES 
