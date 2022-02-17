@@ -108,20 +108,20 @@ void setup_device()
     // MONITORING
 
     // ANIM leds - monitoring
-    light->anim("battery-strip", new Anim_battery, 4, LULU_STRIP_SIZE + 1)
-        ->drawTo(strips[0])
-        ->master(LULU_PREV_MASTER)
-        ->play();
+    // light->anim("battery-strip", new Anim_battery, 4, LULU_STRIP_SIZE + 1)
+    //     ->drawTo(strips[0])
+    //     ->master(LULU_PREV_MASTER)
+    //     ->play();
 
-    light->anim("remote-strip", new Anim_remote, LULU_PREV_SIZE + 4, LULU_STRIP_SIZE + 6)
-        ->drawTo(strips[0])
-        ->master(LULU_PREV_MASTER)
-        ->play();
+    // light->anim("remote-strip", new Anim_remote, LULU_PREV_SIZE + 4, LULU_STRIP_SIZE + 6)
+    //     ->drawTo(strips[0])
+    //     ->master(LULU_PREV_MASTER)
+    //     ->play();
 
-    light->anim("rssi-strip", new Anim_rssi, 1, LULU_STRIP_SIZE + 17)
-        ->drawTo(strips[0])
-        ->master(LULU_PREV_MASTER * 1.5)
-        ->play();
+    // light->anim("rssi-strip", new Anim_rssi, 1, LULU_STRIP_SIZE + 17)
+    //     ->drawTo(strips[0])
+    //     ->master(LULU_PREV_MASTER * 1.5)
+    //     ->play();
 
     //  ******  *****   ******  ***  **  ******  ******
     //  **  **  **  **    **    ***  **  **        **
