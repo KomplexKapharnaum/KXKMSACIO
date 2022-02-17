@@ -1,4 +1,4 @@
-#define L_NAME "Barre"
+#define L_NAME "Barre"  // a tester 
 
 #define LULU_STRIP_SIZE     120 
 #define LULU_STRIP_TYPE     LED_SK6812W_V3               // Strip type

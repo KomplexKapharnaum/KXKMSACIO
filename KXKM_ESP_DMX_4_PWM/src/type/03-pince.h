@@ -1,4 +1,4 @@
-#define L_NAME "Pince"
+#define L_NAME "Pince"  // a tester 
 
 
 #define LULU_STRIP_SIZE     17                                  

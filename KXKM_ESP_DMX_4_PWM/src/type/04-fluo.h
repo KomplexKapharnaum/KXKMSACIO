@@ -1,4 +1,4 @@
-#define L_NAME "Fluo"
+#define L_NAME "Fluo"   // a tester 
 
 #define LULU_STRIP_SIZE     73 
 #define LULU_STRIP_TYPE     LED_SK6812W_V3               // Strip type
