@@ -18,9 +18,13 @@
 
 void setup_device()
 {
+    // ******  **  **  **  ******  **  **  *****   ******   *****
+    // **           *  *     **    **  **  **  **  **      **
+    // ****    **    **      **    **  **  *****   ****    ******
+    // **      **   *  *     **    **  **  **  **  **          **
+    // **      **  **  **    **     ****   **  **  ******  *****
     //
     // FIXTURES
-    //
 
     // PWM fixture
 #ifdef PWM_ON_OFF
@@ -35,9 +39,13 @@ void setup_device()
     light->addFixtures(strips, LED_N_STRIPS)
         ->copyFixture({strips[0], LULU_STRIP_SIZE, LULU_STRIP_SIZE + 18, strips[1], 0}); // jauge sortie 2
 
+    //  ******  ******   *****  ******     *****  ******   ****   **  **  ******  ***  **  ****** ******
+    //    **    **      **        **      **      **      **  **  **  **  **      ***  **  **     **
+    //    **    ****    ******    **      ******  ****    ** ***  **  **  ****    ** * **  **     ****
+    //    **    **          **    **          **  **      ** ***  **  **  **      **  ***  **     **
+    //    **    ******  *****     **      *****   ******   *** *   ****   ******  **   **  ****** ******
     //
     // TEST Sequence
-    //
 
     // INIT TEST STRIPS
     light->anim("test-strip", new Anim_test_strip, LULU_STRIP_SIZE)
@@ -61,11 +69,15 @@ void setup_device()
     light->anim("test-pwm")->wait();
 #endif
 
+    //  *****   *****   ******   *****  ******  ******   *****
+    //  **  **  **  **  **      **      **        **    **
+    //  *****   *****   ****    ******  ****      **    ******
+    //  **      **  **  **          **  **        **        **
+    //  **      **  **  ******  *****   ******    **    *****
     //
     //  PRESETS
-    //
 
-// ANIM pwm - presets
+    // ANIM pwm - presets
 #ifdef PWM_ON_OFF
     light->anim("mem-pwm", new Anim_datathru, PWM_N_CHAN)
         ->drawTo(dimmer)
@@ -88,9 +100,13 @@ void setup_device()
         ->mem(-1)
         ->master(LULU_PREV_MASTER);
 
+    //  ***   ***   ****   ***  **  **  ******   ****   *****   **  ***  **  ******
+    //  ***   ***  **  **  ***  **        **    **  **  **  **      ***  **  **
+    //  ** * * **  **  **  ** * **  **    **    **  **  *****   **  ** * **  ** ***
+    //  **  *  **  **  **  **  ***  **    **    **  **  **  **  **  **  ***  **  **
+    //  **     **   ****   **   **  **    **     ****   **  **  **  **   **  ******
     //
     // MONITORING
-    //
 
     // ANIM leds - monitoring
     light->anim("battery-strip", new Anim_battery, 4, LULU_STRIP_SIZE + 1)
@@ -108,9 +124,13 @@ void setup_device()
         ->master(LULU_PREV_MASTER * 1.5)
         ->play();
 
+    //  ******  *****   ******  ***  **  ******  ******
+    //  **  **  **  **    **    ***  **  **        **
+    //  ******  *****     **    ** * **  ****      **
+    //  **  **  **  **    **    **  ***  **        **
+    //  **  **  **  **    **    **   **  ******    **
     //
     // ARTNET
-    //
 
     // ANIM pwm - artnet
 #ifdef PWM_ON_OFF
@@ -143,9 +163,13 @@ void setup_device()
 #endif
                        }});
 
+    //  ***  **   ****      **       **  **  ****** **
+    //  ***  **  **  **     **       **      **
+    //  ** * **  **  **     **   *   **  **  ****   **
+    //  **  ***  **  **      *  * *  *   **  **     **
+    //  **   **   ****        **   **    **  **     **
     //
     // NOWIFI
-    //
 
     // EVENT: wifi lost
     // wifi->onDisconnect([&]()
@@ -155,9 +179,13 @@ void setup_device()
     //     light->anim("artnet-strip")->push(0); // @master 0
     // });
 
+    //  *****   ******  ***   ***   ****   ******  ******
+    //  **  **  **      ***   ***  **  **    **    **
+    //  *****   ****    ** * * **  **  **    **    ****
+    //  **  **  **      **  *  **  **  **    **    **
+    //  **  **  ******  **     **   ****     **    ******
     //
     // REMOTE
-    //
 
     remote->setMacroMax(light->anim("mem-strip")->bank()->size());
 
