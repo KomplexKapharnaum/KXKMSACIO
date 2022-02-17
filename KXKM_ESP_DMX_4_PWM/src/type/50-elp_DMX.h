@@ -58,7 +58,7 @@ void setup_device()
         ->push(0);
 
 
-    // ANIM leds - artnet
+    // ANIM elp - artnet
     light->anim("artnet-elp", new Anim_dmx_strip, ELP_PIXELS)
         ->drawTo(elp)
         ->play();
