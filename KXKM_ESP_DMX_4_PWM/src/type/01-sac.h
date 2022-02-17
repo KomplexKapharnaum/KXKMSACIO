@@ -8,7 +8,7 @@
 
 // #define ARTNET_DMXNODE 1
 
-// #define PWM_ON_OFF 1
+#define PWM_ON_OFF 1
 
 #include "macro/Type/SK/mem_sk.h"
 
