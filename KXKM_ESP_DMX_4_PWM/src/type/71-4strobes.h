@@ -11,9 +11,13 @@
 
 void setup_device()  
 {
+    // ******  **  **  **  ******  **  **  *****   ******   *****
+    // **           *  *     **    **  **  **  **  **      **
+    // ****    **    **      **    **  **  *****   ****    ******
+    // **      **   *  *     **    **  **  **  **  **          **
+    // **      **  **  **    **     ****   **  **  ******  *****
     //
-    // FIXTURES 
-    //
+    // FIXTURES
 
     // LED STRIPS fixtures
     K32_fixture* strobes[STROBE_N] = {nullptr};
@@ -21,10 +25,13 @@ void setup_device()
         strobes[k] = new K32_dmxfixture(dmx, 1+20*k, STROBE_PATCHSIZE);  // Str 1 : 21 ,Str 2 : 38 ,Str 3 : 55 ,Str 4 : 72   
     light->addFixtures( strobes, STROBE_N );
 
-
+    //  ******  ***  **  **  ***   ***
+    //  **  **  ***  **      ***   ***
+    //  ******  ** * **  **  ** * * **
+    //  **  **  **  ***  **  **  *  **
+    //  **  **  **   **  **  **     **
     // 
     // ANIM
-    //
 
     // ANIM strobes 
     light->anim("mem-strobe", new Anim_datathru, STROBE_PATCHSIZE)
@@ -34,9 +41,21 @@ void setup_device()
         ->push(0)
         ->play();
     
+    //  ***  **   ****      **       **  **  ****** **
+    //  ***  **  **  **     **       **      **
+    //  ** * **  **  **     **   *   **  **  ****   **
+    //  **  ***  **  **      *  * *  *   **  **     **
+    //  **   **   ****        **   **    **  **     **
+    //
+    // NOWIFI
+
+    //  *****   ******  ***   ***   ****   ******  ******
+    //  **  **  **      ***   ***  **  **    **    **
+    //  *****   ****    ** * * **  **  **    **    ****
+    //  **  **  **      **  *  **  **  **    **    **
+    //  **  **  ******  **     **   ****     **    ******
     //
     // REMOTE
-    //
 
     remote->setMacroMax( light->anim("mem-strobe")->bank()->size() );
     

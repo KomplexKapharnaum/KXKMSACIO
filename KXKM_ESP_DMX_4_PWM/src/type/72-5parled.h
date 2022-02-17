@@ -12,9 +12,13 @@
 // void init_lights()  
 void setup_device()
 {
+    // ******  **  **  **  ******  **  **  *****   ******   *****
+    // **           *  *     **    **  **  **  **  **      **
+    // ****    **    **      **    **  **  *****   ****    ******
+    // **      **   *  *     **    **  **  **  **  **          **
+    // **      **  **  **    **     ****   **  **  ******  *****
     //
-    // FIXTURES 
-    //
+    // FIXTURES
 
     // LED STRIPS fixtures
     K32_fixture* pars[PAR_N] = {nullptr};
@@ -22,10 +26,13 @@ void setup_device()
         pars[k] = new K32_dmxfixture(dmx, 1+5*k, PAR_PATCHSIZE);  // Str 1 : 21 ,Str 2 : 38 ,Str 3 : 55 ,Str 4 : 72   
     light->addFixtures( pars, PAR_N );
 
-
+    //  ******  ***  **  **  ***   ***
+    //  **  **  ***  **      ***   ***
+    //  ******  ** * **  **  ** * * **
+    //  **  **  **  ***  **  **  *  **
+    //  **  **  **   **  **  **     **
     // 
     // ANIM
-    //
 
     // ANIM pars 
     light->anim("mem-pars", new Anim_datathru, PAR_PATCHSIZE)
@@ -35,9 +42,21 @@ void setup_device()
         ->push(0)
         ->play();
     
+    //  ***  **   ****      **       **  **  ****** **
+    //  ***  **  **  **     **       **      **
+    //  ** * **  **  **     **   *   **  **  ****   **
+    //  **  ***  **  **      *  * *  *   **  **     **
+    //  **   **   ****        **   **    **  **     **
+    //
+    // NOWIFI
+
+    //  *****   ******  ***   ***   ****   ******  ******
+    //  **  **  **      ***   ***  **  **    **    **
+    //  *****   ****    ** * * **  **  **    **    ****
+    //  **  **  **      **  *  **  **  **    **    **
+    //  **  **  ******  **     **   ****     **    ******
     //
     // REMOTE
-    //
 
     remote->setMacroMax( light->anim("mem-pars")->bank()->size() );
     

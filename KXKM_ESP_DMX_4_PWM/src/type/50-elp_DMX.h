@@ -13,17 +13,25 @@
 
 void setup_device()
 {
+    // ******  **  **  **  ******  **  **  *****   ******   *****
+    // **           *  *     **    **  **  **  **  **      **
+    // ****    **    **      **    **  **  *****   ****    ******
+    // **      **   *  *     **    **  **  **  **  **          **
+    // **      **  **  **    **     ****   **  **  ******  *****
     //
     // FIXTURES
-    //
 
     // ELP fixtures
     K32_fixture *elp = new K32_dmxfixture(dmx, DMXOUT_ADDR, ELP_PIXELS * 3, true);
     light->addFixture(elp);
 
+    //  ******  ******   *****  ******     *****  ******   ****   **  **  ******  ***  **  ****** ******
+    //    **    **      **        **      **      **      **  **  **  **  **      ***  **  **     **
+    //    **    ****    ******    **      ******  ****    ** ***  **  **  ****    ** * **  **     ****
+    //    **    **          **    **          **  **      ** ***  **  **  **      **  ***  **     **
+    //    **    ******  *****     **      *****   ******   *** *   ****   ******  **   **  ****** ******
     //
     // TEST Sequence
-    //
 
     // INIT TEST STRIPS
     light->anim("test-elp", new Anim_test_strip, ELP_PIXELS)
@@ -34,9 +42,13 @@ void setup_device()
         ->wait(); // WAIT END
 
     
+    //  ******  *****   ******  ***  **  ******  ******
+    //  **  **  **  **    **    ***  **  **        **
+    //  ******  *****     **    ** * **  ****      **
+    //  **  **  **  **    **    **  ***  **        **
+    //  **  **  **  **    **    **   **  ******    **
     //
-    // ANIM
-    //
+    // ARTNET
 
     // ANIM elp
     light->anim("mem-elp", new Anim_dmx_strip, ELP_PIXELS)
@@ -63,10 +75,29 @@ void setup_device()
             }
         });
 
+    //  ***  **   ****      **       **  **  ****** **
+    //  ***  **  **  **     **       **      **
+    //  ** * **  **  **     **   *   **  **  ****   **
+    //  **  ***  **  **      *  * *  *   **  **     **
+    //  **   **   ****        **   **    **  **     **
+    //
+    // NOWIFI
 
+    // EVENT: wifi lost
+    // wifi->onDisconnect([&]()
+    // {
+    //     LOG("WIFI: connection lost..");
+    //     //  light->anim("artnet-strip")->push(MEM_NO_WIFI, LULU_PATCHSIZE);
+    //     light->anim("artnet-strip")->push(0); // @master 0
+    // });
+
+    //  *****   ******  ***   ***   ****   ******  ******
+    //  **  **  **      ***   ***  **  **    **    **
+    //  *****   ****    ** * * **  **  **    **    ****
+    //  **  **  **      **  *  **  **  **    **    **
+    //  **  **  ******  **     **   ****     **    ******
     //
     // REMOTE
-    //
 
     remote->setMacroMax(light->anim("mem-elp")->bank()->size());
 

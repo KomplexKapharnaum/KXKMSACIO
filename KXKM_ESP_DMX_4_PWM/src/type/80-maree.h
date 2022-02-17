@@ -8,9 +8,13 @@
 
 void setup_device()  
 {
+    // ******  **  **  **  ******  **  **  *****   ******   *****
+    // **           *  *     **    **  **  **  **  **      **
+    // ****    **    **      **    **  **  *****   ****    ******
+    // **      **   *  *     **    **  **  **  **  **          **
+    // **      **  **  **    **     ****   **  **  ******  *****
     //
-    // FIXTURES 
-    //
+    // FIXTURES
 
     // LED STRIPS fixtures
     K32_fixture* strips[LED_N_STRIPS] = {nullptr};
@@ -19,9 +23,13 @@ void setup_device()
     light->addFixtures( strips, LED_N_STRIPS );
 
 
+    //  ******  ******   *****  ******     *****  ******   ****   **  **  ******  ***  **  ****** ******
+    //    **    **      **        **      **      **      **  **  **  **  **      ***  **  **     **
+    //    **    ****    ******    **      ******  ****    ** ***  **  **  ****    ** * **  **     ****
+    //    **    **          **    **          **  **      ** ***  **  **  **      **  ***  **     **
+    //    **    ******  *****     **      *****   ******   *** *   ****   ******  **   **  ****** ******
     //
     // TEST Sequence
-    //
 
         // INIT TEST STRIPS
             light->anim( "test-strip", new Anim_test_strip, LULU_STRIP_SIZE )
@@ -30,9 +38,13 @@ void setup_device()
                 ->master(LULU_PREV_MASTER)
                 ->play()->wait();
 
+    //  ******  ***  **  **  ***   ***
+    //  **  **  ***  **      ***   ***
+    //  ******  ** * **  **  ** * * **
+    //  **  **  **  ***  **  **  *  **
+    //  **  **  **   **  **  **     **
     // 
     // ANIM
-    //
 
     // ANIM leds - artnet
     light->anim("maree", new Anim_maree, LULU_STRIP_SIZE)
