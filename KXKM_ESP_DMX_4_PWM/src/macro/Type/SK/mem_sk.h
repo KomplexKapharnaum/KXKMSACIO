@@ -1,13 +1,14 @@
 #include <K32_presets.h>
 
-
-//                  {master , r  , g  , b  , w  ,pix mod , pix long , pix_pos , str_mod , str_speed , r_fond , g_fond , b_fond , w_fond , mirror_mod , zoom }
-//                  {0      , 1  , 2  , 3  , 4  ,5       , 6        , 7       , 8       , 9         , 10     , 11     , 12     , 13     , 14         , 15   } adr + -1
+// 
+// MEM ANIMATOR DATA 
+//
 
 class BankSK : public LBank { 
     public:
         BankSK() : LBank(16) {
-
+//                  {0      , 1  , 2  , 3  , 4  ,5       , 6        , 7       , 8       , 9         , 10     , 11     , 12     , 13     , 14         , 15   } adr + -1
+//                  {master , r  , g  , b  , w  ,pix mod , pix long , pix_pos , str_mod , str_speed , r_fond , g_fond , b_fond , w_fond , mirror_mod , zoom }
             add(mem_t {  133, 133,   0,   0,   0,       0,         0,        0,        0,          0,       0,       0,       0,       0,           0,  255}); // 00 Red
 
             add(mem_t {  255,  35,  45,  15,   0,     235,       127,      127,        0,          0,       0,       0,       0,       0,           0,  255}); // 01 bleu blanc rouge
@@ -63,6 +64,7 @@ class BankSK_PREV : public LBank {
     public:
         BankSK_PREV() : LBank(6*4) {
 
+                      //  {r1,g1,b1,w1, r2,g2,b2,w2, r3,g3,w3,w3, r4,g4,b4,w4, r5,g5,b5,w5, r6,g6,b6,w6},
                 add(mem_t {1, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0});    // 00 red
                 add(mem_t {0, 1, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0});    // 01 Green
                 add(mem_t {0, 0, 1, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0});    // 02 Blue
