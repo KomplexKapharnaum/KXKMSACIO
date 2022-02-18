@@ -85,10 +85,7 @@
 #include "type/11-strobe.h"
 
 #elif LULU_TYPE == 12
-#define L_NAME "Dmx_par"
-#define LULU_STRIP_SIZE 0
-#define DMXFIXTURE_PATCHSIZE 5                           // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
-#include "macro/Type/parled/mem_pwm_parled_dmx.h" // mem global
+#include "type/12-parled.h"
 
 #elif LULU_TYPE == 13
 #include "type/13-node_DMX.h"
