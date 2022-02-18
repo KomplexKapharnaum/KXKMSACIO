@@ -91,12 +91,7 @@
 #include "type/13-node_DMX.h"
 
 #elif LULU_TYPE == 20
-#define LULU_STRIP_SIZE 60
-#define L_NAME "Cube_str"
-#define LULU_MEMNOWIFI_MASTER 255
-#include "macro/Type/strobe/mem_strobe.h" // defo
-#include "macro/Type/4pwm/mem_4pwm.h"     // defo
-#include "macro/mem_cube_strobe.h"
+#include "type/20-cube-strobe.h"
 
 #elif LULU_TYPE == 21
 #define LULU_STRIP_SIZE 60
