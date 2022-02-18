@@ -7,7 +7,6 @@
 #define PWR_FAKE_CURRENT 12500
 
 #define ARTNET_ENABLE       1
-
 // #define ARTNET_DMXNODE 1
 
 #define PWM_ON_OFF 1
