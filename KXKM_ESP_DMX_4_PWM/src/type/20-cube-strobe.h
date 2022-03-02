@@ -5,7 +5,7 @@
 #define STROBE_N 4       // nombre de strobe
 
 #define ARTNET_ENABLE 1
-#define ARTNET_DMXNODE 1
+#define ARTNET_DMXNODE 0
 
 #if VERSION_STROBE == 1
 #define STROBE_PATCHSIZE 16
@@ -40,7 +40,7 @@ void setup_device()
     // STROBE fixtures
     K32_fixture *strobes[STROBE_N] = {nullptr};
     for (int k = 0; k < STROBE_N; k++)
-        strobes[k] = new K32_dmxfixture(dmx, 1 + 20 * k, STROBE_PATCHSIZE); // Str 1 : 21 ,Str 2 : 38 ,Str 3 : 55 ,Str 4 : 72
+        strobes[k] = new K32_dmxfixture(dmx, (1 + 20 * k) + PWM_N_CHAN, STROBE_PATCHSIZE); // Str 1 : 21 ,Str 2 : 38 ,Str 3 : 55 ,Str 4 : 72
     light->addFixtures(strobes, STROBE_N);
 
     // .########.########..######..########.....######..########..#######..##.....##.########.##....##..######..########
@@ -61,7 +61,7 @@ void setup_device()
     //     ->play();
 
     // PWM TEST
-    light->anim("test-pwm", new Anim_test_pwm, LULU_STRIP_SIZE)
+    light->anim("test-pwm", new Anim_test_pwm, PWM_N_CHAN)
         ->drawTo(dimmer)
         ->push(300)
         ->master(LULU_PREV_MASTER)
@@ -78,24 +78,6 @@ void setup_device()
     // .##........##...##...##.............##.##..........##..........##
     // .##........##....##..##.......##....##.##..........##....##....##
     // .##........##.....##.########..######..########....##.....######.
-
-    // .##.....##..#######..##....##.####.########..#######..########..####.##....##..######..
-    // .###...###.##.....##.###...##..##.....##....##.....##.##.....##..##..###...##.##....##.
-    // .####.####.##.....##.####..##..##.....##....##.....##.##.....##..##..####..##.##.......
-    // .##.###.##.##.....##.##.##.##..##.....##....##.....##.########...##..##.##.##.##...####
-    // .##.....##.##.....##.##..####..##.....##....##.....##.##...##....##..##..####.##....##.
-    // .##.....##.##.....##.##...###..##.....##....##.....##.##....##...##..##...###.##....##.
-    // .##.....##..#######..##....##.####....##.....#######..##.....##.####.##....##..######..
-
-    // ....###....########..########.##....##.########.########
-    // ...##.##...##.....##....##....###...##.##..........##...
-    // ..##...##..##.....##....##....####..##.##..........##...
-    // .##.....##.########.....##....##.##.##.######......##...
-    // .#########.##...##......##....##..####.##..........##...
-    // .##.....##.##....##.....##....##...###.##..........##...
-    // .##.....##.##.....##....##....##....##.########....##...
-    //
-    // ARTNET
 
     // ANIM pwm - presets
     light->anim("mem-pwm", new Anim_datathru, PWM_N_CHAN)
@@ -126,19 +108,46 @@ void setup_device()
         ->push(0)
         ->play();
 
+    // .##.....##..#######..##....##.####.########..#######..########..####.##....##..######..
+    // .###...###.##.....##.###...##..##.....##....##.....##.##.....##..##..###...##.##....##.
+    // .####.####.##.....##.####..##..##.....##....##.....##.##.....##..##..####..##.##.......
+    // .##.###.##.##.....##.##.##.##..##.....##....##.....##.########...##..##.##.##.##...####
+    // .##.....##.##.....##.##..####..##.....##....##.....##.##...##....##..##..####.##....##.
+    // .##.....##.##.....##.##...###..##.....##....##.....##.##....##...##..##...###.##....##.
+    // .##.....##..#######..##....##.####....##.....#######..##.....##.####.##....##..######..
+
+    // ....###....########..########.##....##.########.########
+    // ...##.##...##.....##....##....###...##.##..........##...
+    // ..##...##..##.....##....##....####..##.##..........##...
+    // .##.....##.########.....##....##.##.##.######......##...
+    // .#########.##...##......##....##..####.##..........##...
+    // .##.....##.##....##.....##....##...###.##..........##...
+    // .##.....##.##.....##....##....##....##.########....##...
+    //
+    // ARTNET
+
+    // ANIM pwm - artnet
+    light->anim("artnet-pwm", new Anim_datathru, PWM_N_CHAN)
+        ->drawTo(dimmer)
+        ->play();
+
     // ANIM strobes - artnet
     light->anim("artnet-strobe", new Anim_dmx_strip, STROBE_PATCHSIZE)
         ->drawTo(strobes, STROBE_N)
         ->play();
 
     // ARTNET: subscribe dmx frame
-    int memSize = light->anim("mem-strobe")->bank()->preset_size() + light->anim("mem-pwm")->bank()->preset_size();
+    int memSize = PWM_N_CHAN + STROBE_PATCHSIZE;
 
     K32_artnet::onDmx({.address = (1 + (light->id() - 1) * memSize),
                        .framesize = memSize,
                        .callback = [](const uint8_t *data, int length)
                        {
-                           light->anim("artnet-strobe")->push(data, length);
+                           if (length >= PWM_N_CHAN)
+                               light->anim("artnet-pwm")->push(data, PWM_N_CHAN);
+
+                           if (length >= PWM_N_CHAN + STROBE_PATCHSIZE)
+                               light->anim("artnet-strobe")->push(&data[PWM_N_CHAN], STROBE_PATCHSIZE);
                        }});
 
     // .##....##..#######.....##......##.####.########.####
@@ -180,8 +189,7 @@ void setup_device()
 
     k32->on("remote/state", [](Orderz *order)
             {
-
-        remoteState stateR = (remoteState) order->getData(0)->toInt();
+            remoteState stateR = (remoteState) order->getData(0)->toInt();
 
         // AUTO
         if (stateR == REMOTE_AUTO)
@@ -194,8 +202,12 @@ void setup_device()
         // MANU
         else if (stateR == REMOTE_MANU || stateR == REMOTE_MANU_LAMP || stateR == REMOTE_MANU_STM)
         {
+            light->anim("artnet-pwm")->stop();
+            light->anim("mem-pwm")->play();
+
             light->anim("artnet-strobe")->stop();
             light->anim("mem-strobe")->play();
+
             LOG("REMOTE: -> Mode MANU");
         } });
 }
