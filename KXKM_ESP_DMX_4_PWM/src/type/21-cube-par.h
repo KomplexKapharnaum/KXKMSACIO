@@ -2,18 +2,18 @@
 #define L_NAME "Cube_Par" // a tester
 
 #define PAR_N            1
-#define PAR_PATCHSIZE    25
+#define PAR_PATCHSIZE    5
 
 #define ARTNET_ENABLE 1
 #define ARTNET_DMXNODE 1
 
 
-#include "macro/Show/parlement/mem_parled.h"
+#include "macro/Show/parlement/mem_parled_solo.h"
 
 #define PWM_ON_OFF 1
 
 #ifdef PWM_ON_OFF
-#include "macro/Type/4pwm/mem_4pwm.h"
+#include "macro/Show/parlement/mem_4pwm_parlement.h"
 #endif
 
 void setup_device()
@@ -93,7 +93,7 @@ void setup_device()
     //     ->master(LULU_PREV_MASTER);
 
     // ANIM strobes
-    light->anim("mem-strobe", new Anim_datathru, STROBE_PATCHSIZE)
+    light->anim("mem-par", new Anim_datathru, STROBE_PATCHSIZE)
         ->drawTo(strobes, STROBE_N)
         ->bank(new BankStrobe)
         ->remote(true)
@@ -101,19 +101,19 @@ void setup_device()
         ->play();
 
     // ANIM strobes - artnet
-    light->anim("artnet-strobe", new Anim_dmx_strip, STROBE_PATCHSIZE)
+    light->anim("artnet-par", new Anim_dmx_strip, STROBE_PATCHSIZE)
         ->drawTo(strobes, STROBE_N)
         ->play();
 
     // ARTNET: subscribe dmx frame
-    int memSize = light->anim("mem-strobe")->bank()->preset_size() + light->anim("mem-pwm")->bank()->preset_size();
+    int memSize = light->anim("mem-par")->bank()->preset_size() + light->anim("mem-pwm")->bank()->preset_size();
 
     K32_artnet::onDmx({
         .address = (1 + (light->id() - 1) * memSize),
         .framesize = memSize,
         .callback = [](const uint8_t *data, int length)
             {
-                light->anim("artnet-strobe")->push(data, length);
+                light->anim("artnet-par")->push(data, length);
             }
         });
 
@@ -141,14 +141,14 @@ void setup_device()
     //
     // REMOTE
 
-    remote->setMacroMax(light->anim("mem-strobe")->bank()->size());
+    remote->setMacroMax(light->anim("mem-par")->bank()->size());
 
     k32->on("remote/macro", [](Orderz *order)
         {
-            light->anim("mem-strobe")->mem( order->getData(0)->toInt());
+            light->anim("mem-par")->mem( order->getData(0)->toInt());
             light->anim("mem-pwm")->mem(order->getData(0)->toInt());
             remote->setState(REMOTE_MANU); 
-            LOGF("mem-strobe: %d\n", order->getData(0)->toInt());
+            LOGF("mem-par: %d\n", order->getData(0)->toInt());
         });
 
     k32->on("remote/state", [](Orderz *order){
@@ -158,16 +158,16 @@ void setup_device()
         // AUTO
         if (stateR == REMOTE_AUTO)
         {
-            light->anim("mem-strobe")->stop();
-            light->anim("artnet-strobe")->play();
+            light->anim("mem-par")->stop();
+            light->anim("artnet-par")->play();
             LOG("REMOTE: -> Mode AUTO");
         }
 
         // MANU
         else if (stateR == REMOTE_MANU || stateR == REMOTE_MANU_LAMP || stateR == REMOTE_MANU_STM)
         {
-            light->anim("artnet-strobe")->stop();
-            light->anim("mem-strobe")->play();
+            light->anim("artnet-par")->stop();
+            light->anim("mem-par")->play();
             LOG("REMOTE: -> Mode MANU");
         }
     });
