@@ -10,14 +10,14 @@
 // .##.......##.....##.##.......##.....##.......##.......##....##........##......
 // .########..#######..########..#######........##.......##....##........########
 
-#define LULU_TYPE 21
+#define LULU_TYPE 50
 
 // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot"
 // 10="power" 11="DMX_strobe" 12="DMX_Par_led" 13="NODE_dmx_thru"
 // 20="Cube_str" 21="Cube_par"  22="Cube_MiniKOLOR" 23="Cube_Elp"
 // 30="Sucette_parled" 31="Sucette_Strobe" 32="Sucette_MiniKolor" 33="sucette_Elp"  34="Banc"
 // 40="New_Fluo"
-// 50="strip to elp dmx"
+// 50="ELP dmx (sk anim)"
 // 60="Lyre audio dmx + strip"
 // 70="Strobe" 71="4x Strobe" 72="5x parled"
 // 80="Maree atom-lite"

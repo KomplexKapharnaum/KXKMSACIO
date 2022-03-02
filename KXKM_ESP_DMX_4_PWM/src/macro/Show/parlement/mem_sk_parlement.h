@@ -13,9 +13,13 @@ class BankSK : public LBank {
             add(mem_t {  255, 255, 255, 255,   0,       0,         0,        0,        0,          0,       0,       0,       0,       0,           0,  255}); // 01 white
 
             add(mem_t {  255,   0,   0,   0,   0,      11,        50,       43,        0,          0,       0,       0,       0,       0,           0,  255}); // 02 sablier vert
-                mem->mod(new K32_mod_isawtooth)->phase(0)->at(7)->period(8500)->mini(2)->maxi(43)->absolute();
-                mem->mod(new K32_mod_pulse)->phase(0)->param(0,2*8500)->at(2)->period(3*8500)->mini(0)->maxi(255)->absolute();//green
-                mem->mod(new K32_mod_pulse)->phase(0)->param(0,8500)->at(1)->period(3*8500)->mini(255)->maxi(0)->absolute();//red
+                mem->mod(new K32_mod_isawtooth)->at(7)->period(8500)->mini(2)->maxi(43)->absolute();
+                mem->mod(new K32_mod_pulse)->at(2)->period(3*8500)->param(0, 2*8500)->mini(0)->maxi(255)->absolute();  //green
+                mem->mod(new K32_mod_pulse)->at(1)->period(3*8500)->param(0,   8500)->mini(255)->maxi(0)->absolute();    //red
+                mem->mod(new K32_mod_sawtooth)->period(3*8500)->event([](int value){ 
+                                                                        if (value==252) mqtt->publish("k32/event/sablier-A", String(light->id()).c_str());
+                                                                        if (value==254) remote->stmSetMacro(3);
+                                                                    });
 
             add(mem_t {  255, 255,   0,   0,   0,       0,         0,        0,       21,        180,       0,       0,       0,       0,           0,  255}); // 03 red smooth
 
@@ -23,12 +27,7 @@ class BankSK : public LBank {
 
             add(mem_t {  255, 255, 255, 255,   0,       0,         0,        0,       11,        100,       0,       0,       0,       0,           0,  255}); // 05 white str 
 
-            add(mem_t {  255, 255, 255, 255,   0,       0,         0,        0,       67,        180,       0,       0,       0,       0,           0,  255}); // 06 white str rnd 67
-
-
-            
-
-            
+            add(mem_t {  255, 255, 255, 255,   0,       0,         0,        0,       67,        180,       0,       0,       0,       0,           0,  255}); // 06 white str rnd 67          
             
             add(mem_t {  255,   0,   0, 255,   0,       0,         0,        0,        0,          0,       0,       0,      90,       0,           0,  255}); // 07 Blue
 

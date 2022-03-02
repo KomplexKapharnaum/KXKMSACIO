@@ -4,7 +4,7 @@
 class BankPar : public LBank
 {
 public:
-    BankPar () : LBank(25)
+    BankPar () : LBank(5)
     {
         //    {0      , 1  , 2  , 3  , 4  } adr + -1
         //    {master , r  , g  , b  , str,   m , r  , g  , b  , str,   m , r  , g  , b  , str,   m , r  , g  , b  , str,   m , r  , g  , b  , str, }

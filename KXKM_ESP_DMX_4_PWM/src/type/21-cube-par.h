@@ -7,13 +7,11 @@
 #define ARTNET_ENABLE 1
 #define ARTNET_DMXNODE 1
 
-#include "macro/Show/parlement/mem_parled_solo.h"
-
 #define PWM_ON_OFF 1
 
-#ifdef PWM_ON_OFF
 #include "macro/Show/parlement/mem_4pwm_parlement.h"
-#endif
+#include "macro/Show/parlement/mem_parled_solo.h"
+
 
 void setup_device()
 {
@@ -31,10 +29,10 @@ void setup_device()
     K32_fixture *dimmer = new K32_pwmfixture(pwm);
     light->addFixture(dimmer);
 
-    // STROBE fixtures
+    // PAR fixtures
     K32_fixture *par[PAR_N] = {nullptr};
     for (int k = 0; k < PAR_N; k++)
-        par[k] = new K32_dmxfixture(dmx, 1 + 20 * k, PAR_PATCHSIZE); // Str 1 : 21 ,Str 2 : 38 ,Str 3 : 55 ,Str 4 : 72
+        par[k] = new K32_dmxfixture(dmx, 1 + 20 * k, PAR_PATCHSIZE);
     light->addFixtures(par, PAR_N);
 
     // .########.########..######..########.....######..########..#######..##.....##.########.##....##..######..########
@@ -47,22 +45,14 @@ void setup_device()
 
     // TEST Sequence
 
-    // INIT TEST STRIPS
-    // light->anim("test-strip", new Anim_test_strip, LULU_STRIP_SIZE)
-    //     ->drawTo(strips, LED_N_STRIPS)
-    //     ->push(300)
-    //     ->master(LULU_PREV_MASTER)
-    //     ->play();
-
     // PWM TEST
-    light->anim("test-pwm", new Anim_test_pwm, LULU_STRIP_SIZE)
+    light->anim("test-pwm", new Anim_test_pwm, PWM_N_CHAN)
         ->drawTo(dimmer)
         ->push(300)
         ->master(LULU_PREV_MASTER)
         ->play();
 
     // WAIT END
-    // light->anim("test-strip")->wait();
     light->anim("test-pwm")->wait();
 
     // .########..########..########..######..########.########..######.
@@ -73,6 +63,20 @@ void setup_device()
     // .##........##....##..##.......##....##.##..........##....##....##
     // .##........##.....##.########..######..########....##.....######.
 
+
+    // ANIM pwm - presets
+    light->anim("mem-pwm", new Anim_datathru, PWM_N_CHAN)
+        ->drawTo(dimmer)
+        ->bank(new BankPWM)
+        ->remote(true);
+
+    // ANIM par
+    light->anim("mem-par", new Anim_datathru, PAR_PATCHSIZE)
+        ->drawTo(par, PAR_N)
+        ->bank(new BankPar)
+        ->remote(true)
+        ->push(0);
+
     // .##.....##..#######..##....##.####.########..#######..########..####.##....##..######..
     // .###...###.##.....##.###...##..##.....##....##.....##.##.....##..##..###...##.##....##.
     // .####.####.##.....##.####..##..##.....##....##.....##.##.....##..##..####..##.##.......
@@ -80,6 +84,7 @@ void setup_device()
     // .##.....##.##.....##.##..####..##.....##....##.....##.##...##....##..##..####.##....##.
     // .##.....##.##.....##.##...###..##.....##....##.....##.##....##...##..##...###.##....##.
     // .##.....##..#######..##....##.####....##.....#######..##.....##.####.##....##..######..
+
 
     // ....###....########..########.##....##.########.########
     // ...##.##...##.....##....##....###...##.##..........##...
@@ -89,51 +94,31 @@ void setup_device()
     // .##.....##.##....##.....##....##...###.##..........##...
     // .##.....##.##.....##....##....##....##.########....##...
 
-    // ARTNET
-
-    // ANIM pwm - presets
-    light->anim("mem-pwm", new Anim_datathru, PWM_N_CHAN)
+    // ANIM pwm - artnet
+    light->anim("artnet-pwm", new Anim_datathru, PWM_N_CHAN)
         ->drawTo(dimmer)
-        ->bank(new BankPWM)
-        ->remote(true)
-        ->mem(-1);
-
-    // // ANIM leds - presets
-    // light->anim("mem-strip", new Anim_dmx_strip, LULU_STRIP_SIZE)
-    //     ->drawTo(strips[0])
-    //     ->bank(new BankSK)
-    //     ->remote(true)
-    //     ->mem(-1);
-
-    // // ANIM leds - presets preview
-    // light->anim("memprev-strip", new Anim_preview, LULU_PREV_SIZE, LULU_STRIP_SIZE + 8)
-    //     ->drawTo(strips[0])
-    //     ->bank(new BankSK_PREV) // TODO
-    //     ->mem(-1)
-    //     ->master(LULU_PREV_MASTER);
-
-    // ANIM par
-    light->anim("mem-par", new Anim_datathru, PAR_PATCHSIZE)
-        ->drawTo(par, PAR_N)
-        ->bank(new BankPar)
-        ->remote(true)
-        ->push(0)
         ->play();
 
     // ANIM par - artnet
-    light->anim("artnet-par", new Anim_dmx_strip, PAR_PATCHSIZE)
+    light->anim("artnet-par", new Anim_datathru, PAR_PATCHSIZE)
         ->drawTo(par, PAR_N)
         ->play();
+        
 
     // ARTNET: subscribe dmx frame
-    int memSize = light->anim("mem-par")->bank()->preset_size() + light->anim("mem-pwm")->bank()->preset_size();
+    int patchSize = PWM_N_CHAN + PAR_PATCHSIZE;
 
-    K32_artnet::onDmx({.address = (1 + (light->id() - 1) * memSize),
-                       .framesize = memSize,
+    K32_artnet::onDmx({.address = (1 + (light->id() - 1) * patchSize),
+                       .framesize = patchSize,
                        .callback = [](const uint8_t *data, int length)
                        {
-                           light->anim("artnet-par")->push(data, length);
+                            if (length >= PWM_N_CHAN) 
+                                light->anim("artnet-pwm")->push(data, PWM_N_CHAN);
+
+                            if (length >= PWM_N_CHAN+PAR_PATCHSIZE) 
+                                light->anim("artnet-par")->push(&data[PWM_N_CHAN], PAR_PATCHSIZE);
                        }});
+
 
     // .##....##..#######.....##......##.####.########.####
     // .###...##.##.....##....##..##..##..##..##........##.
@@ -163,33 +148,45 @@ void setup_device()
 
     // REMOTE
 
-    remote->setMacroMax(light->anim("mem-par")->bank()->size());
+    remote->setMacroMax( light->anim("mem-par")->bank()->size() );
 
+    // REMOTE: want macro
     k32->on("remote/macro", [](Orderz *order)
-            {
+        {
             light->anim("mem-par")->mem( order->getData(0)->toInt());
-            light->anim("mem-pwm")->mem(order->getData(0)->toInt());
+            light->anim("mem-pwm")->mem( order->getData(0)->toInt());
             remote->setState(REMOTE_MANU); 
-            LOGF("mem-par: %d\n", order->getData(0)->toInt()); });
+            LOGF("mem: %d\n", order->getData(0)->toInt()); 
+        });
 
+
+    // REMOTE: state changed
     k32->on("remote/state", [](Orderz *order)
+        {
+            remoteState stateR = (remoteState) order->getData(0)->toInt();
+
+            // AUTO
+            if (stateR == REMOTE_AUTO)
             {
+                light->anim("mem-pwm")->stop();
+                light->anim("artnet-pwm")->play();
 
-        remoteState stateR = (remoteState) order->getData(0)->toInt();
+                light->anim("mem-par")->stop();
+                light->anim("artnet-par")->play();
+                
+                LOG("REMOTE: -> Mode AUTO");
+            }
 
-        // AUTO
-        if (stateR == REMOTE_AUTO)
-        {
-            light->anim("mem-par")->stop();
-            light->anim("artnet-par")->play();
-            LOG("REMOTE: -> Mode AUTO");
-        }
+            // MANU
+            else if (stateR == REMOTE_MANU || stateR == REMOTE_MANU_LAMP || stateR == REMOTE_MANU_STM)
+            {
+                light->anim("artnet-pwm")->stop();
+                light->anim("mem-pwm")->play();
+                
+                light->anim("artnet-par")->stop();
+                light->anim("mem-par")->play();
 
-        // MANU
-        else if (stateR == REMOTE_MANU || stateR == REMOTE_MANU_LAMP || stateR == REMOTE_MANU_STM)
-        {
-            light->anim("artnet-par")->stop();
-            light->anim("mem-par")->play();
-            LOG("REMOTE: -> Mode MANU");
-        } });
+                LOG("REMOTE: -> Mode MANU");
+            } 
+        });
 }
