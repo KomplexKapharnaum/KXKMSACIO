@@ -44,6 +44,13 @@ void setup_device()
 
     // TEST Sequence
 
+    // INIT TEST STRIPS
+    // light->anim("test-strip", new Anim_test_strip, LULU_STRIP_SIZE)
+    //     ->drawTo(strips, LED_N_STRIPS)
+    //     ->push(300)
+    //     ->master(LULU_PREV_MASTER)
+    //     ->play();
+
     // PWM TEST
     light->anim("test-pwm", new Anim_test_pwm, PWM_N_CHAN)
         ->drawTo(dimmer)
@@ -52,6 +59,7 @@ void setup_device()
         ->play();
 
     // WAIT END
+    // light->anim("test-strip")->wait();
     light->anim("test-pwm")->wait();
 
     // .########..########..########..######..########.########..######.
@@ -68,7 +76,7 @@ void setup_device()
         ->bank(new BankPWM)
         ->remote(true);
 
-    // ANIM par
+    // ANIM par - presets
     light->anim("mem-par", new Anim_datathru, PAR_PATCHSIZE)
         ->drawTo(par, PAR_N)
         ->bank(new BankPar)
