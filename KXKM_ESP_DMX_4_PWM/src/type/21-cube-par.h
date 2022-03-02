@@ -5,13 +5,12 @@
 #define PAR_PATCHSIZE 5
 
 #define ARTNET_ENABLE 1
-#define ARTNET_DMXNODE 1
+#define ARTNET_DMXNODE 0
 
 #define PWM_ON_OFF 1
 
 #include "macro/Show/parlement/mem_4pwm_parlement.h"
 #include "macro/Show/parlement/mem_parled_solo.h"
-
 
 void setup_device()
 {
@@ -32,7 +31,7 @@ void setup_device()
     // PAR fixtures
     K32_fixture *par[PAR_N] = {nullptr};
     for (int k = 0; k < PAR_N; k++)
-        par[k] = new K32_dmxfixture(dmx, 1 + 20 * k, PAR_PATCHSIZE);
+        par[k] = new K32_dmxfixture(dmx, (1 + 20 * k) + PWM_N_CHAN, PAR_PATCHSIZE);
     light->addFixtures(par, PAR_N);
 
     // .########.########..######..########.....######..########..#######..##.....##.########.##....##..######..########
@@ -63,7 +62,6 @@ void setup_device()
     // .##........##....##..##.......##....##.##..........##....##....##
     // .##........##.....##.########..######..########....##.....######.
 
-
     // ANIM pwm - presets
     light->anim("mem-pwm", new Anim_datathru, PWM_N_CHAN)
         ->drawTo(dimmer)
@@ -85,7 +83,6 @@ void setup_device()
     // .##.....##.##.....##.##...###..##.....##....##.....##.##....##...##..##...###.##....##.
     // .##.....##..#######..##....##.####....##.....#######..##.....##.####.##....##..######..
 
-
     // ....###....########..########.##....##.########.########
     // ...##.##...##.....##....##....###...##.##..........##...
     // ..##...##..##.....##....##....####..##.##..........##...
@@ -103,7 +100,6 @@ void setup_device()
     light->anim("artnet-par", new Anim_datathru, PAR_PATCHSIZE)
         ->drawTo(par, PAR_N)
         ->play();
-        
 
     // ARTNET: subscribe dmx frame
     int patchSize = PWM_N_CHAN + PAR_PATCHSIZE;
@@ -112,13 +108,12 @@ void setup_device()
                        .framesize = patchSize,
                        .callback = [](const uint8_t *data, int length)
                        {
-                            if (length >= PWM_N_CHAN) 
-                                light->anim("artnet-pwm")->push(data, PWM_N_CHAN);
+                           if (length >= PWM_N_CHAN)
+                               light->anim("artnet-pwm")->push(data, PWM_N_CHAN);
 
-                            if (length >= PWM_N_CHAN+PAR_PATCHSIZE) 
-                                light->anim("artnet-par")->push(&data[PWM_N_CHAN], PAR_PATCHSIZE);
+                           if (length >= PWM_N_CHAN + PAR_PATCHSIZE)
+                               light->anim("artnet-par")->push(&data[PWM_N_CHAN], PAR_PATCHSIZE);
                        }});
-
 
     // .##....##..#######.....##......##.####.########.####
     // .###...##.##.....##....##..##..##..##..##........##.
@@ -148,21 +143,19 @@ void setup_device()
 
     // REMOTE
 
-    remote->setMacroMax( light->anim("mem-par")->bank()->size() );
+    remote->setMacroMax(light->anim("mem-par")->bank()->size());
 
     // REMOTE: want macro
     k32->on("remote/macro", [](Orderz *order)
-        {
+            {
             light->anim("mem-par")->mem( order->getData(0)->toInt());
             light->anim("mem-pwm")->mem( order->getData(0)->toInt());
             remote->setState(REMOTE_MANU); 
-            LOGF("mem: %d\n", order->getData(0)->toInt()); 
-        });
-
+            LOGF("mem: %d\n", order->getData(0)->toInt()); });
 
     // REMOTE: state changed
     k32->on("remote/state", [](Orderz *order)
-        {
+            {
             remoteState stateR = (remoteState) order->getData(0)->toInt();
 
             // AUTO
@@ -187,6 +180,5 @@ void setup_device()
                 light->anim("mem-par")->play();
 
                 LOG("REMOTE: -> Mode MANU");
-            } 
-        });
+            } });
 }
