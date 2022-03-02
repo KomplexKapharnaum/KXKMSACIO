@@ -94,22 +94,24 @@
 #include "type/20-cube-strobe.h"
 
 #elif LULU_TYPE == 21
-#define LULU_STRIP_SIZE 60
-#define L_NAME "Cube_par"
-#define DMXFIXTURE_PATCHSIZE 9        // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
-#define LULU_MEMNOWIFI_MASTER 255
-#include "macro/Type/parled/mem_parled.h"
-// #include "macro/Show/larochelle/mem_parled_roch.h"
+#include "type/21-cube-par.h"
 
-// #include "macro/Type/4pwm/mem_4pwm.h" // defo
-// #include "macro/mem_cube_parled.h"
-// #include "macro/Show/larochelle/mem_cube_parled_roch.h"
+// #define LULU_STRIP_SIZE 60
+// #define L_NAME "Cube_par"
+// #define DMXFIXTURE_PATCHSIZE 9        // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
+// #define LULU_MEMNOWIFI_MASTER 255
+// #include "macro/Type/parled/mem_parled.h"
+// // #include "macro/Show/larochelle/mem_parled_roch.h"
 
-#include "macro/Show/Baro/mem_pwm_baro_127.h" // cube 1 3 5 7 9
-#include "macro/Show/Baro/mem_cube_baro_127.h"
+// // #include "macro/Type/4pwm/mem_4pwm.h" // defo
+// // #include "macro/mem_cube_parled.h"
+// // #include "macro/Show/larochelle/mem_cube_parled_roch.h"
 
-// #include "macro/Show/Baro/mem_pwm_baro_125.h"   // cube 2 4 6 8 10
-// #include "macro/Show/Baro/mem_cube_baro_125.h"
+// #include "macro/Show/Baro/mem_pwm_baro_127.h" // cube 1 3 5 7 9
+// #include "macro/Show/Baro/mem_cube_baro_127.h"
+
+// // #include "macro/Show/Baro/mem_pwm_baro_125.h"   // cube 2 4 6 8 10
+// // #include "macro/Show/Baro/mem_cube_baro_125.h"
 
 #elif LULU_TYPE == 22
 #define LULU_STRIP_SIZE 60
