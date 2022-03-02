@@ -1,72 +1,73 @@
 
 #define L_NAME "Atom"
 
-#define LULU_STRIP_SIZE     25                                  // 5 pour tester avec les jauges de monitoring
-#define LULU_STRIP_TYPE     LED_WS2812_V1                       // Strip type
+#define LULU_STRIP_SIZE 25            // 5 pour tester avec les jauges de monitoring
+#define LULU_STRIP_TYPE LED_WS2812_V1 // Strip type
 
-#define ARTNET_ENABLE   1
+#define ARTNET_ENABLE 1
 
 #include "macro/Type/4pwm/mem_4pwm.h" // defo
 #include "macro/Type/SK/mem_sk.h"     // defo
 
-
-
-void setup_device() 
+void setup_device()
 {
-    // ******  **  **  **  ******  **  **  *****   ******   *****
-    // **           *  *     **    **  **  **  **  **      **
-    // ****    **    **      **    **  **  *****   ****    ******
-    // **      **   *  *     **    **  **  **  **  **          **
-    // **      **  **  **    **     ****   **  **  ******  *****
+    // .########.####.##.....##.########.##.....##.########..########..######.
+    // .##........##...##...##.....##....##.....##.##.....##.##.......##....##
+    // .##........##....##.##......##....##.....##.##.....##.##.......##......
+    // .######....##.....###.......##....##.....##.########..######....######.
+    // .##........##....##.##......##....##.....##.##...##...##.............##
+    // .##........##...##...##.....##....##.....##.##....##..##.......##....##
+    // .##.......####.##.....##....##.....#######..##.....##.########..######.
     //
     // FIXTURES
 
     // PWM fixture
-    K32_fixture* dimmer = new K32_pwmfixture(pwm); 
-    light->addFixture( dimmer );
-
+    K32_fixture *dimmer = new K32_pwmfixture(pwm);
+    light->addFixture(dimmer);
 
     // LED STRIPS fixtures
-    K32_fixture* strips[LED_N_STRIPS] = {nullptr};
-    for(int k=0; k<LED_N_STRIPS; k++)
-        strips[k] = new K32_ledstrip(k, LEDS_PIN[k32->system->hw()][k], (led_types)LULU_STRIP_TYPE, LULU_STRIP_SIZE);    
-    light->addFixtures( strips, LED_N_STRIPS );
+    K32_fixture *strips[LED_N_STRIPS] = {nullptr};
+    for (int k = 0; k < LED_N_STRIPS; k++)
+        strips[k] = new K32_ledstrip(k, LEDS_PIN[k32->system->hw()][k], (led_types)LULU_STRIP_TYPE, LULU_STRIP_SIZE);
+    light->addFixtures(strips, LED_N_STRIPS);
 
-
-    //  ******  ******   *****  ******     *****  ******   ****   **  **  ******  ***  **  ****** ******
-    //    **    **      **        **      **      **      **  **  **  **  **      ***  **  **     **
-    //    **    ****    ******    **      ******  ****    ** ***  **  **  ****    ** * **  **     ****
-    //    **    **          **    **          **  **      ** ***  **  **  **      **  ***  **     **
-    //    **    ******  *****     **      *****   ******   *** *   ****   ******  **   **  ****** ******
+    // .########.########..######..########.....######..########..#######..##.....##.########.##....##..######..########
+    // ....##....##.......##....##....##.......##....##.##.......##.....##.##.....##.##.......###...##.##....##.##......
+    // ....##....##.......##..........##.......##.......##.......##.....##.##.....##.##.......####..##.##.......##......
+    // ....##....######....######.....##........######..######...##.....##.##.....##.######...##.##.##.##.......######..
+    // ....##....##.............##....##.............##.##.......##..##.##.##.....##.##.......##..####.##.......##......
+    // ....##....##.......##....##....##.......##....##.##.......##....##..##.....##.##.......##...###.##....##.##......
+    // ....##....########..######.....##........######..########..#####.##..#######..########.##....##..######..########
     //
     // TEST Sequence
 
-        // INIT TEST STRIPS
-            light->anim( "test-strip", new Anim_test_strip, LULU_STRIP_SIZE )
-                ->drawTo(strips, LED_N_STRIPS)
-                ->push(300)
-                ->master(LULU_PREV_MASTER)
-                ->play();
+    // INIT TEST STRIPS
+    light->anim("test-strip", new Anim_test_strip, LULU_STRIP_SIZE)
+        ->drawTo(strips, LED_N_STRIPS)
+        ->push(300)
+        ->master(LULU_PREV_MASTER)
+        ->play();
 
-        // PWM TEST
-            light->anim( "test-pwm", new Anim_test_pwm, LULU_STRIP_SIZE )
-                ->drawTo(dimmer)
-                ->push(300)
-                ->master(LULU_PREV_MASTER)
-                ->play();
+    // PWM TEST
+    light->anim("test-pwm", new Anim_test_pwm, LULU_STRIP_SIZE)
+        ->drawTo(dimmer)
+        ->push(300)
+        ->master(LULU_PREV_MASTER)
+        ->play();
 
-        // WAIT END
-            light->anim("test-strip")->wait();
-            light->anim("test-pwm")->wait();
+    // WAIT END
+    light->anim("test-strip")->wait();
+    light->anim("test-pwm")->wait();
 
-    
-    //  *****   *****   ******   *****  ******  ******   *****
-    //  **  **  **  **  **      **      **        **    **
-    //  *****   *****   ****    ******  ****      **    ******
-    //  **      **  **  **          **  **        **        **
-    //  **      **  **  ******  *****   ******    **    *****
+    // .########..########..########..######..########.########..######.
+    // .##.....##.##.....##.##.......##....##.##..........##....##....##
+    // .##.....##.##.....##.##.......##.......##..........##....##......
+    // .########..########..######....######..######......##.....######.
+    // .##........##...##...##.............##.##..........##..........##
+    // .##........##....##..##.......##....##.##..........##....##....##
+    // .##........##.....##.########..######..########....##.....######.
     //
-    //  PRESETS 
+    //  PRESETS
 
     // ANIM pwm - presets
     light->anim("mem-pwm", new Anim_datathru, PWM_N_CHAN)
@@ -79,13 +80,22 @@ void setup_device()
         ->drawTo(strips, LED_N_STRIPS)
         ->bank(new BankSK)
         ->remote(true);
-    
 
-    //  ******  *****   ******  ***  **  ******  ******
-    //  **  **  **  **    **    ***  **  **        **
-    //  ******  *****     **    ** * **  ****      **
-    //  **  **  **  **    **    **  ***  **        **
-    //  **  **  **  **    **    **   **  ******    **
+    // .##.....##..#######..##....##.####.########..#######..########..####.##....##..######..
+    // .###...###.##.....##.###...##..##.....##....##.....##.##.....##..##..###...##.##....##.
+    // .####.####.##.....##.####..##..##.....##....##.....##.##.....##..##..####..##.##.......
+    // .##.###.##.##.....##.##.##.##..##.....##....##.....##.########...##..##.##.##.##...####
+    // .##.....##.##.....##.##..####..##.....##....##.....##.##...##....##..##..####.##....##.
+    // .##.....##.##.....##.##...###..##.....##....##.....##.##....##...##..##...###.##....##.
+    // .##.....##..#######..##....##.####....##.....#######..##.....##.####.##....##..######..
+
+    // ....###....########..########.##....##.########.########
+    // ...##.##...##.....##....##....###...##.##..........##...
+    // ..##...##..##.....##....##....####..##.##..........##...
+    // .##.....##.########.....##....##.##.##.######......##...
+    // .#########.##...##......##....##..####.##..........##...
+    // .##.....##.##....##.....##....##...###.##..........##...
+    // .##.....##.##.....##....##....##....##.########....##...
     //
     // ARTNET
 
@@ -102,26 +112,25 @@ void setup_device()
     // ARTNET: subscribe dmx frame
     int FRAME_size = light->anim("mem-strip")->bank()->preset_size() + light->anim("mem-pwm")->bank()->preset_size();
 
-    K32_artnet::onDmx( {
-        .address    = (1 + (light->id() - 1) * FRAME_size), 
-        .framesize  = FRAME_size, 
-        .callback   = [](const uint8_t *data, int length) 
-        { 
-            int sizeSK = light->anim("mem-strip")->bank()->preset_size();
-            int sizePWM = light->anim("mem-pwm")->bank()->preset_size();
+    K32_artnet::onDmx({.address = (1 + (light->id() - 1) * FRAME_size),
+                       .framesize = FRAME_size,
+                       .callback = [](const uint8_t *data, int length)
+                       {
+                           int sizeSK = light->anim("mem-strip")->bank()->preset_size();
+                           int sizePWM = light->anim("mem-pwm")->bank()->preset_size();
 
-            // LOGINL("ARTFRAME: "); LOGF("length=%d ", length); for (int k = 0; k < length; k++) LOGF("%d ", data[k]); LOG();
-            light->anim("artnet-strip")->push(data, min(sizeSK, length));
-            // light->anim("artnet-pwm")->push(data, min(sizePWM,length)); // FIX
-        }
-    });
-    
+                           // LOGINL("ARTFRAME: "); LOGF("length=%d ", length); for (int k = 0; k < length; k++) LOGF("%d ", data[k]); LOG();
+                           light->anim("artnet-strip")->push(data, min(sizeSK, length));
+                           // light->anim("artnet-pwm")->push(data, min(sizePWM,length)); // FIX
+                       }});
 
-    //  ***  **   ****      **       **  **  ****** **
-    //  ***  **  **  **     **       **      **
-    //  ** * **  **  **     **   *   **  **  ****   **
-    //  **  ***  **  **      *  * *  *   **  **     **
-    //  **   **   ****        **   **    **  **     **
+    // .##....##..#######.....##......##.####.########.####
+    // .###...##.##.....##....##..##..##..##..##........##.
+    // .####..##.##.....##....##..##..##..##..##........##.
+    // .##.##.##.##.....##....##..##..##..##..######....##.
+    // .##..####.##.....##....##..##..##..##..##........##.
+    // .##...###.##.....##....##..##..##..##..##........##.
+    // .##....##..#######......###..###..####.##.......####
     //
     // NOWIFI
 
@@ -133,29 +142,30 @@ void setup_device()
     //     light->anim("artnet-strip")->push(0); // @master 0
     // });
 
-
-    //  *****   ******  ***   ***   ****   ******  ******
-    //  **  **  **      ***   ***  **  **    **    **
-    //  *****   ****    ** * * **  **  **    **    ****
-    //  **  **  **      **  *  **  **  **    **    **
-    //  **  **  ******  **     **   ****     **    ******
+    // .########..########.##.....##..#######..########.########
+    // .##.....##.##.......###...###.##.....##....##....##......
+    // .##.....##.##.......####.####.##.....##....##....##......
+    // .########..######...##.###.##.##.....##....##....######..
+    // .##...##...##.......##.....##.##.....##....##....##......
+    // .##....##..##.......##.....##.##.....##....##....##......
+    // .##.....##.########.##.....##..#######.....##....########
     //
     // REMOTE
 
-    remote->setMacroMax( light->anim("mem-strip")->bank()->size() );
+    remote->setMacroMax(light->anim("mem-strip")->bank()->size());
 
-    k32->on("atom/btn-click", [](Orderz* order){
-        remote->stmNext();
-    });
-    
-    k32->on("remote/macro", [](Orderz* order){
+    k32->on("atom/btn-click", [](Orderz *order)
+            { remote->stmNext(); });
+
+    k32->on("remote/macro", [](Orderz *order)
+            {
         light->anim("mem-strip")->mem( order->getData(0)->toInt() );
         light->anim("mem-pwm")->mem( order->getData(0)->toInt() );
 
-        remote->setState(REMOTE_MANU);
-    });
+        remote->setState(REMOTE_MANU); });
 
-    k32->on("remote/state", [](Orderz* order){
+    k32->on("remote/state", [](Orderz *order)
+            {
 
         remoteState stateR = (remoteState) order->getData(0)->toInt();
 
@@ -181,55 +191,42 @@ void setup_device()
             light->anim("mem-pwm")->play();
 
             LOG("REMOTE: -> Mode MANU");
-        }
-    });
-
-    
+        } });
 }
-
-
-
-
-
-
-
-
 
 #ifdef zzzzzzz
 
-
-// 
+//
 // MEM ANIMATOR DATA ! modulateur relatif a la valeur du tableau
 //
 uint8_t MEM[PRESET_COUNT][LULU_PATCHSIZE] = {};
 uint8_t MEM_NO_WIFI[LULU_PATCHSIZE] = {};
 
-
 void init_mem()
 {
-  for (int n = 0 ; n < PRESET_COUNT ; n++)
-   {
-      for (int i = 0 ; i < SK_PRESET_SIZE ; i++) 
-      {
-           MEM[n][i] = MEM_SK[n][i];
-           MEM_NO_WIFI[i] = MEM_SK_NO_WIFI[i];
-      }
-      for (int i = SK_PRESET_SIZE ; i < LULU_PATCHSIZE  ; i++) 
-      {
-           MEM[n][i]=MEM_PWM[n][i - SK_PRESET_SIZE];
-           MEM_NO_WIFI[i] = MEM_PWM_NO_WIFI[i - SK_PRESET_SIZE];
-      }
-   }
+    for (int n = 0; n < PRESET_COUNT; n++)
+    {
+        for (int i = 0; i < SK_PRESET_SIZE; i++)
+        {
+            MEM[n][i] = MEM_SK[n][i];
+            MEM_NO_WIFI[i] = MEM_SK_NO_WIFI[i];
+        }
+        for (int i = SK_PRESET_SIZE; i < LULU_PATCHSIZE; i++)
+        {
+            MEM[n][i] = MEM_PWM[n][i - SK_PRESET_SIZE];
+            MEM_NO_WIFI[i] = MEM_PWM_NO_WIFI[i - SK_PRESET_SIZE];
+        }
+    }
 }
 
-
-// 
+//
 // APPLY MACRO WITH CUSTOM MODULATORS INTO anim
 //
 //{master , r  , g  , b  , w  ,pix mod , pix long , pix_pos , str_mod , str_speed , r_fond , g_fond , b_fond , w_fond , mirror_mod , zoom }
 //{0      , 1  , 2  , 3  , 4  ,5       , 6        , 7       , 8       , 9         , 10     , 11     , 12     , 13     , 14         , 15   } adr + -1
 
-void load_mem(K32_anim *anim, int macro) {
+void load_mem(K32_anim *anim, int macro)
+{
 
     // remove disposable modulators
     //
