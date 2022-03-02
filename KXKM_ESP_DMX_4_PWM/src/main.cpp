@@ -1,7 +1,17 @@
 #include <Arduino.h>
 
-#define LULU_VER 91
-#define LULU_TYPE 50
+#define LULU_VER 92
+
+// .##.......##.....##.##.......##.....##....########.##....##.########..########
+// .##.......##.....##.##.......##.....##.......##.....##..##..##.....##.##......
+// .##.......##.....##.##.......##.....##.......##......####...##.....##.##......
+// .##.......##.....##.##.......##.....##.......##.......##....########..######..
+// .##.......##.....##.##.......##.....##.......##.......##....##........##......
+// .##.......##.....##.##.......##.....##.......##.......##....##........##......
+// .########..#######..########..#######........##.......##....##........########
+
+#define LULU_TYPE 21
+
 // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot"
 // 10="power" 11="DMX_strobe" 12="DMX_Par_led" 13="NODE_dmx_thru"
 // 20="Cube_str" 21="Cube_par"  22="Cube_MiniKOLOR" 23="Cube_Elp"
@@ -13,13 +23,20 @@
 // 80="Maree atom-lite"
 // 81="Buzzer atom-lite"
 
+//      .####....########.
+//      ..##.....##.....##
+//      ..##.....##.....##
+//      ..##.....##.....##
+//      ..##.....##.....##
+//      ..##.....##.....##
+//      .####....########.
 
 /////////////////////////////////////////ID/////////////////////////////////////////
 
-// #define K32_SET_NODEID      501          // board unique id
-#define K32_SET_CHANNEL     1           // board channel mqtt
-#define LIGHT_SET_ID        4           // permet de calculer l'adresse DMX
-#define ARTNET_SET_UNIVERSE 1           // univers artnet
+#define K32_SET_NODEID 63     // board unique id
+#define K32_SET_CHANNEL 1     // board channel mqtt
+#define LIGHT_SET_ID 1        // permet de calculer l'adresse DMX
+#define ARTNET_SET_UNIVERSE 6 // univers artnet
 //                    // defo ARTNET_SET_UNIVERSE 0  => LULU-TYPE 6 & 7 & 8 & 10 & 20 & 34
 //                    // defo ARTNET_SET_UNIVERSE 1  => LULU-TYPE 1 & 2 & 5 & 50
 //                    // defo ARTNET_SET_UNIVERSE 2  => LULU-TYPE 9 & 72
@@ -30,7 +47,6 @@
 //                    // defo ARTNET_SET_UNIVERSE 7  => LULU-TYPE 3 & 23
 //                    // defo ARTNET_SET_UNIVERSE 16 => LULU-TYPE 60 (Lyres)
 
-
 /////////////////////////////////////////K32/////////////////////////////////////////
 
 #include "k32_loader.h"
@@ -38,6 +54,14 @@
 ///////////////////////////////////////////////// include ////////////////////////////////////////
 
 #include "boutons.h"
+
+// ..######..########.########.##.....##.########.
+// .##....##.##..........##....##.....##.##.....##
+// .##.......##..........##....##.....##.##.....##
+// ..######..######......##....##.....##.########.
+// .......##.##..........##....##.....##.##.......
+// .##....##.##..........##....##.....##.##.......
+// ..######..########....##.....#######..##.......
 
 ///////////////////////////////////////////////// SETUP ////////////////////////////////////////
 void setup()
@@ -52,16 +76,16 @@ void setup()
   {
     // Define router (also MQTT broker)
     String router = "2.0.0.1";
-    
+
     // Auto calculate IP, i.e.   ID: 45 => 2.0.0.145  //  ID: 318 => 2.0.3.118  // ID: 100 => 2.0.1.100
     //
-    String basenet = router.substring(0, router.indexOf('.', router.indexOf('.')+1));   // 2.0.
-    int subnet = k32->system->id()/100;
-    wifi->staticIP(basenet + "." + String(subnet) + "." + String(k32->system->id() - subnet*100 + 100), router, "255.0.0.0");
+    String basenet = router.substring(0, router.indexOf('.', router.indexOf('.') + 1)); // 2.0.
+    int subnet = k32->system->id() / 100;
+    wifi->staticIP(basenet + "." + String(subnet) + "." + String(k32->system->id() - subnet * 100 + 100), router, "255.0.0.0");
 
     // Wifi connect (SSID / password)
     //
-    wifi->connect("kxkm24", NULL); //KXKM 24
+    wifi->connect("kxkm24", NULL); // KXKM 24
     // wifi->connect("phare", NULL); //KXKM phare
     // wifi->connect("kxkm24lulu", NULL);                                                         //KXKM 24 lulu
     // wifi->connect("mgr4g", NULL);                                                              //Maigre dev
@@ -69,17 +93,14 @@ void setup()
     // wifi->connect("riri_new", "B2az41opbn6397");                                               //Riri dev home
     // TODO: if wifi->connect ommited = crash on mqtt/artnet/osc
 
-
-    
-
     ////////////////// MQTT
     if (mqtt)
       mqtt->start({
           .broker = router.c_str(), // Komplex
           // .broker = "2.0.0.10", // Riri dev home
           // .broker = "192.168.43.132",  // MGR dev home
-          .beatInterval = 5000,  // heartbeat interval milliseconds (0 = disable) 5000
-          .statusInterval = 0 // full beacon interval milliseconds (0 = disable) 15000
+          .beatInterval = 5000, // heartbeat interval milliseconds (0 = disable) 5000
+          .statusInterval = 0   // full beacon interval milliseconds (0 = disable) 15000
       });
 
     ////////////////// OSC
@@ -126,7 +147,6 @@ void setup()
   //         // }
   //       });
 
-
   // Heap Memory log
   // k32->timer->every(1000, []() {
   //   static int lastheap = 0;
@@ -137,6 +157,13 @@ void setup()
 
 } // setup
 
+// .##........#######...#######..########.
+// .##.......##.....##.##.....##.##.....##
+// .##.......##.....##.##.....##.##.....##
+// .##.......##.....##.##.....##.########.
+// .##.......##.....##.##.....##.##.......
+// .##.......##.....##.##.....##.##.......
+// .########..#######...#######..##.......
 ///////////////////////////////////////// LOOP /////////////////////////////////////////////////
 void loop()
 {
@@ -144,4 +171,4 @@ void loop()
 
   delay(20);
 
-} //loop
+} // loop
