@@ -8,6 +8,7 @@ import netifaces as ni
 from operator import itemgetter
 import argparse
 from zeroconf import ServiceBrowser, Zeroconf
+from shutil import which
 
 ip = []
 esp_respond_sender_port = 3235
@@ -134,16 +135,30 @@ class Upgrader(Thread):
 
         stri = "Uploading to "+self.info['shortname']+"  "+str(self.info['ip'])+" using "+sender
         print(stri)
-        # print(self.info['ip'], sender, self.info['port'], firmware)
-        cmd = 'python3 espota.py -i '+self.info['ip']+' -I '+sender+' -p '+self.info['port']+' -P '+str(self.port)+' -f '+firmware
-        # cmd = 'py C:\\Users\\ririf\\.platformio\\packages\\framework-arduinoespressif32\\tools\\espota.py -i '+self.info['ip']+' -I '+sender+' -p '+self.info['port']+' -P '+str(self.port)+' -f '+firmware
-        # print(cmd)
+
+        # Search python
+        pycandidates = ['py', 'python3', 'python' ]
+        cmd = None
+        for py in pycandidates:
+            if which(py):
+                cmd = py
+                break
+        if not cmd:
+            print("Can't find python command..", pycandidates)
+            return
+
+        # ESPOTA cmd build
+        cmd += ' espota.py -i '+self.info['ip']+' -I '+sender+' -p '+self.info['port']+' -P '+str(self.port)+' -f '+firmware
+        
         p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        if (p.wait() == 0):
-            stri = "Updated " +self.info['shortname']+"  "+str(self.info['ip'])
+        res = p.communicate()
+        if (p.returncode == 0):
+            print("Updated", self.info['shortname'], self.info['ip'])
         else:
-            stri = "Failed " +self.info['shortname']+"  "+str(self.info['ip']+" \n\t"+cmd)
-        print(stri)
+            
+            print( "Failed", self.info['shortname'], self.info['ip'])
+            print( "\t", cmd)
+            print( "\t", res[0], res[1])
 
  
  
