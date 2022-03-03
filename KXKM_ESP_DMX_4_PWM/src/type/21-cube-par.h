@@ -1,13 +1,16 @@
 
 #define L_NAME "Cube_Par" // a tester
 
+// PAR
 #define PAR_N 1
 #define PAR_PATCHSIZE 5
+
+// PATCH
+#define PATCHSIZE   PWM_N_CHAN+PAR_PATCHSIZE
 
 #define ARTNET_ENABLE 1
 #define ARTNET_DMXNODE 1
 
-#define PWM_ON_OFF 1
 
 #include "macro/Show/parlement/mem_4pwm_parlement.h"
 #include "macro/Show/parlement/mem_parled_solo.h"
@@ -106,16 +109,14 @@ void setup_device()
         
 
     // ARTNET: subscribe dmx frame
-    int patchSize = PWM_N_CHAN + PAR_PATCHSIZE;
-
-    K32_artnet::onDmx({.address = (1 + (light->id() - 1) * patchSize),
-                       .framesize = patchSize,
+    K32_artnet::onDmx({.address = (1 + (light->id() - 1) * PATCHSIZE),
+                       .framesize = PATCHSIZE,
                        .callback = [](const uint8_t *data, int length)
                        {
                             if (length >= PWM_N_CHAN) 
                                 light->anim("artnet-pwm")->push(data, PWM_N_CHAN);
 
-                            if (length >= PWM_N_CHAN+PAR_PATCHSIZE) 
+                            if (length >= PATCHSIZE) 
                                 light->anim("artnet-par")->push(&data[PWM_N_CHAN], PAR_PATCHSIZE);
                        }});
 
