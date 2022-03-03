@@ -9,6 +9,12 @@
 
 #define PWM_ON_OFF 1
 
+// #include "macro/Show/Baro/mem_pwm_baro_127.h" // cube 1 3 5 7 9
+// #include "macro/Show/Baro/mem_cube_baro_127.h"
+
+// // #include "macro/Show/Baro/mem_pwm_baro_125.h"   // cube 2 4 6 8 10
+// // #include "macro/Show/Baro/mem_cube_baro_125.h"
+
 #include "macro/Show/parlement/mem_4pwm_parlement.h"
 #include "macro/Show/parlement/mem_parled_solo.h"
 
