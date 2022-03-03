@@ -9,12 +9,17 @@
 #define PATCHSIZE   PWM_N_CHAN+PAR_PATCHSIZE
 
 #define ARTNET_ENABLE 1
-#define ARTNET_DMXNODE 1
+#define ARTNET_DMXNODE 0
 
+
+// #include "macro/Show/Baro/mem_pwm_baro_127.h" // cube 1 3 5 7 9
+// #include "macro/Show/Baro/mem_cube_baro_127.h"
+
+// // #include "macro/Show/Baro/mem_pwm_baro_125.h"   // cube 2 4 6 8 10
+// // #include "macro/Show/Baro/mem_cube_baro_125.h"
 
 #include "macro/Show/parlement/mem_4pwm_parlement.h"
 #include "macro/Show/parlement/mem_parled_solo.h"
-
 
 void setup_device()
 {
@@ -35,7 +40,7 @@ void setup_device()
     // PAR fixtures
     K32_fixture *par[PAR_N] = {nullptr};
     for (int k = 0; k < PAR_N; k++)
-        par[k] = new K32_dmxfixture(dmx, 1 + 20 * k, PAR_PATCHSIZE);
+        par[k] = new K32_dmxfixture(dmx, (1 + PAR_PATCHSIZE * k) + PWM_N_CHAN, PAR_PATCHSIZE);
     light->addFixtures(par, PAR_N);
 
     // .########.########..######..########.....######..########..#######..##.....##.########.##....##..######..########
@@ -48,6 +53,13 @@ void setup_device()
 
     // TEST Sequence
 
+    // INIT TEST STRIPS
+    // light->anim("test-strip", new Anim_test_strip, LULU_STRIP_SIZE)
+    //     ->drawTo(strips, LED_N_STRIPS)
+    //     ->push(300)
+    //     ->master(LULU_PREV_MASTER)
+    //     ->play();
+
     // PWM TEST
     light->anim("test-pwm", new Anim_test_pwm, PWM_N_CHAN)
         ->drawTo(dimmer)
@@ -56,6 +68,7 @@ void setup_device()
         ->play();
 
     // WAIT END
+    // light->anim("test-strip")->wait();
     light->anim("test-pwm")->wait();
 
     // .########..########..########..######..########.########..######.
@@ -66,14 +79,13 @@ void setup_device()
     // .##........##....##..##.......##....##.##..........##....##....##
     // .##........##.....##.########..######..########....##.....######.
 
-
     // ANIM pwm - presets
     light->anim("mem-pwm", new Anim_datathru, PWM_N_CHAN)
         ->drawTo(dimmer)
         ->bank(new BankPWM)
         ->remote(true);
 
-    // ANIM par
+    // ANIM par - presets
     light->anim("mem-par", new Anim_datathru, PAR_PATCHSIZE)
         ->drawTo(par, PAR_N)
         ->bank(new BankPar)
@@ -87,7 +99,6 @@ void setup_device()
     // .##.....##.##.....##.##..####..##.....##....##.....##.##...##....##..##..####.##....##.
     // .##.....##.##.....##.##...###..##.....##....##.....##.##....##...##..##...###.##....##.
     // .##.....##..#######..##....##.####....##.....#######..##.....##.####.##....##..######..
-
 
     // ....###....########..########.##....##.########.########
     // ...##.##...##.....##....##....###...##.##..........##...
@@ -106,20 +117,18 @@ void setup_device()
     light->anim("artnet-par", new Anim_datathru, PAR_PATCHSIZE)
         ->drawTo(par, PAR_N)
         ->play();
-        
 
     // ARTNET: subscribe dmx frame
     K32_artnet::onDmx({.address = (1 + (light->id() - 1) * PATCHSIZE),
                        .framesize = PATCHSIZE,
                        .callback = [](const uint8_t *data, int length)
                        {
-                            if (length >= PWM_N_CHAN) 
-                                light->anim("artnet-pwm")->push(data, PWM_N_CHAN);
+                           if (length >= PWM_N_CHAN)
+                               light->anim("artnet-pwm")->push(data, PWM_N_CHAN);
 
                             if (length >= PATCHSIZE) 
                                 light->anim("artnet-par")->push(&data[PWM_N_CHAN], PAR_PATCHSIZE);
                        }});
-
 
     // .##....##..#######.....##......##.####.########.####
     // .###...##.##.....##....##..##..##..##..##........##.
@@ -149,21 +158,19 @@ void setup_device()
 
     // REMOTE
 
-    remote->setMacroMax( light->anim("mem-par")->bank()->size() );
+    remote->setMacroMax(light->anim("mem-par")->bank()->size());
 
     // REMOTE: want macro
     k32->on("remote/macro", [](Orderz *order)
-        {
+            {
             light->anim("mem-par")->mem( order->getData(0)->toInt());
             light->anim("mem-pwm")->mem( order->getData(0)->toInt());
             remote->setState(REMOTE_MANU); 
-            LOGF("mem: %d\n", order->getData(0)->toInt()); 
-        });
-
+            LOGF("mem: %d\n", order->getData(0)->toInt()); });
 
     // REMOTE: state changed
     k32->on("remote/state", [](Orderz *order)
-        {
+            {
             remoteState stateR = (remoteState) order->getData(0)->toInt();
 
             // AUTO
@@ -188,6 +195,5 @@ void setup_device()
                 light->anim("mem-par")->play();
 
                 LOG("REMOTE: -> Mode MANU");
-            } 
-        });
+            } });
 }
