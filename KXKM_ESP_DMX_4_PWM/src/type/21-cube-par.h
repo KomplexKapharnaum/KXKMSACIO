@@ -25,7 +25,7 @@
 
 #include "macro/Show/parlement/mem_4pwm_parlement.h"
 #include "macro/Show/parlement/mem_parled_solo.h"
-#include "macro/Type/SK/mem_sk.h"
+#include "macro/Show/parlement/mem_sk_parlement.h"
 
 
 void setup_device()
