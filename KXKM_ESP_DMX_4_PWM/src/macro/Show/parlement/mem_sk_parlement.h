@@ -17,7 +17,7 @@ class BankSK : public LBank {
                 mem->mod(new K32_mod_pulse)->at(2)->period(3*8500)->param(0, 2*8500)->mini(0)->maxi(255)->absolute();  //green
                 mem->mod(new K32_mod_pulse)->at(1)->period(3*8500)->param(0,   8500)->mini(255)->maxi(0)->absolute();    //red
                 mem->mod(new K32_mod_sawtooth)->period(3*8500)->event([](int value){ 
-                                                                        if (value==252) mqtt->publish("k32/event/sablier-A", String(light->id()).c_str());
+                                                                        if (value==252) mqtt->publish("k32/event/sablier", String(light->id()).c_str());
                                                                         if (value==254) remote->stmSetMacro(3);
                                                                     });
 
