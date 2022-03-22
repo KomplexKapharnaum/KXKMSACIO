@@ -17,7 +17,7 @@ class BankSK : public LBank {
                 mem->mod(new K32_mod_pulse)->at(2)->period(3*30000)->param(0, 2*30000)->mini(0)->maxi(255)->absolute();  //green
                 mem->mod(new K32_mod_pulse)->at(1)->period(3*30000)->param(0,   30000)->mini(255)->maxi(0)->absolute();    //red
                 mem->mod(new K32_mod_sawtooth)->period(3*30000)->event([](int value){ 
-                                                                        if (value==252) mqtt->publish("k32/event/sablier-A", String(light->id()).c_str());
+                                                                        if (value==252) mqtt->publish("k32/event/sablier", String(light->id()).c_str());
                                                                         if (value==254) remote->stmSetMacro(3);
                                                                     });
 
@@ -28,7 +28,7 @@ class BankSK : public LBank {
                 mem->mod(new K32_mod_pulse)->at(2)->period(3*20000)->param(0, 2*20000)->mini(0)->maxi(255)->absolute();  //green
                 mem->mod(new K32_mod_pulse)->at(1)->period(3*20000)->param(0,   20000)->mini(255)->maxi(0)->absolute();    //red
                 mem->mod(new K32_mod_sawtooth)->period(3*20000)->event([](int value){ 
-                                                                        if (value==252) mqtt->publish("k32/event/sablier-A", String(light->id()).c_str());
+                                                                        if (value==252) mqtt->publish("k32/event/sablier", String(light->id()).c_str());
                                                                         if (value==254) remote->stmSetMacro(3);
                                                                     });
 
@@ -37,7 +37,7 @@ class BankSK : public LBank {
                 mem->mod(new K32_mod_pulse)->at(2)->period(3*10000)->param(0, 2*10000)->mini(0)->maxi(255)->absolute();  //green
                 mem->mod(new K32_mod_pulse)->at(1)->period(3*10000)->param(0,   10000)->mini(255)->maxi(0)->absolute();    //red
                 mem->mod(new K32_mod_sawtooth)->period(3*10000)->event([](int value){ 
-                                                                        if (value==252) mqtt->publish("k32/event/sablier-A", String(light->id()).c_str());
+                                                                        if (value==252) mqtt->publish("k32/event/sablier", String(light->id()).c_str());
                                                                         if (value==254) remote->stmSetMacro(3);
                                                                     });
 

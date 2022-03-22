@@ -155,17 +155,18 @@ void setup_device()
     remote->setMacroMax(light->anim("mem-strip")->bank()->size());
 
     k32->on("atom/btn-click", [](Orderz *order)
-            { remote->stmNext(); });
+    { 
+        remote->stmNext(); 
+    });
 
     k32->on("remote/macro", [](Orderz *order)
-            {
+    {
         light->anim("mem-strip")->mem( order->getData(0)->toInt() );
-        light->anim("mem-pwm")->mem( order->getData(0)->toInt() );
-
-        remote->setState(REMOTE_MANU); });
+        light->anim("mem-pwm")->mem( order->getData(0)->toInt() ); 
+    });
 
     k32->on("remote/state", [](Orderz *order)
-            {
+    {
 
         remoteState stateR = (remoteState) order->getData(0)->toInt();
 
@@ -191,7 +192,8 @@ void setup_device()
             light->anim("mem-pwm")->play();
 
             LOG("REMOTE: -> Mode MANU");
-        } });
+        } 
+    });
 }
 
 #ifdef zzzzzzz
