@@ -165,7 +165,7 @@ class Upgrader(Thread):
 if __name__ == '__main__':
 
     while True:
-        subprocess.call('clear',shell=True) 
+        # subprocess.call('clear',shell=True) 
         # print("LOCAL ip: "+ str(ip_of_sender) +"\n")
         print("=============================================")
         print("============ ESP32 - OTA updater ============")
