@@ -135,8 +135,6 @@ void k32_setup() {
 
             K32_artnet::onFullDmx([](const uint8_t *data, int length)
             {
-                // LOGF("ARTNET fullframe: %d \n", length);
-
                 // Force Auto
                 if (length > 511 && data[511] > 250) // data 512 = end dmx trame   
                     remote->setState(REMOTE_AUTO)->lock();
