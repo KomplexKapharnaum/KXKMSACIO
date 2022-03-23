@@ -136,14 +136,15 @@
 // // #include "macro/Show/esch/mem_sucette_esch.h"
 
 #elif LULU_TYPE == 31
-#define LULU_STRIP_SIZE 60
-#define L_NAME "Sucette_strobe"
-#define DMXFIXTURE_PATCHSIZE 9            // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
-#define LULU_MEMNOWIFI_MASTER 255         //
-#include "macro/Type/strobe/mem_strobe.h" // defo
+#include "type/31-table-lumineuse-strobe.h"
+// #define LULU_STRIP_SIZE 60
+// #define L_NAME "Sucette_strobe"
+// #define DMXFIXTURE_PATCHSIZE 9            // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
+// #define LULU_MEMNOWIFI_MASTER 255         //
+// #include "macro/Type/strobe/mem_strobe.h" // defo
 
-#include "macro/Type/4pwm/mem_4pwm.h" // defo
-#include "macro/mem_sucette_strobe.h"
+// #include "macro/Type/4pwm/mem_4pwm.h" // defo
+// #include "macro/mem_sucette_strobe.h"
 
 #elif LULU_TYPE == 32
 #define LULU_STRIP_SIZE 60
