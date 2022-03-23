@@ -4,20 +4,16 @@
 #define VERSION_STROBE 2 // 1=strobe rgb 16 ch 5 division 2=strobe rgb 17 ch 4 division
 #define STROBE_N 4       // nombre de strobe
 
-#define ARTNET_ENABLE 1
-#define ARTNET_DMXNODE 1
-
 #if VERSION_STROBE == 1
 #define STROBE_PATCHSIZE 16
-#elif VERSION_STROBE == 2
-#define STROBE_PATCHSIZE 17
-#endif
-
-#if VERSION_STROBE == 1
 #include "macro/Type/strobe/mem_strobe_dmx_mod_1.h"
 #elif VERSION_STROBE == 2
+#define STROBE_PATCHSIZE 17
 #include "macro/Type/strobe/mem_strobe_dmx_mod_2.h"
 #endif
+
+#define ARTNET_ENABLE 1
+#define ARTNET_DMXNODE 1
 
 void setup_device()
 {
