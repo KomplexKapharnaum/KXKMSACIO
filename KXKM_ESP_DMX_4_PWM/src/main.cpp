@@ -10,7 +10,7 @@
 // .##.......##.....##.##.......##.....##.......##.......##....##........##......
 // .########..#######..########..#######........##.......##....##........########
 
-#define LULU_TYPE 21
+#define LULU_TYPE 81
 
 // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot"
 // 10="power" 11="DMX_strobe" 12="DMX_Par_led" 13="NODE_dmx_thru"
@@ -33,7 +33,7 @@
 
 /////////////////////////////////////////ID/////////////////////////////////////////
 
-// #define K32_SET_NODEID 63     // board unique id
+// #define K32_SET_NODEID 331     // board unique id
 // #define K32_SET_CHANNEL 1     // board channel mqtt
 // #define LIGHT_SET_ID 1        // permet de calculer l'adresse DMX
 // #define ARTNET_SET_UNIVERSE 6 // univers artnet
@@ -51,10 +51,6 @@
 
 #include "k32_loader.h"
 
-///////////////////////////////////////////////// include ////////////////////////////////////////
-
-#include "boutons.h"
-
 // ..######..########.########.##.....##.########.
 // .##....##.##..........##....##.....##.##.....##
 // .##.......##..........##....##.....##.##.....##
@@ -67,7 +63,6 @@
 void setup()
 {
   k32_setup();
-  boutons_init(); // ATOM Btn // TODO make plugin
 
   /////////////////////////////////////////////// NETWORK //////////////////////////////////////
 
@@ -167,8 +162,6 @@ void setup()
 ///////////////////////////////////////// LOOP /////////////////////////////////////////////////
 void loop()
 {
-  boutons_loop(); // ATOM Btn // TODO make plugin
 
   delay(20);
-
 } // loop

@@ -5,6 +5,9 @@ K32* k32 = nullptr;
 #include <hardware/K32_stm32.h>
 K32_stm32* stm32 = nullptr;
 
+#include <hardware/K32_buttons.h>
+K32_buttons* buttons = nullptr;
+
 #include <hardware/K32_mcp.h>
 K32_mcp* mcp = nullptr;
 
@@ -64,6 +67,11 @@ void k32_setup() {
     #ifdef HW_ENABLE_STM32
         stm32 = new K32_stm32(k32, true);
     #endif
+
+    // BUTTONS (GPIO)
+    buttons = new K32_buttons(k32);
+    if (k32->system->hw() >= 3) // ATOM
+        buttons->add(39, "atom");
 
     // MCP
     mcp = new K32_mcp(MCP_PIN[k32->system->hw()]);
