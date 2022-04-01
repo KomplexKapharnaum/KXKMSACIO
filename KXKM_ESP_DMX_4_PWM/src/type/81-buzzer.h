@@ -1,7 +1,7 @@
 
 #define L_NAME "Buzzer"
 
-#define LULU_STRIP_SIZE 1             // 5 pour tester avec les jauges de monitoring
+#define LULU_STRIP_SIZE 25             // 5 pour tester avec les jauges de monitoring
 #define LULU_STRIP_TYPE LED_WS2812_V1 // Strip type
 
 #define ARTNET_ENABLE 0
