@@ -154,7 +154,7 @@ void setup_device()
 
     remote->setMacroMax(light->anim("mem-strip")->bank()->size());
 
-    k32->on("atom/btn-click", [](Orderz *order)
+    k32->on("btn/atom", [](Orderz *order)
     { 
         remote->stmNext(); 
     });
