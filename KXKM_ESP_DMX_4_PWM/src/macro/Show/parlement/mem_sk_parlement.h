@@ -12,27 +12,18 @@ class BankSK : public LBank {
 
             add(mem_t {  255, 255, 255, 255,   0,       0,         0,        0,        0,          0,       0,       0,       0,       0,           0,  255}); // 01 white
 
-            add(mem_t {  255,   0,   0,   0,   0,      11,        50,       43,        0,          0,       0,       0,       0,       0,           0,  255}); // 02 sablier 1minute 30 sec
-                mem->mod(new K32_mod_isawtooth)->at(7)->period(30000)->mini(2)->maxi(43)->absolute();
-                mem->mod(new K32_mod_pulse)->at(2)->period(3*30000)->param(0, 2*30000)->mini(0)->maxi(255)->absolute();  //green
-                mem->mod(new K32_mod_pulse)->at(1)->period(3*30000)->param(0,   30000)->mini(255)->maxi(0)->absolute();    //red
-                mem->mod(new K32_mod_sawtooth)->period(3*30000)->event([](int value){ 
+            add(mem_t {  255,   0,   0,   0,   0,      11,        50,       43,        0,          0,       0,       0,       0,       0,           0,  255}); // 02 sablier 45 sec
+                mem->mod(new K32_mod_isawtooth)->at(7)->period(15000)->mini(2)->maxi(43)->absolute();
+                mem->mod(new K32_mod_pulse)->at(2)->period(3*15000)->param(0, 2*15000)->mini(0)->maxi(255)->absolute();  //green
+                mem->mod(new K32_mod_pulse)->at(1)->period(3*15000)->param(0,   15000)->mini(255)->maxi(0)->absolute();    //red
+                mem->mod(new K32_mod_sawtooth)->period(3*15000)->event([](int value){ 
                                                                         if (value==252) mqtt->publish("k32/event/sablier", String(light->id()).c_str());
                                                                         if (value==254) remote->stmSetMacro(3);
                                                                     });
 
             add(mem_t {  255, 255,   0,   0,   0,       0,         0,        0,       21,        180,       0,       0,       0,       0,           0,  255}); // 03 red smooth
 
-            add(mem_t {  255,   0,   0,   0,   0,      11,        50,       43,        0,          0,       0,       0,       0,       0,           0,  255}); // 04 sablier 1 minute
-                mem->mod(new K32_mod_isawtooth)->at(7)->period(20000)->mini(2)->maxi(43)->absolute();
-                mem->mod(new K32_mod_pulse)->at(2)->period(3*20000)->param(0, 2*20000)->mini(0)->maxi(255)->absolute();  //green
-                mem->mod(new K32_mod_pulse)->at(1)->period(3*20000)->param(0,   20000)->mini(255)->maxi(0)->absolute();    //red
-                mem->mod(new K32_mod_sawtooth)->period(3*20000)->event([](int value){ 
-                                                                        if (value==252) mqtt->publish("k32/event/sablier", String(light->id()).c_str());
-                                                                        if (value==254) remote->stmSetMacro(3);
-                                                                    });
-
-            add(mem_t {  255,   0,   0,   0,   0,      11,        50,       43,        0,          0,       0,       0,       0,       0,           0,  255}); // 05 sablier 30 sec
+            add(mem_t {  255,   0,   0,   0,   0,      11,        50,       43,        0,          0,       0,       0,       0,       0,           0,  255}); // 04 sablier 30 sec
                 mem->mod(new K32_mod_isawtooth)->at(7)->period(10000)->mini(2)->maxi(43)->absolute();
                 mem->mod(new K32_mod_pulse)->at(2)->period(3*10000)->param(0, 2*10000)->mini(0)->maxi(255)->absolute();  //green
                 mem->mod(new K32_mod_pulse)->at(1)->period(3*10000)->param(0,   10000)->mini(255)->maxi(0)->absolute();    //red
@@ -41,9 +32,32 @@ class BankSK : public LBank {
                                                                         if (value==254) remote->stmSetMacro(3);
                                                                     });
 
-            add(mem_t {  255, 255, 255, 255,   0,       0,         0,        0,       67,        180,       0,       0,       0,       0,           0,  255}); // 06 white str rnd 67          
+            add(mem_t {  255,   0,   0,   0,   0,      11,        50,       43,        0,          0,       0,       0,       0,       0,           0,  255}); // 05 sablier 18 sec
+                mem->mod(new K32_mod_isawtooth)->at(7)->period(6000)->mini(2)->maxi(43)->absolute();
+                mem->mod(new K32_mod_pulse)->at(2)->period(3*6000)->param(0, 2*6000)->mini(0)->maxi(255)->absolute();  //green
+                mem->mod(new K32_mod_pulse)->at(1)->period(3*6000)->param(0,   6000)->mini(255)->maxi(0)->absolute();    //red
+                mem->mod(new K32_mod_sawtooth)->period(3*6000)->event([](int value){ 
+                                                                        if (value==252) mqtt->publish("k32/event/sablier", String(light->id()).c_str());
+                                                                        if (value==254) remote->stmSetMacro(3);
+                                                                    });
+
+            add(mem_t {  255,   0,   0,   0,   0,      11,        50,       43,        0,          0,       0,       0,       0,       0,           0,  255}); // 06 sablier 9 sec
+                mem->mod(new K32_mod_isawtooth)->at(7)->period(3000)->mini(2)->maxi(43)->absolute();
+                mem->mod(new K32_mod_pulse)->at(2)->period(3*3000)->param(0, 2*3000)->mini(0)->maxi(255)->absolute();  //green
+                mem->mod(new K32_mod_pulse)->at(1)->period(3*3000)->param(0,   3000)->mini(255)->maxi(0)->absolute();    //red
+                mem->mod(new K32_mod_sawtooth)->period(3*3000)->event([](int value){ 
+                                                                        if (value==252) mqtt->publish("k32/event/sablier", String(light->id()).c_str());
+                                                                        if (value==254) remote->stmSetMacro(3);
+                                                                    });
             
-            add(mem_t {  255,   0,   0, 255,   0,       0,         0,        0,        0,          0,       0,       0,      90,       0,           0,  255}); // 07 Blue
+            add(mem_t {  255,   0,   0,   0,   0,      11,        50,       43,        0,          0,       0,       0,       0,       0,           0,  255}); // 07 sablier 3 sec
+                mem->mod(new K32_mod_isawtooth)->at(7)->period(1000)->mini(2)->maxi(43)->absolute();
+                mem->mod(new K32_mod_pulse)->at(2)->period(3*1000)->param(0, 2*1000)->mini(0)->maxi(255)->absolute();  //green
+                mem->mod(new K32_mod_pulse)->at(1)->period(3*1000)->param(0,   1000)->mini(255)->maxi(0)->absolute();    //red
+                mem->mod(new K32_mod_sawtooth)->period(3*1000)->event([](int value){ 
+                                                                        if (value==252) mqtt->publish("k32/event/sablier", String(light->id()).c_str());
+                                                                        if (value==254) remote->stmSetMacro(3);
+                                                                    });
 
             add(mem_t {  255, 255, 255,   0,   0,       0,         0,        0,        0,          0,     100,     100,       0,       0,           0,  255}); // 08 Yellow
 
