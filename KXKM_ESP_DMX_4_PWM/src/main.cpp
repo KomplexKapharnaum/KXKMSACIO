@@ -10,12 +10,12 @@
 // .##.......##.....##.##.......##.....##.......##.......##....##........##......
 // .########..#######..########..#######........##.......##....##........########
 
-#define LULU_TYPE 50
+#define LULU_TYPE 30
 
 // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot"
 // 10="power" 11="DMX_strobe" 12="DMX_Par_led" 13="NODE_dmx_thru"
 // 20="Cube_str" 21="Cube_par"  22="Cube_MiniKOLOR" 23="Cube_Elp"
-// 30="table-lumineuse_parled" 31="table-lumineuse_Strobe" 32="table-lumineuse_MiniKolor" 33="table-lumineuse_Elp"  34="Banc"
+// 30="table-lumineuse_parled" 31="table-lumineuse_Strobe" 32="table-lumineuse_MiniKolor" 33="table-lumineuse_Elp"  34="Banc" 38="table-lumineuse-no-artnet&mqtt"
 // 40="New_Fluo"
 // 50="ELP dmx (sk anim)"
 // 60="Lyre audio dmx + strip"
@@ -89,14 +89,14 @@ void setup()
     // TODO: if wifi->connect ommited = crash on mqtt/artnet/osc
 
     ////////////////// MQTT
-    if (mqtt)
-      mqtt->start({
-          .broker = router.c_str(), // Komplex
-          // .broker = "2.0.0.10", // Riri dev home
-          // .broker = "192.168.43.132",  // MGR dev home
-          .beatInterval = 5000, // heartbeat interval milliseconds (0 = disable) 5000
-          .statusInterval = 0   // full beacon interval milliseconds (0 = disable) 15000
-      });
+    // if (mqtt)
+    //   mqtt->start({
+    //       .broker = router.c_str(), // Komplex
+    //       // .broker = "2.0.0.10", // Riri dev home
+    //       // .broker = "192.168.43.132",  // MGR dev home
+    //       .beatInterval = 5000, // heartbeat interval milliseconds (0 = disable) 5000
+    //       .statusInterval = 0   // full beacon interval milliseconds (0 = disable) 15000
+    //   });
 
     ////////////////// OSC
     if (osc)
@@ -149,6 +149,8 @@ void setup()
   //   LOGF2("Free memory: %d / %d\n", heap, heap - lastheap);
   //   lastheap = heap;
   // });
+
+  
 
 } // setup
 
