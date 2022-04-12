@@ -153,8 +153,8 @@ void setup_device()
                             if (length >= PWM_N_CHAN)
                                light->anim("artnet-pwm")->push(data, PWM_N_CHAN);
 
-                            if (length >= PWM_N_CHAN + STRIP_PATCHSIZE)
-                                light->anim("artnet-strip")->push(&data[PWM_N_CHAN], STRIP_PATCHSIZE);
+                            // if (length >= PWM_N_CHAN + STRIP_PATCHSIZE)
+                            //     light->anim("artnet-strip")->push(&data[PWM_N_CHAN], STRIP_PATCHSIZE);
 
                             if (length >= PATCHSIZE) 
                                 light->anim("artnet-par")->push(&data[PWM_N_CHAN + STRIP_PATCHSIZE], PAR_PATCHSIZE);
