@@ -187,6 +187,9 @@
 // #include "macro/Show/esch/mem_pwm_esch.h"
 // #include "macro/Show/esch/mem_sucette_esch.h"
 
+#elif LULU_TYPE == 38
+#include "type/38-table-lumineuse-par.h"
+
 #elif LULU_TYPE == 40
 #define L_NAME "New_Fluo"
 #define LULU_STRIP_SIZE 73 / 20 = newfluo

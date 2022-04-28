@@ -1,5 +1,5 @@
 
-#define L_NAME "Cube_Par" // a tester
+#define L_NAME "NO_table_lumineuse_par_NO" // a tester
 
 // PAR
 #define PAR_N 1
@@ -11,9 +11,9 @@
 #define STRIP_PATCHSIZE 16
 
 // PATCH
-#define PATCHSIZE   PWM_N_CHAN + STRIP_PATCHSIZE + PAR_PATCHSIZE
+#define PATCHSIZE   25 // PWM_N_CHAN + STRIP_PATCHSIZE + PAR_PATCHSIZE
 
-#define ARTNET_ENABLE 1
+#define ARTNET_ENABLE 0
 #define ARTNET_DMXNODE 0
 
 
@@ -23,7 +23,8 @@
 // // #include "macro/Show/Baro/mem_pwm_baro_125.h"   // cube 2 4 6 8 10
 // // #include "macro/Show/Baro/mem_cube_baro_125.h"
 
-#include "macro/Show/parlement/mem_4pwm_parlement.h"
+#include "macro/Type/4pwm/mem_4pwm.h"
+// #include "macro/Show/parlement/mem_4pwm_parlement.h"
 #include "macro/Show/parlement/mem_parled_solo.h"
 #include "macro/Show/parlement/mem_sk_parlement.h"
 
@@ -97,7 +98,8 @@ void setup_device()
         ->drawTo(dimmer)
         ->bank(new BankPWM)
         ->remote(true)
-        ->mem(-1);
+        ->mem(0)
+        ->play();
 
     // ANIM leds - presets
     light->anim("mem-strip", new Anim_dmx_strip, LULU_STRIP_SIZE)
@@ -153,8 +155,8 @@ void setup_device()
                             if (length >= PWM_N_CHAN)
                                light->anim("artnet-pwm")->push(data, PWM_N_CHAN);
 
-                            // if (length >= PWM_N_CHAN + STRIP_PATCHSIZE)
-                            //     light->anim("artnet-strip")->push(&data[PWM_N_CHAN], STRIP_PATCHSIZE);
+                            if (length >= PWM_N_CHAN + STRIP_PATCHSIZE)
+                                light->anim("artnet-strip")->push(&data[PWM_N_CHAN], STRIP_PATCHSIZE);
 
                             if (length >= PATCHSIZE) 
                                 light->anim("artnet-par")->push(&data[PWM_N_CHAN + STRIP_PATCHSIZE], PAR_PATCHSIZE);
