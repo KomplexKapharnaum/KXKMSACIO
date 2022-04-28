@@ -10,7 +10,7 @@
 // .##.......##.....##.##.......##.....##.......##.......##....##........##......
 // .########..#######..########..#######........##.......##....##........########
 
-#define LULU_TYPE 38
+#define LULU_TYPE 21
 
 // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot"
 // 10="power" 11="DMX_strobe" 12="DMX_Par_led" 13="NODE_dmx_thru"
@@ -33,9 +33,9 @@
 
 /////////////////////////////////////////ID/////////////////////////////////////////
 
-// #define K32_SET_NODEID 6     // board unique id
+// #define K32_SET_NODEID 125     // board unique id
 // #define K32_SET_CHANNEL 2     // board channel mqtt
-// #define LIGHT_SET_ID 3        // permet de calculer l'adresse DMX ota
+// #define LIGHT_SET_ID 2        // permet de calculer l'adresse DMX ota
 // #define ARTNET_SET_UNIVERSE 5 // univers artnet
 //                    // defo ARTNET_SET_UNIVERSE 0  => LULU-TYPE 6 & 7 & 8 & 10 & 20 & 34
 //                    // defo ARTNET_SET_UNIVERSE 1  => LULU-TYPE 1 & 2 & 5 & 50
@@ -89,14 +89,14 @@ void setup()
     // TODO: if wifi->connect ommited = crash on mqtt/artnet/osc
 
     ////////////////// MQTT
-    // if (mqtt)
-    //   mqtt->start({
-    //       .broker = router.c_str(), // Komplex
-    //       // .broker = "2.0.0.10", // Riri dev home
-    //       // .broker = "192.168.43.132",  // MGR dev home
-    //       .beatInterval = 5000, // heartbeat interval milliseconds (0 = disable) 5000
-    //       .statusInterval = 0   // full beacon interval milliseconds (0 = disable) 15000
-    //   });
+    if (mqtt)
+      mqtt->start({
+          .broker = router.c_str(), // Komplex
+          // .broker = "2.0.0.10", // Riri dev home
+          // .broker = "192.168.43.132",  // MGR dev home
+          .beatInterval = 5000, // heartbeat interval milliseconds (0 = disable) 5000
+          .statusInterval = 0   // full beacon interval milliseconds (0 = disable) 15000
+      });
 
     ////////////////// OSC
     if (osc)
@@ -108,7 +108,7 @@ void setup()
       });
   }
 
-  ///////////////////// INFO //////////////////////////////////////
+  ////////////////// INFO //////////////////////////////////////
 
   // Monitoring refresh // FIX
   // k32->timer->every(REFRESH_INFO, []()
