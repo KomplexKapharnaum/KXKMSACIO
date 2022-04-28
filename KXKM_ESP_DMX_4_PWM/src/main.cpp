@@ -1,6 +1,6 @@
 #include <Arduino.h>
 
-#define LULU_VER 93
+#define LULU_VER 94
 
 // .##.......##.....##.##.......##.....##....########.##....##.########..########
 // .##.......##.....##.##.......##.....##.......##.....##..##..##.....##.##......
@@ -35,7 +35,7 @@
 
 // #define K32_SET_NODEID 6     // board unique id
 // #define K32_SET_CHANNEL 2     // board channel mqtt
-// #define LIGHT_SET_ID 3        // permet de calculer l'adresse DMX ota
+// #define LIGHT_SET_ID 5        // permet de calculer l'adresse DMX ota
 // #define ARTNET_SET_UNIVERSE 5 // univers artnet
 //                    // defo ARTNET_SET_UNIVERSE 0  => LULU-TYPE 6 & 7 & 8 & 10 & 20 & 34
 //                    // defo ARTNET_SET_UNIVERSE 1  => LULU-TYPE 1 & 2 & 5 & 50
