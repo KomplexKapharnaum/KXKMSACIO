@@ -91,7 +91,7 @@ class ServiceListener(object):
             cli['ip'] = info.parsed_addresses()[0]
             cli['port'] = str(info.port)
             try:
-                cli['version'] = name.split('v')[1].split('.')[0]
+                cli['version'] = name.split('v')[1].split('.')[0].split('-')[0]
             except:
                 cli['version'] = 0
 
@@ -105,11 +105,11 @@ class ServiceListener(object):
 
                 nameSplit = cli['shortname'].split('-')
                 print("["+("x" if cli['upgrade'] else " ")+"]["+str(len(clients)-1).rjust(2)+"]", 
-                            nameSplit[0].rjust(4), 
-                            nameSplit[1].rjust(4), 
+                            nameSplit[0].rjust(2), 
+                            nameSplit[1].ljust(12), 
                             '', 
-                            '-'.join(nameSplit[2:-1]).ljust(16), 
-                            nameSplit[-1].rjust(4),
+                            '-'.join( [k for k in nameSplit[2:-1] if not k.startswith('v')]   ).ljust(5), 
+                            (cli['version']).ljust(7),
                             '',
                             cli['ip']
                             )
@@ -191,7 +191,12 @@ if __name__ == '__main__':
         print("")
 
         try:
-            a = input("Detecting devices... Press Enter when ready.\n\n")
+            a = input("Detecting devices... \n"+
+                      "You can specify target indexes list, i.e.:  2,6,12  \n"
+                      "Press Enter when ready.\n\n"+
+                      "---------- "+"Type ------------ Version ----- IP ---\n")
+
+            
         except KeyboardInterrupt:
             r.close()
             browser.cancel();
@@ -201,13 +206,22 @@ if __name__ == '__main__':
 
         r.close()
 
-        if a.isnumeric():
-            if int(a) >= len(clients): continue
-            upgradables = [clients[int(a)]]
-            y = input("Upload to "+upgradables[0]['shortname']+" ?... [y/n]\n\n")
+        selectedIndexes = a.split(',')
+        if selectedIndexes[0].isnumeric():
+            upgradables = []
+            for a in selectedIndexes:
+                if a.isnumeric() and int(a) < len(clients):
+                    upgradables.append(clients[int(a)])
         else:
             upgradables = [cli for cli in clients if cli['upgrade']]
-            y = input("Upload to "+str(len(upgradables))+" Devices ?... [y/n]\n\n")
+        
+        if len(upgradables) == 0: continue
+        
+        print("\nUpload to "+str(len(upgradables))+" devices :\n")
+        for u in upgradables:
+            print("\t"+u['shortname'].ljust(20)+u['ip'])
+        y = input("\nPlease confirm... [y/n]\n\n")
+                 
         if y != 'y': continue
             
         threadlist = []
