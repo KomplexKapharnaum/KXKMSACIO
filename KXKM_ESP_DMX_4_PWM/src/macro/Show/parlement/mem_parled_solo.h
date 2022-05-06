@@ -11,11 +11,22 @@ public:
    
         add(mem_t{  255,   0,   0, 255,   0}); // 00 blue
 
-        add(mem_t{  255, 255, 255, 255,   0}); // 01 white
+        add(mem_t{  255,   0,   0, 255,   0}); // 01 blue
 
-        add(mem_t{  255, 255,   0,   0,   0}); // 02 red breath
+        add(mem_t{  255,   0,   0, 255,   0}); // 02 blue
+        
+        add(mem_t{  255,   0,   0, 255,   0}); // 03 blue
+
+        add(mem_t{  255,   0,   0, 255,   0}); // 04 blue
+
+        add(mem_t{  255,   0,   0, 255,   0}); // 05 blue
+        
+        add(mem_t{  255, 255, 255, 255,   0}); // 06 white
+
+        add(mem_t{  255, 255,   0,   0,   0}); // 07 red breath
             mem->mod(new K32_mod_sinus)->at(0)->period(2000);
 
+        add(mem_t{    0,   0,   0,   0,   0}); // 08 stop -> black
     }
 };
 
