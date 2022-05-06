@@ -22,26 +22,26 @@ class BankSK : public LBank {
             
             add(mem_t {  255,   0,   0, 255,   0,       0,         0,        0,        0,          0,       0,       0,       0,       0,           0,  255}); // 00 bleu
 
-            add(mem_t {  255, 255, 255, 255,   0,       0,         0,        0,        0,          0,       0,       0,       0,       0,           0,  255}); // 01 white
-
-            add(mem_t {  255, 255,   0,   0,   0,       0,         0,        0,        0,          0,       0,       0,       0,       0,           0,  255}); // 02 red breath
-                mem->mod(new K32_mod_sinus)->at(0)->period(2000);
-
-            add(mem_t {  255,   0,   0,   0,   0,      11,        50,       43,        0,          0,       0,       0,       0,       0,           0,  255}); // 03 sablier 45 sec
+            add(mem_t {  255,   0,   0,   0,   0,      11,        50,       43,        0,          0,       0,       0,       0,       0,           0,  255}); // 01 sablier 45 sec
                 makeSablier(mem, 45);
 
-            add(mem_t {  255,   0,   0,   0,   0,      11,        50,       43,        0,          0,       0,       0,       0,       0,           0,  255}); // 04 sablier 30 sec
+            add(mem_t {  255,   0,   0,   0,   0,      11,        50,       43,        0,          0,       0,       0,       0,       0,           0,  255}); // 02 sablier 30 sec
                 makeSablier(mem, 30);
 
-            add(mem_t {  255,   0,   0,   0,   0,      11,        50,       43,        0,          0,       0,       0,       0,       0,           0,  255}); // 05 sablier 18 sec
+            add(mem_t {  255,   0,   0,   0,   0,      11,        50,       43,        0,          0,       0,       0,       0,       0,           0,  255}); // 03 sablier 18 sec
                 makeSablier(mem, 18);
 
-            add(mem_t {  255,   0,   0,   0,   0,      11,        50,       43,        0,          0,       0,       0,       0,       0,           0,  255}); // 06 sablier 9 sec
+            add(mem_t {  255,   0,   0,   0,   0,      11,        50,       43,        0,          0,       0,       0,       0,       0,           0,  255}); // 04 sablier 9 sec
                 makeSablier(mem, 9);
             
-            add(mem_t {  255,   0,   0,   0,   0,      11,        50,       43,        0,          0,       0,       0,       0,       0,           0,  255}); // 07 sablier 3 sec
+            add(mem_t {  255,   0,   0,   0,   0,      11,        50,       43,        0,          0,       0,       0,       0,       0,           0,  255}); // 05 sablier 3 sec
                 makeSablier(mem, 3);
-      
+
+            add(mem_t {  255, 255, 255, 255,   0,       0,         0,        0,        0,          0,       0,       0,       0,       0,           0,  255}); // 06 white
+
+            add(mem_t {  255, 255,   0,   0,   0,       0,         0,        0,        0,          0,       0,       0,       0,       0,           0,  255}); // 07 red breath
+                mem->mod(new K32_mod_sinus)->at(0)->period(2000);
+
             add(mem_t {    0,   0,   0,   0,   0,       0,         0,        0,        0,          0,       0,       0,       0,       0,           0,  255}); // 08 stop -> black
 
         }
