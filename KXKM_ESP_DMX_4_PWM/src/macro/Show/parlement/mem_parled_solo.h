@@ -26,7 +26,10 @@ public:
         add(mem_t{  255, 255,   0,   0,   0}); // 07 red breath
             mem->mod(new K32_mod_sinus)->at(0)->period(2000);
 
-        add(mem_t{    0,   0,   0,   0,   0}); // 08 stop -> black
+        add(mem_t{  255, 255,   0,   0,   0}); // 08 red breath leader
+            mem->mod(new K32_mod_sinus)->at(0)->period(2000);
+
+        add(mem_t{    0,   0,   0,   0,   0}); // 09 stop -> black
     }
 };
 
