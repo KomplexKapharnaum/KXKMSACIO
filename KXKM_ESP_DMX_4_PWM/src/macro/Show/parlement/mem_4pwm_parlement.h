@@ -7,7 +7,7 @@ class BankPWM : public LBank {
 
             add(mem_t {    0,    0,    0,    0});   // 00 off
 
-            add(mem_t {  255,  255,  255,  255});   // 01 on
+            add(mem_t {    0,    0,    0,    0});   // 01 
 
             add(mem_t {    0,    0,    0,    0});   // 02 
 
@@ -17,7 +17,7 @@ class BankPWM : public LBank {
 
             add(mem_t {    0,    0,    0,    0});   // 05 
 
-            add(mem_t {    0,    0,    0,    0});   // 06
+            add(mem_t {  255,  255,  255,  255});   // 06 on
 
             add(mem_t {    0,    0,    0,    0});   // 07 
 
