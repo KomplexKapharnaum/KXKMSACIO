@@ -109,7 +109,7 @@ class ServiceListener(object):
                             nameSplit[1].ljust(12), 
                             '', 
                             '-'.join( [k for k in nameSplit[2:-1] if not k.startswith('v')]   ).ljust(5), 
-                            (cli['version']).ljust(7),
+                            str(cli['version']).ljust(7),
                             '',
                             cli['ip']
                             )
