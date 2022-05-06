@@ -42,5 +42,7 @@ class BankSK : public LBank {
             add(mem_t {  255,   0,   0,   0,   0,      11,        50,       43,        0,          0,       0,       0,       0,       0,           0,  255}); // 07 sablier 3 sec
                 makeSablier(mem, 3);
       
+            add(mem_t {    0,   0,   0,   0,   0,       0,         0,        0,        0,          0,       0,       0,       0,       0,           0,  255}); // 08 stop -> black
+
         }
 };
