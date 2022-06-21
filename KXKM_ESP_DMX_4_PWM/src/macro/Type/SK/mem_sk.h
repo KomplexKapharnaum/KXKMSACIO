@@ -51,7 +51,7 @@ class BankSK : public LBank {
             add(mem_t {    0,   0,   0,   0,   0,       0,         0,        0,        0,          0,       0,       0,       0,       0,           0,    0}); // 15 BLACK stm leave lset mem
 
 
-            nowifi(mem_t { 255,   0,   0,   0,    0,       0,         0,        0,        0,          0,       0,       0,       0,       0,           0,  255});            
+            // nowifi(mem_t { 255,   0,   0,   0,    0,       0,         0,        0,        0,          0,       0,       0,       0,       0,           0,  255});            
         }
 };
 
