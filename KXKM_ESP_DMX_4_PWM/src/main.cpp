@@ -1,6 +1,6 @@
 #include <Arduino.h>
 
-#define LULU_VER 95
+#define LULU_VER 96
 
 // .##.......##.....##.##.......##.....##....########.##....##.########..########
 // .##.......##.....##.##.......##.....##.......##.....##..##..##.....##.##......
@@ -10,7 +10,7 @@
 // .##.......##.....##.##.......##.....##.......##.......##....##........##......
 // .########..#######..########..#######........##.......##....##........########
 
-#define LULU_TYPE 2
+#define LULU_TYPE 34
 
 // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot"
 // 10="power" 11="DMX_strobe" 12="DMX_Par_led" 13="NODE_dmx_thru"
@@ -33,10 +33,10 @@
 
 /////////////////////////////////////////ID/////////////////////////////////////////
 
-#define K32_SET_NODEID 1      // board unique id
-#define K32_SET_CHANNEL 1     // board channel mqtt elp 1
-#define LIGHT_SET_ID 11       // permet de calculer l'adresse DMX ota
-#define ARTNET_SET_UNIVERSE 1 // univers artnet
+// #define K32_SET_NODEID 1      // board unique id
+// #define K32_SET_CHANNEL 1     // board channel mqtt elp 1
+// #define LIGHT_SET_ID 4       // permet de calculer l'adresse DMX ota
+// #define ARTNET_SET_UNIVERSE 1 // univers artnet
 //                    // defo ARTNET_SET_UNIVERSE 0  => LULU-TYPE 6 & 7 & 8 & 10 & 20 & 34
 //                    // defo ARTNET_SET_UNIVERSE 1  => LULU-TYPE 1 & 2 & 5 & 50
 //                    // defo ARTNET_SET_UNIVERSE 2  => LULU-TYPE 9 & 72
