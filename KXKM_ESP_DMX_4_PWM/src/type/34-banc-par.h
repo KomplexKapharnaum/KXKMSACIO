@@ -176,13 +176,13 @@ void setup_device()
     // NOWIFI
 
     // EVENT: wifi lost
-    wifi->onDisconnect([&]()
+    K32_wifi::onDisconnect([]()
     {
         LOG("WIFI: connection lost..");
         //  light->anim("artnet-strip")->push(MEM_NO_WIFI, LULU_PATCHSIZE);
-        light->anim("artnet-strip")->nowifi();
-        light->anim("artnet-pwm")->nowifi();
-        light->anim("artnet-par")->nowifi();
+        // light->anim("artnet-strip")->nowifi();
+        // light->anim("artnet-pwm")->nowifi();
+        // light->anim("artnet-par")->nowifi();
     });
 
     // .########..########.##.....##..#######..########.########
