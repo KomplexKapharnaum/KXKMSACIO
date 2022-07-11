@@ -1,37 +1,31 @@
 
 #define L_NAME "banc_par" // a tester
 
-// PAR
-#define PAR_N 1
-#define PAR_PATCHSIZE 5
+#define LULU_MEMNOWIFI_MASTER 127
+
+#include "macro/Show/parlement/mem_sk_parlement.h"         // PAR_PATCHSIZE = 5
+#include "macro/Type/4pwm/mem_4pwm.h"                      // PWM_N_CHAN = 4
+// #include "macro/Show/parlement/mem_4pwm_parlement.h"    
+#include "macro/Show/parlement/mem_parled_solo.h"          // PAR_PATCHSIZE = 5
 
 // LEDS
 #define LULU_STRIP_TYPE   LED_SK6812W_V3  // Type de strip led          
 #define LULU_STRIP_SIZE   120
-#define STRIP_PATCHSIZE   16
 
-// PWM
-#define PWM 4
+// PAR
+#define PAR_N 1
 
 // PATCH
-// #define PATCHSIZE   PWM + STRIP_PATCHSIZE + PAR_PATCHSIZE
-#define PATCHSIZE   STRIP_PATCHSIZE + PWM_N_CHAN + PAR_PATCHSIZE
-// #define PATCHSIZE   25 // PWM_N_CHAN + STRIP_PATCHSIZE + PAR_PATCHSIZE
+#define PATCHSIZE  (STRIP_PATCHSIZE + PWM_N_CHAN + PAR_PATCHSIZE)   // 25
 
+// ARTNET
 #define ARTNET_ENABLE 1
 #define ARTNET_DMXNODE 0
-#define LULU_MEMNOWIFI_MASTER 127
 
-#include "macro/Type/4pwm/mem_4pwm.h"
-// #include "macro/Show/parlement/mem_4pwm_parlement.h"
-#include "macro/Show/parlement/mem_parled_solo.h"
-#include "macro/Show/parlement/mem_sk_parlement.h"
 
 
 void setup_device()
 {
-    LOGF("PATCHSIZE %d",PATCHSIZE);
-    LOG("");
     // .########.####.##.....##.########.##.....##.########..########..######.
     // .##........##...##...##.....##....##.....##.##.....##.##.......##....##
     // .##........##....##.##......##....##.....##.##.....##.##.......##......
@@ -55,7 +49,7 @@ void setup_device()
     // PAR fixtures
     K32_fixture *par[PAR_N] = {nullptr};
     for (int k = 0; k < PAR_N; k++)
-        par[k] = new K32_dmxfixture(dmx, (1 + PATCHSIZE * k) + PWM_N_CHAN + STRIP_PATCHSIZE, PAR_PATCHSIZE);
+        par[k] = new K32_dmxfixture(dmx, (1 + int(PATCHSIZE) * k) + PWM_N_CHAN + STRIP_PATCHSIZE, PAR_PATCHSIZE);
     light->addFixtures(par, PAR_N);
 
     // .########.########..######..########.....######..########..#######..##.....##.########.##....##..######..########
@@ -161,10 +155,10 @@ void setup_device()
                             // }
                             // LOG("");
 
-                            if (length >= PWM_N_CHAN + STRIP_PATCHSIZE)
+                            if (length >= STRIP_PATCHSIZE)
                                 light->anim("artnet-strip")->push(data, STRIP_PATCHSIZE);
                             
-                            if (length >= PWM_N_CHAN)
+                            if (length >= PWM_N_CHAN + STRIP_PATCHSIZE)
                                light->anim("artnet-pwm")->push(&data[STRIP_PATCHSIZE], PWM_N_CHAN);
 
                             if (length >= PATCHSIZE) 
@@ -185,10 +179,10 @@ void setup_device()
     wifi->onDisconnect([&]()
     {
         LOG("WIFI: connection lost..");
-         light->anim("artnet-strip")->nowifi;
-         light->anim("artnet-pwm")->nowifi;
-         light->anim("artnet-par")->nowifi;
-        // light->anim("artnet-strip")->push(0); // @master 0
+        //  light->anim("artnet-strip")->push(MEM_NO_WIFI, LULU_PATCHSIZE);
+        light->anim("artnet-strip")->nowifi();
+        light->anim("artnet-pwm")->nowifi();
+        light->anim("artnet-par")->nowifi();
     });
 
     // .########..########.##.....##..#######..########.########

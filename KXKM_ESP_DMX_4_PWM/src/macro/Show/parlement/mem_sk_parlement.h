@@ -12,10 +12,12 @@ void makeSablier(LPreset* mem, int durationSeconds)
                                                         });
 }
 
+#define STRIP_PATCHSIZE 16
+
 
 class BankSK : public LBank { 
     public:
-        BankSK() : LBank(16) {
+        BankSK() : LBank(STRIP_PATCHSIZE) {
 
             //      {master , r  , g  , b  , w  ,pix mod , pix long , pix_pos , str_mod , str_speed , r_fond , g_fond , b_fond , w_fond , mirror_mod , zoom }
             //      {0      , 1  , 2  , 3  , 4  ,5       , 6        , 7       , 8       , 9         , 10     , 11     , 12     , 13     , 14         , 15   } adr + -1
