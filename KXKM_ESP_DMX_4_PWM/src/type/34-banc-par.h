@@ -8,14 +8,14 @@
 // LEDS
 #define LULU_STRIP_TYPE   LED_SK6812W_V3  // Type de strip led          
 #define LULU_STRIP_SIZE   120
-#define STRIP_PATCHSIZE 16
+#define STRIP_PATCHSIZE   16
 
 // PWM
 #define PWM 4
 
 // PATCH
 // #define PATCHSIZE   PWM + STRIP_PATCHSIZE + PAR_PATCHSIZE
-#define PATCHSIZE   PWM_N_CHAN + STRIP_PATCHSIZE + PAR_PATCHSIZE
+#define PATCHSIZE   STRIP_PATCHSIZE + PWM_N_CHAN + PAR_PATCHSIZE
 // #define PATCHSIZE   25 // PWM_N_CHAN + STRIP_PATCHSIZE + PAR_PATCHSIZE
 
 #define ARTNET_ENABLE 1
@@ -146,19 +146,28 @@ void setup_device()
         ->drawTo(par, PAR_N)
         ->play();
 
+
     // ARTNET: subscribe dmx frame
-    K32_artnet::onDmx({.address = (1 + (light->id() - 1) * PATCHSIZE),
+    K32_artnet::onDmx({.address = (1 + (light->id() - 1) * int(PATCHSIZE)),
                        .framesize = PATCHSIZE,
                        .callback = [](const uint8_t *data, int length)
                        {
-                            if (length >= PWM_N_CHAN)
-                               light->anim("artnet-pwm")->push(data, PWM_N_CHAN);
+                            // LOGINL(" dmx:");
+                            // for (int i=0; i<length; i++)
+                            // {
+                            //     LOGINL(" ");
+                            //     LOGINL(data[i]);
+                            // }
+                            // LOG("");
 
                             if (length >= PWM_N_CHAN + STRIP_PATCHSIZE)
-                                light->anim("artnet-strip")->push(&data[PWM_N_CHAN], STRIP_PATCHSIZE);
+                                light->anim("artnet-strip")->push(data, STRIP_PATCHSIZE);
+                            
+                            if (length >= PWM_N_CHAN)
+                               light->anim("artnet-pwm")->push(&data[STRIP_PATCHSIZE], PWM_N_CHAN);
 
                             if (length >= PATCHSIZE) 
-                                light->anim("artnet-par")->push(&data[PWM_N_CHAN + STRIP_PATCHSIZE], PAR_PATCHSIZE);
+                                light->anim("artnet-par")->push(&data[STRIP_PATCHSIZE + PWM_N_CHAN], PAR_PATCHSIZE);
                        }});
 
     // .##....##..#######.....##......##.####.########.####
