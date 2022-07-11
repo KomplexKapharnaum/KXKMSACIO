@@ -20,6 +20,7 @@
 
 #define ARTNET_ENABLE 1
 #define ARTNET_DMXNODE 0
+#define LULU_MEMNOWIFI_MASTER 127
 
 #include "macro/Type/4pwm/mem_4pwm.h"
 // #include "macro/Show/parlement/mem_4pwm_parlement.h"
@@ -181,12 +182,14 @@ void setup_device()
     // NOWIFI
 
     // EVENT: wifi lost
-    // wifi->onDisconnect([&]()
-    // {
-    //     LOG("WIFI: connection lost..");
-    //     //  light->anim("artnet-strip")->push(MEM_NO_WIFI, LULU_PATCHSIZE);
-    //     light->anim("artnet-strip")->push(0); // @master 0
-    // });
+    wifi->onDisconnect([&]()
+    {
+        LOG("WIFI: connection lost..");
+         light->anim("artnet-strip")->nowifi;
+         light->anim("artnet-pwm")->nowifi;
+         light->anim("artnet-par")->nowifi;
+        // light->anim("artnet-strip")->push(0); // @master 0
+    });
 
     // .########..########.##.....##..#######..########.########
     // .##.....##.##.......###...###.##.....##....##....##......
