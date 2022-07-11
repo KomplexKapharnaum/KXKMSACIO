@@ -170,7 +170,7 @@ void setup_device()
                            // LOGINL("ARTFRAME: "); LOGF("length=%d ", length); for (int k = 0; k < length; k++) LOGF("%d ", data[k]); LOG();
                            light->anim("artnet-strip")->push(data, min(sizeSK, length));
 #ifdef PWM_ON_OFF
-                           light->anim("artnet-pwm")->push(data, min(sizePWM, length)); // FIX
+                           light->anim("artnet-pwm")->push(&data[sizeSK], min(sizePWM, length)); // FIX
 #endif
                        }});
 
