@@ -1,10 +1,12 @@
 #ifndef mem_parled_parlement_solo_h
 #define mem_parled_parlement_solo_h
 
+#define PAR_PATCHSIZE 5
+
 class BankPar : public LBank
 {
 public:
-    BankPar () : LBank(5)
+    BankPar () : LBank(PAR_PATCHSIZE)
     {
         //    {0      , 1  , 2  , 3  , 4  } adr + -1
         //    {master , r  , g  , b  , str,   m , r  , g  , b  , str,   m , r  , g  , b  , str,   m , r  , g  , b  , str,   m , r  , g  , b  , str, }
