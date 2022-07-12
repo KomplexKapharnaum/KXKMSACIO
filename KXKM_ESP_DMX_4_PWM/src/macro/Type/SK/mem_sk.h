@@ -1,12 +1,15 @@
 #include <K32_presets.h>
 
+#define STRIP_PATCHSIZE 16
+
+
 // 
 // MEM ANIMATOR DATA 
 //
 
 class BankSK : public LBank { 
     public:
-        BankSK() : LBank(16) {
+        BankSK() : LBank(STRIP_PATCHSIZE) {
 //                  {0      , 1  , 2  , 3  , 4  ,5       , 6        , 7       , 8       , 9         , 10     , 11     , 12     , 13     , 14         , 15   } adr + -1
 //                  {master , r  , g  , b  , w  ,pix mod , pix long , pix_pos , str_mod , str_speed , r_fond , g_fond , b_fond , w_fond , mirror_mod , zoom }
             add(mem_t {  133, 133,   0,   0,   0,       0,         0,        0,        0,          0,       0,       0,       0,       0,           0,  255}); // 00 Red

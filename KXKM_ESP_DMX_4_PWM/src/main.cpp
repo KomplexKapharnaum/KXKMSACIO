@@ -112,36 +112,36 @@ void setup()
   ////////////////// INFO //////////////////////////////////////
 
   // Monitoring refresh // FIX
-  // k32->timer->every(REFRESH_INFO, []()
-  //       {
-  //         if (stm32)
-  //           light->anim("battery-strip")->push(stm32->battery());
+  k32->timer->every(REFRESH_INFO, []()
+        {
+          if (stm32)
+            light->anim("battery-strip")->push(stm32->battery());
 
-  //         static bool toggleRSSI = false;
-  //         toggleRSSI = !toggleRSSI;
+          static bool toggleRSSI = false;
+          toggleRSSI = !toggleRSSI;
 
-  //         // Wifi
-  //         if (wifi)
-  //         {
-  //           int rssi = wifi->getRSSI();
-  //           if (rssi < 0)
-  //             light->anim("rssi-strip")->push(rssi);
-  //           else if (toggleRSSI)
-  //             light->anim("rssi-strip")->push(-100);
-  //           else
-  //             light->anim("rssi-strip")->push(0);
-  //         }
+          // Wifi
+          if (wifi)
+          {
+            int rssi = wifi->getRSSI();
+            if (rssi < 0)
+              light->anim("rssi-strip")->push(rssi);
+            else if (toggleRSSI)
+              light->anim("rssi-strip")->push(-100);
+            else
+              light->anim("rssi-strip")->push(0);
+          }
 
-  //         // Bluetooth
-  //         // TODO: enable BT
-  //         // if(bt)
-  //         // {
-  //         //   int rssi = bt->getRSSI();
-  //         //   if (rssi > 0)         light->anim("rssi-strip")->push(rssi);
-  //         //   else if (toggleRSSI)  light->anim("rssi-strip")->push(100);
-  //         //   else                  light->anim("rssi-strip")->push(0);
-  //         // }
-  //       });
+          // Bluetooth
+          // TODO: enable BT
+          // if(bt)
+          // {
+          //   int rssi = bt->getRSSI();
+          //   if (rssi > 0)         light->anim("rssi-strip")->push(rssi);
+          //   else if (toggleRSSI)  light->anim("rssi-strip")->push(100);
+          //   else                  light->anim("rssi-strip")->push(0);
+          // }
+        });
 
   // Heap Memory log
   // k32->timer->every(1000, []() {
