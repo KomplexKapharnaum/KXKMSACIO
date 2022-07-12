@@ -176,14 +176,14 @@ void setup_device()
     // NOWIFI
 
     // EVENT: wifi lost
-    wifi->onDisconnect([&]()
-    {
-        LOG("WIFI: connection lost..");
-        //  light->anim("artnet-strip")->push(MEM_NO_WIFI, LULU_PATCHSIZE);
-        light->anim("artnet-strip")->nowifi();
-        light->anim("artnet-pwm")->nowifi();
-        light->anim("artnet-par")->nowifi();
-    });
+    // wifi->onDisconnect([&]()
+    // {
+    //     LOG("WIFI: connection lost..");
+    //     //  light->anim("artnet-strip")->push(MEM_NO_WIFI, LULU_PATCHSIZE);
+    //     light->anim("artnet-strip")->nowifi();
+    //     light->anim("artnet-pwm")->nowifi();
+    //     light->anim("artnet-par")->nowifi();
+    // });
 
     // .########..########.##.....##..#######..########.########
     // .##.....##.##.......###...###.##.....##....##....##......
