@@ -1,14 +1,7 @@
 
 #define L_NAME "Sac"
 
-#define LULU_STRIP_SIZE 120
-#define LULU_STRIP_TYPE LED_SK6812W_V3 // Strip type
-
-#define PWR_FAKE_CURRENT 12500
-
-#define ARTNET_ENABLE 1
-// #define ARTNET_DMXNODE 1
-
+// PWM
 #define PWM_ON_OFF 1
 
 #include "macro/Type/SK/mem_sk.h"
@@ -16,6 +9,17 @@
 #ifdef PWM_ON_OFF
 #include "macro/Type/4pwm/mem_4pwm.h"
 #endif
+
+// LEDS
+#define LULU_STRIP_TYPE LED_SK6812W_V3 // Strip type
+#define LULU_STRIP_SIZE 120
+
+#define PWR_FAKE_CURRENT 12500
+
+// ARTNET
+#define ARTNET_ENABLE 1
+// #define ARTNET_DMXNODE 1
+
 
 void setup_device()
 {
