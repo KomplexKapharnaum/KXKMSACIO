@@ -10,7 +10,7 @@
 // .##.......##.....##.##.......##.....##.......##.......##....##........##......
 // .########..#######..########..#######........##.......##....##........########
 
-#define LULU_TYPE 34
+#define LULU_TYPE 1
 
 // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot"
 // 10="power" 11="DMX_strobe" 12="DMX_Par_led" 13="NODE_dmx_thru"
@@ -35,16 +35,17 @@
 
 // #define K32_SET_NODEID 1      // board unique id
 // #define K32_SET_CHANNEL 1     // board channel mqtt elp 1
-// #define LIGHT_SET_ID 4       // permet de calculer l'adresse DMX ota
-// #define ARTNET_SET_UNIVERSE 1 // univers artnet
+#define LIGHT_SET_ID 1       // permet de calculer l'adresse DMX ota
+#define ARTNET_SET_UNIVERSE 8 // univers artnet
 //                    // defo ARTNET_SET_UNIVERSE 0  => LULU-TYPE 6 & 7 & 8 & 10 & 20 & 34
-//                    // defo ARTNET_SET_UNIVERSE 1  => LULU-TYPE 1 & 2 & 5 & 50
+//                    // defo ARTNET_SET_UNIVERSE 1  => LULU-TYPE 2 & 5 & 50
 //                    // defo ARTNET_SET_UNIVERSE 2  => LULU-TYPE 9 & 72
 //                    // defo ARTNET_SET_UNIVERSE 3  => LULU-TYPE 50
 //                    // defo ARTNET_SET_UNIVERSE 4  => LULU-TYPE 11
 //                    // defo ARTNET_SET_UNIVERSE 5  => LULU-TYPE 12 & 21 & 22
 //                    // defo ARTNET_SET_UNIVERSE 6  => LULU-TYPE 4 & 30 & 31 & 32 & 33 & 40
 //                    // defo ARTNET_SET_UNIVERSE 7  => LULU-TYPE 3 & 23
+//                    // defo ARTNET_SET_UNIVERSE 8  => LULU-TYPE 1
 //                    // defo ARTNET_SET_UNIVERSE 16 => LULU-TYPE 60 (Lyres)
 
 /////////////////////////////////////////K32/////////////////////////////////////////
