@@ -144,12 +144,13 @@ void setup()
           });
 
   // Heap Memory log
-  // k32->timer->every(1000, []() {
-  //   static int lastheap = 0;
-  //   int heap = ESP.getFreeHeap();
-  //   LOGF2("Free memory: %d / %d\n", heap, heap - lastheap);
-  //   lastheap = heap;
-  // });
+  k32->timer->every(1000, []() {
+    static int lastheap = 0;
+    int heap = ESP.getFreeHeap();
+    // LOGF2("Free memory: %d / %d\n", heap, heap - lastheap);
+    lastheap = heap;
+    if (heap < 50000) LOGF2("WARNING: free memory < 50K, new task might not properly start. %d / %d\n", heap, heap - lastheap);
+  });
 
   
 
