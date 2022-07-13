@@ -160,9 +160,9 @@ void k32_setup() {
         bt = new K32_bluetooth(k32, "k32-" + String(k32->system->id()));
 
         // TODO use event !
-        bt->onConnect([&]() {
-            bt->send("Yo Rasta!");
-        });
+        // bt->onConnect([&]() {
+        //     bt->send("Yo Rasta!");
+        // });
 
     }
     
