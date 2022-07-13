@@ -23,9 +23,8 @@ K32_pwm* pwm = nullptr;
 #include <K32_wifi.h>
 K32_wifi* wifi = nullptr;
 
-// #include <K32_bluetooth.h>
-// K32_bluetooth* bt = nullptr;
-// TODO: re-enable BT
+#include <K32_bluetooth.h>
+K32_bluetooth* bt = nullptr;
 
 #include <K32_osc.h>
 K32_osc* osc = nullptr;
@@ -61,11 +60,12 @@ void k32_setup() {
 
     //////////////////////////////////////// K32_lib ////////////////////////////////////
     k32 = new K32();
-
+    // Serial.begin(115200, SERIAL_8N1);
+    
     //////////////////////////////////////// K32 hardware ////////////////////////////////////
     // STM32
     #ifdef HW_ENABLE_STM32
-        stm32 = new K32_stm32(k32, true);
+        // stm32 = new K32_stm32(k32, true);
     #endif
 
     // BUTTONS (GPIO)
@@ -95,23 +95,19 @@ void k32_setup() {
         if (PWM_PIN[k32->system->hw()][k] > 0) // TODO: allow -1 pin but disable output
             pwm->attach(PWM_PIN[k32->system->hw()][k]);
 
-    /////////////////////////////////////////////// LIGHT //////////////////////////////////////
+    // /////////////////////////////////////////////// LIGHT //////////////////////////////////////
 
     light = new K32_light(k32);
     light->loadprefs();
     
     dmx = new K32_dmx(DMX_PIN[k32->system->hw()], DMX_OUT);    
 
-    setup_device();
+    
 
 
-    /////////////////////////////////////////////// NAME //////////////////////////////////////
+    // /////////////////////////////////////////////// NAME //////////////////////////////////////
 
-    String nodeName = L_NAME;
-    // if (LULU_STRIP_TYPE == LED_SK6812_V1)         nodeName += "-SK";
-    // else if (LULU_STRIP_TYPE == LED_SK6812W_V1)   nodeName += "-SKW";
-    // else                                          nodeName += "-WS";
-    nodeName += "-" + String(light->id()) + "-v" + String(LULU_VER);
+    String nodeName = String(L_NAME) + "-" + String(light->id()) + "-v" + String(LULU_VER);
 
     LOG("\nNAME:   " + nodeName );
     LOGF("CHANNEL: %d\n\n", k32->system->channel());
@@ -119,7 +115,7 @@ void k32_setup() {
     /////////////////////////////////////////////// NETWORK //////////////////////////////////////
 
     ////////////////// WIFI MODE
-    if (wifiMode()) 
+    if (!wifiMode()) 
     {
         // WIFI
         LOG("NETWORK: wifi");
@@ -157,18 +153,18 @@ void k32_setup() {
     }
     
     ////////////////// BLUETOOTH MODE
-    // TODO: re-enable BT
-    // else {
-    //     LOG("NETWORK: bluetooth");
+    else {
+        // BLUETOOTH
+        LOG("NETWORK: bluetooth");
         
-    //     bt = new K32_bluetooth(k32, "k32-" + String(k32->system->id()));
+        bt = new K32_bluetooth(k32, "k32-" + String(k32->system->id()));
 
-    //     bt->onConnect([&]() {
-    //         bt->send("Yo Rasta!");
-    //     });
-    // }
+        // TODO use event !
+        bt->onConnect([&]() {
+            bt->send("Yo Rasta!");
+        });
 
-
-
+    }
+    
+    setup_device();
 }
-
