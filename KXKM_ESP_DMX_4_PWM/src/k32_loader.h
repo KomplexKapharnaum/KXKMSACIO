@@ -157,7 +157,7 @@ void k32_setup() {
         // BLUETOOTH
         LOG("NETWORK: bluetooth BROKEN");
         
-        // bt = new K32_bluetooth(k32, "k32-" + String(k32->system->id()));
+        bt = new K32_bluetooth(k32, "k32-" + String(k32->system->id()));
 
         // // TODO use event !
         // bt->onConnect([&]() {
