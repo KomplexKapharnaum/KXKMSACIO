@@ -65,7 +65,7 @@ void k32_setup() {
     //////////////////////////////////////// K32 hardware ////////////////////////////////////
     // STM32
     #ifdef HW_ENABLE_STM32
-        // stm32 = new K32_stm32(k32, true);
+        stm32 = new K32_stm32(k32, true);
     #endif
 
     // BUTTONS (GPIO)
@@ -115,7 +115,7 @@ void k32_setup() {
     /////////////////////////////////////////////// NETWORK //////////////////////////////////////
 
     ////////////////// WIFI MODE
-    if (!wifiMode()) 
+    if (wifiMode()) 
     {
         // WIFI
         LOG("NETWORK: wifi");
@@ -155,11 +155,11 @@ void k32_setup() {
     ////////////////// BLUETOOTH MODE
     else {
         // BLUETOOTH
-        LOG("NETWORK: bluetooth");
+        LOG("NETWORK: bluetooth BROKEN");
         
-        bt = new K32_bluetooth(k32, "k32-" + String(k32->system->id()));
+        // bt = new K32_bluetooth(k32, "k32-" + String(k32->system->id()));
 
-        // TODO use event !
+        // // TODO use event !
         // bt->onConnect([&]() {
         //     bt->send("Yo Rasta!");
         // });
