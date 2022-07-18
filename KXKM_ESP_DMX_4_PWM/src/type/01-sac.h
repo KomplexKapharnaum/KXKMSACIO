@@ -7,7 +7,7 @@
 
 // LEDS
 #define LULU_STRIP_TYPE LED_SK6812W_V3 // Strip type
-#define LULU_STRIP_SIZE 30
+#define LULU_STRIP_SIZE 120
 
 // LEDS ATOM
 // #define LULU_STRIP_TYPE LED_WS2812B_V3 // Strip type
@@ -58,7 +58,7 @@ void setup_device()
     // TEST Sequence
 
     // INIT TEST STRIPS
-    light->anim("test-strip", new Anim_test_strip, LULU_STRIP_SIZE)
+    light->anim("test-strip", new Anim_test_strip, LULU_STRIP_SIZE + 30)
         ->drawTo(strips, LED_N_STRIPS)
         ->push(300)
         ->master(LULU_PREV_MASTER)
@@ -97,8 +97,8 @@ void setup_device()
     light->anim("memprev-strip", new Anim_preview, LULU_PREV_SIZE, LULU_STRIP_SIZE + 8)
         ->drawTo(strips[0])
         ->bank(new BankSK_PREV) // TODO
-        ->mem(-1)
-        ->master(LULU_PREV_MASTER);
+        ->master(LULU_PREV_MASTER)
+        ->mem(-1);
 
     // ANIM pwm - presets
     light->anim("mem-pwm", new Anim_datathru, PWM_N_CHAN)
