@@ -125,7 +125,7 @@ void k32_setup() {
         
 
         // OSC
-        // osc = new K32_osc(k32, wifi);    // TODO: re-enable OSC
+        osc = new K32_osc(k32, wifi, stm32);    // TODO: re-enable OSC
         
 
         //ARTNET

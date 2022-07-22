@@ -96,7 +96,7 @@ void setup()
           // .broker = "2.0.0.10", // Riri dev home
           // .broker = "192.168.43.132",  // MGR dev home
           .beatInterval = 5000, // heartbeat interval milliseconds (0 = disable) 5000
-          .statusInterval = 0   // full beacon interval milliseconds (0 = disable) 15000
+          .statusInterval = 15000   // full beacon interval milliseconds (0 = disable) 15000
       });
 
     ////////////////// OSC
@@ -104,8 +104,8 @@ void setup()
       osc->start({
           .port_in = 1818,        // osc port input (0 = disable)  // 1818
           .port_out = 1819,       // osc port output (0 = disable) // 1819
-          .beatInterval = 5000,   // heartbeat interval milliseconds (0 = disable)
-          .statusInterval = 15000 // full beacon interval milliseconds (0 = disable)
+          .beatInterval = 0,   // heartbeat interval milliseconds (0 = disable)
+          .statusInterval = 0 // full beacon interval milliseconds (0 = disable)
       });
   }
 
