@@ -71,7 +71,16 @@ void k32_setup() {
         buttons->add(39, "atom");
 
     // MCP
-    mcp = new K32_mcp(MCP_PIN[k32->system->hw()]);
+    mcp = new K32_mcp(k32);
+    // if (mcp) {
+    //     k32->on("mcp/press", [](Orderz* order){
+    //         if (order->getData(0)->toInt() == 14 && order->getData(1)->toStr() == "long") k32->system->reset();
+    //     });
+    //     k32->on("mcp/release", [](Orderz* order){
+    //         LOGF2("onRelease %d %s\n", order->getData(0)->toInt(), order->getData(1)->toStr());
+    //         if (order->getData(0)->toInt() == 14 && order->getData(1)->toStr() == "long") k32->system->reset();
+    //     });
+    // }
 
     // POWER
     power = new K32_power(stm32, LIPO, true);
@@ -108,6 +117,7 @@ void k32_setup() {
 
     LOG("\nNAME:   " + nodeName );
     LOGF("CHANNEL: %d\n\n", k32->system->channel());
+    LOGF("LIGHT ID: %d\n", light->id());
     
     /////////////////////////////////////////////// NETWORK //////////////////////////////////////
 
@@ -136,6 +146,8 @@ void k32_setup() {
 
             K32_artnet::onFullDmx([](const uint8_t *data, int length)
             {
+                // LOGF("Artnet frame %d\n", length);
+
                 // Force Auto
                 if (length > 511 && data[511] > 250) // data 512 = end dmx trame   
                     remote->setState(REMOTE_AUTO)->lock();
