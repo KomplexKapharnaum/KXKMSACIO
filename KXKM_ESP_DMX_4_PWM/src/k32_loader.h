@@ -47,10 +47,7 @@ K32_dmx* dmx = nullptr;
 // CHECK MCP SWITCH to select Wifi or BT
 //
 bool wifiMode() {
-    if (mcp) {
-        mcp->input(14);
-        return mcp->state(14);
-    }
+    if (mcp) return mcp->state(14);
     else return true;
 }
 
