@@ -52,9 +52,7 @@ class BankSK : public LBank {
                 mem->mod(new K32_mod_sinus)->at(0)->period(8500)->mini(38)->maxi(217);
             
             add(    0,   0,   0,   0,   0,       0,         0,        0,        0,          0,       0,       0,       0,       0,           0,    0); // 15 BLACK stm leave lset mem
-
-
-            nowifi( 255,   255,   0,   0,    0,       0,         0,        0,        0,          0,       0,       0,       0,       0,           0,  255);            
+       
         }
 };
 
