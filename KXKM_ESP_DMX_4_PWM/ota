@@ -190,8 +190,14 @@ if __name__ == '__main__':
         print("SENDER ip: \t\t", ip)
         print("")
 
+        print("Options:")
+        print("\t -v version")
+        print("\t -t type")
+        print("\t -i ip")
+        print("")
+        
         try:
-            a = input("Detecting devices... \n"+
+            a = input("Detecting devices... \n\n"+
                       "You can specify target indexes list, i.e.:  2,6,12  \n"
                       "Press Enter when ready.\n\n"+
                       "---------- "+"Type ------------ Version ----- IP ---\n")
