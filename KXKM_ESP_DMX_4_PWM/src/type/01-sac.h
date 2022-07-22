@@ -180,8 +180,8 @@ void setup_device()
     K32_wifi::onDisconnect([]()
     {
         LOG("WIFI: connection lost..");
-        // light->anim("artnet-strip")->nowifi();
-        // light->anim("artnet-pwm")->nowifi();
+        light->anim("artnet-strip")->nowifi();
+        light->anim("artnet-pwm")->nowifi();
     });
 
     // .########..########.##.....##..#######..########.########
