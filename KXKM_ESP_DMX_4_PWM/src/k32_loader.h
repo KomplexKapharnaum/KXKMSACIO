@@ -70,17 +70,16 @@ void k32_setup() {
     if (k32->system->hw() >= 3) // ATOM
         buttons->add(39, "atom");
 
-    // MCP
+    // MCP 
     mcp = new K32_mcp(k32);
-    // if (mcp) {
-    //     k32->on("mcp/press", [](Orderz* order){
-    //         if (order->getData(0)->toInt() == 14 && order->getData(1)->toStr() == "long") k32->system->reset();
-    //     });
-    //     k32->on("mcp/release", [](Orderz* order){
-    //         LOGF2("onRelease %d %s\n", order->getData(0)->toInt(), order->getData(1)->toStr());
-    //         if (order->getData(0)->toInt() == 14 && order->getData(1)->toStr() == "long") k32->system->reset();
-    //     });
-    // }
+    if (mcp) {
+        k32->on("mcp/press", [](Orderz* order){
+            if (order->getData(0)->toInt() == 14 && strcmp(order->getData(1)->toStr(), "long") == 0) k32->system->reset();
+        });
+        k32->on("mcp/release", [](Orderz* order){
+            if (order->getData(0)->toInt() == 14 && strcmp(order->getData(1)->toStr(), "long") == 0) k32->system->reset();
+        });
+    }
 
     // POWER
     power = new K32_power(stm32, LIPO, true);
@@ -175,5 +174,11 @@ void k32_setup() {
 
     }
     
+    ////////////////// RUN SPECIFIC DEVICE
     setup_device();
+
+
+    ///////////////// BLINK READY
+    uint8_t l[6] = {255,255,255,255,255,255};
+    if (stm32) stm32->blink(l, 500);
 }
