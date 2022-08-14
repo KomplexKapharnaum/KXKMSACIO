@@ -1,7 +1,7 @@
 
 #include <K32_light.h>
 #include <hardware/K32_remote.h>
-#include "mem.h"
+// #include "mem.h" // Not in ESP IDF 4
 
 
 // ANIM RSSI

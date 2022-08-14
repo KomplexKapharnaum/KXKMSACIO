@@ -301,7 +301,7 @@ class Anim_dmx_strip : public K32_anim {
 
         // Dash Length + Offset
         int dashLength  = max(1, scale255(segmentSize, data[6]) );          // pix_start
-        int dashOffset  =  scale255(segmentSize+dashLength, data[7]);                  // pix_pos
+        int dashOffset  =  scale255(segmentSize+2*dashLength, data[7])-dashLength;                  // pix_pos
 
         // 2 colors = color1 one-dash / backColor background
         if (pixMode == 1 || pixMode == 7) 
@@ -326,7 +326,7 @@ class Anim_dmx_strip : public K32_anim {
           {
             if (i >= dashOffset && i < dashOffset+dashLength) 
             {
-              int coef = ((dashOffset+dashLength-1-i) * 255 ) / (dashLength-1);
+              int coef = (dashLength>1) ? ((dashOffset+dashLength-1-i) * 255 ) / (dashLength-1) : 0;
 
               segment[i] %= (uint8_t)coef;
               segment[i] += backColor % (uint8_t)(255-coef);
@@ -343,7 +343,7 @@ class Anim_dmx_strip : public K32_anim {
           {
             if (i >= dashOffset && i < dashOffset+dashLength) 
             {
-              int coef = ((i-dashOffset) * 255 ) / (dashLength-1);
+              int coef = (dashLength>1) ? ((i-dashOffset) * 255 ) / (dashLength-1) : 0;
 
               segment[i] %= (uint8_t)coef;
               segment[i] += backColor % (uint8_t)(255-coef);
@@ -360,14 +360,14 @@ class Anim_dmx_strip : public K32_anim {
           { 
             if (i >= dashOffset && i < dashOffset+dashLength/2) 
             {
-              int coef = ((i-dashOffset) * 255 ) / (dashLength/2);
+              int coef = (dashLength>1) ? ((i-dashOffset) * 255 ) / (dashLength/2) : 0;
 
               segment[i] %= (uint8_t)coef;
               segment[i] += backColor % (uint8_t)(255-coef);
             }
             else if (i >= dashOffset+dashLength/2 && i < dashOffset+dashLength) 
             {
-              int coef = ((dashOffset+dashLength-1-i) * 255 ) / (dashLength/2);
+              int coef = (dashLength>1) ? ((dashOffset+dashLength-1-i) * 255 ) / (dashLength/2) : 0;
 
               segment[i] %= (uint8_t)coef;
               segment[i] += backColor % (uint8_t)(255-coef);

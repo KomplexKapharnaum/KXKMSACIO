@@ -1,6 +1,6 @@
 #include <Arduino.h>
 
-#define LULU_VER 96
+#define LULU_VER 100
 
 // .##.......##.....##.##.......##.....##....########.##....##.########..########
 // .##.......##.....##.##.......##.....##.......##.....##..##..##.....##.##......
@@ -35,8 +35,8 @@
 
 // #define K32_SET_NODEID 1      // board unique id
 // #define K32_SET_CHANNEL 1     // board channel mqtt elp 1
-#define LIGHT_SET_ID 1       // permet de calculer l'adresse DMX ota
-#define ARTNET_SET_UNIVERSE 8 // univers artnet
+// #define LIGHT_SET_ID 8       // permet de calculer l'adresse DMX ota
+// #define ARTNET_SET_UNIVERSE 8 // univers artnet
 //                    // defo ARTNET_SET_UNIVERSE 0  => LULU-TYPE 6 & 7 & 8 & 10 & 20 & 34
 //                    // defo ARTNET_SET_UNIVERSE 1  => LULU-TYPE 2 & 5 & 50
 //                    // defo ARTNET_SET_UNIVERSE 2  => LULU-TYPE 9 & 72
@@ -96,7 +96,7 @@ void setup()
           // .broker = "2.0.0.10", // Riri dev home
           // .broker = "192.168.43.132",  // MGR dev home
           .beatInterval = 5000, // heartbeat interval milliseconds (0 = disable) 5000
-          .statusInterval = 0   // full beacon interval milliseconds (0 = disable) 15000
+          .statusInterval = 15000   // full beacon interval milliseconds (0 = disable) 15000
       });
 
     ////////////////// OSC
@@ -104,56 +104,58 @@ void setup()
       osc->start({
           .port_in = 1818,        // osc port input (0 = disable)  // 1818
           .port_out = 1819,       // osc port output (0 = disable) // 1819
-          .beatInterval = 5000,   // heartbeat interval milliseconds (0 = disable)
-          .statusInterval = 15000 // full beacon interval milliseconds (0 = disable)
+          .beatInterval = 0,   // heartbeat interval milliseconds (0 = disable)
+          .statusInterval = 0 // full beacon interval milliseconds (0 = disable)
       });
   }
 
   ////////////////// INFO //////////////////////////////////////
 
-  // Monitoring refresh // FIX
-  // k32->timer->every(REFRESH_INFO, []()
-  //       {
-  //         if (stm32)
-  //           light->anim("battery-strip")->push(stm32->battery());
+  // Monitoring refresh // TODO Move somewhere else !
+  if (k32)
+    k32->timer->every(REFRESH_INFO, []()
+          {
+            if (stm32)
+              light->anim("battery-strip")->push(stm32->battery());
 
-  //         static bool toggleRSSI = false;
-  //         toggleRSSI = !toggleRSSI;
+            static bool toggleRSSI = false;
+            toggleRSSI = !toggleRSSI;
 
-  //         // Wifi
-  //         if (wifi)
-  //         {
-  //           int rssi = wifi->getRSSI();
-  //           if (rssi < 0)
-  //             light->anim("rssi-strip")->push(rssi);
-  //           else if (toggleRSSI)
-  //             light->anim("rssi-strip")->push(-100);
-  //           else
-  //             light->anim("rssi-strip")->push(0);
-  //         }
+            // Wifi
+            if (wifi && light)
+            {
+              int rssi = wifi->getRSSI();
+              if (rssi < 0)
+                light->anim("rssi-strip")->push(rssi);
+              else if (toggleRSSI)
+                light->anim("rssi-strip")->push(-100);
+              else
+                light->anim("rssi-strip")->push(0);
+            }
 
-  //         // Bluetooth
-  //         // TODO: enable BT
-  //         // if(bt)
-  //         // {
-  //         //   int rssi = bt->getRSSI();
-  //         //   if (rssi > 0)         light->anim("rssi-strip")->push(rssi);
-  //         //   else if (toggleRSSI)  light->anim("rssi-strip")->push(100);
-  //         //   else                  light->anim("rssi-strip")->push(0);
-  //         // }
-  //       });
+            // Bluetooth
+            if(bt && light)
+            {
+              int rssi = bt->getRSSI();
+              if (rssi > 0)         light->anim("rssi-strip")->push(rssi);
+              else if (toggleRSSI)  light->anim("rssi-strip")->push(100);
+              else                  light->anim("rssi-strip")->push(0);
+            }
+          });
 
   // Heap Memory log
-  // k32->timer->every(1000, []() {
-  //   static int lastheap = 0;
-  //   int heap = ESP.getFreeHeap();
-  //   LOGF2("Free memory: %d / %d\n", heap, heap - lastheap);
-  //   lastheap = heap;
-  // });
+  k32->timer->every(1000, []() {
+    static int lastheap = 0;
+    int heap = ESP.getFreeHeap();
+    // LOGF2("Free memory: %d / %d\n", heap, heap - lastheap);
+    lastheap = heap;
+    if (heap < 50000) LOGF2("WARNING: free memory < 50K, new task might not properly start. %d / %d\n", heap, heap - lastheap);
+  });
 
   
 
 } // setup
+
 
 // .##........#######...#######..########.
 // .##.......##.....##.##.....##.##.....##
@@ -165,6 +167,7 @@ void setup()
 ///////////////////////////////////////// LOOP /////////////////////////////////////////////////
 void loop()
 {
-
-  delay(20);
+  delay(200);
+  // light->anim("mem-strip")->printWM();
+  // light->anim("rssi-strip")->printWM();
 } // loop

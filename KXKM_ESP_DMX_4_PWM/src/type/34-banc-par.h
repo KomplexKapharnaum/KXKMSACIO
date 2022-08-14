@@ -5,7 +5,7 @@
 
 #include "macro/Show/parlement/mem_sk_parlement.h"         // PAR_PATCHSIZE = 5
 #include "macro/Type/4pwm/mem_4pwm.h"                      // PWM_N_CHAN = 4
-// #include "macro/Show/parlement/mem_4pwm_parlement.h"    
+// #include "macro/Show/parlement/mem_4pwm_parlement.h"       // PWM_N_CHAN = 4
 #include "macro/Show/parlement/mem_parled_solo.h"          // PAR_PATCHSIZE = 5
 
 // LEDS
@@ -179,7 +179,6 @@ void setup_device()
     K32_wifi::onDisconnect([]()
     {
         LOG("WIFI: connection lost..");
-        //  light->anim("artnet-strip")->push(MEM_NO_WIFI, LULU_PATCHSIZE);
         // light->anim("artnet-strip")->nowifi();
         // light->anim("artnet-pwm")->nowifi();
         // light->anim("artnet-par")->nowifi();
