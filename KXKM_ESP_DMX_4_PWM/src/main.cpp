@@ -10,7 +10,7 @@
 // .##.......##.....##.##.......##.....##.......##.......##....##........##......
 // .########..#######..########..#######........##.......##....##........########
 
-#define LULU_TYPE 1
+#define LULU_TYPE 50
 
 // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot"
 // 10="power" 11="DMX_strobe" 12="DMX_Par_led" 13="NODE_dmx_thru"
@@ -81,7 +81,7 @@ void setup()
 
     // Wifi connect (SSID / password)
     //
-    wifi->connect("kxkm24", NULL); // KXKM 24
+    wifi->connect("kxkm-off", NULL); // KXKM 24
     // wifi->connect("phare", NULL); //KXKM phare
     // wifi->connect("kxkm24lulu", NULL);                                                         //KXKM 24 lulu
     // wifi->connect("mgr4g", NULL);                                                              //Maigre dev
@@ -112,7 +112,7 @@ void setup()
   ////////////////// INFO //////////////////////////////////////
 
   // Monitoring refresh // TODO Move somewhere else !
-  if (k32)
+  if (k32 && LULU_TYPE == 1)
     k32->timer->every(REFRESH_INFO, []()
           {
             if (stm32)
