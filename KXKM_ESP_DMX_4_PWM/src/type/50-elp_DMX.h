@@ -8,8 +8,8 @@
 
 #define ARTNET_ENABLE 1
 
-// #include "macro/Type/SK/mem_sk.h" // defo
-#include "macro/Show/parlement/mem_sk_parlement.h"
+#include "macro/Type/SK/mem_sk.h" // defo
+// #include "macro/Show/parlement/mem_sk_parlement.h"
 
 void setup_device()
 {
