@@ -67,7 +67,7 @@ void k32_setup() {
 
     // BUTTONS (GPIO)
     buttons = new K32_buttons(k32);
-    if (k32->system->hw() >= 3) // ATOM
+    if (k32->system->hw() >= 13) // ATOM
         buttons->add(39, "atom");
 
     // MCP 

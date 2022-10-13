@@ -35,8 +35,8 @@
 
 // #define K32_SET_NODEID 1      // board unique id
 // #define K32_SET_CHANNEL 1     // board channel mqtt elp 1
-// #define LIGHT_SET_ID 8       // permet de calculer l'adresse DMX ota
-// #define ARTNET_SET_UNIVERSE 8 // univers artnet
+#define LIGHT_SET_ID 1       // permet de calculer l'adresse DMX ota
+// #define ARTNET_SET_UNIVERSE 4 // univers artnet
 //                    // defo ARTNET_SET_UNIVERSE 0  => LULU-TYPE 6 & 7 & 8 & 10 & 20 & 34
 //                    // defo ARTNET_SET_UNIVERSE 1  => LULU-TYPE 2 & 5 & 50
 //                    // defo ARTNET_SET_UNIVERSE 2  => LULU-TYPE 9 & 72
@@ -81,12 +81,13 @@ void setup()
 
     // Wifi connect (SSID / password)
     //
-    wifi->connect("kxkm24", NULL); // KXKM 24
-    // wifi->connect("phare", NULL); //KXKM phare
-    // wifi->connect("kxkm24lulu", NULL);                                                         //KXKM 24 lulu
-    // wifi->connect("mgr4g", NULL);                                                              //Maigre dev
-    // wifi->connect("interweb", "superspeed37");                                                 //Maigre dev home
-    // wifi->connect("riri_new", "B2az41opbn6397");                                               //Riri dev home
+    // wifi->connect("kxkm24out", NULL);            // KXKM 24 out
+    wifi->connect("kxkm24", NULL);                  // KXKM 24
+    // wifi->connect("phare", NULL);                // KXKM phare
+    // wifi->connect("kxkm24lulu", NULL);           // KXKM 24 LULU                                                        //KXKM 24 lulu
+    // wifi->connect("mgr4g", NULL);                // Maigre                                                            //Maigre dev
+    // wifi->connect("interweb", "superspeed37");   // Maigre Maizon                                             //Maigre dev home
+    // wifi->connect("riri_new", "B2az41opbn6397"); // RIRI dev                                              //Riri dev home
     // TODO: if wifi->connect ommited = crash on mqtt/artnet/osc
 
     ////////////////// MQTT
@@ -112,7 +113,7 @@ void setup()
   ////////////////// INFO //////////////////////////////////////
 
   // Monitoring refresh // TODO Move somewhere else !
-  if (k32)
+  if (k32 && int(LULU_TYPE) == 1)
     k32->timer->every(REFRESH_INFO, []()
           {
             if (stm32)
