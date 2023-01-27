@@ -155,7 +155,11 @@ void setup_device()
         ->play();
 
     // ARTNET: subscribe dmx frame
+#ifdef PWM_ON_OFF
     int FRAME_size = light->anim("mem-strip")->bank()->preset_size() + light->anim("mem-pwm")->bank()->preset_size();
+#else
+    int FRAME_size = light->anim("mem-strip")->bank()->preset_size();
+#endif
 
     K32_artnet::onDmx({.address = (1 + (light->id() - 1) * FRAME_size),
                        .framesize = FRAME_size,
