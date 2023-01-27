@@ -4,7 +4,7 @@
 
 #ifdef M5EZ_WIFI
 #include <WiFi.h>
-#include "network/K32_wifi.h"
+#include "K32_wifi.h"
 extern "C"
 {
 #include "esp_wifi.h"
