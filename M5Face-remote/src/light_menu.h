@@ -2,6 +2,7 @@
 #define LIGHT_MENU_H
 
 #include "preset_light.h"
+#include "K32_mqtt.h"
 
 void remote_light();
 
@@ -88,7 +89,10 @@ void send_mirror()
     light_mqtt_frame += String(mirror) + "|" + String(zoom);
     light_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(LIGHT_MQTT_FRAME);
     light_mqtt_topic.toCharArray(LIGHT_MQTT_TOPIC, light_mqtt_topic.length() + 1);
-    k32->mqtt->publish(LIGHT_MQTT_TOPIC, light_mqtt_frame.c_str(), 1);
+    // k32->mqtt->publish(LIGHT_MQTT_TOPIC, light_mqtt_frame.c_str(), 1);
+    K32_mqtt(publish)(LIGHT_MQTT_TOPIC, light_mqtt_frame.c_str(), 1);
+    
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
