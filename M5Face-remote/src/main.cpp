@@ -60,14 +60,16 @@ void setup()
 
   /////////////////////////////////////////////// WIFI //////////////////////////////////////
   String net = String(k32->system->id() - 8910);
-  k32->init_wifi("M5-Remote");
-  k32->wifi->staticIP("2.0.0." + net, "2.0.0.1", "255.0.0.0"); //KXKM
-  // k32->wifi->staticIP("10.0.0."+ net, "10.0.0.1", "255.0.0.0");//KXKM MESH
-  k32->wifi->connect("kxkm24", NULL); //KXKM
-  // k32->wifi->connect("phare", NULL); //KXKM phare
-  // k32->wifi->connect("maree", NULL); //KXKM maree
-  // k32->wifi->connect("mgr4g", NULL); //MGR
-  // k32->wifi->connect("riri_new", "B2az41opbn6397"); //Riri dev home
+
+  ez.wifi32 = new K32_wifi(k32);
+  ez.wifi32->setHostname("M5-Remote");
+  ez.wifi32->staticIP("2.0.0." + net, "2.0.0.1", "255.0.0.0"); //KXKM
+  // wifi32->staticIP("10.0.0."+ net, "10.0.0.1", "255.0.0.0");//KXKM MESH
+  ez.wifi32->connect("kxkm24", NULL); //KXKM
+  // wifi32->connect("phare", NULL); //KXKM phare
+  // wifi32->connect("maree", NULL); //KXKM maree
+  // wifi32->connect("mgr4g", NULL); //MGR
+  // wifi32->connect("riri_new", "B2az41opbn6397"); //Riri dev home
 
   // ez.wifi.add("SSID", "KEY", "IP", "MASK", "GATEWAY","BROKER");
   ez.wifi.add("kxkm24", "", "2.0.0." + net, "255.0.0.0", "2.0.0.1", "2.0.0.1");                         //KXKM
@@ -82,29 +84,29 @@ void setup()
   ez.wifi.add("riri_new", "B2az41opbn6397", "0.0.0.0", "0.0.0.0", "0.0.0.0", "0.0.0.0");                //Riri dev home
 
   ///////////////////////////////////////////// MQTT ////////////////////////////////////////
-  k32->init_mqtt();
+  ez.mqtt32 = new K32_mqtt(k32, ez.wifi32, NULL, NULL);
 
-  k32->mqtt->subscribe({.topic = "k32/monitor/beat",
+  ez.mqtt32->subscribe({.topic = "k32/monitor/beat",
                         .qos = 0,
                         .callback = [](char *payload, size_t length)
                         {
                           incombeat(payload, length);
                         }});
 
-  k32->mqtt->subscribe({.topic = "k32/monitor/status",
+  ez.mqtt32->subscribe({.topic = "k32/monitor/status",
                         .qos = 0,
                         .callback = [](char *payload, size_t length)
                         {
                           incoming(payload, length);
                         }});
 
-  k32->mqtt->start({
+  ez.mqtt32->start({
       .broker = "2.0.0.1", // Komplex
       // .broker = "10.0.0.1",// Komplex MESH
       // .broker = "2.0.0.10", // Riri dev home
       // .broker = "192.168.43.100",//MGR
       .beatInterval = 0,  // heartbeat interval milliseconds (0 = disable)
-      .beaconInterval = 0 // full beacon interval milliseconds (0 = disable)
+      .statusInterval = 0 // full beacon interval milliseconds (0 = disable)
   });
 
   ////////////////////////////////////////// SPIFFS EDIT /////////////////////////////////////

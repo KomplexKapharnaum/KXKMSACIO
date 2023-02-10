@@ -714,7 +714,8 @@ private:
 //
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <K32.h>
-
+#include <K32_mqtt.h>
+#include <K32_wifi.h>
 struct event_t
 {
 	uint16_t (*function)();
@@ -766,6 +767,8 @@ public:
 #endif
 
 	static K32 *k32;
+	static K32_mqtt *mqtt32;
+	static K32_wifi *wifi32;
 
 	static void begin(K32 *_k32);
 

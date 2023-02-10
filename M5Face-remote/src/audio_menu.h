@@ -52,7 +52,7 @@ void send_volume()
     _Volu = String(Volume);
     audio_mqtt_topic = String(MQTT_K32) + String(AUDIO_MQTT_ID) + String(AUDIO_MQTT_VOLUME);
     audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
-    k32->mqtt->publish(AUDIO_MQTT_TOPIC, _Volu.c_str(), 1);
+    ez.mqtt32->publish(AUDIO_MQTT_TOPIC, _Volu.c_str(), 1);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -672,7 +672,7 @@ void remote_audio()
                     audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
                     audio_mqtt_message = String(audio_fonction) + "|" + String(page_mem + msg) + "|" + String(Volume) + "|" + String(mqtt_loop);
                     audio_mqtt_message.toCharArray(AUDIO_MQTT_MESSAGE, audio_mqtt_message.length() + 1);
-                    k32->mqtt->publish(AUDIO_MQTT_TOPIC, AUDIO_MQTT_MESSAGE, 1);
+                    ez.mqtt32->publish(AUDIO_MQTT_TOPIC, AUDIO_MQTT_MESSAGE, 1);
                     msg += "|" + audio_mqtt_topic + "|" + (page_mem + msg);
 
                     break;
@@ -680,7 +680,7 @@ void remote_audio()
                 case '.':
                     audio_mqtt_topic = String(MQTT_K32) + String(AUDIO_MQTT_ID) + String(AUDIO_MQTT_STOP);
                     audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
-                    k32->mqtt->publish(AUDIO_MQTT_TOPIC, nullptr, 1);
+                    ez.mqtt32->publish(AUDIO_MQTT_TOPIC, nullptr, 1);
                     msg += "|" + audio_mqtt_topic;
                     break;
                 case '=':
@@ -715,14 +715,14 @@ void remote_audio()
                 case 'M':
                     audio_mqtt_topic = String(MQTT_K32) + String(AUDIO_MQTT_ID) + String(AUDIO_MQTT_FADE_IN);
                     audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
-                    k32->mqtt->publish(AUDIO_MQTT_TOPIC, nullptr, 1);
+                    ez.mqtt32->publish(AUDIO_MQTT_TOPIC, nullptr, 1);
                     msg += "|" + audio_mqtt_topic;
                     break;
 
                 case '%':
                     audio_mqtt_topic = String(MQTT_K32) + String(AUDIO_MQTT_ID) + String(AUDIO_MQTT_FADE_OUT);
                     audio_mqtt_topic.toCharArray(AUDIO_MQTT_TOPIC, audio_mqtt_topic.length() + 1);
-                    k32->mqtt->publish(AUDIO_MQTT_TOPIC, nullptr, 1);
+                    ez.mqtt32->publish(AUDIO_MQTT_TOPIC, nullptr, 1);
                     msg += "|" + audio_mqtt_topic;
                     break;
 
