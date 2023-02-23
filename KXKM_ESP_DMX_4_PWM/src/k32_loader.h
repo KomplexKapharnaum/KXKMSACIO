@@ -64,10 +64,10 @@ void k32_setup() {
     #ifdef HW_ENABLE_STM32
         stm32 = new K32_stm32(k32, true);
 
-        LOGF("[stm32]: API_REV: %d",            stm32->api_rev());
-        LOGF("[stm32]: FIRMWARE_REV: %d",       stm32->firmware_rev());
-        LOGF("[stm32]: HW_ID: %d",              stm32->hw_id());
-        LOGF("[stm32]: HW_REV: %d",             stm32->hw_rev());
+        LOGF("[stm32]: API_REV: %d\n",            stm32->api_rev());
+        LOGF("[stm32]: FIRMWARE_REV: %d\n",       stm32->firmware_rev());
+        LOGF("[stm32]: HW_ID: %d\n",              stm32->hw_id());
+        LOGF("[stm32]: HW_REV: %d\n",             stm32->hw_rev());
     #endif
 
     // BUTTONS (GPIO)

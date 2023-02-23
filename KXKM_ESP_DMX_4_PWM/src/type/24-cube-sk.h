@@ -6,16 +6,12 @@
 
 // #define ARTNET_DMXNODE 1
 
-#define PWM_ON_OFF 1
-
 #include "macro/Type/SK/mem_sk.h"  // defo
 // #include "macro/Show/larochelle/mem_sk_roch.h"
 // #include "macro/Show/esch/mem_sk_esch.h"
 
 
-#ifdef PWM_ON_OFF
 #include "macro/Type/4pwm/mem_4pwm.h"
-#endif
 
 void setup_device() 
 {
@@ -30,10 +26,8 @@ void setup_device()
     // FIXTURES
 
     // PWM fixture
-#ifdef PWM_ON_OFF
     K32_fixture *dimmer = new K32_pwmfixture(pwm);
     light->addFixture(dimmer);
-#endif
 
 
     // LED STRIPS fixtures
@@ -53,27 +47,23 @@ void setup_device()
     //
     // TEST Sequence
 
-        // INIT TEST STRIPS
-            light->anim( "test-strip", new Anim_test_strip, LULU_STRIP_SIZE )
-                ->drawTo(strips, LED_N_STRIPS)
-                ->push(300)
-                ->master(LULU_PREV_MASTER)
-                ->play();
+    // INIT TEST STRIPS
+    light->anim( "test-strip", new Anim_test_strip, LULU_STRIP_SIZE )
+        ->drawTo(strips, LED_N_STRIPS)
+        ->push(300)
+        ->master(LULU_PREV_MASTER)
+        ->play();
 
-        // PWM TEST
-#ifdef PWM_ON_OFF
+    // PWM TEST
     light->anim("test-pwm", new Anim_test_pwm, LULU_STRIP_SIZE)
         ->drawTo(dimmer)
         ->push(300)
         ->master(LULU_PREV_MASTER)
         ->play();
-#endif
 
-        // WAIT END
-            light->anim("test-strip")->wait();
-#ifdef PWM_ON_OFF
+    // WAIT END
+    light->anim("test-strip")->wait();
     light->anim("test-pwm")->wait();
-#endif;
 
     
     // .########..########..########..######..########.########..######.
@@ -87,13 +77,11 @@ void setup_device()
     //  PRESETS
 
     // ANIM pwm - presets
-#ifdef PWM_ON_OFF
     light->anim("mem-pwm", new Anim_datathru, PWM_N_CHAN)
         ->drawTo(dimmer)
         ->bank(new BankPWM)
         ->remote(true)
         ->mem(-1);
-#endif
 
     // ANIM leds - presets
     light->anim("mem-strip", new Anim_dmx_strip, LULU_STRIP_SIZE)
@@ -149,11 +137,9 @@ void setup_device()
     // ARTNET
 
     // ANIM pwm - artnet
-#ifdef PWM_ON_OFF
     light->anim("artnet-pwm", new Anim_datathru, PWM_N_CHAN)
         ->drawTo(dimmer)
         ->play();
-#endif
 
 
     // ANIM leds - artnet
@@ -170,15 +156,11 @@ void setup_device()
         .callback   = [](const uint8_t *data, int length) 
         { 
             int sizeSK = light->anim("mem-strip")->bank()->preset_size();
-#ifdef PWM_ON_OFF
-                           int sizePWM = light->anim("mem-pwm")->bank()->preset_size();
-#endif
+            int sizePWM = light->anim("mem-pwm")->bank()->preset_size();
 
             // LOGINL("ARTFRAME: "); LOGF("length=%d ", length); for (int k = 0; k < length; k++) LOGF("%d ", data[k]); LOG();
             light->anim("artnet-strip")->push(data, min(sizeSK, length));
-#ifdef PWM_ON_OFF
-                           light->anim("artnet-pwm")->push(data, min(sizePWM, length)); // FIX
-#endif
+            light->anim("artnet-pwm")->push(data, min(sizePWM, length)); // FIX
         }});
     
 
@@ -215,9 +197,7 @@ void setup_device()
     
     k32->on("remote/macro", [](Orderz* order){
         light->anim("mem-strip")->mem( order->getData(0)->toInt() );
-#ifdef PWM_ON_OFF
         light->anim("mem-pwm")->mem(order->getData(0)->toInt());
-#endif
     });
 
     k32->on("remote/preview", [](Orderz* order){
