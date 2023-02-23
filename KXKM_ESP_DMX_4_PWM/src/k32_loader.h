@@ -62,13 +62,19 @@ void k32_setup() {
     //////////////////////////////////////// K32 hardware ////////////////////////////////////
     // STM32
     #ifdef HW_ENABLE_STM32
-        stm32 = new K32_stm32(k32, true);
+        stm32 = new K32_stm32(k32);
 
         LOGF("[stm32]: API_REV: %d\n",            stm32->api_rev());
         LOGF("[stm32]: FIRMWARE_REV: %d\n",       stm32->firmware_rev());
         LOGF("[stm32]: HW_ID: %d\n",              stm32->hw_id());
         LOGF("[stm32]: HW_REV: %d\n",             stm32->hw_rev());
     #endif
+
+    LOGINL("[system]: NODE id: ");
+    LOG(k32->system->id());
+
+    LOGINL("[system]: HW rev: ");
+    LOG(k32->system->hw());
 
     // BUTTONS (GPIO)
     buttons = new K32_buttons(k32);

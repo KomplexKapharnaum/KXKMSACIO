@@ -33,14 +33,14 @@ void boutons_init()
     for (int i = 0; i < WATCH_SLOTS; i++)
         watchValues[i] = -128;
 
-    if (k32->system->hw() >= 3)
+    if (k32->system->hw() >= 13)
         pinMode(39, INPUT_PULLUP);
 }
 
 void boutons_loop()
 {
     //////////////////    Click on Atom    ////////////////////
-    if (k32->system->hw() >= 3 )
+    if (k32->system->hw() >= 13 )
     {
         int btn = digitalRead(39);
         if (didChange(W_ATOMBTN, btn) && btn == 0)

@@ -33,7 +33,9 @@
 
 /////////////////////////////////////////ID/////////////////////////////////////////
 
-// #define K32_SET_NODEID 172    // board unique id
+// #define K32_SET_NODEID 5    // board unique id => V1 only or boards without STM32 !! otherwise read from STM32
+// #define K32_SET_HWREV 13    // board hw rev !! only for boards without STM32
+
 // #define K32_SET_CHANNEL 8     // board channel mqtt elp 1 barre 8 cube 3
 // #define LIGHT_SET_ID 5       // permet de calculer l'adresse DMX ota
 // #define ARTNET_SET_UNIVERSE 1 // univers artnet
