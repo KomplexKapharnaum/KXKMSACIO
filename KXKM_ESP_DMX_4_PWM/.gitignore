@@ -6,3 +6,4 @@
 .pdb
 *.code-workspace
 lib/K32-lib/
+*.pyc
