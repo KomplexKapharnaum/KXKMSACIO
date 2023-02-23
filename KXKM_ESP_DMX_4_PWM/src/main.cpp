@@ -10,11 +10,11 @@
 // .##.......##.....##.##.......##.....##.......##.......##....##........##......
 // .########..#######..########..#######........##.......##....##........########
 
-#define LULU_TYPE 50
+#define LULU_TYPE 2
 
 // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot"
 // 10="power" 11="DMX_strobe" 12="DMX_Par_led" 13="NODE_dmx_thru"
-// 20="Cube_str" 21="Cube_par"  22="Cube_MiniKOLOR" 23="Cube_Elp"
+// 20="Cube_str" 21="Cube_par"  22="Cube_MiniKOLOR" 23="Cube_Elp" 24="Cibe_SK"
 // 30="table-lumineuse_parled" 31="table-lumineuse_Strobe" 32="table-lumineuse_MiniKolor" 33="table-lumineuse_Elp"  34="Banc" 38="table-lumineuse-no-artnet&mqtt"
 // 40="New_Fluo"
 // 50="ELP dmx (sk anim)"
@@ -33,10 +33,10 @@
 
 /////////////////////////////////////////ID/////////////////////////////////////////
 
-// #define K32_SET_NODEID 1      // board unique id
-// #define K32_SET_CHANNEL 1     // board channel mqtt elp 1
-#define LIGHT_SET_ID 1       // permet de calculer l'adresse DMX ota
-// #define ARTNET_SET_UNIVERSE 4 // univers artnet
+#define K32_SET_NODEID 180    // board unique id
+#define K32_SET_CHANNEL 8     // board channel mqtt elp 1 barre 8 cube 3
+#define LIGHT_SET_ID 2       // permet de calculer l'adresse DMX ota
+#define ARTNET_SET_UNIVERSE 1 // univers artnet
 //                    // defo ARTNET_SET_UNIVERSE 0  => LULU-TYPE 6 & 7 & 8 & 10 & 20 & 34
 //                    // defo ARTNET_SET_UNIVERSE 1  => LULU-TYPE 2 & 5 & 50
 //                    // defo ARTNET_SET_UNIVERSE 2  => LULU-TYPE 9 & 72
