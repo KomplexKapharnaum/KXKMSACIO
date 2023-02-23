@@ -4,7 +4,7 @@
 
 #ifdef M5EZ_WIFI
 #include <WiFi.h>
-#include "network/K32_wifi.h"
+#include "K32_wifi.h"
 extern "C"
 {
 #include "esp_wifi.h"
@@ -1422,7 +1422,7 @@ void ezWifi::begin()
     ez.header.insert(RIGHTMOST, "wifi", sizeof(cutoffs) * (ez.theme->signal_bar_width + ez.theme->signal_bar_gap) + 2 * ez.theme->header_hmargin, ez.wifi._drawWidget);
     // For handling issue #50, when initial connection attempt fails in this specific mode but will succeed if tried again.
     WiFi.onEvent([](WiFiEvent_t event, WiFiEventInfo_t info) {
-        if (WIFI_REASON_ASSOC_FAIL == info.disconnected.reason)
+        if (WIFI_REASON_ASSOC_FAIL == info.wifi_sta_disconnected.reason)
         {
 #ifdef M5EZ_WIFI_DEBUG
             LOG("EZWIFI: Special case: Disconnect w/ ASSOC_FAIL. Setting _state to EZWIFI_SCANNING;");
@@ -1430,7 +1430,7 @@ void ezWifi::begin()
             _state = EZWIFI_SCANNING;
         }
     },
-                 WiFiEvent_t::SYSTEM_EVENT_STA_DISCONNECTED);
+                 WiFiEvent_t::ARDUINO_EVENT_WIFI_STA_DISCONNECTED);
     ez.addEvent(ez.wifi.loop);
 }
 
@@ -1706,9 +1706,9 @@ void ezWifi::_manageConnect()
     {
         uint8_t zpic = manageconnect.pick() - 1;
 
-        ez.k32->mqtt->broker((networks[zpic].broker).c_str());
-        ez.k32->wifi->staticIP((networks[zpic].ip).c_str(), (networks[zpic].gateway).c_str(), (networks[zpic].mask).c_str());
-        ez.k32->wifi->connect((networks[zpic].SSID).c_str(), (networks[zpic].key).c_str());
+        ez.mqtt32->broker((networks[zpic].broker).c_str());
+        ez.wifi32->staticIP((networks[zpic].ip).c_str(), (networks[zpic].gateway).c_str(), (networks[zpic].mask).c_str());
+        ez.wifi32->connect((networks[zpic].SSID).c_str(), (networks[zpic].key).c_str());
         ez.msgBox("Connect to", (networks[zpic].SSID).c_str(), "OK");
         return;
     }
@@ -1791,7 +1791,7 @@ bool ezWifi::_connection(ezMenu *callingMenu)
             return true;
         if (pressed == "Disconnect")
         {
-            ez.k32->wifi->disconnect();
+            ez.wifi32->disconnect();
             while (WiFi.isConnected())
             {
             }
@@ -1815,7 +1815,7 @@ bool ezWifi::_connection(ezMenu *callingMenu)
         if (joinmenu.pickName() == "Scan and join")
         {
             ez.msgBox("WiFi setup menu", "Scanning ...", "");
-            ez.k32->wifi->disconnect();
+            ez.wifi32->disconnect();
             WiFi._setStatus(WL_IDLE_STATUS);
             delay(100);
             int16_t n = WiFi.scanNetworks();
@@ -1843,13 +1843,13 @@ bool ezWifi::_connection(ezMenu *callingMenu)
                     if (WiFi.encryptionType(networks.pick() - 1) == WIFI_AUTH_OPEN)
                     {
                         WiFi.mode(WIFI_MODE_STA);
-                        ez.k32->wifi->connect(SSID.c_str());
+                        ez.wifi32->connect(SSID.c_str());
                     }
                     else
                     {
                         key = ez.textInput("Enter wifi password");
                         WiFi.mode(WIFI_MODE_STA);
-                        ez.k32->wifi->connect(SSID.c_str(), key.c_str());
+                        ez.wifi32->connect(SSID.c_str(), key.c_str());
                     }
                     ez.msgBox("WiFi setup menu", "Connecting ...", "Abort", false);
                     String button;
@@ -1858,7 +1858,7 @@ bool ezWifi::_connection(ezMenu *callingMenu)
                     {
                         if (button == "Abort")
                         {
-                            ez.k32->wifi->disconnect();
+                            ez.wifi32->disconnect();
                             break;
                         }
                         status = WiFi.status();
@@ -2067,7 +2067,7 @@ uint16_t ezWifi::loop()
                         LOG("EZWIFI: Match: " + WiFi.SSID(n) + ", connecting...");
 #endif
                         WiFi.mode(WIFI_MODE_STA);
-                        ez.k32->wifi->connect(ssid.c_str(), key.c_str());
+                        ez.wifi32->connect(ssid.c_str(), key.c_str());
                         _state = EZWIFI_CONNECTING;
                         _wait_until = millis() + 7000;
                         return 250;
@@ -2091,7 +2091,7 @@ uint16_t ezWifi::loop()
 #ifdef M5EZ_WIFI_DEBUG
             LOG("EZWIFI: Connect timed out...");
 #endif
-            ez.k32->wifi->disconnect();
+            ez.wifi32->disconnect();
             _current_from_scan++;
             _state = EZWIFI_SCANNING;
         }
@@ -2776,7 +2776,7 @@ void ezMqtt::begin()
 
 uint16_t ezMqtt::loop()
 {
-    ez.mqtt.mqtt_on = ez.k32->mqtt->isConnected();
+    ez.mqtt.mqtt_on = ez.mqtt32->isConnected();
     ez.header.draw("mqtt");
     return 5000;
 }
@@ -2821,6 +2821,10 @@ ezSettings M5ez::settings;
 ezMenu *M5ez::_currentMenu = nullptr;
 bool M5ez::_in_event = false;
 K32 *M5ez::k32 = nullptr;
+
+K32_wifi *M5ez::wifi32 = nullptr;
+K32_mqtt *M5ez::mqtt32 = nullptr;
+
 #ifdef M5EZ_WIFI
 ezWifi M5ez::wifi;
 constexpr ezWifi &M5ez::w;

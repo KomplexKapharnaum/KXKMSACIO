@@ -113,6 +113,9 @@
 #include "macro/type/elp/mem_elp.h"   // defo
 #include "macro/mem_cube_elp.h"       //
 
+#elif LULU_TYPE == 24
+#include "type/24-cube-sk.h"
+
 #elif LULU_TYPE == 30
 #include "type/30-table-lumineuse-par.h"
 // #define LULU_STRIP_SIZE 60

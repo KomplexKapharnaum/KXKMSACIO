@@ -8,7 +8,7 @@ int16_t who_result;
 
 void monitor_menu()
 {
-    ez.mqtt.mqtt_on = k32->mqtt->isConnected();
+    ez.mqtt.mqtt_on = ez.mqtt32->isConnected();
 
     who_result = 0;
     String on_off_line;

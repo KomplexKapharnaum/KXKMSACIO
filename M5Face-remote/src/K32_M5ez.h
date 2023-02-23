@@ -4,7 +4,7 @@
 #define M5EZ_VERSION "2.3.0"
 
 // Comment out the line below to disable WPS.
-#define M5EZ_WPS
+// #define M5EZ_WPS
 
 // Turn this off to compile without WiFi (no) OTA updates, no clock)
 #define M5EZ_WIFI
@@ -714,7 +714,8 @@ private:
 //
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <K32.h>
-
+#include <K32_mqtt.h>
+#include <K32_wifi.h>
 struct event_t
 {
 	uint16_t (*function)();
@@ -766,6 +767,8 @@ public:
 #endif
 
 	static K32 *k32;
+	static K32_mqtt *mqtt32;
+	static K32_wifi *wifi32;
 
 	static void begin(K32 *_k32);
 
