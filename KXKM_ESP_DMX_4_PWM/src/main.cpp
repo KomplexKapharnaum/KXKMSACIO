@@ -33,10 +33,10 @@
 
 /////////////////////////////////////////ID/////////////////////////////////////////
 
-#define K32_SET_NODEID 180    // board unique id
-#define K32_SET_CHANNEL 8     // board channel mqtt elp 1 barre 8 cube 3
-#define LIGHT_SET_ID 2       // permet de calculer l'adresse DMX ota
-#define ARTNET_SET_UNIVERSE 1 // univers artnet
+// #define K32_SET_NODEID 172    // board unique id
+// #define K32_SET_CHANNEL 8     // board channel mqtt elp 1 barre 8 cube 3
+// #define LIGHT_SET_ID 5       // permet de calculer l'adresse DMX ota
+// #define ARTNET_SET_UNIVERSE 1 // univers artnet
 //                    // defo ARTNET_SET_UNIVERSE 0  => LULU-TYPE 6 & 7 & 8 & 10 & 20 & 34
 //                    // defo ARTNET_SET_UNIVERSE 1  => LULU-TYPE 2 & 5 & 50
 //                    // defo ARTNET_SET_UNIVERSE 2  => LULU-TYPE 9 & 72

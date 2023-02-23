@@ -169,8 +169,9 @@ void k32_setup() {
     else {
         // BLUETOOTH
         LOG("NETWORK: bluetooth");
+        LOG("NETWORK: bluetooth DISABLED! too much memory consumed... FIXME");
         
-        bt = new K32_bluetooth(k32, "k32-" + String(k32->system->id()));
+        // bt = new K32_bluetooth(k32, "k32-" + String(k32->system->id()));
 
         // // TODO use event !
         // bt->onConnect([&]() {
