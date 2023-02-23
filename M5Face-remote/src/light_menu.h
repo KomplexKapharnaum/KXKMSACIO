@@ -43,7 +43,7 @@ String light_mqtt_frame;
 int16_t Master = 255;
 String _Mast = String(Master);
 
-char LIGHT_MQTT_TOPIC[] = "k32/all/leds/master/tenless";
+char light_mqtt_topic_c[64];
 String light_mqtt_topic;
 String LIGHT_MQTT_MEM = "/leds/mem";
 String LIGHT_MQTT_STOP = "/leds/stop";
@@ -88,9 +88,9 @@ void send_mirror()
 
     light_mqtt_frame += String(mirror) + "|" + String(zoom);
     light_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(LIGHT_MQTT_FRAME);
-    light_mqtt_topic.toCharArray(LIGHT_MQTT_TOPIC, light_mqtt_topic.length() + 1);
-    // mqtt32->publish(LIGHT_MQTT_TOPIC, light_mqtt_frame.c_str(), 1);
-    ez.mqtt32->publish(LIGHT_MQTT_TOPIC, light_mqtt_frame.c_str(), 1);
+    light_mqtt_topic.toCharArray(light_mqtt_topic_c, light_mqtt_topic.length() + 1);
+    // mqtt32->publish(light_mqtt_topic_c, light_mqtt_frame.c_str(), 1);
+    ez.mqtt32->publish(light_mqtt_topic_c, light_mqtt_frame.c_str(), 1);
     
 
 }
@@ -129,8 +129,8 @@ void send_mod()
 
     light_mqtt_frame += String(mod) + "|" + String(pix_long) + "|" + String(pix_pos);
     light_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(LIGHT_MQTT_FRAME);
-    light_mqtt_topic.toCharArray(LIGHT_MQTT_TOPIC, light_mqtt_topic.length() + 1);
-    ez.mqtt32->publish(LIGHT_MQTT_TOPIC, light_mqtt_frame.c_str(), 1);
+    light_mqtt_topic.toCharArray(light_mqtt_topic_c, light_mqtt_topic.length() + 1);
+    ez.mqtt32->publish(light_mqtt_topic_c, light_mqtt_frame.c_str(), 1);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -157,8 +157,8 @@ void send_str()
 
     light_mqtt_frame += String(str) + "|" + String(str_speed);
     light_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(LIGHT_MQTT_FRAME);
-    light_mqtt_topic.toCharArray(LIGHT_MQTT_TOPIC, light_mqtt_topic.length() + 1);
-    ez.mqtt32->publish(LIGHT_MQTT_TOPIC, light_mqtt_frame.c_str(), 1);
+    light_mqtt_topic.toCharArray(light_mqtt_topic_c, light_mqtt_topic.length() + 1);
+    ez.mqtt32->publish(light_mqtt_topic_c, light_mqtt_frame.c_str(), 1);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -197,8 +197,8 @@ void send_color()
     }
     light_mqtt_frame += String(red) + "|" + String(green) + "|" + String(blue) + "|" + String(white);
     light_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(LIGHT_MQTT_FRAME);
-    light_mqtt_topic.toCharArray(LIGHT_MQTT_TOPIC, light_mqtt_topic.length() + 1);
-    ez.mqtt32->publish(LIGHT_MQTT_TOPIC, light_mqtt_frame.c_str(), 1);
+    light_mqtt_topic.toCharArray(light_mqtt_topic_c, light_mqtt_topic.length() + 1);
+    ez.mqtt32->publish(light_mqtt_topic_c, light_mqtt_frame.c_str(), 1);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -208,8 +208,8 @@ void send_master()
 {
     _Mast = String(Master);
     light_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(LIGHT_MQTT_MASTER);
-    light_mqtt_topic.toCharArray(LIGHT_MQTT_TOPIC, light_mqtt_topic.length() + 1);
-    ez.mqtt32->publish(LIGHT_MQTT_TOPIC, _Mast.c_str(), 1);
+    light_mqtt_topic.toCharArray(light_mqtt_topic_c, light_mqtt_topic.length() + 1);
+    ez.mqtt32->publish(light_mqtt_topic_c, _Mast.c_str(), 1);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -780,7 +780,7 @@ void remote_light()
     String action = "";
     bool _a_b = true;
     light_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(LIGHT_MQTT_MEM);
-    light_mqtt_topic.toCharArray(LIGHT_MQTT_TOPIC, light_mqtt_topic.length() + 1);
+    light_mqtt_topic.toCharArray(light_mqtt_topic_c, light_mqtt_topic.length() + 1);
     String fonct = "Master";
     uint8_t page_mem = 0;
     String page_me = "0-9";
@@ -890,8 +890,8 @@ void remote_light()
                     if (light_fonction < 2)
                     {
                         light_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(LIGHT_MQTT_MEM);
-                        light_mqtt_topic.toCharArray(LIGHT_MQTT_TOPIC, light_mqtt_topic.length() + 1);
-                        ez.mqtt32->publish(LIGHT_MQTT_TOPIC, (page_mem + msg).c_str(), 1);
+                        light_mqtt_topic.toCharArray(light_mqtt_topic_c, light_mqtt_topic.length() + 1);
+                        ez.mqtt32->publish(light_mqtt_topic_c, (page_mem + msg).c_str(), 1);
                         msg += " " + light_mqtt_topic + (page_mem + msg);
 
                         send_master();
@@ -940,8 +940,8 @@ void remote_light()
 
                 case '.':
                     light_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(LIGHT_MQTT_STOP);
-                    light_mqtt_topic.toCharArray(LIGHT_MQTT_TOPIC, light_mqtt_topic.length() + 1);
-                    ez.mqtt32->publish(LIGHT_MQTT_TOPIC, nullptr, 1);
+                    light_mqtt_topic.toCharArray(light_mqtt_topic_c, light_mqtt_topic.length() + 1);
+                    ez.mqtt32->publish(light_mqtt_topic_c, nullptr, 1);
                     msg += " " + light_mqtt_topic;
                     break;
                 case '=':
@@ -977,8 +977,8 @@ void remote_light()
                     else if (light_fonction == 1)
                     {
                         light_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(LIGHT_MQTT_SLOWER);
-                        light_mqtt_topic.toCharArray(LIGHT_MQTT_TOPIC, light_mqtt_topic.length() + 1);
-                        ez.mqtt32->publish(LIGHT_MQTT_TOPIC, nullptr, 1);
+                        light_mqtt_topic.toCharArray(light_mqtt_topic_c, light_mqtt_topic.length() + 1);
+                        ez.mqtt32->publish(light_mqtt_topic_c, nullptr, 1);
                         msg += " " + light_mqtt_topic;
                     }
                     else if (light_fonction == 3)
@@ -1023,8 +1023,8 @@ void remote_light()
                     else if (light_fonction == 1)
                     {
                         light_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(LIGHT_MQTT_FASTER);
-                        light_mqtt_topic.toCharArray(LIGHT_MQTT_TOPIC, light_mqtt_topic.length() + 1);
-                        ez.mqtt32->publish(LIGHT_MQTT_TOPIC, nullptr, 1);
+                        light_mqtt_topic.toCharArray(light_mqtt_topic_c, light_mqtt_topic.length() + 1);
+                        ez.mqtt32->publish(light_mqtt_topic_c, nullptr, 1);
                         msg += " " + light_mqtt_topic;
                     }
                     else if (light_fonction == 3)
@@ -1082,8 +1082,8 @@ void remote_light()
                     if (light_fonction == 0 || light_fonction == 2)
                     {
                         light_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(LIGHT_MQTT_FADE_IN);
-                        light_mqtt_topic.toCharArray(LIGHT_MQTT_TOPIC, light_mqtt_topic.length() + 1);
-                        ez.mqtt32->publish(LIGHT_MQTT_TOPIC, nullptr, 1);
+                        light_mqtt_topic.toCharArray(light_mqtt_topic_c, light_mqtt_topic.length() + 1);
+                        ez.mqtt32->publish(light_mqtt_topic_c, nullptr, 1);
                         msg += " " + light_mqtt_topic;
                     }
                     else if (light_fonction == 1)
@@ -1094,8 +1094,8 @@ void remote_light()
                     if (light_fonction == 0 || light_fonction == 2)
                     {
                         light_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(LIGHT_MQTT_FADE_OUT);
-                        light_mqtt_topic.toCharArray(LIGHT_MQTT_TOPIC, light_mqtt_topic.length() + 1);
-                        ez.mqtt32->publish(LIGHT_MQTT_TOPIC, nullptr, 1);
+                        light_mqtt_topic.toCharArray(light_mqtt_topic_c, light_mqtt_topic.length() + 1);
+                        ez.mqtt32->publish(light_mqtt_topic_c, nullptr, 1);
                         msg += " " + light_mqtt_topic;
                     }
                     else if (light_fonction == 1)
@@ -1116,8 +1116,8 @@ void remote_light()
                     else if (light_fonction == 1)
                     {
                         light_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(LIGHT_MQTT_SMALLER);
-                        light_mqtt_topic.toCharArray(LIGHT_MQTT_TOPIC, light_mqtt_topic.length() + 1);
-                        ez.mqtt32->publish(LIGHT_MQTT_TOPIC, nullptr, 1);
+                        light_mqtt_topic.toCharArray(light_mqtt_topic_c, light_mqtt_topic.length() + 1);
+                        ez.mqtt32->publish(light_mqtt_topic_c, nullptr, 1);
                         msg += " " + light_mqtt_topic;
                     }
                     else if (light_fonction == 2)
@@ -1165,8 +1165,8 @@ void remote_light()
                     else if (light_fonction == 1)
                     {
                         light_mqtt_topic = String(MQTT_K32) + String(MQTT_ID) + String(LIGHT_MQTT_BIGGER);
-                        light_mqtt_topic.toCharArray(LIGHT_MQTT_TOPIC, light_mqtt_topic.length() + 1);
-                        ez.mqtt32->publish(LIGHT_MQTT_TOPIC, nullptr, 1);
+                        light_mqtt_topic.toCharArray(light_mqtt_topic_c, light_mqtt_topic.length() + 1);
+                        ez.mqtt32->publish(light_mqtt_topic_c, nullptr, 1);
                         msg += " " + light_mqtt_topic;
                     }
                     else if (light_fonction == 2)
