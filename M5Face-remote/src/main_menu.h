@@ -11,8 +11,8 @@ void main_menu()
 {
     ezMenu main_menu("Welcome to M5");
     main_menu.txtBig();
-    main_menu.addItem("REMOTE STROBE", remote_strobe);
     main_menu.addItem("REMOTE LULU", remote_light);
+    main_menu.addItem("REMOTE STROBE", remote_strobe);
     main_menu.addItem("REMOTE AUDIO", remote_audio);
     main_menu.addItem("REMOTE MAREE", remote_maree);
     main_menu.addItem("MONITOR", monitor_menu);

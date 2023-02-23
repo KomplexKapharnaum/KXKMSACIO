@@ -40,7 +40,7 @@ String strobe_mqtt_frame;
 int16_t strobe_Master = 255;
 String strobe_Mast = String(strobe_Master);
 
-char STROBE_MQTT_TOPIC[] = "k32/all/leds/master/tenless";
+char strobe_mqtt_topic_c[64];
 String strobe_mqtt_topic;
 String STROBE_MQTT_MEM = "/leds/mem";
 String STROBE_MQTT_STOP = "/leds/stop";
@@ -76,8 +76,8 @@ void send_red_str()
 
     strobe_mqtt_frame += String(strobe_red);
     strobe_mqtt_topic = String(STROBE_MQTT_K32) + String(STROBE_MQTT_ID) + String(STROBE_MQTT_FRAME);
-    strobe_mqtt_topic.toCharArray(STROBE_MQTT_TOPIC, strobe_mqtt_topic.length() + 1);
-    ez.mqtt32->publish(STROBE_MQTT_TOPIC, strobe_mqtt_frame.c_str(), 1);
+    strobe_mqtt_topic.toCharArray(strobe_mqtt_topic_c, strobe_mqtt_topic.length() + 1);
+    ez.mqtt32->publish(strobe_mqtt_topic_c, strobe_mqtt_frame.c_str(), 1);
 }
 ///////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////DRAW GREEN//////////////////////////////////////
@@ -101,8 +101,8 @@ void send_green_str()
 
     strobe_mqtt_frame += String(strobe_green);
     strobe_mqtt_topic = String(STROBE_MQTT_K32) + String(STROBE_MQTT_ID) + String(STROBE_MQTT_FRAME);
-    strobe_mqtt_topic.toCharArray(STROBE_MQTT_TOPIC, strobe_mqtt_topic.length() + 1);
-    ez.mqtt32->publish(STROBE_MQTT_TOPIC, strobe_mqtt_frame.c_str(), 1);
+    strobe_mqtt_topic.toCharArray(strobe_mqtt_topic_c, strobe_mqtt_topic.length() + 1);
+    ez.mqtt32->publish(strobe_mqtt_topic_c, strobe_mqtt_frame.c_str(), 1);
 }
 ///////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////DRAW BLUE //////////////////////////////////////
@@ -126,8 +126,8 @@ void send_blue_str()
 
     strobe_mqtt_frame += String(strobe_blue);
     strobe_mqtt_topic = String(STROBE_MQTT_K32) + String(STROBE_MQTT_ID) + String(STROBE_MQTT_FRAME);
-    strobe_mqtt_topic.toCharArray(STROBE_MQTT_TOPIC, strobe_mqtt_topic.length() + 1);
-    ez.mqtt32->publish(STROBE_MQTT_TOPIC, strobe_mqtt_frame.c_str(), 1);
+    strobe_mqtt_topic.toCharArray(strobe_mqtt_topic_c, strobe_mqtt_topic.length() + 1);
+    ez.mqtt32->publish(strobe_mqtt_topic_c, strobe_mqtt_frame.c_str(), 1);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -162,8 +162,8 @@ void send_color_str()
 
     strobe_mqtt_frame += String(strobe_red) + "|" + String(strobe_green) + "|" + String(strobe_blue);
     strobe_mqtt_topic = String(STROBE_MQTT_K32) + String(STROBE_MQTT_ID) + String(STROBE_MQTT_FRAME);
-    strobe_mqtt_topic.toCharArray(STROBE_MQTT_TOPIC, strobe_mqtt_topic.length() + 1);
-    ez.mqtt32->publish(STROBE_MQTT_TOPIC, strobe_mqtt_frame.c_str(), 1);
+    strobe_mqtt_topic.toCharArray(strobe_mqtt_topic_c, strobe_mqtt_topic.length() + 1);
+    ez.mqtt32->publish(strobe_mqtt_topic_c, strobe_mqtt_frame.c_str(), 1);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -200,8 +200,8 @@ void send_master_str()
 {
     strobe_Mast = String(strobe_Master);
     strobe_mqtt_topic = String(STROBE_MQTT_K32) + String(STROBE_MQTT_ID) + String(STROBE_MQTT_MASTER);
-    strobe_mqtt_topic.toCharArray(STROBE_MQTT_TOPIC, strobe_mqtt_topic.length() + 1);
-    ez.mqtt32->publish(STROBE_MQTT_TOPIC, strobe_Mast.c_str(), 1);
+    strobe_mqtt_topic.toCharArray(strobe_mqtt_topic_c, strobe_mqtt_topic.length() + 1);
+    ez.mqtt32->publish(strobe_mqtt_topic_c, strobe_Mast.c_str(), 1);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -900,7 +900,7 @@ void remote_strobe()
     String action = "";
     bool _a_b = true;
     strobe_mqtt_topic = String(STROBE_MQTT_K32) + String(STROBE_MQTT_ID) + String(STROBE_MQTT_MEM);
-    strobe_mqtt_topic.toCharArray(STROBE_MQTT_TOPIC, strobe_mqtt_topic.length() + 1);
+    strobe_mqtt_topic.toCharArray(strobe_mqtt_topic_c, strobe_mqtt_topic.length() + 1);
     String fonct = "Master";
     uint8_t page_mem = 0;
     String page_me = "0-9";
@@ -1015,8 +1015,8 @@ void remote_strobe()
                         strobe_blue = PRESET_MEM_COLOR_STR[key_val - 48][2];
 
                         strobe_mqtt_topic = String(STROBE_MQTT_K32) + String(STROBE_MQTT_ID) + String(STROBE_MQTT_MEM);
-                        strobe_mqtt_topic.toCharArray(STROBE_MQTT_TOPIC, strobe_mqtt_topic.length() + 1);
-                        ez.mqtt32->publish(STROBE_MQTT_TOPIC, (page_mem + msg).c_str(), 1);
+                        strobe_mqtt_topic.toCharArray(strobe_mqtt_topic_c, strobe_mqtt_topic.length() + 1);
+                        ez.mqtt32->publish(strobe_mqtt_topic_c, (page_mem + msg).c_str(), 1);
                         msg += " " + strobe_mqtt_topic + (page_mem + msg);
 
                         send_master_str();
@@ -1062,8 +1062,8 @@ void remote_strobe()
 
                 case '.':
                     strobe_mqtt_topic = String(STROBE_MQTT_K32) + String(STROBE_MQTT_ID) + String(STROBE_MQTT_STOP);
-                    strobe_mqtt_topic.toCharArray(STROBE_MQTT_TOPIC, strobe_mqtt_topic.length() + 1);
-                    ez.mqtt32->publish(STROBE_MQTT_TOPIC, nullptr, 1);
+                    strobe_mqtt_topic.toCharArray(strobe_mqtt_topic_c, strobe_mqtt_topic.length() + 1);
+                    ez.mqtt32->publish(strobe_mqtt_topic_c, nullptr, 1);
                     msg += " " + strobe_mqtt_topic;
                     break;
                 case '=':
@@ -1117,8 +1117,8 @@ void remote_strobe()
                     else if (strobe_fonction == 1)
                     {
                         strobe_mqtt_topic = String(STROBE_MQTT_K32) + String(STROBE_MQTT_ID) + String(STROBE_MQTT_SLOWER);
-                        strobe_mqtt_topic.toCharArray(STROBE_MQTT_TOPIC, strobe_mqtt_topic.length() + 1);
-                        ez.mqtt32->publish(STROBE_MQTT_TOPIC, nullptr, 1);
+                        strobe_mqtt_topic.toCharArray(strobe_mqtt_topic_c, strobe_mqtt_topic.length() + 1);
+                        ez.mqtt32->publish(strobe_mqtt_topic_c, nullptr, 1);
                         msg += " " + strobe_mqtt_topic;
                     }
                     else if (strobe_fonction == 3)
@@ -1163,8 +1163,8 @@ void remote_strobe()
                     else if (strobe_fonction == 1)
                     {
                         strobe_mqtt_topic = String(STROBE_MQTT_K32) + String(STROBE_MQTT_ID) + String(STROBE_MQTT_FASTER);
-                        strobe_mqtt_topic.toCharArray(STROBE_MQTT_TOPIC, strobe_mqtt_topic.length() + 1);
-                        ez.mqtt32->publish(STROBE_MQTT_TOPIC, nullptr, 1);
+                        strobe_mqtt_topic.toCharArray(strobe_mqtt_topic_c, strobe_mqtt_topic.length() + 1);
+                        ez.mqtt32->publish(strobe_mqtt_topic_c, nullptr, 1);
                         msg += " " + strobe_mqtt_topic;
                     }
                     else if (strobe_fonction == 3)
@@ -1226,8 +1226,8 @@ void remote_strobe()
                     if (strobe_fonction == 0 || strobe_fonction == 2)
                     {
                         strobe_mqtt_topic = String(STROBE_MQTT_K32) + String(STROBE_MQTT_ID) + String(STROBE_MQTT_FADE_IN);
-                        strobe_mqtt_topic.toCharArray(STROBE_MQTT_TOPIC, strobe_mqtt_topic.length() + 1);
-                        ez.mqtt32->publish(STROBE_MQTT_TOPIC, nullptr, 1);
+                        strobe_mqtt_topic.toCharArray(strobe_mqtt_topic_c, strobe_mqtt_topic.length() + 1);
+                        ez.mqtt32->publish(strobe_mqtt_topic_c, nullptr, 1);
                         msg += " " + strobe_mqtt_topic;
                     }
                     else if (strobe_fonction == 1)
@@ -1238,8 +1238,8 @@ void remote_strobe()
                     if (strobe_fonction == 0 || strobe_fonction == 2)
                     {
                         strobe_mqtt_topic = String(STROBE_MQTT_K32) + String(STROBE_MQTT_ID) + String(STROBE_MQTT_FADE_OUT);
-                        strobe_mqtt_topic.toCharArray(STROBE_MQTT_TOPIC, strobe_mqtt_topic.length() + 1);
-                        ez.mqtt32->publish(STROBE_MQTT_TOPIC, nullptr, 1);
+                        strobe_mqtt_topic.toCharArray(strobe_mqtt_topic_c, strobe_mqtt_topic.length() + 1);
+                        ez.mqtt32->publish(strobe_mqtt_topic_c, nullptr, 1);
                         msg += " " + strobe_mqtt_topic;
                     }
                     else if (strobe_fonction == 1)
@@ -1260,8 +1260,8 @@ void remote_strobe()
                     else if (strobe_fonction == 1)
                     {
                         strobe_mqtt_topic = String(STROBE_MQTT_K32) + String(STROBE_MQTT_ID) + String(STROBE_MQTT_SMALLER);
-                        strobe_mqtt_topic.toCharArray(STROBE_MQTT_TOPIC, strobe_mqtt_topic.length() + 1);
-                        ez.mqtt32->publish(STROBE_MQTT_TOPIC, nullptr, 1);
+                        strobe_mqtt_topic.toCharArray(strobe_mqtt_topic_c, strobe_mqtt_topic.length() + 1);
+                        ez.mqtt32->publish(strobe_mqtt_topic_c, nullptr, 1);
                         msg += " " + strobe_mqtt_topic;
                     }
                     else if (strobe_fonction == 2)
@@ -1309,8 +1309,8 @@ void remote_strobe()
                     else if (strobe_fonction == 1)
                     {
                         strobe_mqtt_topic = String(STROBE_MQTT_K32) + String(STROBE_MQTT_ID) + String(STROBE_MQTT_BIGGER);
-                        strobe_mqtt_topic.toCharArray(STROBE_MQTT_TOPIC, strobe_mqtt_topic.length() + 1);
-                        ez.mqtt32->publish(STROBE_MQTT_TOPIC, nullptr, 1);
+                        strobe_mqtt_topic.toCharArray(strobe_mqtt_topic_c, strobe_mqtt_topic.length() + 1);
+                        ez.mqtt32->publish(strobe_mqtt_topic_c, nullptr, 1);
                         msg += " " + strobe_mqtt_topic;
                     }
                     else if (strobe_fonction == 2)
