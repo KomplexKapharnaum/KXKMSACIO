@@ -1,6 +1,6 @@
 #include <Arduino.h>
 
-#define LULU_VER 100
+#define LULU_VER 101
 
 // .##.......##.....##.##.......##.....##....########.##....##.########..########
 // .##.......##.....##.##.......##.....##.......##.....##..##..##.....##.##......
@@ -10,11 +10,11 @@
 // .##.......##.....##.##.......##.....##.......##.......##....##........##......
 // .########..#######..########..#######........##.......##....##........########
 
-#define LULU_TYPE 2
+#define LULU_TYPE 24
 
 // 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot"
 // 10="power" 11="DMX_strobe" 12="DMX_Par_led" 13="NODE_dmx_thru"
-// 20="Cube_str" 21="Cube_par"  22="Cube_MiniKOLOR" 23="Cube_Elp" 24="Cibe_SK"
+// 20="Cube_str" 21="Cube_par"  22="Cube_MiniKOLOR" 23="Cube_Elp" 24="Cube_SK"
 // 30="table-lumineuse_parled" 31="table-lumineuse_Strobe" 32="table-lumineuse_MiniKolor" 33="table-lumineuse_Elp"  34="Banc" 38="table-lumineuse-no-artnet&mqtt"
 // 40="New_Fluo"
 // 50="ELP dmx (sk anim)"
