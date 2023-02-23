@@ -220,8 +220,10 @@ void setup_device()
         if (stateR == REMOTE_AUTO)
         {
             light->anim("mem-strip")->stop();
+            light->anim("mem-pwm")->stop();
             light->anim("memprev-strip")->stop();
             light->anim("artnet-strip")->play();
+            light->anim("artnet-pwm")->play();
             LOG("REMOTE: -> Mode AUTO");
         }
 
@@ -229,7 +231,9 @@ void setup_device()
         else if (stateR == REMOTE_MANU_STM)
         {
             light->anim("artnet-strip")->stop();
+            light->anim("artnet-pwm")->stop();
             light->anim("memprev-strip")->play();
+            light->anim("mem-pwm")->play();
             light->anim("mem-strip")->play();
             LOG("REMOTE: -> Mode STM");
         }
@@ -238,7 +242,9 @@ void setup_device()
         else if (stateR == REMOTE_MANU || stateR == REMOTE_MANU_LAMP)
         {
             light->anim("artnet-strip")->stop();
+            light->anim("artnet-pwm")->stop();
             light->anim("mem-strip")->play();
+            light->anim("mem-pwm")->play();
             light->anim("memprev-strip")->play();
             LOG("REMOTE: -> Mode MANU");
         }
