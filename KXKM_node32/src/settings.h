@@ -226,5 +226,8 @@
 #elif LULU_TYPE == 81
 #include "type/81-buzzer.h"
 
+#elif LULU_TYPE == 83
+#include "type/83-cloud.h"
+
 #endif
 #endif

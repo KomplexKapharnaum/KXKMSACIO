@@ -10,9 +10,9 @@
 // .##.......##.....##.##.......##.....##.......##.......##....##........##......
 // .########..#######..########..#######........##.......##....##........########
 
-#define LULU_TYPE 24
+#define LULU_TYPE 2
 
-// 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot"
+// 0="Power" 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot"
 // 10="power" 11="DMX_strobe" 12="DMX_Par_led" 13="NODE_dmx_thru"
 // 20="Cube_str" 21="Cube_par"  22="Cube_MiniKOLOR" 23="Cube_Elp" 24="Cube_SK"
 // 30="table-lumineuse_parled" 31="table-lumineuse_Strobe" 32="table-lumineuse_MiniKolor" 33="table-lumineuse_Elp"  34="Banc" 38="table-lumineuse-no-artnet&mqtt"
@@ -22,6 +22,7 @@
 // 70="Strobe" 71="4x Strobe" 72="5x parled"
 // 80="Maree atom-lite"
 // 81="Buzzer atom-lite"
+// 83="Cloud"
 
 //      .####....########.
 //      ..##.....##.....##
@@ -35,10 +36,26 @@
 
 // #define K32_SET_NODEID 5    // board unique id => V1 only or boards without STM32 !! otherwise read from STM32
 // #define K32_SET_HWREV 13    // board hw rev !! only for boards without STM32
+                                        // HW_REVISION 0
+                                        // HW_REVISION 1 KXKM V1
+                                        // HW_REVISION 2 KXKM V2
+                                        // HW_REVISION 3 KXKM V3
+                                        // HW_REVISION 4
+                                        // HW_REVISION 5
+                                        // HW_REVISION 6
+                                        // HW_REVISION 7
+                                        // HW_REVISION 8
+                                        // HW_REVISION 9
+                                        // HW_REVISION 10
+                                        // HW_REVISION 11
+                                        // HW_REVISION 12
+                                        // HW_REVISION 13: ATOM
+                                        // HW_REVISION 14: ATOM_LITE
 
-// #define K32_SET_CHANNEL 8     // board channel mqtt elp 1 barre 8 cube 3
-// #define LIGHT_SET_ID 5       // permet de calculer l'adresse DMX ota
-// #define ARTNET_SET_UNIVERSE 1 // univers artnet
+
+// #define K32_SET_CHANNEL 8      // board channel mqtt elp 1 barre 8 cube 3
+// #define LIGHT_SET_ID 5         // permet de calculer l'adresse DMX
+// #define ARTNET_SET_UNIVERSE 1  // univers artnet
 //                    // defo ARTNET_SET_UNIVERSE 0  => LULU-TYPE 6 & 7 & 8 & 10 & 20 & 34
 //                    // defo ARTNET_SET_UNIVERSE 1  => LULU-TYPE 2 & 5 & 50
 //                    // defo ARTNET_SET_UNIVERSE 2  => LULU-TYPE 9 & 72
