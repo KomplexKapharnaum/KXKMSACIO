@@ -197,6 +197,11 @@ void setup_device()
     // REMOTE
 
     remote->setMacroMax( light->anim("mem-strip")->bank()->size() );
+
+    k32->on("btn/atom", [](Orderz *order)
+    { 
+        remote->stmNext(); 
+    });
     
     k32->on("remote/macro", [](Orderz* order){
         light->anim("mem-strip")->mem( order->getData(0)->toInt() );
