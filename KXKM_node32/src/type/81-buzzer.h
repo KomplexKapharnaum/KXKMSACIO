@@ -52,17 +52,17 @@ void setup_device()
     // BTN
     buttons->add(26, "buzzer");
     k32->on("btn/buzzer-on", [](Orderz* order){
-        if (mqtt) mqtt->publish("k32/event/buzz", String(light->id()).c_str() );
+        if (mqtt) mqtt->publish("k32/event/buzz", String(k32->system->lightid()).c_str() );
     });
     k32->on("btn/buzzer-off", [](Orderz* order){
-        if (mqtt) mqtt->publish("k32/event/unbuzz", String(light->id()).c_str() );
+        if (mqtt) mqtt->publish("k32/event/unbuzz", String(k32->system->lightid()).c_str() );
     });
 
     k32->on("btn/atom-on", [](Orderz* order){
-        if (mqtt) mqtt->publish("k32/event/buzz", String(light->id()).c_str() );
+        if (mqtt) mqtt->publish("k32/event/buzz", String(k32->system->lightid()).c_str() );
     });
     k32->on("btn/atom-off", [](Orderz* order){
-        if (mqtt) mqtt->publish("k32/event/unbuzz", String(light->id()).c_str() );
+        if (mqtt) mqtt->publish("k32/event/unbuzz", String(k32->system->lightid()).c_str() );
     });
 }
 

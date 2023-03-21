@@ -139,7 +139,7 @@ void setup_device()
     // ARTNET: subscribe dmx frame
     int memSize = PWM_N_CHAN + STROBE_PATCHSIZE;
 
-    K32_artnet::onDmx({.address = (1 + (light->id() - 1) * memSize),
+    K32_artnet::onDmx({.address = (1 + (k32->system->lightid() - 1) * memSize),
                        .framesize = memSize,
                        .callback = [](const uint8_t *data, int length)
                        {

@@ -146,7 +146,7 @@ void setup_device()
         ->play();
 
     // ARTNET: subscribe dmx frame
-    K32_artnet::onDmx({.address = (1 + (light->id() - 1) * PATCHSIZE),
+    K32_artnet::onDmx({.address = (1 + (k32->system->lightid() - 1) * PATCHSIZE),
                        .framesize = PATCHSIZE,
                        .callback = [](const uint8_t *data, int length)
                        {

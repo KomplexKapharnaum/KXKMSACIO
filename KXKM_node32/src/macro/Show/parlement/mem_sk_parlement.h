@@ -7,7 +7,7 @@ void makeSablier(LPreset* mem, int durationSeconds)
     mem->mod(new K32_mod_pulse)->at(2)->period(3*ms)->param(0, 2*ms)->mini(0)->maxi(255)->absolute();  // green - cycle 1 & 2
     mem->mod(new K32_mod_pulse)->at(1)->period(3*ms)->param(0,   ms)->mini(255)->maxi(0)->absolute();  // red   - cycle 2 & 3
     mem->mod(new K32_mod_sawtooth)->period(3*ms)->event([](int value){                                 // trigger mqtt + jump to mem2 at the end
-                                                            if (value==252) mqtt->publish("k32/event/sablier", String(light->id()).c_str());
+                                                            if (value==252) mqtt->publish("k32/event/sablier", String(k32->system->lightid()).c_str());
                                                             // if (value==254) remote->stmSetMacro(2); (handled by burgerquizz.py)
                                                         });
 }

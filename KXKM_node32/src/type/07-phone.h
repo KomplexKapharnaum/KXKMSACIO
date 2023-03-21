@@ -154,7 +154,7 @@ void setup_device()
     // ARTNET: subscribe dmx frame
     int FRAME_size = light->anim("mem-strip")->bank()->preset_size() + light->anim("mem-pwm")->bank()->preset_size();
 
-    K32_artnet::onDmx({.address = (1 + (light->id() - 1) * FRAME_size),
+    K32_artnet::onDmx({.address = (1 + (k32->system->lightid() - 1) * FRAME_size),
                        .framesize = FRAME_size,
                        .callback = [](const uint8_t *data, int length)
                        {
@@ -296,7 +296,7 @@ light->copyFixture({strips[0], 0, LULU_STRIP_SIZE, elp, 0});
 
 // LYRE
 #elif LULU_TYPE == 60
-int DMX_address = (1 + (light->id() - 1) * 32); // DMX Offset = 32  =>  Lyre 1 addr=1 / Lyre 2 addr=33 / ...
+int DMX_address = (1 + (k32->system->lightid() - 1) * 32); // DMX Offset = 32  =>  Lyre 1 addr=1 / Lyre 2 addr=33 / ...
 dmxfixs[0] = new K32_dmxfixture(dmx, DMX_address, DMXFIXTURE_PATCHSIZE);
 
 // OTHERS
@@ -316,7 +316,7 @@ int FRAME_size = LYRE_PATCHSIZE + 9; // 9: MEM R G B W PWM1 PWM2 PWM3 PWM4
 #else
 int FRAME_size = LULU_PATCHSIZE;
 #endif
-int ARTNET_address = (1 + (light->id() - 1) * LULU_PATCHSIZE);
+int ARTNET_address = (1 + (k32->system->lightid() - 1) * LULU_PATCHSIZE);
 
 artnet->onDmx({.address = ARTNET_address,
                .framesize = FRAME_size,
