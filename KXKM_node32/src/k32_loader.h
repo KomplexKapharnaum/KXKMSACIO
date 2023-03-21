@@ -32,6 +32,9 @@ K32_osc* osc = nullptr;
 #include <K32_mqtt.h>
 K32_mqtt* mqtt = nullptr;
 
+#include <K32_web.h>
+K32_web* web = nullptr;
+
 #include <K32_artnet.h>
 K32_artnet* artnet = nullptr;
 
@@ -95,7 +98,7 @@ void k32_setup() {
     // POWER
     power = new K32_power(stm32, LIPO, true);
     //power->setExternalCurrentSensor(HO10_P_SP33, CURRENT_PIN[k32->system->hw()], PWR_FAKE_CURRENT);  // TODO: test sensor
-    if(mcp->ok) power->setMCPcalib(mcp);
+    if(mcp && mcp->ok) power->setMCPcalib(mcp);
 
     // Remote
     remote = new K32_remote(k32, mcp);
@@ -114,7 +117,6 @@ void k32_setup() {
     // /////////////////////////////////////////////// LIGHT //////////////////////////////////////
 
     light = new K32_light(k32);
-    light->loadprefs();
     
     dmx = new K32_dmx(DMX_PIN[k32->system->hw()], DMX_OUT);    
 
@@ -123,11 +125,11 @@ void k32_setup() {
 
     // /////////////////////////////////////////////// NAME //////////////////////////////////////
 
-    String nodeName = String(L_NAME) + "-" + String(light->id()) + "-v" + String(LULU_VER);
+    String nodeName = String(L_NAME) + "-" + String(k32->system->lightid()) + "-v" + String(LULU_VER);
 
     LOG("\nNAME:   " + nodeName );
     LOGF("CHANNEL: %d\n\n", k32->system->channel());
-    LOGF("LIGHT ID: %d\n", light->id());
+    LOGF("LIGHT ID: %d\n", k32->system->lightid());
     
     /////////////////////////////////////////////// NETWORK //////////////////////////////////////
 
@@ -148,10 +150,12 @@ void k32_setup() {
         osc = new K32_osc(k32, wifi, stm32);    // TODO: re-enable OSC
         
 
+        // WEB
+        web = new K32_web(k32);
+
         //ARTNET
         #if ARTNET_ENABLE == 1
             artnet = new K32_artnet(k32, wifi, nodeName);
-            artnet->loadprefs();
             artnet->start(); 
 
             K32_artnet::onFullDmx([](const uint8_t *data, int length)
