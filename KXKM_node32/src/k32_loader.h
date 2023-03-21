@@ -59,7 +59,7 @@ bool wifiMode() {
 void k32_setup() {
 
     //////////////////////////////////////// K32_lib ////////////////////////////////////
-    k32 = new K32();
+    k32 = new K32(NODE32_VER);
     // Serial.begin(115200, SERIAL_8N1);
     
     //////////////////////////////////////// K32 hardware ////////////////////////////////////
@@ -125,7 +125,7 @@ void k32_setup() {
 
     // /////////////////////////////////////////////// NAME //////////////////////////////////////
 
-    String nodeName = String(L_NAME) + "-" + String(k32->system->lightid()) + "-v" + String(LULU_VER);
+    String nodeName = String(L_NAME) + "-" + String(k32->system->lightid()) + "-v" + String(NODE32_VER);
 
     LOG("\nNAME:   " + nodeName );
     LOGF("CHANNEL: %d\n\n", k32->system->channel());
