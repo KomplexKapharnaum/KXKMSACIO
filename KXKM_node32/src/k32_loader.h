@@ -96,9 +96,9 @@ void k32_setup() {
     }
 
     // POWER
-    power = new K32_power(stm32, LIPO, true);
+    if (stm32) power = new K32_power(stm32, LIPO, true);
     //power->setExternalCurrentSensor(HO10_P_SP33, CURRENT_PIN[k32->system->hw()], PWR_FAKE_CURRENT);  // TODO: test sensor
-    if(mcp && mcp->ok) power->setMCPcalib(mcp);
+    if(mcp && mcp->ok && power) power->setMCPcalib(mcp);
 
     // Remote
     remote = new K32_remote(k32, mcp);
