@@ -1,16 +1,12 @@
-#define L_NAME "Barre"  // a tester 
+#define L_NAME "Barre" 
 
-#define LULU_STRIP_SIZE     120 
-#define LULU_STRIP_TYPE     LED_SK6812W_V3               // Strip type
-
-
-// #define ARTNET_DMXNODE 1
-
+#define LULU_STRIP_SIZE     128             // Barre 120 leds // Barrette 64 leds 
+#define LULU_STRIP_TYPE     LED_SK6812W_V3               
 
 #include "macro/Type/4pwm/mem_4pwm.h"
-#include "macro/Type/SK/mem_sk.h"  // defo
+// #include "macro/Type/SK/mem_sk.h"  // defo
 // #include "macro/Show/larochelle/mem_sk_roch.h"
-// #include "macro/Show/esch/mem_sk_esch.h"
+#include "macro/Show/esch/mem_sk_esch.h"
 
 
 
@@ -26,6 +22,11 @@ void setup_device()
     //
     // FIXTURES
 
+    // Enable PWM 
+    for (int k = 0; k < PWM_N_CHAN; k++)
+        if (PWM_PIN[k32->system->hw()][k] > 0) // TODO: allow -1 pin but disable output
+            pwm->attach(PWM_PIN[k32->system->hw()][k]);
+
     // PWM fixture
     K32_fixture *dimmer = new K32_pwmfixture(pwm);
     light->addFixture(dimmer);
@@ -34,9 +35,11 @@ void setup_device()
     // LED STRIPS fixtures
     K32_fixture* strips[LED_N_STRIPS] = {nullptr};
     for(int k=0; k<LED_N_STRIPS; k++)
-        strips[k] = new K32_ledstrip(k, LEDS_PIN[k32->system->hw()][k], (led_types)LULU_STRIP_TYPE, LULU_STRIP_SIZE + 30);    
-    light->addFixtures( strips, LED_N_STRIPS )
-         ->copyFixture({strips[0], LULU_STRIP_SIZE, LULU_STRIP_SIZE + 18, strips[1], 0}); // jauge sortie 2
+        strips[k] = new K32_ledstrip(k, LEDS_PIN[k32->system->hw()][k], (led_types)LULU_STRIP_TYPE, LULU_STRIP_SIZE + 30);
+    light->addFixtures( strips, LED_N_STRIPS );
+
+    // Copy jauge
+    light->copyFixture({strips[0], LULU_STRIP_SIZE, LULU_STRIP_SIZE + 18, strips[1], 0}); // jauge sortie 2
 
     // .########.########..######..########.....######..########..#######..##.....##.########.##....##..######..########
     // ....##....##.......##....##....##.......##....##.##.......##.....##.##.....##.##.......###...##.##....##.##......
@@ -163,7 +166,7 @@ void setup_device()
 
             // LOGINL("ARTFRAME: "); LOGF("length=%d ", length); for (int k = 0; k < length; k++) LOGF("%d ", data[k]); LOG();
             light->anim("artnet-strip")->push(data, min(sizeSK, length));
-            light->anim("artnet-pwm")->push(data, min(sizePWM, length)); // FIX
+            light->anim("artnet-pwm")->push(&data[sizeSK], min(sizePWM, length-sizeSK)); // FIX
         }});
     
 

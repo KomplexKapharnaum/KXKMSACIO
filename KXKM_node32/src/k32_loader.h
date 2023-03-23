@@ -81,7 +81,7 @@ void k32_setup() {
 
     // BUTTONS (GPIO)
     buttons = new K32_buttons(k32);
-    if (k32->system->hw() >= 13) // ATOM
+    if (k32->system->hw() == 13 || k32->system->hw() == 14) // ATOM
         buttons->add(39, "atom");
 
     // MCP 
@@ -110,9 +110,6 @@ void k32_setup() {
 
     // PWM
     pwm = new K32_pwm(k32);
-    for (int k = 0; k < PWM_N_CHAN; k++)
-        if (PWM_PIN[k32->system->hw()][k] > 0) // TODO: allow -1 pin but disable output
-            pwm->attach(PWM_PIN[k32->system->hw()][k]);
 
     // /////////////////////////////////////////////// LIGHT //////////////////////////////////////
 
@@ -120,7 +117,6 @@ void k32_setup() {
     
     dmx = new K32_dmx(DMX_PIN[k32->system->hw()], DMX_OUT);    
 
-    
 
 
     // /////////////////////////////////////////////// NAME //////////////////////////////////////

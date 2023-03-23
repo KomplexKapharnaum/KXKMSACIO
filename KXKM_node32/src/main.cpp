@@ -1,6 +1,6 @@
 #include <Arduino.h>
 
-#define NODE32_VER 101
+#define NODE32_VER 102
 
 // .##.......##.....##.##.......##.....##....########.##....##.########..########
 // .##.......##.....##.##.......##.....##.......##.....##..##..##.....##.##......
@@ -10,19 +10,18 @@
 // .##.......##.....##.##.......##.....##.......##.......##....##........##......
 // .########..#######..########..#######........##.......##....##........########
 
-#define LULU_TYPE 8
+#define LULU_TYPE 82
 
-// 0="Power" 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="H&S" 7="Phone" 8="Atom" 9="chariot"
-// 10="power" 11="DMX_strobe" 12="DMX_Par_led" 13="NODE_dmx_thru"
+// 0="Power" 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="PotSon" 9="chariot"
+// 10="power" 11="DMX_strobe" 12="DMX_Par_led" 13="NODE_dmx_thru" 14="DMX_smoke"
 // 20="Cube_str" 21="Cube_par"  22="Cube_MiniKOLOR" 23="Cube_Elp" 24="Cube_SK"
 // 30="table-lumineuse_parled" 31="table-lumineuse_Strobe" 32="table-lumineuse_MiniKolor" 33="table-lumineuse_Elp"  34="Banc" 38="table-lumineuse-no-artnet&mqtt"
 // 40="New_Fluo"
 // 50="ELP dmx (sk anim)"
 // 60="Lyre audio dmx + strip"
 // 70="Strobe" 71="4x Strobe" 72="5x parled"
-// 80="Maree atom-lite"
-// 81="Buzzer atom-lite"
-// 83="Cloud"
+// ATOM: 80="Atom" 82="Relais" 83="Cloud" 84="Maree"
+// ATOM ST: 91: "ST_buzzer" 
 
 //      .####....########.
 //      ..##.....##.....##
@@ -34,8 +33,8 @@
 
 /////////////////////////////////////////ID/////////////////////////////////////////
 
-// #define K32_SET_NODEID 1    // board unique id => V1 only or boards without STM32 !! otherwise read from STM32
-// #define K32_SET_HWREV 13    // board hw rev !! only for boards without STM32
+// #define K32_SET_NODEID 304    // board unique id => V1 only or boards without STM32 !! otherwise read from STM32
+// #define K32_SET_HWREV 14    // board hw rev !! only for boards without STM32
                                         //  1: KXKM V1
                                         //  2: KXKM V2
                                         //  3: KXKM V3
@@ -82,9 +81,9 @@ void setup()
   ////////////////// WIFI
   if (wifi)
   {
-    // Define router (also MQTT broker)
+    // Define router (also MQTT broker) 
     String router = "2.0.0.1";
-    // String router = "192.168.1.129";
+    // String router = "192.168.131.131";
 
     // Auto calculate IP, i.e.   ID: 45 => 2.0.0.145  //  ID: 318 => 2.0.3.118  // ID: 100 => 2.0.1.100
     //

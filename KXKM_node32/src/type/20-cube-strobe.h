@@ -33,6 +33,11 @@ void setup_device()
     //
     // FIXTURES
 
+    // Enable PWM 
+    for (int k = 0; k < PWM_N_CHAN; k++)
+        if (PWM_PIN[k32->system->hw()][k] > 0) // TODO: allow -1 pin but disable output
+            pwm->attach(PWM_PIN[k32->system->hw()][k]);
+
     // PWM fixture
     K32_fixture *dimmer = new K32_pwmfixture(pwm);
     light->addFixture(dimmer);

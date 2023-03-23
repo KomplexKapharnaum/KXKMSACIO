@@ -92,5 +92,6 @@ void setup_device()
     k32->on("remote/macro", [](Orderz *order)
             {
         light->anim("mem-strobe")->mem( order->getData(0)->toInt() );
-        LOGF("mem-strobe: %d\n", order->getData(0)->toInt()); });
+        LOGF("mem-strobe: %d\n", order->getData(0)->toInt()); 
+    });
 }

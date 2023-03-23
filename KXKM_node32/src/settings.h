@@ -66,13 +66,10 @@
 #include "type/05-flex.h"
 
 #elif LULU_TYPE == 6
-#include "type/06-barrette.h"
+#include "type/06-potson.h"
 
 #elif LULU_TYPE == 7
 #include "type/07-phone.h"
-
-#elif LULU_TYPE == 8
-#include "type/08-atom.h"
 
 #elif LULU_TYPE == 9
 #include "type/09-chariot.h"
@@ -89,130 +86,15 @@
 #elif LULU_TYPE == 13
 #include "type/13-node_DMX.h"
 
+#elif LULU_TYPE == 14
+#include "type/14-smoke.h"
+
 #elif LULU_TYPE == 20
 #include "type/20-cube-strobe.h"
 
 #elif LULU_TYPE == 21
 #include "type/21-cube-par.h"
 
-#elif LULU_TYPE == 22
-#define LULU_STRIP_SIZE 60
-#define L_NAME "Cube_minikolor"
-#define DMXFIXTURE_PATCHSIZE 13 //  20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
-#define LULU_MEMNOWIFI_MASTER 255
-#include "macro/type/4pwm/mem_4pwm.h"           // defo
-#include "macro/type/minikolor/mem_minikolor.h" // defo
-#include "macro/mem_cube_minikolor.h"           //
-
-#elif LULU_TYPE == 23
-#define LULU_STRIP_SIZE 60
-#define L_NAME "Cube_elp"
-#define DMXFIXTURE_PATCHSIZE 7 //  20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor / = elp
-#define LULU_MEMNOWIFI_MASTER 255
-#include "macro/type/4pwm/mem_4pwm.h" // defo
-#include "macro/type/elp/mem_elp.h"   // defo
-#include "macro/mem_cube_elp.h"       //
-
-#elif LULU_TYPE == 24
-#include "type/24-cube-sk.h"
-
-#elif LULU_TYPE == 30
-#include "type/30-table-lumineuse-par.h"
-// #define LULU_STRIP_SIZE 60
-// #define L_NAME "Sucette_parled"
-// #define DMXFIXTURE_PATCHSIZE 9         // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
-// #define LULU_MEMNOWIFI_MASTER 82        // 82 niveau pour les statics baronnie
-// #include "macro/type/parled/mem_parled.h"
-
-// // #include "macro/type/4pwm/mem_4pwm.h"             // defo
-// // #include "macro/mem_sucette_parled.h"             // defo
-
-// //////////////////////////////// Baronie
-// // #include "macro/Show/Baro/mem_pwm_baro_131.h"     // vincent
-// // #include "macro/Show/Baro/mem_sucette_baro_131.h"
-
-// #include "macro/Show/Baro/mem_pwm_baro_132.h"        // jerome
-// #include "macro/Show/Baro/mem_sucette_baro_132.h"
-
-// //////////////////////////////// Esch
-// // #include "macro/Show/esch/mem_pwm_esch.h"
-// // #include "macro/Show/esch/mem_sucette_esch.h"
-
-#elif LULU_TYPE == 31
-#include "type/31-table-lumineuse-strobe.h"
-// #define LULU_STRIP_SIZE 60
-// #define L_NAME "Sucette_strobe"
-// #define DMXFIXTURE_PATCHSIZE 9            // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
-// #define LULU_MEMNOWIFI_MASTER 255         //
-// #include "macro/type/strobe/mem_strobe.h" // defo
-
-// #include "macro/type/4pwm/mem_4pwm.h" // defo
-// #include "macro/mem_sucette_strobe.h"
-
-#elif LULU_TYPE == 32
-#define LULU_STRIP_SIZE 60
-#define L_NAME "Sucette_MiniKolor"
-#define DMXFIXTURE_PATCHSIZE 9                  // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
-#define LULU_MEMNOWIFI_MASTER 255               //
-#include "macro/type/minikolor/mem_minikolor.h" // defo
-
-#include "macro/type/4pwm/mem_4pwm.h" // defo
-#include "macro/mem_sucette_minikolor.h"
-
-#elif LULU_TYPE == 33
-#define LULU_STRIP_SIZE 60
-#define L_NAME "Sucette_Elp"
-#define DMXFIXTURE_PATCHSIZE 9      // 20 = sk_pw / 16 = strobe led / 5 = par led / 20 = cube strobe dmx / 9 = cube par led dmx / 13 = cube minikolor
-#define LULU_MEMNOWIFI_MASTER 255   //
-#include "macro/type/elp/mem_elp.h" // defo
-
-#include "macro/type/4pwm/mem_4pwm.h" // defo
-#include "macro/mem_sucette_elp.h"
-
-#elif LULU_TYPE == 34
-#include "type/34-banc-par.h"
-// #define LULU_STRIP_SIZE 60
-// #define L_NAME "Banc_parled"
-// #define LULU_MEMNOWIFI_MASTER 127 // 82 niveau pour les statics baronnie
-// #include "macro/type/parled/mem_parled.h"
-
-// // #include "macro/type/4pwm/mem_4pwm.h"            // defo
-// // #include "macro/mem_sucette_parled.h"
-
-// //////////////////////////////// Baronie
-// // #include "macro/Show/Baro/mem_pwm_baro_131.h"     // vincent
-// // #include "macro/Show/Baro/mem_sucette_baro_131.h"
-
-// // #include "macro/Show/Baro/mem_pwm_baro_132.h"     // jerome
-// // #include "macro/Show/Baro/mem_sucette_baro_132.h"
-
-// //////////////////////////////// Esch
-// #include "macro/Show/esch/mem_pwm_esch.h"
-// #include "macro/Show/esch/mem_sucette_esch.h"
-
-#elif LULU_TYPE == 38
-#include "type/38-table-lumineuse-par.h"
-
-#elif LULU_TYPE == 40
-#define L_NAME "New_Fluo"
-#define LULU_STRIP_SIZE 73 / 20 = newfluo
-#define LULU_MEMNOWIFI_MASTER 255     //
-#include "macro/type/4pwm/mem_4pwm.h" // defo
-#include "macro/type/SK/mem_fluo.h"
-
-#include "macro/mem_new_fluo_pwm.h"
-
-#elif LULU_TYPE == 50
-#include "type/50-elp_DMX.h"
-
-#elif LULU_TYPE == 60
-#define L_NAME "lyre_DMX"
-#define LULU_STRIP_SIZE 27
-#define DMXFIXTURE_PATCHSIZE 16
-
-#include "macro/type/4pwm/mem_4pwm.h" // defo
-#include "macro/type/SK/mem_sk.h"     // defo
-#include "macro/mem_barre_pwm.h"
 
 #elif LULU_TYPE == 71
 #include "type/71-4strobes.h"
@@ -220,14 +102,21 @@
 #elif LULU_TYPE == 72
 #include "type/72-5parled.h"
 
-#elif LULU_TYPE == 80
-#include "type/80-maree.h"
 
-#elif LULU_TYPE == 81
-#include "type/81-buzzer.h"
+#elif LULU_TYPE == 80
+#include "type/80-atom.h"
+
+#elif LULU_TYPE == 82
+#include "type/82-relais.h"
 
 #elif LULU_TYPE == 83
 #include "type/83-cloud.h"
+
+#elif LULU_TYPE == 84
+#include "type/84-maree.h"
+
+#elif LULU_TYPE == 91
+#include "type/91-ST-buzzer.h"
 
 #endif
 #endif

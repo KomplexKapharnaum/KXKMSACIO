@@ -1,15 +1,7 @@
 
-#define L_NAME "Dmx_strobe" // a tester
+#define L_NAME "Smoke" 
 
-#define VERSION_STROBE 2 // 1=strobe rgb 16 ch 5 division 2=strobe rgb 17 ch 4 division
-
-#if VERSION_STROBE == 1
-#define STROBE_PATCHSIZE 16
-#include "macro/Type/strobe/mem_strobe_dmx_mod_1.h"
-#elif VERSION_STROBE == 2
-#define STROBE_PATCHSIZE 17
-#include "macro/Type/strobe/mem_strobe_dmx_mod_2.h"
-#endif
+#include "macro/Type/smoke/mem_smoke_dmx.h"
 
 #define ARTNET_ENABLE 1
 
@@ -25,9 +17,9 @@ void setup_device()
     //
     // FIXTURES
 
-    // STROBE fixtures
-    K32_fixture *strobe = new K32_dmxfixture(dmx, 1, STROBE_PATCHSIZE);     // Strobe en DMX 1
-    light->addFixture(strobe);
+    // SMOKE fixtures
+    K32_fixture *smoke = new K32_dmxfixture(dmx, 1, SMOKE_PATCHSIZE);     // Smoke en DMX 1
+    light->addFixture(smoke);
 
 
     // .########..########..########..######..########.########..######.
@@ -38,10 +30,10 @@ void setup_device()
     // .##........##....##..##.......##....##.##..........##....##....##
     // .##........##.....##.########..######..########....##.....######.
 
-    // ANIM strobes
-    light->anim("mem-strobe", new Anim_datathru, STROBE_PATCHSIZE)
-        ->drawTo(strobe)
-        ->bank(new BankStrobe)
+    // ANIM smokes
+    light->anim("mem-smoke", new Anim_datathru, SMOKE_PATCHSIZE)
+        ->drawTo(smoke)
+        ->bank(new BankSmoke)
         ->remote(true)
         ->play();
 
@@ -54,16 +46,17 @@ void setup_device()
     // .##.....##.##.....##....##....##....##.########....##...
     //
 
-    // ANIM strobes - artnet
-    light->anim("artnet-strobe", new Anim_datathru, STROBE_PATCHSIZE)
-        ->drawTo(strobe);
+    // ANIM smokes - artnet
+    light->anim("artnet-smoke", new Anim_datathru, SMOKE_PATCHSIZE)
+        ->drawTo(smoke);
 
+    
     // ARTNET: subscribe dmx frame
     K32_artnet::onDmx({.address = (1 + (k32->system->lightid() - 1) * 20),
-                       .framesize = STROBE_PATCHSIZE,
+                       .framesize = SMOKE_PATCHSIZE,
                        .callback = [](const uint8_t *data, int length)
                        {
-                           light->anim("artnet-strobe")->push(data, length);
+                           light->anim("artnet-smoke")->push(data, length);
                        }});
 
     // .##....##..#######.....##......##.####.########.####
@@ -94,14 +87,14 @@ void setup_device()
     //
     // REMOTE
 
-    remote->setMacroMax(light->anim("mem-strobe")->bank()->size());
+    remote->setMacroMax(light->anim("mem-smoke")->bank()->size());
 
     // SELECT MEM
     k32->on("remote/macro", [](Orderz *order)
     {
-        light->anim("mem-strobe")->mem( order->getData(0)->toInt());
+        light->anim("mem-smoke")->mem( order->getData(0)->toInt());
         remote->setState(REMOTE_MANU); 
-        LOGF("mem-strobe: %d\n", order->getData(0)->toInt()); 
+        LOGF("mem-smoke: %d\n", order->getData(0)->toInt()); 
     });
 
     // CHANGE MODE
@@ -112,16 +105,16 @@ void setup_device()
         // AUTO
         if (stateR == REMOTE_AUTO)
         {
-            light->anim("mem-strobe")->stop();
-            light->anim("artnet-strobe")->play();
+            light->anim("mem-smoke")->stop();
+            light->anim("artnet-smoke")->play();
             LOG("REMOTE: -> Mode AUTO");
         }
 
         // MANU
         else if (stateR == REMOTE_MANU || stateR == REMOTE_MANU_LAMP || stateR == REMOTE_MANU_STM)
         {
-            light->anim("artnet-strobe")->stop();
-            light->anim("mem-strobe")->play();
+            light->anim("artnet-smoke")->stop();
+            light->anim("mem-smoke")->play();
             LOG("REMOTE: -> Mode MANU");
         } 
     });
