@@ -47,6 +47,7 @@ void channel_1()
             mqtt->publishToChannel("event/start");
             mqtt->publishToChannel("relay/on");
             mqtt->publishToChannel("leds/mem", "1");
+            mqtt->publish("rpi/sierra/play", "1_*");
             
             // STEP 2
             if (timeout1) delete timeout1;
@@ -79,6 +80,7 @@ void channel_1()
             mqtt->publishToChannel("event/stop");
             mqtt->publishToChannel("relay/off");
             mqtt->publishToChannel("leds/mem", "0");
+            mqtt->publish("rpi/sierra/stop");
         }
     });
 
@@ -87,6 +89,14 @@ void channel_1()
     k32->on("event/stop", [](Orderz *order) { stateB = false; });
 
 }
+
+// REPOS
+//
+void channel_2() {}
+
+// SERRE
+//
+void channel_5() {}
 
 
 // SETUP COMMON
@@ -137,6 +147,9 @@ void setup_device()
 
     // SCENARII
     if (k32->system->channel() == 1) channel_1();
+    if (k32->system->channel() == 2) channel_2();
+    if (k32->system->channel() == 5) channel_5();
+
 }
 
 
