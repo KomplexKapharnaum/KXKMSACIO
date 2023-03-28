@@ -95,6 +95,8 @@
 #elif LULU_TYPE == 21
 #include "type/21-cube-par.h"
 
+#elif LULU_TYPE == 50
+#include "type/50-elp_DMX.h"
 
 #elif LULU_TYPE == 71
 #include "type/71-4strobes.h"

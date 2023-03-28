@@ -11,7 +11,7 @@
 
 #define ATOM_LED 27
 #define ATOM_BUZBTN 26
-#define ATOM_SWITCH 25
+#define ATOM_SWITCH 22
 #define ATOM_BUZLIGHT 32
 
 bool stateB = false;
@@ -47,7 +47,7 @@ void channel_1()
             mqtt->publishToChannel("event/start");
             mqtt->publishToChannel("relay/on");
             mqtt->publishToChannel("leds/mem", "1");
-            mqtt->publish("rpi/sierra/play", "1_*");
+            mqtt->publish("rpi/lima/play", "1_*");
             
             // STEP 2
             if (timeout1) delete timeout1;
@@ -80,7 +80,7 @@ void channel_1()
             mqtt->publishToChannel("event/stop");
             mqtt->publishToChannel("relay/off");
             mqtt->publishToChannel("leds/mem", "0");
-            mqtt->publish("rpi/sierra/stop");
+            mqtt->publish("rpi/lima/stop");
         }
     });
 
@@ -92,11 +92,83 @@ void channel_1()
 
 // REPOS
 //
-void channel_2() {}
+void channel_2() 
+{   
+    // Door CLOSED -> start
+    k32->on("btn/switch-on", [](Orderz *order) { 
+        stateB = false;
+        k32->emit("btn/buzzer-on");
+    });
+
+    // Buzzer PRESSED
+    k32->on("btn/buzzer-on", [](Orderz *order) { 
+        if (!mqtt) return;
+
+        // Cancel Timeout
+        if (timeout1) timeout1->cancel();
+        if (timeout2) timeout2->cancel();
+        if (timeout3) timeout3->cancel();
+        if (timeout4) timeout4->cancel();
+        
+        // START
+        if (!stateB) {
+            
+            // STEP 1
+            mqtt->publishToChannel("event/start");
+            mqtt->publishToChannel("leds/mem", "1");
+            mqtt->publish("rpi/oscar/play", "1_*");
+
+            // STEP 2
+            if (timeout1) delete timeout1;
+            timeout1 = new K32_timeout(2000, []() {
+                mqtt->publishToChannel("leds/mem", "2");
+            });
+
+            // STEP 3
+            if (timeout2) delete timeout2;
+            timeout2 = new K32_timeout(4000, []() {
+                mqtt->publishToChannel("leds/mem", "3");
+            });
+
+            // STEP 4
+            if (timeout3) delete timeout3;
+            timeout3 = new K32_timeout(6000, []() {
+                mqtt->publishToChannel("leds/mem", "4");
+            });
+
+            // STEP 5 => STOP
+            if (timeout4) delete timeout4;
+            timeout4 = new K32_timeout(8000, []() {
+                k32->emit("btn/buzzer-on");
+            });
+
+        }
+
+        // STOP
+        else {
+            mqtt->publishToChannel("event/stop");
+            mqtt->publishToChannel("leds/mem", "0");
+            mqtt->publish("rpi/oscar/stop");
+        }
+    });
+
+    // START / STOP
+    k32->on("event/start", [](Orderz *order) { stateB = true; });
+    k32->on("event/stop", [](Orderz *order) { stateB = false; });
+
+}
 
 // SERRE
 //
-void channel_5() {}
+void channel_5() {
+
+    // Buzzer PRESSED
+    k32->on("btn/buzzer-on", [](Orderz *order) { 
+        if (!mqtt) return;
+        mqtt->publishToChannel("audio/play", "0");
+    });
+
+}
 
 
 // SETUP COMMON

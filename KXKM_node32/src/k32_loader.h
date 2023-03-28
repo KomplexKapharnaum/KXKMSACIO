@@ -44,6 +44,11 @@ K32_light* light = nullptr;
 #include "K32_dmx.h"
 K32_dmx* dmx = nullptr;
 
+#if HW_ENABLE_AUDIO == 1
+    #include <audio/K32_audio.h>
+    K32_audio* audio = nullptr;
+#endif
+
 #include "settings.h"
 
 
@@ -61,6 +66,12 @@ void k32_setup() {
     //////////////////////////////////////// K32_lib ////////////////////////////////////
     k32 = new K32(NODE32_VER);
     // Serial.begin(115200, SERIAL_8N1);
+
+    // /////////////////////////////////////////////// AUDIO //////////////////////////////////////
+    #if HW_ENABLE_AUDIO == 1
+        if (AUDIO_PIN[k32->system->hw()][0] > 0 && SD_PIN[k32->system->hw()][0] > 0)
+            audio = new K32_audio(k32, AUDIO_PIN[k32->system->hw()], SD_PIN[k32->system->hw()]);
+    #endif
     
     //////////////////////////////////////// K32 hardware ////////////////////////////////////
     // STM32
@@ -85,15 +96,17 @@ void k32_setup() {
         buttons->add(39, "atom");
 
     // MCP 
-    mcp = new K32_mcp(k32);
-    if (mcp) {
-        k32->on("mcp/press", [](Orderz* order){
-            if (order->getData(0)->toInt() == 14 && strcmp(order->getData(1)->toStr(), "long") == 0) k32->system->reset();
-        });
-        k32->on("mcp/release", [](Orderz* order){
-            if (order->getData(0)->toInt() == 14 && strcmp(order->getData(1)->toStr(), "long") == 0) k32->system->reset();
-        });
-    }
+    #if HW_ENABLE_AUDIO == 1
+        LOG("MCP: disabled when audio in use");
+    #else
+        mcp = new K32_mcp(k32); 
+    #endif
+    k32->on("mcp/press", [](Orderz* order){
+        if (order->getData(0)->toInt() == 14 && strcmp(order->getData(1)->toStr(), "long") == 0) k32->system->reset();
+    });
+    k32->on("mcp/release", [](Orderz* order){
+        if (order->getData(0)->toInt() == 14 && strcmp(order->getData(1)->toStr(), "long") == 0) k32->system->reset();
+    });
 
     // POWER
     if (stm32) power = new K32_power(stm32, LIPO, true);
@@ -115,8 +128,11 @@ void k32_setup() {
 
     light = new K32_light(k32);
     
-    dmx = new K32_dmx(DMX_PIN[k32->system->hw()], DMX_OUT);    
-
+    #if HW_ENABLE_AUDIO == 1
+        LOG("DMX: disabled when audio in use");
+    #else
+        dmx = new K32_dmx(DMX_PIN[k32->system->hw()], DMX_OUT);    
+    #endif
 
 
     // /////////////////////////////////////////////// NAME //////////////////////////////////////
