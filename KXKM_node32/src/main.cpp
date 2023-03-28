@@ -1,6 +1,8 @@
 #include <Arduino.h>
 
-#define NODE32_VER 102
+#define NODE32_VER 103    // if previous version was < 102 : Upload SPIFFS !
+          // 102: add Webserver + SPIFFS
+          // 103: add K32_audio
 
 // .##.......##.....##.##.......##.....##....########.##....##.########..########
 // .##.......##.....##.##.......##.....##.......##.....##..##..##.....##.##......
@@ -10,7 +12,7 @@
 // .##.......##.....##.##.......##.....##.......##.......##....##........##......
 // .########..#######..########..#######........##.......##....##........########
 
-#define LULU_TYPE 91
+#define LULU_TYPE 6
 
 // 0="Power" 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="PotSon" 9="chariot"
 // 10="power" 11="DMX_strobe" 12="DMX_Par_led" 13="NODE_dmx_thru" 14="DMX_smoke"
@@ -33,7 +35,7 @@
 
 /////////////////////////////////////////ID/////////////////////////////////////////
 
-// #define K32_SET_NODEID 304    // board unique id => V1 only or boards without STM32 !! otherwise read from STM32
+// #define K32_SET_NODEID 49    // board unique id => V1 only or boards without STM32 !! otherwise read from STM32
 // #define K32_SET_HWREV 14    // board hw rev !! only for boards without STM32
                                         //  1: KXKM V1
                                         //  2: KXKM V2
@@ -83,7 +85,7 @@ void setup()
   {
     // Define router (also MQTT broker) 
     String router = "2.0.0.1";
-    // String router = "192.168.131.131";
+    // String router = "192.168.1.37";
 
     // Auto calculate IP, i.e.   ID: 45 => 2.0.0.145  //  ID: 318 => 2.0.3.118  // ID: 100 => 2.0.1.100
     //
