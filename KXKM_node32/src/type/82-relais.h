@@ -12,12 +12,12 @@ void setup_device()
     digitalWrite(ATOM_RELAY, HIGH);
 
     // event/buzz (from mqtt)
-    k32->on("btn/atom-on", [](Orderz *order) { digitalWrite(ATOM_RELAY, LOW); });
-    k32->on("event/start", [](Orderz *order) { digitalWrite(ATOM_RELAY, LOW); });   // TODO: replace with K32_relay cmd
+    k32->on("btn/atom-on", [](Orderz *order) { digitalWrite(ATOM_RELAY, LOW); });   // ON
+    k32->on("event/relayON", [](Orderz *order) { digitalWrite(ATOM_RELAY, LOW); });   // TODO: replace with K32_relay cmd
 
     // event/stop (from mqtt)
-    k32->on("btn/atom-off", [](Orderz *order) { digitalWrite(ATOM_RELAY, HIGH); });
-    k32->on("event/stop", [](Orderz *order) { digitalWrite(ATOM_RELAY, HIGH); });  // TODO: replace with K32_relay cmd
+    k32->on("btn/atom-off", [](Orderz *order) { digitalWrite(ATOM_RELAY, HIGH); });// OFF
+    k32->on("event/relayOFF", [](Orderz *order) { digitalWrite(ATOM_RELAY, HIGH); });  // TODO: replace with K32_relay cmd
 }
 
 
