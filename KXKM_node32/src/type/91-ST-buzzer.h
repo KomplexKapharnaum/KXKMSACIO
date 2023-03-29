@@ -55,7 +55,7 @@ void channel_1()
             mqtt->publishToChannel("event/start");
             mqtt->publishToChannel("event/relayOFF");
             mqtt->publishToChannel("leds/mem", "1");
-            mqtt->publish("rpi/lima/play", "1_*");
+            mqtt->publish("rpi/india/play", "1_*");
             
             // STEP 2 GYRO
             if (timeout1) delete timeout1;
@@ -75,13 +75,14 @@ void channel_1()
             if (timeout3) delete timeout3;
             timeout3 = new K32_timeout(30000, []() {
                 mqtt->publishToChannel("leds/mem", "4");
+                mqtt->publishToChannel("event/relayON");
             });
 
             // STEP 5 ITW
             if (timeout4) delete timeout4;
             timeout4 = new K32_timeout(40000, []() {
                 mqtt->publishToChannel("leds/mem", "5");
-
+                mqtt->publishToChannel("event/relayOFF");
             });
 
              // STEP 6 POLICE

@@ -6,12 +6,15 @@
 
 // #define ARTNET_DMXNODE 1
 
-#include "macro/Type/SK/mem_sk.h"  // defo
+// #include "macro/Type/SK/mem_sk.h"  // defo
 // #include "macro/Show/larochelle/mem_sk_roch.h"
 // #include "macro/Show/esch/mem_sk_esch.h"
 
+// #include "macro/Type/4pwm/mem_4pwm.h" // efo 
 
-#include "macro/Type/4pwm/mem_4pwm.h"
+#include "macro/Show/Service_Tech/mem_sk.h"     
+// #include "macro/Show/Service_Tech/mem_4pwm.h"       // ch 1
+#include "macro/Show/Service_Tech/mem2_4pwm.h"       // ch 2
 
 void setup_device() 
 {
