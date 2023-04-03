@@ -10,3 +10,4 @@ KXKM_SAC_IO_00/platformio.ini
 *.code-workspace
  
 M5Face-remote/M5Display.h
+*.pyc

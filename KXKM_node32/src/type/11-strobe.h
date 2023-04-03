@@ -1,14 +1,18 @@
 
 #define L_NAME "Dmx_strobe" // a tester
 
-#define VERSION_STROBE 2 // 1=strobe rgb 16 ch 5 division 2=strobe rgb 17 ch 4 division
+#define VERSION_STROBE 2 // 1=strobe rgb 16 ch 5 division 2=strobe rgb 17 ch 4 division 3=strobe rgb 17 ch 4 division + fog 3 ch 
 
 #if VERSION_STROBE == 1
 #define STROBE_PATCHSIZE 16
 #include "macro/Type/strobe/mem_strobe_dmx_mod_1.h"
 #elif VERSION_STROBE == 2
 #define STROBE_PATCHSIZE 17
-#include "macro/Type/strobe/mem_strobe_dmx_mod_2.h"
+#include "macro/Show/Service_Tech/mem_strobe_dmx_mod_2.h" // channel 2
+#elif VERSION_STROBE == 3
+#define STROBE_PATCHSIZE 20
+// #include "macro/Type/strobe/mem_strobe_dmx_mod_2.h"
+#include "macro/Show/Service_Tech/mem_strobe_dmx_mod_3.h" // channel 1
 #endif
 
 #define ARTNET_ENABLE 1

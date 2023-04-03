@@ -19,6 +19,10 @@ K32_timeout* timeout1;
 K32_timeout* timeout2;
 K32_timeout* timeout3;
 K32_timeout* timeout4;
+K32_timeout* timeout5;
+K32_timeout* timeout6;
+K32_timeout* timeout7;
+K32_timeout* timeout8;
 
 // CHANNEL 1: ACCUEIL
 //
@@ -39,38 +43,74 @@ void channel_1()
         if (timeout2) timeout2->cancel();
         if (timeout3) timeout3->cancel();
         if (timeout4) timeout4->cancel();
+        if (timeout5) timeout5->cancel();
+        if (timeout6) timeout6->cancel();
+        if (timeout7) timeout7->cancel();
+        if (timeout8) timeout8->cancel();
         
         // START
         if (!stateB) {
             
-            // STEP 1
+            // STEP 1 INTRO MANIF
             mqtt->publishToChannel("event/start");
-            mqtt->publishToChannel("relay/on");
+            mqtt->publishToChannel("event/relayOFF");
             mqtt->publishToChannel("leds/mem", "1");
-            mqtt->publish("rpi/lima/play", "1_*");
+            mqtt->publish("rpi/india/play", "1_*");
             
-            // STEP 2
+            // STEP 2 GYRO
             if (timeout1) delete timeout1;
-            timeout1 = new K32_timeout(2000, []() {
+            timeout1 = new K32_timeout(5000, []() {
                 mqtt->publishToChannel("leds/mem", "2");
+                mqtt->publishToChannel("event/relayON");
             });
 
-            // STEP 3
+            // STEP 3 ITW
             if (timeout2) delete timeout2;
-            timeout2 = new K32_timeout(4000, []() {
+            timeout2 = new K32_timeout(15000, []() {
                 mqtt->publishToChannel("leds/mem", "3");
+                mqtt->publishToChannel("event/relayOFF");
             });
 
-            // STEP 4
+            // STEP 4 RUBIS
             if (timeout3) delete timeout3;
-            timeout3 = new K32_timeout(6000, []() {
+            timeout3 = new K32_timeout(30000, []() {
                 mqtt->publishToChannel("leds/mem", "4");
+                mqtt->publishToChannel("event/relayON");
             });
 
-            // STEP 5 => STOP
+            // STEP 5 ITW
             if (timeout4) delete timeout4;
-            timeout4 = new K32_timeout(8000, []() {
+            timeout4 = new K32_timeout(40000, []() {
+                mqtt->publishToChannel("leds/mem", "5");
+                mqtt->publishToChannel("event/relayOFF");
+            });
+
+             // STEP 6 POLICE
+            if (timeout5) delete timeout5;
+            timeout5 = new K32_timeout(55000, []() {
+                mqtt->publishToChannel("leds/mem", "6");
+
+            });
+
+             // STEP 7 ITW
+            if (timeout6) delete timeout6;
+            timeout6 = new K32_timeout(65000, []() {
+                mqtt->publishToChannel("leds/mem", "7");
+
+            });
+
+             // STEP 8 SORTIE
+            if (timeout7) delete timeout7;
+            timeout7 = new K32_timeout(80000, []() {
+                mqtt->publishToChannel("leds/mem", "8");
+
+            });
+
+             // STEP 9 => STOP
+            if (timeout8) delete timeout8;
+            timeout8 = new K32_timeout(90000, []() {
                 k32->emit("btn/buzzer-on");
+                mqtt->publishToChannel("leds/mem", "0");
             });
 
         }
@@ -78,7 +118,7 @@ void channel_1()
         // STOP
         else {
             mqtt->publishToChannel("event/stop");
-            mqtt->publishToChannel("relay/off");
+            mqtt->publishToChannel("event/relayOFF");
             mqtt->publishToChannel("leds/mem", "0");
             mqtt->publish("rpi/lima/stop");
         }
@@ -109,6 +149,7 @@ void channel_2()
         if (timeout2) timeout2->cancel();
         if (timeout3) timeout3->cancel();
         if (timeout4) timeout4->cancel();
+
         
         // START
         if (!stateB) {
@@ -158,17 +199,6 @@ void channel_2()
 
 }
 
-// SERRE
-//
-void channel_5() {
-
-    // Buzzer PRESSED
-    k32->on("btn/buzzer-on", [](Orderz *order) { 
-        if (!mqtt) return;
-        mqtt->publishToChannel("audio/play", "0");
-    });
-
-}
 
 
 // SETUP COMMON
@@ -220,7 +250,6 @@ void setup_device()
     // SCENARII
     if (k32->system->channel() == 1) channel_1();
     if (k32->system->channel() == 2) channel_2();
-    if (k32->system->channel() == 5) channel_5();
 
 }
 
