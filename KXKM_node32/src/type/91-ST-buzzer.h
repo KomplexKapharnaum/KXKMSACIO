@@ -94,9 +94,9 @@ void channel_1()
 //
 void channel_2() 
 {   
-    // Door CLOSED -> start
+    // Door CLOSED -> stop
     k32->on("btn/switch-on", [](Orderz *order) { 
-        stateB = false;
+        stateB = true;
         k32->emit("btn/buzzer-on");
     });
 

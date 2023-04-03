@@ -35,7 +35,7 @@
 
 /////////////////////////////////////////ID/////////////////////////////////////////
 
-// #define K32_SET_NODEID 49    // board unique id => V1 only or boards without STM32 !! otherwise read from STM32
+// #define K32_SET_NODEID 7    // board unique id => V1 only or boards without STM32 !! otherwise read from STM32
 // #define K32_SET_HWREV 14    // board hw rev !! only for boards without STM32
                                         //  1: KXKM V1
                                         //  2: KXKM V2
