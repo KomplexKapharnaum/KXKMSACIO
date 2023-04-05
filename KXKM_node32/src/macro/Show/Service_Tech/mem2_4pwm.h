@@ -10,11 +10,11 @@ class BankPWM : public LBank {
             add(   0,    0,    0,    0);   //  1 BLACK
             add(   0,    0,    0,    0);   //  2 BLACK
             add(   0,    0,    0,    0);   //  3 BLACK
-            add( 255,  255,  255,  255);   //  4 FULL 
-            mem->mod(new K32_mod_fadein)->period(5000)->at(0)->at(1)->at(2)->at(3)->mini(0)->maxi(255);
+            add(   0,    0,    0,    0);   //  4 BLACK
             add(   0,    0,    0,    0);   //  5 BLACK
             add(   0,    0,    0,    0);   //  6 BLACK
-            add(   0,    0,    0,    0);   //  7 BLACK
+            add( 255,  255,  255,  255);   //  7 FULL 
+            mem->mod(new K32_mod_fadein)->period(5000)->at(0)->at(1)->at(2)->at(3)->mini(0)->maxi(255);
             add( 255,  255,  255,  255);   //  8 FULL 
             mem->mod(new K32_mod_fadein)->period(3000)->at(0)->at(1)->at(2)->at(3)->mini(0)->maxi(255);
 
