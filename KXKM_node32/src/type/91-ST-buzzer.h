@@ -14,24 +14,60 @@
 #define ATOM_SWITCH 22
 #define ATOM_BUZLIGHT 32
 
-bool stateB = false;
-K32_timeout* timeout1;
-K32_timeout* timeout2;
-K32_timeout* timeout3;
-K32_timeout* timeout4;
-K32_timeout* timeout5;
-K32_timeout* timeout6;
-K32_timeout* timeout7;
-K32_timeout* timeout8;
+#define CHANNEL1_NMEDIA 3
+#define CHANNEL2_NMEDIA 1
+
+int mediaIndex = 0;
+
+int stateB = 0;
+K32_timeout* timeout0 = nullptr;
+K32_timeout* timeout1 = nullptr;
+K32_timeout* timeout2 = nullptr;
+K32_timeout* timeout3 = nullptr;
+K32_timeout* timeout4 = nullptr;
+K32_timeout* timeout5 = nullptr;
+K32_timeout* timeout6 = nullptr;
+K32_timeout* timeout7 = nullptr;
+K32_timeout* timeout8 = nullptr;
+
+
 
 // CHANNEL 1: ACCUEIL
 //
 void channel_1() 
 {   
+    // ATOM direct ON/OFF
+    k32->on("btn/atom-on", [](Orderz *order) { 
+        if (stateB == 1) stateB = 2;
+        else if (stateB > 1) stateB = 0;
+        k32->emit("btn/buzzer-on"); 
+    });
+
     // Door CLOSED -> start
+    k32->on("btn/switch-long", [](Orderz *order) { 
+        if (stateB == 0) k32->emit("btn/buzzer-on");
+    });
+
+    // Door CLOSED -> start after 1000
     k32->on("btn/switch-on", [](Orderz *order) { 
-        stateB = false;
-        k32->emit("btn/buzzer-on");
+        if (timeout0) {
+            timeout0->cancel();
+            delete timeout0;
+            timeout0 = nullptr;
+        }
+    });
+
+    // Door OPEN -> stop after 1000
+    k32->on("btn/switch-off", [](Orderz *order) 
+    { 
+        if (timeout0) {
+            timeout0->cancel();
+            delete timeout0;
+        }
+        timeout0 = new K32_timeout(1000, []() {
+            stateB = 3; 
+            k32->emit("btn/buzzer-on");
+        });
     });
 
     // Buzzer PRESSED
@@ -39,6 +75,7 @@ void channel_1()
         if (!mqtt) return;
 
         // Cancel Timeout
+        if (timeout0) timeout0->cancel();
         if (timeout1) timeout1->cancel();
         if (timeout2) timeout2->cancel();
         if (timeout3) timeout3->cancel();
@@ -47,15 +84,17 @@ void channel_1()
         if (timeout6) timeout6->cancel();
         if (timeout7) timeout7->cancel();
         if (timeout8) timeout8->cancel();
-        
+
         // START
-        if (!stateB) {
+        if (stateB == 0) {
             
+            mediaIndex = (mediaIndex + 1) % CHANNEL1_NMEDIA;
+
             // STEP 1 INTRO MANIF
-            mqtt->publishToChannel("event/start");
+            stateB = 1;
             mqtt->publishToChannel("event/relayOFF");
             mqtt->publishToChannel("leds/mem", "1");
-            mqtt->publish("rpi/india/play", "1_*");
+            mqtt->publish("rpi/india/play", (String(mediaIndex+1)+"_*").c_str());
             
             // STEP 2 GYRO
             if (timeout1) delete timeout1;
@@ -109,24 +148,22 @@ void channel_1()
              // STEP 9 => STOP
             if (timeout8) delete timeout8;
             timeout8 = new K32_timeout(90000, []() {
+                stateB = 2;
                 k32->emit("btn/buzzer-on");
-                mqtt->publishToChannel("leds/mem", "0");
             });
 
         }
 
         // STOP
-        else {
-            mqtt->publishToChannel("event/stop");
+        if (stateB >= 2) {
             mqtt->publishToChannel("event/relayOFF");
             mqtt->publishToChannel("leds/mem", "0");
-            mqtt->publish("rpi/lima/stop");
+            mqtt->publish("rpi/india/stop");
+            if (stateB == 3) stateB = 0; // Re-ARM for next door close
         }
-    });
 
-    // START / STOP
-    k32->on("event/start", [](Orderz *order) { stateB = true; });
-    k32->on("event/stop", [](Orderz *order) { stateB = false; });
+        LOG(stateB);
+    });
 
 }
 
@@ -154,10 +191,12 @@ void channel_2()
         // START
         if (!stateB) {
             
+            mediaIndex = (mediaIndex + 1) % CHANNEL2_NMEDIA;
+
             // STEP 1
             mqtt->publishToChannel("event/start");
             mqtt->publishToChannel("leds/mem", "1");
-            mqtt->publish("rpi/oscar/play", "1_*");
+            mqtt->publish("rpi/oscar/play", (String(mediaIndex+1)+"_*").c_str());
 
             // STEP 2
             if (timeout1) delete timeout1;
@@ -241,10 +280,6 @@ void setup_device()
     // BUZZER BTN
     buttons->add(ATOM_BUZBTN, "buzzer");
     buttons->add(ATOM_SWITCH, "switch");
-
-    // ATOM BTN -> re-map as BUZZER
-    k32->on("btn/atom-on", [](Orderz *order) { k32->emit("btn/buzzer-on"); });
-    k32->on("btn/atom-off", [](Orderz *order) { k32->emit("btn/buzzer-off"); });
 
 
     // SCENARII
