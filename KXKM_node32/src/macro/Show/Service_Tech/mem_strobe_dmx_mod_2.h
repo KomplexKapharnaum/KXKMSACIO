@@ -22,13 +22,13 @@ public:
         add( 255, 210, 000, 000, 255, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000 ); // 03 Marin qui deraille
         mem->mod(new K32_mod_sinus)->period(2000)->at(3)->phase(0)->mini(0)->maxi(88);
         mem->mod(new K32_mod_fadein)->period(45000)->at(1)->mini(0)->maxi(210);
-        mem->mod(new K32_mod_random)->relative()->period(150)->at(1)->mini(-200)->maxi(15);
+        mem->mod(new K32_mod_random)->additive()->period(1500)->at(1)->mini(-200)->maxi(-100);
 
         add( 255, 210, 000, 120,  18, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000 ); // 04 foret qui deraille
         mem->mod(new K32_mod_sinus)->period(3000)->at(3)->phase(0)->mini(110)->maxi(120);
         mem->mod(new K32_mod_sinus)->period(3000)->at(4)->phase(90)->mini(0)->maxi(18);
         mem->mod(new K32_mod_fadein)->period(45000)->at(1)->mini(0)->maxi(210);
-        mem->mod(new K32_mod_random)->relative()->period(1000)->at(1)->mini(-200)->maxi(15);
+        mem->mod(new K32_mod_random)->additive()->period(1000)->at(1)->mini(-200)->maxi(-50);
 
         add( 255, 000, 255, 255, 250, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000 ); // 05 blanc str
         mem->mod(new K32_mod_sinus)->period(1000)->at(1)->phase(0)->mini(0)->maxi(255);
