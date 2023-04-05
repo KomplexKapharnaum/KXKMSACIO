@@ -21,6 +21,15 @@ class BankPWM : public LBank {
 
             add( 255,    0,    0,    0 );   // 05 blink fast
                 mem->mod(new K32_mod_pulse)->param(1,10)->at(0)->period(200);
+
+            add( 255,    0,    0,    0 );   // 06 blink fast
+                mem->mod(new K32_mod_pulse)->param(1,10)->at(0)->period(1000);
+
+            add( 255,    0,    0,    0 );   // 07 blink fast
+                mem->mod(new K32_mod_pulse)->param(1,10)->at(0)->period(200);
+
+            add( 255,    0,    0,    0 );   // 08 blink fast
+                mem->mod(new K32_mod_pulse)->param(1,10)->at(0)->period(1000);
         }
 };
 
@@ -49,6 +58,18 @@ class BankSK : public LBank {
                 mem->mod(new K32_mod_pulse)->param(1,10)->at(0)->period(1000);
             
             add(255,   255,   0,   0,   0,     0,         0,        0,        0,          0,       0,       0,       0,       0,           0,  255 );  // 05 blink fast
+                mem->mod(new K32_mod_pulse)->param(1,10)->at(0)->period(200);
+
+            add(255,   255,   0,   0,   0,     0,         0,        0,        0,          0,       0,       0,       0,       0,           0,  255 ); // 06 breath slow
+                mem->mod(new K32_mod_sinus)->at(0)->period(2000);
+
+            add(255,   255,   0,   0,   0,     0,         0,        0,        0,          0,       0,       0,       0,       0,           0,  255 );  // 07 breath fast
+                mem->mod(new K32_mod_sinus)->at(0)->period(800);
+
+            add(255,   255,   0,   0,   0,     0,         0,        0,        0,          0,       0,       0,       0,       0,           0,  255 );  // 08 blink slow
+                mem->mod(new K32_mod_pulse)->param(1,10)->at(0)->period(1000);
+            
+            add(255,   255,   0,   0,   0,     0,         0,        0,        0,          0,       0,       0,       0,       0,           0,  255 );  // 09 blink fast
                 mem->mod(new K32_mod_pulse)->param(1,10)->at(0)->period(200);
 
         }

@@ -137,7 +137,7 @@ void k32_setup() {
 
     // /////////////////////////////////////////////// NAME //////////////////////////////////////
 
-    String nodeName = String(L_NAME) + "-" + String(k32->system->lightid()) + "-v" + String(NODE32_VER);
+    String nodeName = String(L_NAME) + "-" + String(k32->system->lightid()) + "-v" + String(NODE32_VER) + "-c" + String(k32->system->channel());
 
     LOG("\nNAME:   " + nodeName );
     LOGF("CHANNEL: %d\n\n", k32->system->channel());
