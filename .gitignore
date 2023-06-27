@@ -6,6 +6,7 @@
 .~lock.sac_v2_io.xlsx#
 *.vscode*
 *.pio*
+.ds_store
 KXKM_SAC_IO_00/platformio.ini
 *.code-workspace
  
