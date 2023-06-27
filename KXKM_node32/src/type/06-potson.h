@@ -22,8 +22,9 @@ void setup_device()
     k32->on("stm32/btn-click", [](Orderz* order) { 
         if (audio->isPlaying()) audio->stop();
         else {
-            audio->loop(true);
-            audio->play("/"+potChannel+".wav", velo); 
+            audio->loop(false);
+            // audio->play("/"+potChannel+".wav", velo); 
+            audio->play("/0_tone.wav", 127);
         }
     });
 
