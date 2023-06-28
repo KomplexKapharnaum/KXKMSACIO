@@ -1,8 +1,10 @@
 #include <Arduino.h>
 
-#define NODE32_VER 103    // if previous version was < 102 : Upload SPIFFS !
+#define NODE32_VER 104    
+          // if previous version was < 102 : Upload SPIFFS !
           // 102: add Webserver + SPIFFS
           // 103: add K32_audio
+          // 104: reset & web config & some audio tweaks
 
 // .##.......##.....##.##.......##.....##....########.##....##.########..########
 // .##.......##.....##.##.......##.....##.......##.....##..##..##.....##.##......
@@ -12,7 +14,7 @@
 // .##.......##.....##.##.......##.....##.......##.......##....##........##......
 // .########..#######..########..#######........##.......##....##........########
 
-#define LULU_TYPE 91
+#define LULU_TYPE 50
 
 // 0="Power" 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="PotSon" 9="chariot"
 // 10="power" 11="DMX_strobe" 12="DMX_Par_led" 13="NODE_dmx_thru" 14="DMX_smoke"

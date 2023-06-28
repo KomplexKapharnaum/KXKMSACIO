@@ -30,11 +30,21 @@ function onOpen(event) {
 
 function onClose(event) {
     console.log('Connection closed');
-    setTimeout(initWebSocket, 2000);
+    setTimeout(initWebSocket, 5000);
 }
 
 function onMessage(event) {
     console.log("WS rcv: " + event.data)
+
+    if (event.data == "reset") {
+        console.log("reset")
+        setTimeout(function(){ 
+            // force reload page
+            window.location.reload(true);
+        }, 1000);
+        document.getElementById("content").innerHTML = "Saving & Restarting ...";
+        return;
+    }
 
     var myObj = JSON.parse(event.data);
     var keys = Object.keys(myObj);
@@ -48,25 +58,22 @@ function onMessage(event) {
             document.getElementById("slider"+ (i+1).toString()).value = myObj[key];
         }
         else {
-            document.getElementById(key).value = myObj[key];
+            if (document.getElementById(key))
+                document.getElementById(key).value = myObj[key];
         }
     }
 }
 
+var newConf = {};
+
 function updateConf(element) {
-  var data = {};
-  data[element.id] = document.getElementById(element.id).value;
-  data = JSON.stringify(data);
-  
-  console.log("conf update: " + data);
-  websocket.send("conf" + data);
+  newConf[element.id] = document.getElementById(element.id).value;
 }
 
-
-function updateSliderPWM(element) {
-  var sliderNumber = element.id.charAt(element.id.length-1);
-  var sliderValue = document.getElementById(element.id).value;
-  document.getElementById("sliderValue"+sliderNumber).innerHTML = sliderValue;
-  console.log(sliderValue);
-  websocket.send(sliderNumber+"s"+sliderValue.toString());
+function saveConf() 
+{
+    let data = JSON.stringify(newConf);
+    console.log("conf update: " + data);
+    websocket.send("conf" + data);
+    newConf = {};
 }

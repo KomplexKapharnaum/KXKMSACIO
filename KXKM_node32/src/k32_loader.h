@@ -66,12 +66,6 @@ void k32_setup() {
     //////////////////////////////////////// K32_lib ////////////////////////////////////
     k32 = new K32(NODE32_VER);
     // Serial.begin(115200, SERIAL_8N1);
-
-    // /////////////////////////////////////////////// AUDIO //////////////////////////////////////
-    #if HW_ENABLE_AUDIO == 1
-        if (AUDIO_PIN[k32->system->hw()][0] > 0 && SD_PIN[k32->system->hw()][0] > 0)
-            audio = new K32_audio(k32, AUDIO_PIN[k32->system->hw()], SD_PIN[k32->system->hw()]);
-    #endif
     
     //////////////////////////////////////// K32 hardware ////////////////////////////////////
     // STM32
@@ -89,6 +83,12 @@ void k32_setup() {
 
     LOGINL("[system]: HW rev: ");
     LOG(k32->system->hw());
+
+    // AUDIO 
+    #if HW_ENABLE_AUDIO == 1
+        if (AUDIO_PIN[k32->system->hw()][0] > 0 && SD_PIN[k32->system->hw()][0] > 0)
+            audio = new K32_audio(k32, AUDIO_PIN[k32->system->hw()], SD_PIN[k32->system->hw()]);
+    #endif
 
     // BUTTONS (GPIO)
     buttons = new K32_buttons(k32);
