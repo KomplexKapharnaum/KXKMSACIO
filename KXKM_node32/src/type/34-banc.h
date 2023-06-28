@@ -148,7 +148,6 @@ void setup_device()
         LOG("WIFI: connection lost..");
         // light->anim("artnet-strip")->nowifi();
         // light->anim("artnet-pwm")->nowifi();
-        // light->anim("artnet-par")->nowifi();
     });
 
     // .########..########.##.....##..#######..########.########
@@ -161,7 +160,7 @@ void setup_device()
 
     // REMOTE
 
-    remote->setMacroMax(light->anim("mem-par")->bank()->size());
+    remote->setMacroMax(light->anim("mem-pwm")->bank()->size());
 
     // REMOTE: want macro
     k32->on("remote/macro", [](Orderz *order)
