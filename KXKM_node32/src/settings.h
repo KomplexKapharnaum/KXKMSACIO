@@ -98,6 +98,9 @@
 #elif LULU_TYPE == 24
 #include "type/24-cube-sk.h"
 
+#elif LULU_TYPE == 34
+#include "type/34-banc.h"
+
 #elif LULU_TYPE == 50
 #include "type/50-elp_DMX.h"
 
