@@ -1,6 +1,10 @@
+
+OTA:
+- merge ota && espota.py
+- add spiffs OTA 
+
+PROFILES:
 -> update mem for other than sac !! 
-
-
 
 AUDIO :
 - play by index (in root path)

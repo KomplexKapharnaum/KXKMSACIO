@@ -1,27 +1,18 @@
 
-#define L_NAME "banc_par" // a tester
+#define L_NAME "banc"
 
-#define LULU_MEMNOWIFI_MASTER 127
-
-#include "macro/Show/parlement/mem_sk_parlement.h"         // PAR_PATCHSIZE = 5
-#include "macro/Type/4pwm/mem_4pwm.h"                      // PWM_N_CHAN = 4
-// #include "macro/Show/parlement/mem_4pwm_parlement.h"       // PWM_N_CHAN = 4
-#include "macro/Show/parlement/mem_parled_solo.h"          // PAR_PATCHSIZE = 5
+#include "macro/Type/SK/mem_sk.h"                   // defo
+#include "macro/Type/4pwm/mem_4pwm.h"               // PWM_N_CHAN = 4
 
 // LEDS
 #define LULU_STRIP_TYPE   LED_SK6812W_V3  // Type de strip led          
 #define LULU_STRIP_SIZE   120
 
-// PAR
-#define PAR_N 1
-
 // PATCH
-#define PATCHSIZE  (STRIP_PATCHSIZE + PWM_N_CHAN + PAR_PATCHSIZE)   // 25
+#define PATCHSIZE  (STRIP_PATCHSIZE + PWM_N_CHAN)
 
 // ARTNET
 #define ARTNET_ENABLE 1
-#define ARTNET_DMXNODE 0
-
 
 
 void setup_device()
@@ -51,11 +42,6 @@ void setup_device()
         strips[k] = new K32_ledstrip(k, LEDS_PIN[k32->system->hw()][k], (led_types)LULU_STRIP_TYPE, LULU_STRIP_SIZE);
     light->addFixtures(strips, LED_N_STRIPS);
 
-    // PAR fixtures
-    K32_fixture *par[PAR_N] = {nullptr};
-    for (int k = 0; k < PAR_N; k++)
-        par[k] = new K32_dmxfixture(dmx, (1 + int(PATCHSIZE) * k) + PWM_N_CHAN + STRIP_PATCHSIZE, PAR_PATCHSIZE);
-    light->addFixtures(par, PAR_N);
 
     // .########.########..######..########.....######..########..#######..##.....##.########.##....##..######..########
     // ....##....##.......##....##....##.......##....##.##.......##.....##.##.....##.##.......###...##.##....##.##......
@@ -107,13 +93,6 @@ void setup_device()
         ->remote(true)
         ->mem(-1);
 
-    // ANIM par - presets
-    light->anim("mem-par", new Anim_datathru, PAR_PATCHSIZE)
-        ->drawTo(par, PAR_N)
-        ->bank(new BankPar)
-        ->remote(true)
-        ->mem(-1);
-
     // .##.....##..#######..##....##.####.########..#######..########..####.##....##..######..
     // .###...###.##.....##.###...##..##.....##....##.....##.##.....##..##..###...##.##....##.
     // .####.####.##.....##.####..##..##.....##....##.....##.##.....##..##..####..##.##.......
@@ -141,33 +120,16 @@ void setup_device()
         ->play();
 
 
-    // ANIM par - artnet
-    light->anim("artnet-par", new Anim_datathru, PAR_PATCHSIZE)
-        ->drawTo(par, PAR_N)
-        ->play();
-
-
     // ARTNET: subscribe dmx frame
     K32_artnet::onDmx({.address = (1 + (k32->system->lightid() - 1) * int(PATCHSIZE)),
                        .framesize = PATCHSIZE,
                        .callback = [](const uint8_t *data, int length)
                        {
-                            // LOGINL(" dmx:");
-                            // for (int i=0; i<length; i++)
-                            // {
-                            //     LOGINL(" ");
-                            //     LOGINL(data[i]);
-                            // }
-                            // LOG("");
-
                             if (length >= STRIP_PATCHSIZE)
                                 light->anim("artnet-strip")->push(data, STRIP_PATCHSIZE);
                             
                             if (length >= PWM_N_CHAN + STRIP_PATCHSIZE)
                                light->anim("artnet-pwm")->push(&data[STRIP_PATCHSIZE], PWM_N_CHAN);
-
-                            if (length >= PATCHSIZE) 
-                                light->anim("artnet-par")->push(&data[STRIP_PATCHSIZE + PWM_N_CHAN], PAR_PATCHSIZE);
                        }});
 
     // .##....##..#######.....##......##.####.########.####
@@ -186,7 +148,6 @@ void setup_device()
         LOG("WIFI: connection lost..");
         // light->anim("artnet-strip")->nowifi();
         // light->anim("artnet-pwm")->nowifi();
-        // light->anim("artnet-par")->nowifi();
     });
 
     // .########..########.##.....##..#######..########.########
@@ -199,12 +160,11 @@ void setup_device()
 
     // REMOTE
 
-    remote->setMacroMax(light->anim("mem-par")->bank()->size());
+    remote->setMacroMax(light->anim("mem-pwm")->bank()->size());
 
     // REMOTE: want macro
     k32->on("remote/macro", [](Orderz *order)
             {
-            light->anim("mem-par")  ->mem( order->getData(0)->toInt());
             light->anim("mem-strip")->mem( order->getData(0)->toInt());
             light->anim("mem-pwm")  ->mem( order->getData(0)->toInt());
             remote->setState(REMOTE_MANU); 
@@ -224,9 +184,6 @@ void setup_device()
                 light->anim("mem-strip")->stop();
                 light->anim("artnet-strip")->play();
 
-                light->anim("mem-par")->stop();
-                light->anim("artnet-par")->play();
-                
                 LOG("REMOTE: -> Mode AUTO");
             }
 
@@ -239,9 +196,6 @@ void setup_device()
                 light->anim("artnet-strip")->stop();
                 light->anim("mem-strip")->play();
                 
-                light->anim("artnet-par")->stop();
-                light->anim("mem-par")->play();
-
                 LOG("REMOTE: -> Mode MANU");
             } });
 }

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+## #!/usr/bin/env python
 #
 # Original espota.py by Ivan Grokhotkov:
 # https://gist.github.com/igrr/d35ab8446922179dc58c
