@@ -1,6 +1,7 @@
 
 #define L_NAME "DMX Fixture" // a tester
 
+
 // // LEDS
 // #define LULU_STRIP_TYPE LED_SK6812W_V3 // Type de strip led
 // #define LULU_STRIP_SIZE 120
@@ -24,7 +25,7 @@
 #define ARTNET_ENABLE 1
 #define ARTNET_DMXNODE 0
 
-#include "macro/Type/parled/mem_pwm_parled_dmx.h"
+#include "macro/Type/parled/mem_parled_dmx.h"
 #include "macro/Type/arcaline/mem_arca_dmx_mod_1.h"
 #include "macro/Type/p5/mem_p5_dmx_mod_1.h"
 
@@ -81,8 +82,8 @@ void setup_device()
     K32_fixture *p5[P5_N] = {nullptr};
     for (int k = 0; k < P5_N; k++)
     {
-        arca[k] = new K32_dmxFixture(dmx, (size_arca + P5_PATCH_SIZE * k), P5_PATCH_SIZE);
-        size_p5 = (size_arca + P5_PATCH_SIZE * k) + P5_PATCH_SIZE
+        arca[k] = new K32_dmxfixture(dmx, (size_arca + P5_PATCH_SIZE * k), P5_PATCH_SIZE);
+        size_p5 = (size_arca + P5_PATCH_SIZE * k) + P5_PATCH_SIZE;
     }
     light->addFixtures(p5 , P5_N);
 
@@ -138,21 +139,21 @@ void setup_device()
     //     ->mem(-1);
 
     // ANIM par - presets
-    light->anim("mem-par", new Par_datathru, PAR_PATCH_SIZE)
+    light->anim("mem-par", new Anim_datathru, PAR_PATCH_SIZE)
         ->drawTo(par, PAR_N)
         ->bank(new BankPar)
         ->remote(true)
         ->mem(-1);
 
     // ANIM arca - presets
-    light->anim("mem-arca", new Arca_datathru, ARCA_PATCH_SIZE)
+    light->anim("mem-arca", new Anim_datathru, ARCA_PATCH_SIZE)
         ->drawTo(arca, ARCA_N)
         ->bank(new BankArca)
         ->remote(true)
         ->mem(-1);
 
     // ANIM P5 - presets
-    light->anim("mem-p5", new P5_datathru, P5_PATCH_SIZE)
+    light->anim("mem-p5", new Anim_datathru, P5_PATCH_SIZE)
         ->drawTo(p5, P5_N)
         ->bank(new BankP5)
         ->remote(true)
@@ -184,17 +185,17 @@ void setup_device()
     //     ->play();
 
     // ANIM par - artnet
-    light->anim("artnet-par", new Par_datathru, PAR_PATCH_SIZE)
+    light->anim("artnet-par", new Anim_datathru, PAR_PATCH_SIZE)
         ->drawTo(par, PAR_N)
         ->play();
 
         // ANIM arca - artnet
-    light->anim("artnet-arca", new Arca_datathru, ARCA_PATCH_SIZE)
+    light->anim("artnet-arca", new Anim_datathru, ARCA_PATCH_SIZE)
         ->drawTo(arca, ARCA_N)
         ->play();
 
         // ANIM p5 - artnet
-    light->anim("artnet-p5", new P5_datathru, P5_PATCH_SIZE)
+    light->anim("artnet-p5", new Anim_datathru, P5_PATCH_SIZE)
         ->drawTo(p5, P5_N)
         ->play();
 
