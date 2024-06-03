@@ -1,6 +1,6 @@
 #include <K32_presets.h>
 
-class BankPars : public LBank
+class BankP5 : public LBank
 {
 public:
     BankP5() : LBank(6)
