@@ -75,7 +75,7 @@ void setup_device()
         arca[k] = new K32_dmxfixture(dmx, (size_par + ARCA_PATCH_SIZE * k), ARCA_PATCH_SIZE);
         size_arca = (size_par + ARCA_PATCH_SIZE * k) + ARCA_PATCH_SIZE;
     }
-        light->addFixtures(arca, ARCA_N);
+    light->addFixtures(arca, ARCA_N);
 
     // P5
     K32_fixture *p5[P5_N] = {nullptr};
@@ -84,7 +84,7 @@ void setup_device()
         arca[k] = new K32_dmxFixture(dmx, (size_arca + P5_PATCH_SIZE * k), P5_PATCH_SIZE);
         size_p5 = (size_arca + P5_PATCH_SIZE * k) + P5_PATCH_SIZE
     }
-    light->addFixtures(p5 , P5_N)
+    light->addFixtures(p5 , P5_N);
 
                   // .########.########..######..########.....######..########..#######..##.....##.########.##....##..######..########
                   // ....##....##.......##....##....##.......##....##.##.......##.....##.##.....##.##.......###...##.##....##.##......
