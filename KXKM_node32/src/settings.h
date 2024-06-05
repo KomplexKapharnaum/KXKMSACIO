@@ -63,8 +63,7 @@
 #include "type/04-fluo.h"
 
 #elif LULU_TYPE == 5
-// #include "type/05-flex.h"
-#include "type/301-dmx-fixture.h"
+#include "type/05-flex.h"
 
 #elif LULU_TYPE == 6
 #include "type/06-potson.h"
@@ -126,6 +125,9 @@
 
 #elif LULU_TYPE == 91
 #include "type/91-ST-buzzer.h"
+
+#elif LULU_TYPE == 301
+#include "type/301-dmx-fixture.h"
 
 #endif
 #endif
