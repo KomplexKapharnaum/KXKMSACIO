@@ -6,8 +6,8 @@ public:
     BankArca() : LBank(7)
     {
         //       { 0  , 1   , 2  , 3  , 4   , 5   , 6 } adr + -1
-        //       { r  , g   , b  ,  w , str , macr, dim }
-        add(  255, 255,   0,   0,   0 ,  0  ,  255); // 00 Red
+        //  { r  , g  , b ,   w , str , macr, dim }
+        add(  255,   0,   0,   0,   0 ,  0  ,  255); // 00 Red
         add(    0, 255,   0,   0,   0 ,  0  ,  255); // 01 Green
         add(    0,   0, 255,   0,   0 ,  0  ,  255); // 02 Blue
         add(  255, 255, 255,   0,   0 ,  0  ,  255); // 03 White

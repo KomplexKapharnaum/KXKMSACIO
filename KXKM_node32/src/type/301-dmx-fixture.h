@@ -1,5 +1,7 @@
 
 #define L_NAME "DMX Fixture" // a tester
+#define PRESET_COUNT 16      // stm leave in last mem
+
 // TODO Régler besoin d'apeller 2 fois la mémoire pour que ça fonctionne
 // // LEDS
 // #define LULU_STRIP_TYPE LED_SK6812W_V3 // Type de strip led
@@ -15,7 +17,7 @@
 #define ARCA_PATCH_SIZE 7 // 1 r , 2 v, 3 b, 4 blanc, 5 str, 6 macro color, 7 dim
 
 // P5
-#define P5_N 0          // nombre de P5
+#define P5_N 1          // nombre de P5
 #define P5_PATCH_SIZE 6 // 1 str, 2 dim, 3 red, 4 green, 5 blue, 6 white
 
 // PATCH
@@ -86,36 +88,40 @@ void setup_device()
     int size_par;
     int size_arca;
     int size_p5;
+    int size_add = 1;
 
     // PAR fixtures
 #if PAR_N != 0
     K32_fixture *par[PAR_N] = {nullptr};
     for (int k = 0; k < PAR_N; k++)
     {
-        par[k] = new K32_dmxfixture(dmx, (1 + PAR_PATCH_SIZE * k), PAR_PATCH_SIZE);
-        size_par = (1 + PAR_PATCH_SIZE * k) + PAR_PATCH_SIZE;
+        par[k] = new K32_dmxfixture(dmx, (size_add + PAR_PATCH_SIZE * k), PAR_PATCH_SIZE);
+        size_par = (size_add + PAR_PATCH_SIZE * k) + PAR_PATCH_SIZE;
     }
     light->addFixtures(par, PAR_N);
+    size_add = 0;
 #endif
     // ARCA fixture
 #if ARCA_N != 0
     K32_fixture *arca[ARCA_N] = {nullptr};
     for (int k = 0; k < ARCA_N; k++)
     {
-        arca[k] = new K32_dmxfixture(dmx, (size_par + ARCA_PATCH_SIZE * k), ARCA_PATCH_SIZE);
-        size_arca = (size_par + ARCA_PATCH_SIZE * k) + ARCA_PATCH_SIZE;
+        arca[k] = new K32_dmxfixture(dmx, (size_add + size_par + ARCA_PATCH_SIZE * k), ARCA_PATCH_SIZE);
+        size_arca = (size_add + size_par + ARCA_PATCH_SIZE * k) + ARCA_PATCH_SIZE;
     }
     light->addFixtures(arca, ARCA_N);
+    size_add = 0;
 #endif
     // P5
 #if P5_N != 0
     K32_fixture *p5[P5_N] = {nullptr};
     for (int k = 0; k < P5_N; k++)
     {
-        p5[k] = new K32_dmxfixture(dmx, (size_arca + P5_PATCH_SIZE * k), P5_PATCH_SIZE);
-        size_p5 = (size_arca + P5_PATCH_SIZE * k) + P5_PATCH_SIZE;
+        p5[k] = new K32_dmxfixture(dmx, (size_add + size_arca + P5_PATCH_SIZE * k), P5_PATCH_SIZE);
+        size_p5 = (size_add + size_arca + P5_PATCH_SIZE * k) + P5_PATCH_SIZE;
     }
     light->addFixtures(p5, P5_N);
+    size_add = 0;
 #endif
     // .########.########..######..########.....######..########..#######..##.....##.########.##....##..######..########
     // ....##....##.......##....##....##.......##....##.##.......##.....##.##.....##.##.......###...##.##....##.##......
@@ -125,11 +131,13 @@ void setup_device()
     // ....##....##.......##....##....##.......##....##.##.......##....##..##.....##.##.......##...###.##....##.##......
     // ....##....########..######.....##........######..########..#####.##..#######..########.##....##..######..########
 
+    // TODO : adapter les animation pour réagir correctement
+
 #if PAR_N != 0
     // INIT TEST STRIPS
     for (int k = 0; k < PAR_N; k++)
     {
-        light->anim("test-par", new Anim_test_strip, PAR_PATCH_SIZE)
+        light->anim("test-par", new Anim_dmx_test, PAR_PATCH_SIZE)
             ->drawTo(par[k])
             ->push(300)
             ->master(LULU_PREV_MASTER)
@@ -140,7 +148,7 @@ void setup_device()
 #if ARCA_N != 0
     for (int k = 0; k < ARCA_N; k++)
     {
-        light->anim("test-arca", new Anim_test_strip, ARCA_PATCH_SIZE)
+        light->anim("test-arca", new Anim_dmx_test, ARCA_PATCH_SIZE)
             ->drawTo(arca[k])
             ->push(300)
             ->master(LULU_PREV_MASTER)
@@ -151,7 +159,7 @@ void setup_device()
 #if P5_N != 0
     for (int k = 0; k < P5_N; k++)
     {
-        light->anim("test-p5", new Anim_test_strip, P5_PATCH_SIZE)
+        light->anim("test-p5", new Anim_dmx_test, P5_PATCH_SIZE)
             ->drawTo(p5[k])
             ->push(300)
             ->master(LULU_PREV_MASTER)
@@ -159,24 +167,6 @@ void setup_device()
             ->wait(); // WAIT END
     }
 #endif
-    // TEST Seque
-    // PWM TEST
-    // light->anim("test-pwm", new Anim_test_pwm, PWM_N_CHAN)
-    //     ->drawTo(dimmer)
-    //     ->push(300)
-    //     ->master(LULU_PREV_MASTER)
-    //     ->play();
-
-    // // INIT TEST STRIPS
-    // light->anim("test-strip", new Anim_test_strip, LULU_STRIP_SIZE)
-    //     ->drawTo(strips, LED_N_STRIPS)
-    //     ->push(300)
-    //     ->master(LULU_PREV_MASTER)
-    //     ->play();
-
-    // // WAIT END
-    // light->anim("test-strip")->wait();
-    // light->anim("test-pwm")->wait();
 
     // .########..########..########..######..########.########..######.
     // .##.....##.##.....##.##.......##....##.##..........##....##....##
@@ -281,8 +271,6 @@ void setup_device()
     // if (length >= PWM_N_CHAN + STRIP_PATCHSIZE)
     //     light->anim("artnet-strip")->push(&data[PWM_N_CHAN], STRIP_PATCHSIZE);
 
-    // TODO set patchsize
-
 #if PAR_N != 0
                            if (length >= PAR_PATCH_SIZE)
                                light->anim("artnet-par")->push(data, PAR_PATCH_SIZE);
@@ -374,19 +362,23 @@ void setup_device()
             // MANU
             else if (stateR == REMOTE_MANU || stateR == REMOTE_MANU_LAMP || stateR == REMOTE_MANU_STM)
             {
+
+#if P5_N != 0
+delayMicroseconds(22668); // temps d'une trame DMX permet de ne pas avoir de conflit
+                light->anim("artnet-p5")->stop();
+                light->anim("mem-p5")->play();
+#endif
+#if ARCA_N != 0
+delayMicroseconds(22668); // temps d'une trame DMX permet de ne pas avoir de conflit
+                light->anim("artnet-arca")->stop();
+                light->anim("mem-arca")->play();
+                delay(100);
+#endif
 #if PAR_N != 0
+delayMicroseconds(22668); // temps d'une trame DMX permet de ne pas avoir de conflit
                 light->anim("artnet-par")->stop();
                 light->anim("mem-par")->play();
 #endif
-#if ARCA_N != 0
-                light->anim("artnet-arca")->stop();
-                light->anim("mem-arca")->play();
-#endif
-#if P5_N != 0
-                light->anim("artnet-p5")->stop();
-                light->anim("mem-p5")->play();
-#endif                
-
                 LOG("REMOTE: -> Mode MANU");
             } });
 }

@@ -5,14 +5,13 @@ class BankP5 : public LBank
 public:
     BankP5() : LBank(6)
     {
-        //     {0      , 1  , 2  , 3  , 4  , 5 } adr + -1
-        //     {   str , dim, r  , g  , b  , w }
-        //     {master , r  , g  , b  , str }
-        add(    0, 255, 255,   0,   0,   0); // 00 Red
-        add(    0, 255,   0, 255,   0,   0); // 01 Green
-        add(    0, 255,   0,   0, 255,   0); // 02 Blue
-        add(    0, 255,   0,   0,   0, 255); // 03 White
-        add(    0, 255, 255, 255, 255,   0); // 04 rvb **3 4 5**
+
+        //   {Shutter, Intensity,    r,   g,   b,   w}
+        add(      255,      255,   255,   0,   0,   0); // 00 Red
+        add(      255,      255,     0, 255,   0,   0); // 01 Green
+        add(      255,      255,     0,   0, 255,   0); // 02 Blue
+        add(      255,      255,     0,   0,   0, 255); // 03 White
+        add(      255,      255,   255, 255, 255,   0); // 04 rvb **3 4 5**
         mem->mod(new K32_mod_sinus)->at(2)->period(8500)->phase(0)->mini(0)->maxi(255);
         mem->mod(new K32_mod_sinus)->at(3)->period(8500)->phase(90)->mini(0)->maxi(255);
         mem->mod(new K32_mod_sinus)->at(4)->period(8500)->phase(180)->mini(0)->maxi(255);
