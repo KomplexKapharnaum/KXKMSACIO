@@ -167,6 +167,7 @@ void setup_device()
         ->drawTo(par, PAR_N)
         ->bank(new BankPar)
         ->remote(true)
+        ->masterChannel(0)
         ->mem(-1);
 #endif
 #if ARCA_N != 0
@@ -175,6 +176,7 @@ void setup_device()
         ->drawTo(arca, ARCA_N)
         ->bank(new BankArca)
         ->remote(true)
+        ->masterChannel(6)
         ->mem(-1);
 #endif
 #if P5_N != 0
@@ -183,6 +185,7 @@ void setup_device()
         ->drawTo(p5, P5_N)
         ->bank(new BankP5)
         ->remote(true)
+        ->masterChannel(1)
         ->mem(-1);
 #endif
 
