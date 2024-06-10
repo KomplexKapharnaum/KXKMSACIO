@@ -7,7 +7,10 @@
 
 // #define PWM_ON_OFF 1
 
-#include "macro/Type/SK/mem_sk.h" // defo
+// #define PREVIEW 1
+
+// #include "macro/Type/SK/mem_sk.h" // defo
+#include "macro/Show/kontact/mem_sk.h" // Kontact
 // #include "macro/Show/larochelle/mem_sk_roch.h"
 // #include "macro/Show/esch/mem_sk_esch.h"
 
@@ -17,7 +20,7 @@
 
 void setup_device()
 {
-    
+
     // .########.####.##.....##.########.##.....##.########..########..######.
     // .##........##...##...##.....##....##.....##.##.....##.##.......##....##
     // .##........##....##.##......##....##.....##.##.....##.##.......##......
@@ -30,7 +33,7 @@ void setup_device()
 
 // PWM fixture
 #ifdef PWM_ON_OFF
-    // Enable PWM 
+    // Enable PWM
     for (int k = 0; k < PWM_N_CHAN; k++)
         if (PWM_PIN[k32->system->hw()][k] > 0) // TODO: allow -1 pin but disable output
             pwm->attach(PWM_PIN[k32->system->hw()][k]);
@@ -42,9 +45,15 @@ void setup_device()
     // LED STRIPS fixtures
     K32_fixture *strips[LED_N_STRIPS] = {nullptr};
     for (int k = 0; k < LED_N_STRIPS; k++)
+#ifdef PREVIEW
         strips[k] = new K32_ledstrip(k, LEDS_PIN[k32->system->hw()][k], (led_types)LULU_STRIP_TYPE, LULU_STRIP_SIZE + 30);
     light->addFixtures(strips, LED_N_STRIPS)
         ->copyFixture({strips[0], LULU_STRIP_SIZE, LULU_STRIP_SIZE + 18, strips[1], 0}); // jauge sortie 2
+#else
+        strips[k] = new K32_ledstrip(k, LEDS_PIN[k32->system->hw()][k], (led_types)LULU_STRIP_TYPE, LULU_STRIP_SIZE);
+    light->addFixtures(strips, LED_N_STRIPS)
+        ->copyFixture({strips[0], 0, LULU_STRIP_SIZE, strips[1], 0}); //  sortie 2
+#endif
 
     // .########.########..######..########.....######..########..#######..##.....##.########.##....##..######..########
     // ....##....##.......##....##....##.......##....##.##.......##.....##.##.....##.##.......###...##.##....##.##......
@@ -104,7 +113,8 @@ void setup_device()
         ->remote(true)
         ->mem(-1);
 
-    // ANIM leds - presets preview
+// ANIM leds - presets preview
+#ifdef PREVIEW
     light->anim("memprev-strip", new Anim_preview, LULU_PREV_SIZE, LULU_STRIP_SIZE + 8)
         ->drawTo(strips[0])
         ->bank(new BankSK_PREV) // TODO
@@ -136,6 +146,7 @@ void setup_device()
         ->drawTo(strips[0])
         ->master(LULU_PREV_MASTER * 1.5)
         ->play();
+#endif
 
     // ....###....########..########.##....##.########.########
     // ...##.##...##.....##....##....###...##.##..........##...
