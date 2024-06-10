@@ -14,7 +14,8 @@
 // .##.......##.....##.##.......##.....##.......##.......##....##........##......
 // .########..#######..########..#######........##.......##....##........########
 
-#define LULU_TYPE 6
+
+#define LULU_TYPE 301
 
 // 0="Power" 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="PotSon" 9="chariot"
 // 10="power" 11="DMX_strobe" 12="DMX_Par_led" 13="NODE_dmx_thru" 14="DMX_smoke"
@@ -26,6 +27,7 @@
 // 70="Strobe" 71="4x Strobe" 72="5x parled"
 // ATOM: 80="Atom" 82="Relais" 83="Cloud" 84="Maree"
 // ATOM ST: 91: "ST_buzzer" 
+// 301 DMX_fixture
 
 //      .####....########.
 //      ..##.....##.....##
@@ -49,7 +51,7 @@
 //
 // You can now set those using WEB interface !!  
 //
-//    // #define K32_SET_CHANNEL 8      // board channel mqtt elp 1 barre 8 cube 3
+//    // #define K32_SET_CHANNEL 8      // board channel mqtt elp 1, 2, cube 3, flex 4,  dmx par 5, dmx arca 6, dmx p5 7, barre 8 
 //    // #define LIGHT_SET_ID 5         // permet de calculer l'adresse DMX
 //    // #define ARTNET_SET_UNIVERSE 1  // univers artnet
 //                    // defo ARTNET_SET_UNIVERSE 0  => LULU-TYPE 6 & 7 & 8 & 10 & 20 & 34

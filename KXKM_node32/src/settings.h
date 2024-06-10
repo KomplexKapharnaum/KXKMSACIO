@@ -126,5 +126,8 @@
 #elif LULU_TYPE == 91
 #include "type/91-ST-buzzer.h"
 
+#elif LULU_TYPE == 301
+#include "type/301-dmx-fixture.h"
+
 #endif
 #endif

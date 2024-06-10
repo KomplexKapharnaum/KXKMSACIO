@@ -12,3 +12,4 @@ KXKM_SAC_IO_00/platformio.ini
  
 M5Face-remote/M5Display.h
 *.pyc
+.DS_Store
