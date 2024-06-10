@@ -319,18 +319,14 @@ void setup_device()
             {
 
 #if P5_N != 0
-delayMicroseconds(22668); // temps d'une trame DMX permet de ne pas avoir de conflit
                 light->anim("artnet-p5")->stop();
                 light->anim("mem-p5")->play();
 #endif
 #if ARCA_N != 0
-delayMicroseconds(22668); // temps d'une trame DMX permet de ne pas avoir de conflit
                 light->anim("artnet-arca")->stop();
                 light->anim("mem-arca")->play();
-                delay(100);
 #endif
 #if PAR_N != 0
-delayMicroseconds(22668); // temps d'une trame DMX permet de ne pas avoir de conflit
                 light->anim("artnet-par")->stop();
                 light->anim("mem-par")->play();
 #endif
