@@ -8,15 +8,15 @@
 // #define LULU_STRIP_SIZE 120
 // #define STRIP_PATCHSIZE 16
 
-// PAR
+// PAR adresse 1
 #define PAR_N 1 // nombre de PAR
 #define PAR_PATCH_SIZE 5
 
-// ARCALINE
+// ARCALINE adresse 6
 #define ARCA_N 1          // nombre de ARCALINE
 #define ARCA_PATCH_SIZE 7 // 1 r , 2 v, 3 b, 4 blanc, 5 str, 6 macro color, 7 dim
 
-// P5
+// P5 adresse 13
 #define P5_N 1          // nombre de P5
 #define P5_PATCH_SIZE 6 // 1 str, 2 dim, 3 red, 4 green, 5 blue, 6 white
 
@@ -50,13 +50,13 @@
 #define ARTNET_DMXNODE 0
 
 #if PAR_N != 0
-#include "macro/Type/parled/mem_parled_dmx.h"
+#include "macro/Show/kontact/mem_parled_dmx.h"
 #endif
 #if ARCA_N != 0
-#include "macro/Type/arcaline/mem_arca_dmx_mod_1.h"
+#include "macro/Show/kontact/mem_arca_dmx_mod_1.h"
 #endif
 #if P5_N != 0
-#include "macro/Type/p5/mem_p5_dmx_mod_1.h"
+#include "macro/Show/kontact/mem_p5_dmx_mod_1.h"
 #endif
 
 void setup_device()
