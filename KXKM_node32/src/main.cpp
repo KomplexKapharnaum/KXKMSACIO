@@ -1,6 +1,6 @@
 #include <Arduino.h>
 
-#define NODE32_VER 104    
+#define NODE32_VER 105    
           // if previous version was < 102 : Upload SPIFFS !
           // 102: add Webserver + SPIFFS
           // 103: add K32_audio
