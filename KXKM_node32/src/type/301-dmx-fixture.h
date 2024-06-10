@@ -10,7 +10,7 @@
 
 // PAR adresse 1
 #define PAR_N 1 // nombre de PAR
-#define PAR_PATCH_SIZE 5
+#define PAR_PATCH_SIZE 5 // 1 dim, 2 r, 3 g, 4 b, 5 str
 
 // ARCALINE adresse 6
 #define ARCA_N 1          // nombre de ARCALINE
