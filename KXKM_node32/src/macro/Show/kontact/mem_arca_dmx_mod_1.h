@@ -7,40 +7,60 @@ public:
     {
         // {000, 001, 002, 003, 004, 005, 006} adr + -1
         // {  r,   g,   b,   w, str,macr, dim}
-        add(255, 000, 000, 000, 000, 000, 255); // 00 Red
-        add(000, 255, 000, 000, 000, 000, 255); // 01 Green
-        add(000, 000, 255, 000, 000, 000, 255); // 02 Blue
-        add(255, 255, 255, 000, 000, 000, 255); // 03 White
-        add(255, 255, 255, 000, 000, 000, 255); // 04 rvb **3 4 5**
-        mem->mod(new K32_mod_sinus)->at(000)->period(8500)->phase(000)->mini(000)->maxi(255);
-        mem->mod(new K32_mod_sinus)->at(1)->period(8500)->phase(90)->mini(000)->maxi(255);
-        mem->mod(new K32_mod_sinus)->at(2)->period(8500)->phase(180)->mini(000)->maxi(255);
+        add(000, 000, 000, 000, 000, 000, 255); // 00 Noir
+        add(000, 000, 000, 127, 000, 000, 255); // 01 Blanc faible
+        add(122, 127,  47, 000, 000, 000, 255); // 02 Sepia faible
+        add(000, 000, 000, 255,  87, 000, 255); // 03 White Strobe
+        add(122, 127,  47, 000, 000, 000, 255); // 04 sepia faible Pti Modulo
+        mem->mod(new K32_mod_sinus)->at(6)->period(8500)->phase(0)->mini(180)->maxi(255);
 
-        add(000, 000, 000, 255,  29, 000, 255); // 05 str rnd 67
-        add(000, 000, 000, 255,  58, 000, 255); // 06 str all 67
-        mem->mod(new K32_mod_pulse)->at(1)->at(2)->at(000)->param(1, 10)->period(70);
+        add(255, 255, 255, 255,  35, 000, 255); // 05 Super8
+        mem->mod(new K32_mod_pulse)->at(4)->period(4000)->phase(0)->mini(35)->maxi(17);
 
-        add(000, 000, 000, 255, 000, 100, 255); // 07 str all 42
-        add(000, 000, 000, 255, 000, 230, 255); // 08 str all lent
-        add(000, 000, 000, 255, 000, 000, 255); // 09 circule w **9** 20>255
-        mem->mod(new K32_mod_sinus)->at(6)->mini(100)->maxi(255)->period(2000);
+        add(000, 255, 000, 000, 000, 000, 255); // 06 Vert Full
+        add(255, 255, 000, 000, 000, 000, 255); // 07 Jaune
+        add(255, 127, 000, 000, 000, 000, 255); // 08 Orange
+        add(255, 000, 000, 000, 000, 000, 255); // 09 Rouge
+        add(000, 255, 000, 000, 000, 000, 255); // 10 Vert in
+        mem->mod(new K32_mod_fadein)->at(6)->period(8500)->phase(0)->mini(0)->maxi(255);
 
-        add(255, 255, 255, 255, 000, 000, 255); // 10 circus w b **7** 1>255
-        mem->mod(new K32_mod_sinus)->at(1)->at(000)->at(4)->period(8500)->phase(000)->mini(000)->maxi(255);
+        add(000, 255, 000, 000, 000, 000, 255); // 11 Vert out
+        mem->mod(new K32_mod_fadeout)->at(6)->period(8500)->phase(0)->mini(0)->maxi(255);
 
-        add(255, 255, 255, 255, 000, 000, 255); // 11 str w -> blue
-        mem->mod(new K32_mod_pulse)->at(1)->at(000)->at(4)->param(1, 100)->period(7000);
+        add(255, 255, 000, 000, 000, 000, 255); // 12 Jaune in
+        mem->mod(new K32_mod_fadein)->at(6)->period(8500)->phase(0)->mini(0)->maxi(255);
 
-        add(255, 255, 255, 000, 010, 000, 255); // 12 color form
-        mem->mod(new K32_mod_sinus)->at(000)->period(8500)->phase(000)->mini(000)->maxi(255);
-        mem->mod(new K32_mod_sinus)->at(1)->period(8500)->phase(120)->mini(000)->maxi(255);
-        mem->mod(new K32_mod_sinus)->at(2)->period(8500)->phase(240)->mini(000)->maxi(255);
+        add(255, 255, 000, 000, 000, 000, 255); // 13 Jaune out
+        mem->mod(new K32_mod_fadeout)->at(6)->period(8500)->phase(0)->mini(0)->maxi(255);
 
-        add(000, 127, 255, 000, 000, 000, 255); // 13 blue parcielle
-        add(000,  80, 200, 000, 000, 000, 255);  // 14 respi blue **000**38 > 217
-        mem->mod(new K32_mod_sinus)->at(6)->period(8500)->mini(38)->maxi(217);
+        add(255, 000, 000, 000, 000, 000, 255); // // 14 V->R->J
+        mem->mod(new K32_mod_sinus)->at(0)->period(10000)->phase(180)->mini(0)->maxi(255);
+        mem->mod(new K32_mod_sinus)->at(0)->period(10000)->phase(90)->mini(0)->maxi(255);
+        mem->mod(new K32_mod_sinus)->at(1)->period(10000)->phase(0)->mini(0)->maxi(255);
 
-        add(000, 000, 000, 000, 000, 000, 000); // 15 BLACK stm leave lset mem
+
+        add(255, 255, 000, 000, 000, 000, 255); // 15 J->V->R
+        mem->mod(new K32_mod_sinus)->at(0)->period(10000)->phase(90)->mini(0)->maxi(255);
+        mem->mod(new K32_mod_sinus)->at(0)->period(10000)->phase(180)->mini(0)->maxi(255);
+        mem->mod(new K32_mod_sinus)->at(1)->period(10000)->phase(240)->mini(0)->maxi(255);
+
+        add(000, 255, 000, 000, 000, 000, 255); // 16 R->J->V
+        mem->mod(new K32_mod_sinus)->at(0)->period(10000)->phase(240)->mini(0)->maxi(255);
+        mem->mod(new K32_mod_sinus)->at(0)->period(10000)->phase(0)->mini(0)->maxi(255);
+        mem->mod(new K32_mod_sinus)->at(1)->period(10000)->phase(90)->mini(0)->maxi(255);
+
+        add(000, 000, 255, 000, 000, 000, 255); // 17 B->V respi
+        mem->mod(new K32_mod_sinus)->at(1)->period(10000)->phase(0)->mini(0)->maxi(255);
+        mem->mod(new K32_mod_sinus)->at(2)->period(10000)->phase(0)->mini(255)->maxi(0);
+        mem->mod(new K32_mod_sinus)->at(6)->period(5000)->phase(180)->mini(120)->maxi(255);
+
+        add(000, 255, 000, 000, 000, 000, 255); // 18 V->B respi
+        mem->mod(new K32_mod_sinus)->at(1)->period(10000)->phase(0)->mini(255)->maxi(0);
+        mem->mod(new K32_mod_sinus)->at(2)->period(10000)->phase(0)->mini(0)->maxi(255);
+        mem->mod(new K32_mod_sinus)->at(6)->period(5000)->phase(180)->mini(120)->maxi(255);
+
+        add(000, 000, 255, 000, 000, 000, 255); // 19 Bleu
+        add(000, 000, 000, 000, 000, 000, 000); // 20 BLACK stm leave lset mem
 
      nowifi(255, 000, 000, 000, 000, 000, 010);
     }
