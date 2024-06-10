@@ -16,8 +16,8 @@ public:
         mem->mod(new K32_mod_sinus)->at(1)->period(8500)->phase(90)->mini(000)->maxi(255);
         mem->mod(new K32_mod_sinus)->at(2)->period(8500)->phase(180)->mini(000)->maxi(255);
 
-        add(000, 000, 000, 255, 029, 000, 255); // 05 str rnd 67
-        add(000, 000, 000, 255, 058, 000, 255); // 06 str all 67
+        add(000, 000, 000, 255,  29, 000, 255); // 05 str rnd 67
+        add(000, 000, 000, 255,  58, 000, 255); // 06 str all 67
         mem->mod(new K32_mod_pulse)->at(1)->at(2)->at(000)->param(1, 10)->period(70);
 
         add(000, 000, 000, 255, 000, 100, 255); // 07 str all 42
@@ -37,7 +37,7 @@ public:
         mem->mod(new K32_mod_sinus)->at(2)->period(8500)->phase(240)->mini(000)->maxi(255);
 
         add(000, 127, 255, 000, 000, 000, 255); // 13 blue parcielle
-        add(000, 080, 200, 000, 000, 000, 255);  // 14 respi blue **000**38 > 217
+        add(000,  80, 200, 000, 000, 000, 255);  // 14 respi blue **000**38 > 217
         mem->mod(new K32_mod_sinus)->at(6)->period(8500)->mini(38)->maxi(217);
 
         add(000, 000, 000, 000, 000, 000, 000); // 15 BLACK stm leave lset mem
