@@ -39,8 +39,9 @@ void setup_device()
         strips[k] = new K32_ledstrip(k, LEDS_PIN[k32->system->hw()][k], (led_types)LULU_STRIP_TYPE, LULU_STRIP_SIZE + 30);
     light->addFixtures( strips, LED_N_STRIPS );
 
-    // Copy jauge
-    light->copyFixture({strips[0], LULU_STRIP_SIZE, LULU_STRIP_SIZE + 18, strips[1], 0}); // jauge sortie 2
+    // Clone fixtures
+    light->copyFixture({strips[0], 0, LULU_STRIP_SIZE, strips[1], 0}); // clone strips 0 to 1
+    // light->copyFixture({strips[0], LULU_STRIP_SIZE, LULU_STRIP_SIZE + 18, strips[1], 0}); // jauge sortie 2
 
     // .########.########..######..########.....######..########..#######..##.....##.########.##....##..######..########
     // ....##....##.......##....##....##.......##....##.##.......##.....##.##.....##.##.......###...##.##....##.##......
