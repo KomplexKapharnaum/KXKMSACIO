@@ -10,8 +10,8 @@
 class BankSK : public LBank { 
     public:
         BankSK() : LBank(STRIP_PATCHSIZE) {
-//                  {0      , 1  , 2  , 3  , 4  ,5       , 6        , 7       , 8       , 9         , 10     , 11     , 12     , 13     , 14         , 15   } adr + -1
-//                  {master , r  , g  , b  , w  ,pix mod , pix long , pix_pos , str_mod , str_speed , r_fond , g_fond , b_fond , w_fond , mirror_mod , zoom }
+          // {0      , 1  , 2  , 3  , 4  ,5       , 6        , 7       , 8       , 9         , 10     , 11     , 12     , 13     , 14         , 15   } adr + -1
+          // {master , r  , g  , b  , w  ,pix mod , pix long , pix_pos , str_mod , str_speed , r_fond , g_fond , b_fond , w_fond , mirror_mod , zoom }
             add(  133, 133,   0,   0,   0,       0,         0,        0,        0,          0,       0,       0,       0,       0,           0,  255); // 00 Red
 
             add(  255,  35,  45,  15,   0,     235,       127,      127,        0,          0,       0,       0,       0,       0,           0,  255); // 01 bleu blanc rouge
