@@ -70,21 +70,6 @@ void setup_device()
     // .##.......####.##.....##....##.....#######..##.....##.########..######.
 
     // FIXTURES
-
-    // Enable PWM
-    // for (int k = 0; k < PWM_N_CHAN; k++)
-    //     if (PWM_PIN[k32->system->hw()][k] > 0) // TODO: allow -1 pin but disable output
-    //         pwm->attach(PWM_PIN[k32->system->hw()][k]);
-
-    // PWM fixture
-    // K32_fixture *dimmer = new K32_pwmfixture(pwm);
-    // light->addFixture(dimmer);
-
-    // LED STRIPS fixtures
-    // K32_fixture *strips[LED_N_STRIPS] = {nullptr};
-    // for (int k = 0; k < LED_N_STRIPS; k++)
-    //     strips[k] = new K32_ledstrip(k, LEDS_PIN[k32->system->hw()][k], (led_types)LULU_STRIP_TYPE, LULU_STRIP_SIZE);
-    // light->addFixtures(strips, LED_N_STRIPS);
     int size_par;
     int size_arca;
     int size_p5;
@@ -176,20 +161,6 @@ void setup_device()
     // .##........##....##..##.......##....##.##..........##....##....##
     // .##........##.....##.########..######..########....##.....######.
 
-    // ANIM pwm - presets
-    // light->anim("mem-pwm", new Anim_datathru, PWM_N_CHAN)
-    //     ->drawTo(dimmer)
-    //     ->bank(new BankPWM)
-    //     ->remote(true)
-    //     ->mem(-1);
-
-    // // ANIM leds - presets
-    // light->anim("mem-strip", new Anim_dmx_strip, LULU_STRIP_SIZE)
-    //     ->drawTo(strips, LED_N_STRIPS)
-    //     ->bank(new BankSK)
-    //     ->remote(true)
-    //     ->mem(-1);
-
 #if PAR_N != 0
     // ANIM par - presets
     light->anim("mem-par", new Anim_datathru, PAR_PATCH_SIZE)
@@ -231,16 +202,6 @@ void setup_device()
     // .##.....##.##....##.....##....##...###.##..........##...
     // .##.....##.##.....##....##....##....##.########....##...
 
-    // ANIM pwm - artnet
-    // light->anim("artnet-pwm", new Anim_datathru, PWM_N_CHAN)
-    //     ->drawTo(dimmer)
-    //     ->play();
-
-    // ANIM pwm - artnet
-    // light->anim("artnet-strip", new Anim_dmx_strip, PWM_N_CHAN)
-    //     ->drawTo(strips, LED_N_STRIPS)
-    //     ->play();
-
 #if PAR_N != 0
     // ANIM par - artnet
     light->anim("artnet-par", new Anim_datathru, PAR_PATCH_SIZE)
@@ -265,12 +226,6 @@ void setup_device()
                        .framesize = PATCHSIZE,
                        .callback = [](const uint8_t *data, int length)
                        {
-    //    if (length >= PWM_N_CHAN)
-    //        light->anim("artnet-pwm")->push(data, PWM_N_CHAN);
-
-    // if (length >= PWM_N_CHAN + STRIP_PATCHSIZE)
-    //     light->anim("artnet-strip")->push(&data[PWM_N_CHAN], STRIP_PATCHSIZE);
-
 #if PAR_N != 0
                            if (length >= PAR_PATCH_SIZE)
                                light->anim("artnet-par")->push(data, PAR_PATCH_SIZE);
