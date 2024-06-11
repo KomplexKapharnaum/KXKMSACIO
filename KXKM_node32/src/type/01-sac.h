@@ -2,8 +2,10 @@
 #define L_NAME "Sac"
 
 // MEMS
-#include "macro/Type/SK/mem_sk.h"
-#include "macro/Type/4pwm/mem_4pwm.h"
+// #include "macro/Type/SK/mem_sk.h"
+// #include "macro/Type/4pwm/mem_4pwm.h"
+#include "macro/Show/kontact/mem_sk.h"
+#include "macro/Show/kontact/mem_4pwm.h"
 
 // LEDS
 #define LULU_STRIP_TYPE LED_SK6812W_V3 // Strip type
