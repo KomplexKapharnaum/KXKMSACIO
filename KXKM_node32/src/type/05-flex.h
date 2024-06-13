@@ -1,13 +1,13 @@
 #define L_NAME "Flex" // a tester
 
-#define LULU_STRIP_SIZE 186
+#define LULU_STRIP_SIZE 300 // contact 60Led/M // defaut : 186
 #define LULU_STRIP_TYPE LED_SK6812W_V3 // Strip type
 
 // #define ARTNET_DMXNODE 1
 
 // #define PWM_ON_OFF 1
 
-// #define PREVIEW 1
+#define PREVIEW 1
 
 // #include "macro/Type/SK/mem_sk.h" // defo
 #include "macro/Show/kontact/mem_sk.h" // Kontact
