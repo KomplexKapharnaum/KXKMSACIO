@@ -1,7 +1,9 @@
 #define L_NAME "Flex" // a tester
 
-#define LULU_STRIP_SIZE 300 // contact 60Led/M // defaut : 186
+
+#define LULU_STRIP_SIZE 300            // contact 60Led/M // defaut : 186
 #define LULU_STRIP_TYPE LED_SK6812W_V3 // Strip type
+
 
 // #define ARTNET_DMXNODE 1
 
@@ -45,15 +47,17 @@ void setup_device()
     // LED STRIPS fixtures
     K32_fixture *strips[LED_N_STRIPS] = {nullptr};
     for (int k = 0; k < LED_N_STRIPS; k++)
-#ifdef PREVIEW
-        strips[k] = new K32_ledstrip(k, LEDS_PIN[k32->system->hw()][k], (led_types)LULU_STRIP_TYPE, LULU_STRIP_SIZE + 30);
-    light->addFixtures(strips, LED_N_STRIPS)
-        ->copyFixture({strips[0], LULU_STRIP_SIZE, LULU_STRIP_SIZE + 18, strips[1], 0}); // jauge sortie 2
-#else
-        strips[k] = new K32_ledstrip(k, LEDS_PIN[k32->system->hw()][k], (led_types)LULU_STRIP_TYPE, LULU_STRIP_SIZE);
-    light->addFixtures(strips, LED_N_STRIPS)
-        ->copyFixture({strips[0], 0, LULU_STRIP_SIZE, strips[1], 0}); //  sortie 2
-#endif
+
+
+    #ifdef PREVIEW
+            strips[k] = new K32_ledstrip(k, LEDS_PIN[k32->system->hw()][k], (led_types)LULU_STRIP_TYPE, LULU_STRIP_SIZE + 30);
+        light->addFixtures(strips, LED_N_STRIPS)
+            ->copyFixture({strips[0], LULU_STRIP_SIZE, LULU_STRIP_SIZE + 18, strips[1], 0}); // jauge sortie 2
+    #else
+            strips[k] = new K32_ledstrip(k, LEDS_PIN[k32->system->hw()][k], (led_types)LULU_STRIP_TYPE, LULU_STRIP_SIZE);
+        light->addFixtures(strips, LED_N_STRIPS)
+            ->copyFixture({strips[0], 0, LULU_STRIP_SIZE, strips[1], 0}); //  sortie 2
+    #endif
 
     // .########.########..######..########.....######..########..#######..##.....##.########.##....##..######..########
     // ....##....##.......##....##....##.......##....##.##.......##.....##.##.....##.##.......###...##.##....##.##......
@@ -115,12 +119,12 @@ void setup_device()
 
 // ANIM leds - presets preview
 #ifdef PREVIEW
+
     light->anim("memprev-strip", new Anim_preview, LULU_PREV_SIZE, LULU_STRIP_SIZE + 8)
         ->drawTo(strips[0])
-        ->bank(new BankSK_PREV) // TODO
+        ->bank(new BankSK) // TODO
         ->mem(-1)
         ->master(LULU_PREV_MASTER);
-
     // .##.....##..#######..##....##.####.########..#######..########..####.##....##..######..
     // .###...###.##.....##.###...##..##.....##....##.....##.##.....##..##..###...##.##....##.
     // .####.####.##.....##.####..##..##.....##....##.....##.##.....##..##..####..##.##.......
@@ -146,6 +150,12 @@ void setup_device()
         ->drawTo(strips[0])
         ->master(LULU_PREV_MASTER * 1.5)
         ->play();
+#else
+    light->anim("mem-strip", new Anim_dmx_strip, LULU_STRIP_SIZE)
+        ->drawTo(strips[0])
+        ->bank(new BankSK_PREV) // TODO
+        ->mem(-1)
+        ->master(LULU_PREV_MASTER);
 #endif
 
     // ....###....########..########.##....##.########.########
@@ -304,8 +314,8 @@ for (int k = 0; k < DMX_N_FIXTURES; k++)
 #include <fixtures/K32_dmxfixture.h>
 K32_dmxfixture *dmxfixs[DMX_N_FIXTURES] = {nullptr};
 
-//      CHARIOT             FLUO
-#if LULU_TYPE == 9 || LULU_TYPE == 40 || LULU_TYPE == 5
+//      CHARIOT             FLUO             Dual Out
+#if LULU_TYPE == 9 || LULU_TYPE == 40 || LULU_TYPE == 302
 light->copyFixture({strips[0], 0, LULU_STRIP_SIZE, strips[1], 0}); // Clone
 
 //      STROBEDMX           PARDMX
