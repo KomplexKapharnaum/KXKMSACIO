@@ -59,6 +59,12 @@ void setup_device()
             ->copyFixture({strips[0], 0, LULU_STRIP_SIZE, strips[1], 0}); //  sortie 2
     #endif
 
+    // ! vérifié que ça fonctionne bien sur la double sortie strip ?
+  
+  /*          strips[k] = new K32_ledstrip(k, LEDS_PIN[k32->system->hw()][k], (led_types)LULU_STRIP_TYPE, LULU_STRIP_SIZE);
+        light->addFixtures(strips, LED_N_STRIPS)
+            ->copyFixture({strips[0], 0, LULU_STRIP_SIZE, strips[1], 0}); //  sortie 2
+  */          
     // .########.########..######..########.....######..########..#######..##.....##.########.##....##..######..########
     // ....##....##.......##....##....##.......##....##.##.......##.....##.##.....##.##.......###...##.##....##.##......
     // ....##....##.......##..........##.......##.......##.......##.....##.##.....##.##.......####..##.##.......##......

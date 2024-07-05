@@ -187,7 +187,7 @@ void setup()
 ///////////////////////////////////////// LOOP /////////////////////////////////////////////////
 void loop()
 {
-  delay(200);
-  // light->anim("mem-strip")->printWM();
+  delay(200); 
+  // light->anim("mem-strip")->printWM(); 
   // light->anim("rssi-strip")->printWM();
 } // loop
