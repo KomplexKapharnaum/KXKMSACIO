@@ -9,18 +9,22 @@ public:
         // {  r,   g,   b,   w, str,macr, dim}
         add(000, 000, 000, 000, 000, 000, 255); // 00 Noir
         add(000, 000, 000, 127, 000, 000, 255); // 01 Blanc faible
+        mem->mod(new K32_mod_fadein)->at(6)->period(50000)->phase(0)->mini(0)->maxi(100);
         add(122, 127,  47, 000, 000, 000, 255); // 02 Sepia faible
         add(000, 000, 000, 255,  87, 000, 255); // 03 White Strobe
         add(122, 127,  47, 000, 000, 000, 255); // 04 sepia faible Pti Modulo
-        mem->mod(new K32_mod_sinus)->at(6)->period(8500)->phase(0)->mini(180)->maxi(255);
-
+        mem->mod(new K32_mod_sinus)->at(6)->period(8500)->phase(0)->mini(100)->maxi(255);
+        mem->mod(new K32_mod_sinus)->at(1)->period(5000)->phase(35)->mini(100)->maxi(150); //modulo sur le vert
+        mem->mod(new K32_mod_sinus)->at(0)->period(5000)->phase(35)->mini(200)->maxi(100); //modulo sur le rouge
         add(255, 255, 255, 255,  35, 000, 255); // 05 Super8
         mem->mod(new K32_mod_pulse)->at(4)->period(4000)->phase(0)->mini(35)->maxi(17);
-
-        add(000, 255, 000, 000, 000, 000, 255); // 06 Vert Full
+        add(000, 255, 000, 000, 000, 000, 255); // 06 Disco color
+        mem->mod(new K32_mod_random)->at(0)->period(500)->phase(0)->mini(0)->maxi(255); // modulo r
+        mem->mod(new K32_mod_random)->at(1)->period(500)->phase(60)->mini(0)->maxi(255); // modulo g
+        mem->mod(new K32_mod_random)->at(2)->period(500)->phase(180)->mini(0)->maxi(255); // modulo b
         add(255, 255, 000, 000, 000, 000, 255); // 07 Jaune
         add(255, 127, 000, 000, 000, 000, 255); // 08 Orange
-        add(255, 000, 000, 000, 000, 000, 255); // 09 Rouge
+        add(255, 000, 000, 000, 87, 000, 255); // 09 Rouge strobe
         add(000, 255, 000, 000, 000, 000, 255); // 10 Vert in
         mem->mod(new K32_mod_fadein)->at(6)->period(8500)->phase(0)->mini(0)->maxi(255);
 

@@ -28,7 +28,7 @@
 // ATOM: 80="Atom" 82="Relais" 83="Cloud" 84="Maree"
 // ATOM ST: 91: "ST_buzzer" 
 // 301 DMX_fixture
-// 302 Flex out 1 & 2
+// 302 Flex out 1 kontact
 
 //      .####....########.
 //      ..##.....##.....##
