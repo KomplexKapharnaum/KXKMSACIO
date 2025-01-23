@@ -130,7 +130,7 @@ void setup()
   }
 
   ////////////////// INFO //////////////////////////////////////
-
+/*tee*/
   // Monitoring refresh // TODO Move somewhere else !
   if (k32 && int(LULU_TYPE) == 1)
     k32->timer->every(REFRESH_INFO, []()
