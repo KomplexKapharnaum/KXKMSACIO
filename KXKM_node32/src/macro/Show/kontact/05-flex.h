@@ -2,7 +2,7 @@
 
 
 #define LULU_STRIP_SIZE 150            // contact 60Led/M // defaut : 186
-#define LULU_STRIP_TYPE LED_SK6812W_V4 // Strip type
+#define LULU_STRIP_TYPE LED_SK6812W_V3 // Strip type
 
 
 // #define ARTNET_DMXNODE 1
@@ -191,6 +191,7 @@ void setup_device()
     int FRAME_size = light->anim("mem-strip")->bank()->preset_size() + light->anim("mem-pwm")->bank()->preset_size();
 #else
     int FRAME_size = light->anim("mem-strip")->bank()->preset_size();
+    FRAME_size = 20; // Forced to 20
 #endif
 
     K32_artnet::onDmx({.address = (1 + (k32->system->lightid() - 1) * FRAME_size),
