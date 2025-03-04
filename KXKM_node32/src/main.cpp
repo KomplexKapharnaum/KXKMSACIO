@@ -100,13 +100,20 @@ void setup()
 
     // Wifi connect (SSID / password)
     //
-    // wifi->connect("kxkm24out", NULL);            // KXKM 24 out
-    wifi->connect("kxkm24", NULL);                  // KXKM 24
-    // wifi->connect("phare", NULL);                // KXKM phare
-    // wifi->connect("kxkm24lulu", NULL);           // KXKM 24 LULU                                                        //KXKM 24 lulu
-    // wifi->connect("mgr4g", NULL);                // Maigre                                                            //Maigre dev
-    // wifi->connect("interweb", "superspeed37");    // Maigre Maizon                                             //Maigre dev home
-    // wifi->connect("riri_new", "B2az41opbn6397"); // RIRI dev                                              //Riri dev home
+    // wifi->connect("kxkm24out", NULL);               // KXKM 24 out
+    // wifi->connect("kxkm24", NULL);                  // KXKM 24 
+    // wifi->connect("kxkm24kr1", NULL);               // KXKM 24 kr1
+    wifi->connect("kxkm24gocab", NULL);             // KXKM 24 gocab
+    // wifi->connect("kxkm24iveco", NULL);             // KXKM 24 iveco
+    // wifi->connect("kxkm24charette", NULL);          // KXKM 24 charette
+    // wifi->connect("kxkm24max", NULL);               // KXKM 24 max
+    // wifi->connect("kxkm24christiana", NULL);        // KXKM 24 christiana
+    // wifi->connect("kxkm24madone", NULL);               // KXKM 24 madonne
+    // wifi->connect("phare", NULL);                   // KXKM phare
+    // wifi->connect("kxkm24lulu", NULL);              // KXKM 24 LULU                                        //KXKM 24 lulu
+    // wifi->connect("mgr4g", NULL);                   // Maigre                                              //Maigre dev
+    // wifi->connect("interweb", "superspeed37");      // Maigre Maizon                                       //Maigre dev home
+    // wifi->connect("riri_new", "B2az41opbn6397");    // RIRI dev                                            //Riri dev home
     // TODO: if wifi->connect ommited = crash on mqtt/artnet/osc
 
     ////////////////// MQTT
