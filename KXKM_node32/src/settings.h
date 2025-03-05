@@ -10,7 +10,7 @@
 #define PWR_FAKE_CURRENT 0 // Courant virtuel si gauge adaptative désactivée
 
 #define LULU_STRIP_TYPE LED_SK6812W_V1 // Type de strip led
-#define LULU_STRIP_SIZE 5
+// #define LULU_STRIP_SIZE 5
 
 #define LULU_PREV_SIZE 6    // Nbr pixel prévisu
 #define LULU_PREV_MASTER 40 // Luminosité prévisu

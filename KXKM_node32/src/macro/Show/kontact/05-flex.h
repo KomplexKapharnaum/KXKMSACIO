@@ -1,7 +1,7 @@
 #define L_NAME "Flex" // a tester
 
 
-#define LULU_STRIP_SIZE 150            // contact 60Led/M // defaut : 186
+// #define PIXSIZE 65            // contact 60Led/M // defaut : 186
 #define LULU_STRIP_TYPE LED_SK6812W_V3 // Strip type
 
 
@@ -46,24 +46,26 @@ void setup_device()
 
     // LED STRIPS fixtures
     K32_fixture *strips[LED_N_STRIPS] = {nullptr};
-    for (int k = 0; k < LED_N_STRIPS; k++)
 
+    int PIXSIZE = k32->system->pixsize();
 
     #ifdef PREVIEW
-            strips[k] = new K32_ledstrip(k, LEDS_PIN[k32->system->hw()][k], (led_types)LULU_STRIP_TYPE, LULU_STRIP_SIZE + 30);
+        for (int k = 0; k < LED_N_STRIPS; k++)
+            strips[k] = new K32_ledstrip(k, LEDS_PIN[k32->system->hw()][k], (led_types)LULU_STRIP_TYPE, PIXSIZE + 30);
         light->addFixtures(strips, LED_N_STRIPS)
-            ->copyFixture({strips[0], LULU_STRIP_SIZE, LULU_STRIP_SIZE + 18, strips[1], 0}); // jauge sortie 2
+            ->copyFixture({strips[0], PIXSIZE, PIXSIZE + 18, strips[1], 0}); // jauge sortie 2
     #else
-            strips[k] = new K32_ledstrip(k, LEDS_PIN[k32->system->hw()][k], (led_types)LULU_STRIP_TYPE, LULU_STRIP_SIZE);
+        for (int k = 0; k < LED_N_STRIPS; k++)
+            strips[k] = new K32_ledstrip(k, LEDS_PIN[k32->system->hw()][k], (led_types)LULU_STRIP_TYPE, PIXSIZE);
         light->addFixtures(strips, LED_N_STRIPS)
-            ->copyFixture({strips[0], 0, LULU_STRIP_SIZE, strips[1], 0}); //  sortie 2
+            ->copyFixture({strips[0], 0, PIXSIZE, strips[1], 0}); //  sortie 2
     #endif
 
     // ! vérifié que ça fonctionne bien sur la double sortie strip ?
   
-  /*          strips[k] = new K32_ledstrip(k, LEDS_PIN[k32->system->hw()][k], (led_types)LULU_STRIP_TYPE, LULU_STRIP_SIZE);
+  /*          strips[k] = new K32_ledstrip(k, LEDS_PIN[k32->system->hw()][k], (led_types)LULU_STRIP_TYPE, PIXSIZE);
         light->addFixtures(strips, LED_N_STRIPS)
-            ->copyFixture({strips[0], 0, LULU_STRIP_SIZE, strips[1], 0}); //  sortie 2
+            ->copyFixture({strips[0], 0, PIXSIZE, strips[1], 0}); //  sortie 2
   */          
     // .########.########..######..########.....######..########..#######..##.....##.########.##....##..######..########
     // ....##....##.......##....##....##.......##....##.##.......##.....##.##.....##.##.......###...##.##....##.##......
@@ -76,7 +78,7 @@ void setup_device()
     // TEST Sequence
 
     // INIT TEST STRIPS
-    light->anim("test-strip", new Anim_test_strip, LULU_STRIP_SIZE)
+    light->anim("test-strip", new Anim_test_strip, PIXSIZE)
         ->drawTo(strips, LED_N_STRIPS)
         ->push(300)
         ->master(LULU_PREV_MASTER)
@@ -84,7 +86,7 @@ void setup_device()
 
 // PWM TEST
 #ifdef PWM_ON_OFF
-    light->anim("test-pwm", new Anim_test_pwm, LULU_STRIP_SIZE)
+    light->anim("test-pwm", new Anim_test_pwm, PIXSIZE)
         ->drawTo(dimmer)
         ->push(300)
         ->master(LULU_PREV_MASTER)
@@ -117,7 +119,7 @@ void setup_device()
 #endif
 
     // ANIM leds - presets
-    light->anim("mem-strip", new Anim_dmx_strip, LULU_STRIP_SIZE)
+    light->anim("mem-strip", new Anim_dmx_strip, PIXSIZE)
         ->drawTo(strips[0])
         ->bank(new BankSK)
         ->remote(true)
@@ -126,7 +128,7 @@ void setup_device()
 // ANIM leds - presets preview
 #ifdef PREVIEW
 
-    light->anim("memprev-strip", new Anim_preview, LULU_PREV_SIZE, LULU_STRIP_SIZE + 8)
+    light->anim("memprev-strip", new Anim_preview, LULU_PREV_SIZE, PIXSIZE + 8)
         ->drawTo(strips[0])
         ->bank(new BankSK) // TODO
         ->mem(-1)
@@ -142,22 +144,22 @@ void setup_device()
     // MONITORING
 
     // ANIM leds - monitoring
-    light->anim("battery-strip", new Anim_battery, 4, LULU_STRIP_SIZE + 1)
+    light->anim("battery-strip", new Anim_battery, 4, PIXSIZE + 1)
         ->drawTo(strips[0])
         ->master(LULU_PREV_MASTER)
         ->play();
 
-    light->anim("remote-strip", new Anim_remote, LULU_PREV_SIZE + 4, LULU_STRIP_SIZE + 6)
+    light->anim("remote-strip", new Anim_remote, LULU_PREV_SIZE + 4, PIXSIZE + 6)
         ->drawTo(strips[0])
         ->master(LULU_PREV_MASTER)
         ->play();
 
-    light->anim("rssi-strip", new Anim_rssi, 1, LULU_STRIP_SIZE + 17)
+    light->anim("rssi-strip", new Anim_rssi, 1, PIXSIZE + 17)
         ->drawTo(strips[0])
         ->master(LULU_PREV_MASTER * 1.5)
         ->play();
 #else
-    // light->anim("mem-strip", new Anim_dmx_strip, LULU_STRIP_SIZE)
+    // light->anim("mem-strip", new Anim_dmx_strip, PIXSIZE)
     //     ->drawTo(strips[0])
     //     ->bank(new BankSK_PREV) // TODO
     //     ->mem(-1)
@@ -182,7 +184,7 @@ void setup_device()
 #endif
 
     // ANIM leds - artnet
-    light->anim("artnet-strip", new Anim_dmx_strip, LULU_STRIP_SIZE)
+    light->anim("artnet-strip", new Anim_dmx_strip, PIXSIZE)
         ->drawTo(strips[0])
         ->play();
 
