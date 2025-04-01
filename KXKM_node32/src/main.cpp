@@ -1,10 +1,10 @@
 #include <Arduino.h>
 
-#define NODE32_VER 105    
-          // if previous version was < 102 : Upload SPIFFS !
-          // 102: add Webserver + SPIFFS
-          // 103: add K32_audio
-          // 104: reset & web config & some audio tweaks
+#define NODE32_VER 105
+// if previous version was < 102 : Upload SPIFFS !
+// 102: add Webserver + SPIFFS
+// 103: add K32_audio
+// 104: reset & web config & some audio tweaks
 
 // .##.......##.....##.##.......##.....##....########.##....##.########..########
 // .##.......##.....##.##.......##.....##.......##.....##..##..##.....##.##......
@@ -13,7 +13,6 @@
 // .##.......##.....##.##.......##.....##.......##.......##....##........##......
 // .##.......##.....##.##.......##.....##.......##.......##....##........##......
 // .########..#######..########..#######........##.......##....##........########
-
 
 #define LULU_TYPE 302
 
@@ -26,7 +25,7 @@
 // 60="Lyre audio dmx + strip"
 // 70="Strobe" 71="4x Strobe" 72="5x parled"
 // ATOM: 80="Atom" 82="Relais" 83="Cloud" 84="Maree"
-// ATOM ST: 91: "ST_buzzer" 
+// ATOM ST: 91: "ST_buzzer"
 // 301 DMX_fixture
 // 302 Flex out 1 kontact
 
@@ -42,17 +41,16 @@
 
 // #define K32_SET_NODEID 7    // board unique id => V1 only or boards without STM32 !! otherwise read from STM32
 // #define K32_SET_HWREV 14    // board hw rev !! only for boards without STM32
-                                        //  1: KXKM V1
-                                        //  2: KXKM V2
-                                        //  3: KXKM V3
-                                        // 13: ATOM
-                                        // 14: ATOM_LITE
-
+//  1: KXKM V1
+//  2: KXKM V2
+//  3: KXKM V3
+// 13: ATOM
+// 14: ATOM_LITE
 
 //
-// You can now set those using WEB interface !!  
+// You can now set those using WEB interface !!
 //
-//    // #define K32_SET_CHANNEL 8      // board channel mqtt elp 1, 2, cube 3, flex 4,  dmx par 5, dmx arca 6, dmx p5 7, barre 8 
+//    // #define K32_SET_CHANNEL 8      // board channel mqtt elp 1, 2, cube 3, flex 4,  dmx par 5, dmx arca 6, dmx p5 7, barre 8
 //    // #define LIGHT_SET_ID 5         // permet de calculer l'adresse DMX
 //    // #define ARTNET_SET_UNIVERSE 1  // univers artnet
 //                    // defo ARTNET_SET_UNIVERSE 0  => LULU-TYPE 6 & 7 & 8 & 10 & 20 & 34
@@ -88,7 +86,7 @@ void setup()
   ////////////////// WIFI
   if (wifi)
   {
-    // Define router (also MQTT broker) 
+    // Define router (also MQTT broker)
     String router = "2.0.0.1";
     // String router = "192.168.1.37";
 
@@ -101,9 +99,9 @@ void setup()
     // Wifi connect (SSID / password)
     //
     // wifi->connect("kxkm24out", NULL);               // KXKM 24 out
-    // wifi->connect("kxkm24", NULL);                  // KXKM 24 
-    // wifi->connect("kxkm24kr1", NULL);               // KXKM 24 kr1
-    wifi->connect("kxkm24gocab", NULL);             // KXKM 24 gocab
+    // wifi->connect("kxkm24", NULL);                  // KXKM 24
+    wifi->connect("kxkm24kr1", NULL); // KXKM 24 kr1
+    // wifi->connect("kxkm24gocab", NULL);             // KXKM 24 gocab
     // wifi->connect("kxkm24iveco", NULL);             // KXKM 24 iveco
     // wifi->connect("kxkm24charette", NULL);          // KXKM 24 charette
     // wifi->connect("kxkm24max", NULL);               // KXKM 24 max
@@ -122,26 +120,26 @@ void setup()
           .broker = router.c_str(), // Komplex
           // .broker = "2.0.0.10", // Riri dev home
           // .broker = "192.168.43.132",  // MGR dev home
-          .beatInterval = 5000, // heartbeat interval milliseconds (0 = disable) 5000
-          .statusInterval = 15000   // full beacon interval milliseconds (0 = disable) 15000
+          .beatInterval = 5000,   // heartbeat interval milliseconds (0 = disable) 5000
+          .statusInterval = 15000 // full beacon interval milliseconds (0 = disable) 15000
       });
 
     ////////////////// OSC
     if (osc)
       osc->start({
-          .port_in = 1818,        // osc port input (0 = disable)  // 1818
-          .port_out = 1819,       // osc port output (0 = disable) // 1819
-          .beatInterval = 0,   // heartbeat interval milliseconds (0 = disable)
+          .port_in = 1818,    // osc port input (0 = disable)  // 1818
+          .port_out = 1819,   // osc port output (0 = disable) // 1819
+          .beatInterval = 0,  // heartbeat interval milliseconds (0 = disable)
           .statusInterval = 0 // full beacon interval milliseconds (0 = disable)
       });
   }
 
   ////////////////// INFO //////////////////////////////////////
-/*tee*/
+  /*tee*/
   // Monitoring refresh // TODO Move somewhere else !
   if (k32 && int(LULU_TYPE) == 1)
     k32->timer->every(REFRESH_INFO, []()
-          {
+                      {
             if (stm32)
               light->anim("battery-strip")->push(stm32->battery());
 
@@ -167,22 +165,18 @@ void setup()
               if (rssi > 0)         light->anim("rssi-strip")->push(rssi);
               else if (toggleRSSI)  light->anim("rssi-strip")->push(100);
               else                  light->anim("rssi-strip")->push(0);
-            }
-          });
+            } });
 
   // Heap Memory log
-  k32->timer->every(1000, []() {
+  k32->timer->every(1000, []()
+                    {
     static int lastheap = 0;
     int heap = ESP.getFreeHeap();
     // LOGF2("Free memory: %d / %d\n", heap, heap - lastheap);
     lastheap = heap;
-    if (heap < 50000) LOGF2("WARNING: free memory < 50K, new task might not properly start. %d / %d\n", heap, heap - lastheap);
-  });
-
-  
+    if (heap < 50000) LOGF2("WARNING: free memory < 50K, new task might not properly start. %d / %d\n", heap, heap - lastheap); });
 
 } // setup
-
 
 // .##........#######...#######..########.
 // .##.......##.....##.##.....##.##.....##
@@ -194,7 +188,18 @@ void setup()
 ///////////////////////////////////////// LOOP /////////////////////////////////////////////////
 void loop()
 {
-  delay(200); 
-  // light->anim("mem-strip")->printWM(); 
+  delay(200);
+  // light->anim("mem-strip")->printWM();
   // light->anim("rssi-strip")->printWM();
+  k32->timer->every(3000, []()
+                    {
+                      int value = analogRead(34);
+                      if ((1650 < value) && (value < 1900))     LOG ("dip 1  "); 
+                      else if ( (2000<value) && (value<2250) )  LOG ("dip  2 ");
+                      else if ( (2280<value) && (value<2500) )  LOG ("dip   3");
+                      else if ( (2600<value) && (value<2820) )  LOG ("dip 12 ");
+                      else if ( (2850<value) && (value<2970) )  LOG ("dip 1 3");
+                      else if ( (2980<value) && (value<3100) )  LOG ("dip  23");
+                      else if ( (3200<value) && (value<3500) )  LOG ("dip 123"); 
+                    });
 } // loop
