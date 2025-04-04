@@ -193,6 +193,9 @@ void loop()
   // light->anim("rssi-strip")->printWM();
   k32->timer->every(3000, []()
                     {
+                      // int read_value = 0;
+                      // k32->dipswitch->dipswitch_read(38,read_value);
+                      
                       int value = analogRead(34);
                       if ((1650 < value) && (value < 1900))     LOG ("dip 1  "); 
                       else if ( (2000<value) && (value<2250) )  LOG ("dip  2 ");
