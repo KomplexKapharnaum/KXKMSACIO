@@ -149,6 +149,11 @@ void k32_setup()
         dmx = new K32_dmx(DMX_PIN[k32->system->hw()], DMX_OUT);
     }
 
+    // /////////////////////////////////////////////// DIPSWITCH /////////////////////////////////
+    
+    dipswitch = new K32_dipswitch(k32); // TODO: check if dipswitch is ok on all boards
+
+
     // /////////////////////////////////////////////// NAME //////////////////////////////////////
 
     String nodeName = String(L_NAME) + "-" + String(k32->system->lightid()) + "-v" + String(NODE32_VER) + "-c" + String(k32->system->channel());

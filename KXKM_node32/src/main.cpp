@@ -193,16 +193,14 @@ void loop()
   // light->anim("rssi-strip")->printWM();
   k32->timer->every(3000, []()
                     {
-                      // int read_value = 0;
-                      // k32->dipswitch->dipswitch_read(38,read_value);
-                      
-                      int value = analogRead(34);
-                      if ((1650 < value) && (value < 1900))     LOG ("dip 1  "); 
-                      else if ( (2000<value) && (value<2250) )  LOG ("dip  2 ");
-                      else if ( (2280<value) && (value<2500) )  LOG ("dip   3");
-                      else if ( (2600<value) && (value<2820) )  LOG ("dip 12 ");
-                      else if ( (2850<value) && (value<2970) )  LOG ("dip 1 3");
-                      else if ( (2980<value) && (value<3100) )  LOG ("dip  23");
-                      else if ( (3200<value) && (value<3500) )  LOG ("dip 123"); 
+                     dipswitch->dipswitch_read();
+                      // int value = analogRead(34);
+                      // if ((1650 < value) && (value < 1900))     LOG ("dip 1  "); 
+                      // else if ( (2000<value) && (value<2250) )  LOG ("dip  2 ");
+                      // else if ( (2280<value) && (value<2500) )  LOG ("dip   3");
+                      // else if ( (2600<value) && (value<2820) )  LOG ("dip 12 ");
+                      // else if ( (2850<value) && (value<2970) )  LOG ("dip 1 3");
+                      // else if ( (2980<value) && (value<3100) )  LOG ("dip  23");
+                      // else if ( (3200<value) && (value<3500) )  LOG ("dip 123"); 
                     });
 } // loop
