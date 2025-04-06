@@ -136,23 +136,28 @@ void k32_setup()
 
     if (k32->system->hw() == 1)
     {
-    #if HW_ENABLE_AUDIO == 1
+#if HW_ENABLE_AUDIO == 1
         LOG("DMX: disabled when audio in use");
-    #else
+#else
         // Todo route dmx in or out
         dmx = new K32_dmx(DMX_PIN[k32->system->hw()], DMX_OUT);
-    #endif
+#endif
     }
     else
     {
-        // Todo route dmx in or out
-        dmx = new K32_dmx(DMX_PIN[k32->system->hw()], DMX_OUT);
+        // if (dipswitch->dip[1] == true)
+        // {
+        dmx = new K32_dmx(DMX_PIN[k32->system->hw()], DMX_IN);
+        // }
+        // else
+        // {
+        //     dmx = new K32_dmx(DMX_PIN[k32->system->hw()], DMX_OUT);
+        // }
     }
 
     // /////////////////////////////////////////////// DIPSWITCH /////////////////////////////////
-    
-    dipswitch = new K32_dipswitch(k32); // TODO: check if dipswitch is ok on all boards
 
+    dipswitch = new K32_dipswitch(k32); // TODO: check if dipswitch is ok on all boards
 
     // /////////////////////////////////////////////// NAME //////////////////////////////////////
 
