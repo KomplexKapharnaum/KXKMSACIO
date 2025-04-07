@@ -122,11 +122,14 @@ void setup_device()
         .address = DMX_ADDRESS,
         .framesize = FRAME_size,
         .callback = [](const uint8_t *data, int length)
-        {
+        {       
                 int sizeSK = light->anim("mem-strip")->bank()->preset_size();
                 #ifdef PWM_ON_OFF
                 int sizePWM = light->anim("mem-pwm")->bank()->preset_size();
                 #endif
+
+                // force
+                sizeSK = 20;
 
                 LOGINL("ARTFRAME: "); LOGF("length=%d ", length); for (int k = 0; k < length; k++) LOGF("%d ", data[k]); LOG();
                 light->anim("artnet-strip")->push(data, min(sizeSK, length));
