@@ -128,7 +128,7 @@ void setup_device()
                 int sizePWM = light->anim("mem-pwm")->bank()->preset_size();
                 #endif
 
-                // LOGINL("ARTFRAME: "); LOGF("length=%d ", length); for (int k = 0; k < length; k++) LOGF("%d ", data[k]); LOG();
+                LOGINL("ARTFRAME: "); LOGF("length=%d ", length); for (int k = 0; k < length; k++) LOGF("%d ", data[k]); LOG();
                 light->anim("artnet-strip")->push(data, min(sizeSK, length));
                 #ifdef PWM_ON_OFF
                 light->anim("artnet-pwm")->push(data, min(sizePWM, length)); // FIX
