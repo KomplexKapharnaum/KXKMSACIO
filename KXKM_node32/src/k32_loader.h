@@ -130,6 +130,18 @@ void k32_setup()
     // PWM
     pwm = new K32_pwm(k32);
 
+    // /////////////////////////////////////////////// NAME //////////////////////////////////////
+
+    String nodeName = String(L_NAME) + "-" + String(k32->system->lightid()) + "-v" + String(NODE32_VER) + "-c" + String(k32->system->channel());
+
+    LOG("\nNAME:   " + nodeName);
+    LOGF("CHANNEL: %d\n\n", k32->system->channel());
+    LOGF("LIGHT ID: %d\n", k32->system->lightid());
+
+    // /////////////////////////////////////////////// DIPSWITCH /////////////////////////////////
+
+    dipswitch = new K32_dipswitch(k32); // TODO: check if dipswitch is ok on all boards
+
     // /////////////////////////////////////////////// LIGHT //////////////////////////////////////
 
     light = new K32_light(k32);
@@ -145,32 +157,30 @@ void k32_setup()
     }
     else
     {
-        // if (dipswitch->dip[1] == true)
-        // {
-        dmx = new K32_dmx(DMX_PIN[k32->system->hw()], DMX_IN);
-        // }
-        // else
-        // {
-        //     dmx = new K32_dmx(DMX_PIN[k32->system->hw()], DMX_OUT);
-        // }
+        if (dipswitch->dip[1] == true)
+        {
+            dmx = new K32_dmx(DMX_PIN[k32->system->hw()], DMX_IN);
+            LOG("DMX: IN");
+        }
+        else
+        {
+            dmx = new K32_dmx(DMX_PIN[k32->system->hw()], DMX_OUT);
+            LOG("DMX: OUT");
+        }
     }
-
-    // /////////////////////////////////////////////// DIPSWITCH /////////////////////////////////
-
-    dipswitch = new K32_dipswitch(k32); // TODO: check if dipswitch is ok on all boards
-
-    // /////////////////////////////////////////////// NAME //////////////////////////////////////
-
-    String nodeName = String(L_NAME) + "-" + String(k32->system->lightid()) + "-v" + String(NODE32_VER) + "-c" + String(k32->system->channel());
-
-    LOG("\nNAME:   " + nodeName);
-    LOGF("CHANNEL: %d\n\n", k32->system->channel());
-    LOGF("LIGHT ID: %d\n", k32->system->lightid());
 
     /////////////////////////////////////////////// NETWORK //////////////////////////////////////
 
+    const int RADIO_ENABLE = !dipswitch->dip1();
+
+    ////////////////// NO RADIO
+    if (!RADIO_ENABLE)
+    {
+        LOG("NETWORK: no radio (dip1 = 1)");
+    }
+
     ////////////////// WIFI MODE
-    if (wifiMode())
+    else if (wifiMode())
     {
         // WIFI
         LOG("NETWORK: wifi");
@@ -186,8 +196,8 @@ void k32_setup()
         // WEB
         web = new K32_web(k32);
 
-// ARTNET
-#if ARTNET_ENABLE == 1
+        // ARTNET
+        #if ARTNET_ENABLE == 1
         artnet = new K32_artnet(k32, wifi, nodeName);
         artnet->start();
 
@@ -202,7 +212,7 @@ void k32_setup()
                 // FULL NODE
                 if (ARTNET_DMXNODE && dmx) 
                     dmx->setMultiple(data, length); });
-#endif
+        #endif
     }
 
     ////////////////// BLUETOOTH MODE

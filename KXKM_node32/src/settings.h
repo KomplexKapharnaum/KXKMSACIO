@@ -130,7 +130,7 @@
 #include "type/301-dmx-fixture.h"
 
 #elif LULU_TYPE == 302
-#include "macro/Show/kontact/05-flex.h"
+#include "type/302-multiflex.h"
 
 #endif
 #endif
