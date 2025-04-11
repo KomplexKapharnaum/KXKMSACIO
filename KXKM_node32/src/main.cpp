@@ -99,8 +99,8 @@ void setup()
     // Wifi connect (SSID / password)
     //
     // wifi->connect("kxkm24out", NULL);               // KXKM 24 out
-    // wifi->connect("kxkm24", NULL);                  // KXKM 24
-    wifi->connect("kxkm24kr1", NULL); // KXKM 24 kr1
+    wifi->connect("kxkm24", NULL);                  // KXKM 24
+    // wifi->connect("kxkm24kr1", NULL); // KXKM 24 kr1
     // wifi->connect("kxkm24gocab", NULL);             // KXKM 24 gocab
     // wifi->connect("kxkm24iveco", NULL);             // KXKM 24 iveco
     // wifi->connect("kxkm24charette", NULL);          // KXKM 24 charette
