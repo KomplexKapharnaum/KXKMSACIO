@@ -384,10 +384,11 @@ class Anim_dmx_strip : public K32_anim {
     
       int strobeMode  = simplifyDmxRange(data[8]);
       int strobePeriod = map(data[9]*data[9], 0, 255*255, STROB_ON_MS*4, 1000);
+      int maxvalue    = data[0];
 
       // strobe modulator
       if (strobeMode == 1 || btw(strobeMode, 3, 10)) 
-        this->mod("strobe")->period( strobePeriod )->play();
+        this->mod("strobe")->setMaxValue(maxvalue)->period( strobePeriod )->play();
       else 
         this->mod("strobe")->stop();
 
@@ -420,7 +421,7 @@ class Anim_dmx_strip : public K32_anim {
 
       // smooth modulator
       if (strobeMode == 2) 
-        this->mod("smooth")->period( strobePeriod * 4 )->play();
+        this->mod("smooth")->setMaxValue(maxvalue)->period( strobePeriod * 4 )->play();
       else 
         this->mod("smooth")->stop();
 
