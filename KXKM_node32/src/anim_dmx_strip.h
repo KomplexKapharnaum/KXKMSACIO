@@ -172,10 +172,10 @@ class Anim_dmx_strip : public K32_anim {
     void init() {
 
       // Strobe on data[0] (animMaster)
-      this->mod("strobe", new K32_mod_pulse)->param(0, STROB_ON_MS)->at(0);
+      this->mod("strobe", new K32_mod_pulse)->param(0, STROB_ON_MS)->at(0)->relative();
 
       // Smooth on data[0] (animMaster)
-      this->mod("smooth", new K32_mod_sinus)->at(0);
+      this->mod("smooth", new K32_mod_sinus)->at(0)->relative();
 
     }
 
@@ -384,36 +384,36 @@ class Anim_dmx_strip : public K32_anim {
     
       int strobeMode  = simplifyDmxRange(data[8]);
       int strobePeriod = map(data[9]*data[9], 0, 255*255, STROB_ON_MS*4, 1000);
-      int maxvalue    = data[0];
 
       // strobe modulator
       if (strobeMode == 1 || btw(strobeMode, 3, 10)) 
-        this->mod("strobe")->setMaxValue(maxvalue)->period( strobePeriod )->play();
-      else 
-        this->mod("strobe")->stop();
+        this->mod("strobe")->period( strobePeriod )->play();
 
     
       // BLINK
       /////////////////////////////////////////////////////////////////////////
 
       // strobe blink (3xstrobe -> blind 1+s)
-      if (strobeMode == 11 || btw(strobeMode, 12, 19)) 
+      else if (strobeMode == 11 || btw(strobeMode, 12, 19)) 
       {
-        // int count = this->strobe->periodCount() % 3;  // ERROR: periodCount is moving.. -> count is not linear !
-        // // LOG(count);
+        this->mod("strobe")->period( 300 )->play();
 
-        // if (count == 0)       this->strobe->period( strobePeriod*100/225 );
-        // else if (count == 1)  this->strobe->period( strobePeriod/4 );
-        // else if (count == 2)  this->strobe->period( strobePeriod*116/100 + 1000 );
+        int count = this->mod("strobe")->periodCount() % 20;  // ERROR: periodCount is moving.. -> count is not linear ! 
+        // LOG("Blink : ");
+        // LOG(count);
+
+        this->mod("strobe")->period( 1050 / (count + 1) );
         
-        // // OFF
-        // if (this->strobe->value() == 0) {
-        //   this->clear();
-        //   return;
-        // }
+        // OFF
+        if (this->mod("strobe")->value() == 0) {
+          this->clear();
+          return;
+        }
 
         // TODO: make a special "multi-pulse" modulator
       }
+      else 
+        this->mod("strobe")->stop();
 
 
       // SMOOTH
@@ -421,7 +421,7 @@ class Anim_dmx_strip : public K32_anim {
 
       // smooth modulator
       if (strobeMode == 2) 
-        this->mod("smooth")->setMaxValue(maxvalue)->period( strobePeriod * 4 )->play();
+        this->mod("smooth")->period( strobePeriod * 4 )->play();
       else 
         this->mod("smooth")->stop();
 
