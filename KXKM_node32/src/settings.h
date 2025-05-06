@@ -132,5 +132,8 @@
 #elif LULU_TYPE == 302
 #include "type/302-multiflex.h"
 
+#elif LULU_TYPE == 303
+#include "type/303-manuflex.h"
+
 #endif
 #endif

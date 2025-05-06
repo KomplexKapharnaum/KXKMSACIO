@@ -28,6 +28,7 @@
 // ATOM ST: 91: "ST_buzzer"
 // 301 DMX_fixture
 // 302 Flex out 1 kontact
+// 303 manuFlex out 1 kontact
 
 //      .####....########.
 //      ..##.....##.....##
