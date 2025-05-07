@@ -159,6 +159,17 @@ void k32_setup()
     {
         dmx = new K32_dmx(DMX_PIN[k32->system->hw()], dipswitch->dip1() ? DMX_IN : DMX_OUT);
         LOG("DMX: " + String(dipswitch->dip1() ? "IN" : "OUT"));
+
+        // DMX IN : commut 512
+        if (dipswitch->dip1())
+        {
+            K32_dmx::onFullDmx([](const uint8_t *data, int length)
+            {
+                // Force Auto
+                if (length > 511 && data[511] > 250) // data 512 = end dmx trame   
+                remote->setState(REMOTE_AUTO)->lock();
+            });
+        }
     }
 
     /////////////////////////////////////////////// NETWORK //////////////////////////////////////
