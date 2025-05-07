@@ -247,6 +247,6 @@ void setup_device()
 
             });
 
-            light->anim("mem-strip")->mem(0)->play();
+            remote->stmNext();
     }
 }
