@@ -14,7 +14,7 @@
 // .##.......##.....##.##.......##.....##.......##.......##....##........##......
 // .########..#######..########..#######........##.......##....##........########
 
-#define LULU_TYPE 302
+#define LULU_TYPE 304
 
 // 0="Power" 1="Sac" 2="Barre" 3="Pince" 4="Fluo" 5="Flex" 6="PotSon" 9="chariot"
 // 10="power" 11="DMX_strobe" 12="DMX_Par_led" 13="NODE_dmx_thru" 14="DMX_smoke"
@@ -29,6 +29,7 @@
 // 301 DMX_fixture
 // 302 Flex out 1 kontact
 // 303 manuFlex out 1 kontact
+// 304 hotteFlex out 1 kontact
 
 //      .####....########.
 //      ..##.....##.....##
