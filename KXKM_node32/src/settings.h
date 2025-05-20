@@ -138,5 +138,14 @@
 #elif LULU_TYPE == 304
 #include "type/304-hotteflex.h"
 
+#elif LULU_TYPE == 305
+#include "type/305-hotteflex_animal.h"
+
+#elif LULU_TYPE == 306
+#include "type/306-hotteflex_machine.h"
+
+#elif LULU_TYPE == 307
+#include "type/307-hotteflex_vegetale.h"
 #endif
+
 #endif
