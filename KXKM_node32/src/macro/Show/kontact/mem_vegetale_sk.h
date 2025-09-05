@@ -15,8 +15,8 @@ public:
                 // {                         pix, pix, pix, str, spe, fon, fon, fon, fon, ror,      }
                 // {mas,   r,   g,   b,   w, mod,long, pos, mod,  ed,   d,   d,   d,   d, mod, zoom }
                 // {000, 001, 002, 003, 004, 005, 006, 007, 008, 009, 010, 011, 012, 013, 014, 015} adr + -1
-                add(255, 000, 000, 000, 255, 015, 075, 000, 000, 000, 000, 000, 000, 000, 000, 255); // 00 Blanc 
-                mem->mod(new K32_mod_sinus)->at(7)->period(2000)->phase(0)->mini(50)->maxi(230); // modulo sur position
+                // add(255, 000, 000, 000, 255, 015, 075, 000, 000, 000, 000, 000, 000, 000, 000, 255); // 00 Blanc 
+                // mem->mod(new K32_mod_sinus)->at(7)->period(2000)->phase(0)->mini(50)->maxi(230); // modulo sur position
 
                 add(255, 000, 255, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 255); // 01 vert
 
